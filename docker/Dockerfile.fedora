@@ -210,7 +210,14 @@ RUN cd /opt/src/vllm \
 # Order matters at runtime (vLLM imports AITER/conch before attention
 # backends); we build wheels here and install in the same order in the final
 # stage. AITER setup.py imports torch, so it needs --no-build-isolation.
-RUN python3 -m pip wheel --no-build-isolation --no-deps -w /wheels \
+# AITER_TRITON_ONLY=1: on gfx1151 only AITER's Triton kernels are usable
+# (CK/ASM kernels are CDNA-only - patch 54's design), so skip the entire
+# C++/CK/HIP build; this also sidesteps CK's missing gfx1151 instantiations.
+# AITER_USE_SYSTEM_TRITON=1: keep the torch-pinned TheRock triton instead of
+# letting AITER's install_triton.sh replace it.
+RUN python3 -m pip install pybind11 psutil pandas "flydsl==0.2.4" \
+    && AITER_TRITON_ONLY=1 AITER_USE_SYSTEM_TRITON=1 \
+       python3 -m pip wheel --no-build-isolation --no-deps -w /wheels \
         "git+https://github.com/ROCm/aiter.git@${AITER_REF}"
 RUN python3 -m pip download --no-deps -d /wheels "conch-triton-kernels==${CONCH_VERSION}"
 # ROCm flash-attention, branch main_perf (the gfx-tuned line). Long compile;
