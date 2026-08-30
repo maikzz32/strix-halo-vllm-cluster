@@ -30,7 +30,6 @@ MARKER_PREFIX = "gfx1151-patch: "
 EXPECTED = {
     "10_triton_device_ordinal": "vllm-src",
     "20_rocm_smi_rtld": "torch",
-    "30_tensorizer_pin": "vllm-src",
     "40_aiter_gfx1x_gating": "vllm-src",
     "51_radix_topk": "vllm-src",
     "52_tilelang_sparse_indexer": "vllm-src",
@@ -42,9 +41,14 @@ EXPECTED = {
 }
 
 # Conditional patches: marker required only when at least one of the listed
-# relative paths exists under the scan root (model-specific patches that
-# legitimately SKIP on trees without the model package).
+# relative paths exists under the scan root. Covers model-specific patches
+# that legitimately SKIP on trees without the model package, and patch 30
+# whose marker lives in requirements/rocm.txt: that file exists in the
+# builder's source checkout (marker enforced there) but is not shipped in
+# the installed wheel, so the final-stage scan (site-packages) legitimately
+# SKIPs it.
 CONDITIONAL = {
+    "30_tensorizer_pin": ["requirements/rocm.txt"],
     "57_ple_offload_amd": ["vllm/models/qwen4_exp"],
     "58_glm_mtp_sparse_dispatch": ["vllm/models/glm5next",
                                    "vllm/models/glm5_next"],
@@ -92,10 +96,14 @@ def version_of(module: str, dist: str | None = None) -> str:
         return importlib.import_module(module).__version__
     except Exception:
         pass
-    try:
-        return importlib.metadata.version(dist or module)
-    except importlib.metadata.PackageNotFoundError:
-        return "not installed"
+    # The wheel's dist name can differ from the import name (aiter is
+    # published as amd-aiter since v0.1.19).
+    for name in dict.fromkeys(n for n in (dist, module) if n):
+        try:
+            return importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError:
+            continue
+    return "not installed"
 
 
 def main() -> int:
@@ -147,7 +155,7 @@ def main() -> int:
     # 4. versions (aiter may legitimately be absent: it is disabled on gfx1x)
     print("--- resolved versions ---")
     for module, dist in (("vllm", None), ("torch", None),
-                         ("triton", None), ("aiter", "aiter")):
+                         ("triton", None), ("aiter", "amd-aiter")):
         print(f"{module:8s} {version_of(module, dist)}")
 
     if failures:

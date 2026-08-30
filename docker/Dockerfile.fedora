@@ -400,6 +400,8 @@ RUN if [ "${RCCL_IMPL}" = "custom" ]; then \
             echo "WARNING: RCCL_IMPL=custom but patches/librccl/librccl.so is missing; falling back to stock RCCL"; \
         fi; \
     fi \
+    && echo "Post-install patch: torch rtld knob (final stage reinstalls torch pristine)" \
+    && python3 /opt/patches/20_rocm_smi_rtld.py \
     && echo "Post-install patch: conch triton_kernels gfx1x MXFP4 MoE tune" \
     && python3 /opt/patches/50_conch_moe_mxfp4_tune.py \
     && echo "Post-install patch: AITER Triton enablement for gfx1151" \
@@ -427,6 +429,9 @@ RUN python3 -c 'import tilelang' 2>/dev/null \
 # package (vendored into the vLLM wheel at vllm/third_party/triton_kernels),
 # which only exists after the pip install above. It defers with SKIP/exit 0
 # pre-install and must succeed here (fail-closed: exit 42 = re-audit).
+# Patch 20 targets the INSTALLED torch package; the builder patched its own
+# torch (marker verified there), but this stage reinstalls torch pristine,
+# so it re-runs here.
 # Patch 54 is split the same way: the vLLM-tree side was applied in the
 # builder stage, the aiter/arch_info side targets the installed packages and
 # runs here.

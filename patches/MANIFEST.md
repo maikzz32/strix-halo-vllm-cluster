@@ -49,9 +49,11 @@ on the first real image build.
   vLLM checkout; located via `importlib.util.find_spec("torch")`).
 - **Upstream reference:** none pinned; re-audit notes should link the torch
   ROCm issue once confirmed on the real build.
-- **Status:** expected-to-need-adjustment. Assumes the `ctypes.CDLL(...)`
-  call for librocm_smi64 sits on a single line containing "rocm_smi". If a
-  future torch already uses `RTLD_GLOBAL`, the patch only adds its marker.
+- **Status:** re-audited for torch 2.13.0+rocm7.14.0 (TheRock
+  `rocm_sdk.initialize_process` loader; pre-TheRock CDLL layouts are
+  rejected with exit 42). Applied in BOTH stages: the builder via
+  apply_all.sh (patches its own torch for the marker check), and the final
+  stage post-install (that stage reinstalls torch pristine).
 - **Re-audit trigger:** exit 42 (no `CDLL` + "rocm_smi" line, or multi-line
   call), or the symbol clash persisting after the patch.
 - **Date:** 2026-08-30.
@@ -65,6 +67,10 @@ on the first real image build.
   `requirements/*.txt`) that contains a `tensorizer` requirement line.
 - **Upstream reference:** none pinned; check vLLM's requirements on each
   rebase.
+- **Verification:** conditional in verify_compat.py - the marker lives in
+  `requirements/*.txt`, which ships in the builder's source checkout
+  (enforced there) but not in the installed wheel, so the final-stage
+  scan legitimately SKIPs it.
 - **Status:** expected-to-need-adjustment. Currently relaxes to an unpinned
   `tensorizer` requirement (extras preserved); **replace with an exact pin
   once a known-good version is confirmed on the first py3.14 build**.
