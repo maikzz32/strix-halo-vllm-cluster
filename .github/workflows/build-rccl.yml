@@ -144,6 +144,9 @@ jobs:
       - name: Publish release asset
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # gh needs a repo context for release commands; the job has no
+          # checkout, so point it at the repository explicitly.
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
           # Create the fixed release once; subsequent runs just re-upload.
