@@ -1,15 +1,30 @@
 name: build-rccl
 
-# Builds the known-good custom RCCL for gfx1151 from kyuz0/rocm-systems
-# (branch gfx1151-rccl - upstream RCCL is fragile on gfx1151, see
-# ROCm/rocm-systems#5229) inside a fedora:44 container with the ROCm SDK.
+# OPTIONAL FALLBACK - probably not needed anymore.
+#
+# ROCm/rocm-systems#5229 (RCCL broken on gfx1151 in TheRock builds) is CLOSED:
+# ROCm/TheRock#4935 re-enabled RCCL for gfx1151/gfx1201 and ROCm/TheRock#5376
+# added librccl.so back to the python wheels. The stock librccl.so that ships
+# in the rocm-sdk-libraries wheel (installed by docker/Dockerfile.fedora from
+# repo.amd.com/rocm/whl-multi-arch) is therefore expected to work on gfx1151,
+# and build-stable.yml builds with RCCL_IMPL=stock.
+#
+# This workflow remains as an escape hatch: it builds the custom RCCL from
+# kyuz0/rocm-systems (branch gfx1151-rccl) inside a fedora:44 container
+# against the TheRock pip ROCm SDK (Fedora 44's packaged ROCm is 7.1.x and
+# lacks the gfx1151 toolchain; rocm-hip-sdk no longer exists there).
 # Publishes librccl.so as a workflow artifact AND as release asset
-# 'librccl-gfx1151.so' on the fixed tag 'rccl-gfx1151', where build-dev.yml
-# (RCCL_IMPL=custom) fetches it. Manual-only: rebuild when ROCm major changes
-# or the gfx1151-rccl branch gets fixes.
+# 'librccl-gfx1151.so' on the fixed tag 'rccl-gfx1151', which
+# docker/Dockerfile.fedora consumes when RCCL_IMPL=custom.
+# Manual-only: rebuild if stock RCCL misbehaves on the cluster.
 
 on:
   workflow_dispatch:
+    inputs:
+      rocm_version:
+        description: ROCm SDK version to build against (TheRock pip wheels)
+        required: true
+        default: "7.14.0"
 
 permissions:
   contents: write   # gh release create/upload
@@ -26,13 +41,39 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: fedora:44
+    env:
+      ROCM_VERSION: ${{ inputs.rocm_version }}
+      ROCM_INDEX_URL: https://repo.amd.com/rocm/whl-multi-arch/
     steps:
-      - name: Install build toolchain + ROCm SDK
+      - name: Install build toolchain + TheRock ROCm SDK (pip)
         run: |
           set -euo pipefail
-          # Package names follow Fedora's ROCm packaging; verify against
-          # Fedora 44 repos if this step breaks (dnf search rocm / rccl).
-          dnf install -y git cmake make gcc-c++ rocm-hip-sdk rocm-cmake
+          # Toolchain + python 3.12 (Fedora 44's default python3 is 3.14; the
+          # gfx1151 torch stack is cp312-only, so the SDK is installed for
+          # 3.12 to match the image). No Fedora ROCm packages exist for this.
+          dnf install -y --setopt=install_weak_deps=False \
+            git cmake make gcc-c++ python3.12 python3.12-devel curl-minimal \
+            numactl-libs libdrm libatomic
+          curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+          python3.12 /tmp/get-pip.py --no-cache-dir
+          rm -f /tmp/get-pip.py
+          python3.12 -m pip install \
+            --index-url "${ROCM_INDEX_URL}" \
+            --extra-index-url https://pypi.org/simple \
+            "rocm[devel,libraries,device-gfx1151]==${ROCM_VERSION}"
+          python3.12 -m rocm_sdk init
+          ROCM_ROOT="$(python3.12 -m rocm_sdk path --root)"
+          SDK_LIBS="$(python3.12 -c 'import _rocm_sdk_libraries, pathlib; print(pathlib.Path(_rocm_sdk_libraries.__file__).parent)')"
+          SDK_CORE="$(python3.12 -c 'import _rocm_sdk_core, pathlib; print(pathlib.Path(_rocm_sdk_core.__file__).parent)')"
+          {
+            echo "ROCM_PATH=${ROCM_ROOT}"
+            echo "ROCM_HOME=${ROCM_ROOT}"
+            echo "HIP_PATH=${ROCM_ROOT}"
+            echo "LD_LIBRARY_PATH=${ROCM_ROOT}/lib:${SDK_CORE}/lib:${SDK_LIBS}/lib"
+            echo "PATH=${ROCM_ROOT}/bin:${SDK_CORE}/bin:${PATH}"
+            echo "CMAKE_PREFIX_PATH=${ROCM_ROOT}/lib/cmake"
+          } >> "$GITHUB_ENV"
+          "${ROCM_ROOT}/bin/hipcc" --version | head -1
 
       - name: Clone and build RCCL for gfx1151
         run: |
@@ -42,6 +83,8 @@ jobs:
           cd rocm-systems/projects/rccl
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER="${ROCM_PATH}/bin/hipcc" \
+            -DCMAKE_PREFIX_PATH="${ROCM_PATH}/lib/cmake" \
             -DGPU_TARGETS=gfx1151 \
             -DBUILD_TESTS=OFF
           cmake --build build -j"$(nproc)"
@@ -79,7 +122,7 @@ jobs:
           # Create the fixed release once; subsequent runs just re-upload.
           gh release view "$RELEASE_TAG" >/dev/null 2>&1 || \
             gh release create "$RELEASE_TAG" \
-              --title "Custom RCCL for gfx1151" \
-              --notes "librccl.so built from kyuz0/rocm-systems@gfx1151-rccl in a fedora:44 container (workflow build-rccl.yml). Fetched by build-dev.yml when RCCL_IMPL=custom."
+              --title "Custom RCCL for gfx1151 (fallback)" \
+              --notes "librccl.so built from kyuz0/rocm-systems@gfx1151-rccl in a fedora:44 container against the TheRock pip ROCm SDK (workflow build-rccl.yml). Fallback only: stock RCCL from the rocm-sdk-libraries wheel is expected to work since ROCm/rocm-systems#5229 was fixed. Consumed by docker/Dockerfile.fedora when RCCL_IMPL=custom."
           gh release upload "$RELEASE_TAG" "${ASSET_NAME}#${ASSET_NAME}" --clobber
           echo "published: $(gh release view "$RELEASE_TAG" --json url -q .url)"
