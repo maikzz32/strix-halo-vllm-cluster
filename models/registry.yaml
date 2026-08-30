@@ -38,6 +38,30 @@ defaults:
 
 models:
 
+  qwen38-27b-ablit:
+    hf_repo: /home/maik/qwen38_ablit   # local path, present on ALL 4 nodes (same path)
+    dtype: gptq-int4
+    approx_size_gib: 17
+    context:
+      native_tokens: 262144
+    status: supported
+    env: {}
+    extra_args: []
+    parsers:
+      tool_call_parser: hermes
+    notes: >
+      Dense hybrid model (config model_type qwen3_5): 64 layers, hidden 5120,
+      GQA 24/4, vocab 248320, linear attention + full attention every 4 layers,
+      MTP head present (mtp_num_hidden_layers -> test --speculative-config
+      '{"method":"mtp","num_speculative_tokens":3}' after baseline).
+      GPTQ int4 pack-quantized (group 128, symmetric) -> vLLM GPTQ path on
+      gfx1151 must be validated (Marlin availability on RDNA uncertain,
+      Triton fallback possible). 17 GiB fits easily per node: profile solo
+      is the expected winner; tp4 only as comparison. Vision weights present
+      but bench is text-only (timm/opencv were cut from the image - re-add
+      if vision is ever needed). First bench target of this repo.
+    references: []
+
   qwen36-35b-a3b:
     hf_repo: Qwen/Qwen3.6-35B-A3B
     dtype: bf16
