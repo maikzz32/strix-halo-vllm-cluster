@@ -20,7 +20,7 @@ mtu_switch_validated: false
 
 # Cluster container image (built by .github/workflows, pushed to ghcr.io).
 # Replace the placeholder owner/repo with the real ghcr.io path.
-container_image: ghcr.io/YOUR_GITHUB_OWNER/strix-halo-vllm:stable
+container_image: ghcr.io/maikzz32/strix-vllm-gfx1151:latest  # built by .github/workflows (ghcr owner = GitHub account maikzz32)
 container_name: strix-vllm
 
 # Persistent Triton JIT cache (host path, bind-mounted into the container).

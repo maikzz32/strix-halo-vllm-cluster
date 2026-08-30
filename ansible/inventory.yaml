@@ -1,26 +1,34 @@
 ---
 # Inventory for the 4-node Strix Halo cluster.
-# Placeholder addresses — replace ansible_host / roce_ip with the real IPs.
-# roce_iface is the 25 GbE interface used for RoCEv2 RDMA (name may differ
-# per node; enp1s0f0 is a typical value, verify with `ip link` on the host).
+# Discovered 2026-08-30 (hostnames/Fedora 45/kernel 7.2.0 verified via SSH):
+#   StrixHalo1-4 = 192.168.1.15-18 (management; note: management shares the
+#   SAME physical NIC port as RoCE on this setup).
+# RoCEv2 RDMA lives on 192.168.100.0/24 (validated: ib_write_bw node1<->node2
+# = 20.34 Gbps @ 64 KiB messages, PORT_ACTIVE, active_mtu 4096).
+# NIC: 4 RoCE ports per node (rocep197s0f0-f3); node4 sees only f0/f1 and its
+# RoCE IP is on port f1, not f3 — roce_iface differs per node, keep it.
 strix_nodes:
   vars:
-    ansible_user: fedora
+    ansible_user: maik
     ansible_become: true
   hosts:
     node1:
-      ansible_host: 192.168.1.11    # management network (SSH)
-      roce_ip: 192.168.100.11       # 25 GbE RoCE interface IP
-      roce_iface: enp1s0f0
+      ansible_host: 192.168.1.15    # management network (SSH) — StrixHalo1
+      roce_ip: 192.168.100.1        # 25 GbE RoCE interface IP
+      roce_iface: enp197s0f3np3
+      roce_rdma_dev: rocep197s0f3   # matching ibv device for validation tasks
     node2:
-      ansible_host: 192.168.1.12
-      roce_ip: 192.168.100.12
-      roce_iface: enp1s0f0
+      ansible_host: 192.168.1.16    # StrixHalo2
+      roce_ip: 192.168.100.2
+      roce_iface: enp197s0f3np3
+      roce_rdma_dev: rocep197s0f3
     node3:
-      ansible_host: 192.168.1.13
-      roce_ip: 192.168.100.13
-      roce_iface: enp1s0f0
+      ansible_host: 192.168.1.17    # StrixHalo3
+      roce_ip: 192.168.100.3
+      roce_iface: enp197s0f3np3
+      roce_rdma_dev: rocep197s0f3
     node4:
-      ansible_host: 192.168.1.14
-      roce_ip: 192.168.100.14
-      roce_iface: enp1s0f0
+      ansible_host: 192.168.1.18    # StrixHalo4 — NOTE: RoCE on port f1,
+      roce_ip: 192.168.100.4        # only 2 RDMA ports present (rocep197s0f0-f1)
+      roce_iface: enp197s0f1np1
+      roce_rdma_dev: rocep197s0f1

@@ -21,7 +21,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PY="${PYTHON:-python3}"
 INVENTORY="${1:-$REPO_ROOT/ansible/inventory.yaml}"
-IMAGE="${VLLM_IMAGE:-vllm-gfx1151:stable}"  # TODO: set full ghcr.io path via VLLM_IMAGE/defaults.env
+IMAGE="${VLLM_IMAGE:-ghcr.io/maikzz32/strix-vllm-gfx1151:latest}"
 SSH_OPTS="${SSH_OPTS:--o BatchMode=yes -o ConnectTimeout=5}"
 
 NAMES=(); TARGETS=(); IPS=()

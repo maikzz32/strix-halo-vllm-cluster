@@ -31,7 +31,7 @@ usage() { sed -n '2,20p' "$0"; exit "${1:-1}"; }
 MODEL="$1"
 PROFILE="$2"
 
-IMAGE="${VLLM_IMAGE:-vllm-gfx1151:stable}"  # TODO: set full ghcr.io path via VLLM_IMAGE/defaults.env
+IMAGE="${VLLM_IMAGE:-ghcr.io/maikzz32/strix-vllm-gfx1151:latest}"
 CONTAINER_NAME="${CONTAINER_NAME:-ray-head}"
 PORT="${PORT:-8000}"
 

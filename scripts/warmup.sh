@@ -54,7 +54,7 @@ esac
 MODEL="$1"
 PROFILE="$2"
 
-IMAGE="${VLLM_IMAGE:-vllm-gfx1151:stable}"
+IMAGE="${VLLM_IMAGE:-ghcr.io/maikzz32/strix-vllm-gfx1151:latest}"
 CONTAINER_NAME="${CONTAINER_NAME:-ray-head}"
 VOLUME_NAME="${VOLUME_NAME:-triton-cache}"
 PORT="${PORT:-8000}"
