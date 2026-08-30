@@ -135,6 +135,9 @@ ENV ROCM_PATH=/opt/rocm \
 # --- rdma-core version gate -------------------------------------------------
 # Check Fedora's packaged rdma-core; only if older than v62 build an overlay
 # into /opt/rdma-overlay (copied over /usr in the final stage).
+# CMAKE_INSTALL_SBINDIR=bin: Fedora is usrmerged (/usr/sbin is a symlink to
+# bin), so an overlay containing a real sbin/ dir would fail the final
+# stage's `cp -a ... /usr/` with "cannot overwrite non-directory".
 RUN set -e; \
     mkdir -p /opt/rdma-overlay; \
     installed=$(dnf repoquery -q --qf '%{VERSION}' rdma-core 2>/dev/null | sort -V | tail -1); \
@@ -148,6 +151,7 @@ RUN set -e; \
         git clone --depth 1 --branch "${RDMA_CORE_REF}" https://github.com/linux-rdma/rdma-core /tmp/rdma-core; \
         cmake -S /tmp/rdma-core -B /tmp/rdma-core/build -GNinja \
             -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCMAKE_INSTALL_SBINDIR=bin \
             -DNO_MAN_PAGES=1 -DNO_PYVERBS=1 -DENABLE_RESOLVE_NEIGH=0; \
         DESTDIR=/opt/rdma-overlay ninja -C /tmp/rdma-core/build install; \
     fi
