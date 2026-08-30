@@ -4,33 +4,52 @@
 #
 # Build context MUST be the repository root (needs ./patches):
 #   podman build -f docker/Dockerfile.fedora \
-#     --build-arg ROCM_VERSION=7.2 \
-#     --build-arg TORCH_VERSION=2.9.1 \
+#     --build-arg ROCM_VERSION=7.14.0 \
+#     --build-arg TORCH_VERSION=2.13.0 \
+#     --build-arg TORCHVISION_VERSION=0.28.0 \
 #     --build-arg VLLM_REF=v0.x.y \
 #     --build-arg RCCL_IMPL=stock \
 #     -t ghcr.io/<org>/vllm-gfx1151:stable .
 #
 # Two-stage build: `builder` compiles vLLM / AITER / ROCm flash-attention
-# wheels against the full ROCm SDK, the final stage carries only runtime
-# packages plus the prebuilt wheels.
+# wheels against the full ROCm SDK, the final stage carries the runtime
+# (same pip SDK, incl. devel, so Triton/AITER JIT works at runtime) plus the
+# prebuilt wheels.
+#
+# ROCm SDK source: Fedora 44's packaged ROCm is 7.1.x - far too old for the
+# torch 2.13+rocm7.14 wheels and missing rocprim/hipcub/rocthrust/miopen/
+# comgr/hsakmt entirely. Instead the SDK comes from TheRock pip packages on
+# AMD's whl-multi-arch index (the same index that serves the torch wheels):
+#   rocm-sdk-core              HIP runtime, comgr, hsa, rocminfo, rocm-smi, llvm
+#   rocm-sdk-libraries         host math libs (rocblas/hipblas/rccl/MIOpen/...)
+#   rocm-sdk-device-gfx1151    gfx1151 device code (kpack, rocblas .co, ...)
+#   rocm-sdk-devel             full dev tree (headers rocprim/hipcub/rocthrust,
+#                              cmake configs, hipcc/clang) - embedded tar,
+#                              expanded by `rocm-sdk init`
+# `rocm-sdk path --root` then prints the ROCm prefix; we symlink it to
+# /opt/rocm and point ROCM_PATH/ROCM_HOME/HIP_PATH there.
+#
+# Python: the gfx1151 torch wheels for the newest aligned stack are cp312
+# ONLY (torch 2.13.0+rocm7.14.0), while Fedora 44's default python3 is 3.14.
+# We therefore install Fedora's python3.12 package and use it for everything
+# (python3 is symlinked to python3.12 in /usr/local/bin).
 #
 # OWNER MUST VERIFY on first build:
-#  - That Fedora 44's packaged ROCm (rocm-hip-devel & friends, prefix /usr)
-#    is new enough for gfx1151 and ABI-compatible with ROCM_VERSION of the
-#    torch wheels below. If it lags, switch the SDK to AMD's yum repo
-#    (repo.radeon.com) instead of the Fedora packages.
-#  - That ROCM_VERSION/TORCH_VERSION exist under
-#    https://repo.amd.com/rocm/whl-multi-arch/rocm<ROCM_VERSION>/gfx1151/.
+#  - That ROCM_VERSION/TORCH_VERSION/TORCHVISION_VERSION form an aligned set
+#    on https://repo.amd.com/rocm/whl-multi-arch/ (build-stable.yml's
+#    discover step resolves this automatically).
 
 ARG FEDORA_VERSION=44
 FROM fedora:${FEDORA_VERSION} AS builder
 
-ARG ROCM_VERSION=7.2
-ARG TORCH_VERSION=2.9.1
+ARG ROCM_VERSION=7.14.0
+ARG TORCH_VERSION=2.13.0
+ARG TORCHVISION_VERSION=0.28.0
 ARG VLLM_REF=main
 ARG RCCL_IMPL=stock
 ARG AITER_REF=v0.1.19
 ARG CONCH_VERSION=1.2.1
+ARG ROCM_INDEX_URL=https://repo.amd.com/rocm/whl-multi-arch/
 # Fedora's rdma-core must be >= v62 (Ubuntu's v50 had irdma
 # "Unknown completion" errors). Overlay-built from source only if older.
 ARG RDMA_CORE_MIN_MAJOR=62
@@ -38,34 +57,63 @@ ARG RDMA_CORE_REF=v62.0
 
 ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
 
-# --- Full ROCm SDK + build toolchain ---------------------------------------
-# Fedora packages ROCm with prefix /usr (libs in /usr/lib64), NOT /opt/rocm.
-# Building vLLM against the pip-bundled ROCm runtime inside the torch wheel
-# is a known failure, so we build against this system SDK.
+# --- Build toolchain + python 3.12 ------------------------------------------
+# No Fedora ROCm packages: the SDK comes from the TheRock pip wheels (see
+# header). numactl-libs/libdrm/libatomic are runtime deps of the HSA thunk
+# that the pip SDK does not bundle.
 RUN dnf install -y ${DNF_FLAGS} \
         git cmake ninja-build gcc gcc-c++ make which findutils procps-ng \
-        python3 python3-pip python3-devel \
-        rocm-hip-devel rocm-opencl-devel rocm-comgr-devel rocm-device-libs \
-        hsakmt-roct-devel rocblas-devel hipblas-devel rocfft-devel hipfft-devel \
-        rocsparse-devel hipsparse-devel rocsolver-devel hipsolver-devel \
-        rocrand-devel hiprand-devel rocprim-devel hipcub-devel rocthrust-devel \
-        rccl-devel miopen-hip-devel composable-kernel-devel half-devel \
-        roctracer-devel rocm-cmake rocminfo rocm-smi \
+        python3.12 python3.12-devel curl-minimal \
+        numactl-libs libdrm libatomic \
     && dnf clean all
 
-# ROCm-layout compatibility prefix so tools that expect $ROCM_HOME/{bin,lib,
-# include} (torch cpp_extension, vLLM's cmake) find the Fedora layout.
-RUN mkdir -p /opt/rocm \
-    && ln -s /usr/bin     /opt/rocm/bin \
-    && ln -s /usr/include /opt/rocm/include \
-    && ln -s /usr/lib64   /opt/rocm/lib \
-    && ln -s /usr/lib64   /opt/rocm/lib64 \
-    && ln -s /usr/share   /opt/rocm/share
+# pip for python3.12 (Fedora's python3-pip targets the 3.14 system python) and
+# the python3 -> python3.12 symlink so every later step (patch layer, smoke
+# test, console scripts) consistently uses the interpreter the wheels target.
+RUN curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
+    && python3.12 /tmp/get-pip.py --no-cache-dir \
+    && rm -f /tmp/get-pip.py \
+    && ln -sf /usr/bin/python3.12 /usr/local/bin/python3
+
+# --- gfx1151 torch stack + full ROCm SDK from AMD's multi-arch index --------
+# torch itself pulls rocm[libraries]==<ROCM_VERSION> (core+libraries),
+# triton==...rocm<ROCM_VERSION> and rocm-bootstrap; the amd-torch-device
+# plugin pulls rocm-sdk-device-gfx1151. Adding rocm[devel] completes the SDK
+# (headers + cmake + compilers). torchvision is needed by vLLM multimodal
+# code; its version is resolved alongside torch by the CI discover step.
+# PyPI is kept as extra-index for the pure-python deps (and the setuptools
+# backend needed to build the `rocm` sdist).
+RUN python3 -m pip install \
+        --index-url "${ROCM_INDEX_URL}" \
+        --extra-index-url https://pypi.org/simple \
+        "torch==${TORCH_VERSION}+rocm${ROCM_VERSION}" \
+        "amd-torch-device-gfx1151==${TORCH_VERSION}+rocm${ROCM_VERSION}" \
+        "torchvision==${TORCHVISION_VERSION}+rocm${ROCM_VERSION}" \
+        "amd-torchvision-device-gfx1151==${TORCHVISION_VERSION}+rocm${ROCM_VERSION}" \
+        "rocm[devel]==${ROCM_VERSION}" \
+    && python3 -m pip install pyyaml packaging setuptools wheel ninja cmake
+
+# Expand the embedded devel tar (headers/cmake/compilers, reconciles the
+# gfx1151 device links), then expose the SDK at fixed paths: /opt/rocm is the
+# ROCm prefix (bin/include/lib/cmake), /opt/rocm-core and /opt/rocm-libraries
+# the runtime lib trees.
+RUN python3 -m rocm_sdk init \
+    && ln -sfn "$(python3 -m rocm_sdk path --root)" /opt/rocm \
+    && ln -sfn "$(python3 -c 'import _rocm_sdk_core, pathlib; print(pathlib.Path(_rocm_sdk_core.__file__).parent)')" /opt/rocm-core \
+    && ln -sfn "$(python3 -c 'import _rocm_sdk_libraries, pathlib; print(pathlib.Path(_rocm_sdk_libraries.__file__).parent)')" /opt/rocm-libraries \
+    && export PATH=/opt/rocm/bin:/opt/rocm-core/bin:${PATH} \
+    && command -v hipcc \
+    && test -d /opt/rocm/include/rocprim \
+    && test -d /opt/rocm/include/hipcub \
+    && test -d /opt/rocm/include/thrust \
+    && echo "ROCm SDK layout OK: $(hipcc --version | head -1)"
 
 ENV ROCM_PATH=/opt/rocm \
     ROCM_HOME=/opt/rocm \
     HIP_PATH=/opt/rocm \
-    PATH=/opt/rocm/bin:${PATH} \
+    PATH=/opt/rocm/bin:/opt/rocm-core/bin:${PATH} \
+    CMAKE_PREFIX_PATH=/opt/rocm/lib/cmake \
+    LD_LIBRARY_PATH=/opt/rocm/lib:/opt/rocm-core/lib:/opt/rocm-libraries/lib \
     PYTORCH_ROCM_ARCH=gfx1151 \
     GPU_TARGETS=gfx1151 \
     VLLM_TARGET_DEVICE=rocm \
@@ -74,15 +122,6 @@ ENV ROCM_PATH=/opt/rocm \
 # it, while torch cpp_extension keys off PYTORCH_ROCM_ARCH. Setting BOTH is
 # the belt-and-suspenders pin against the silent arch-fallback bug
 # (vllm#22590, audited again from the build log at wheel-build time below).
-
-# --- gfx1151 torch stack from AMD's multi-arch index ------------------------
-# torchvision is needed by vLLM multimodal code; unpinned because the
-# torch<->torchvision pairing in this index is not documented - if the index
-# lacks torchvision, drop it here and pin it manually.
-RUN pip3 install \
-        --index-url "https://repo.amd.com/rocm/whl-multi-arch/rocm${ROCM_VERSION}/gfx1151/" \
-        "torch==${TORCH_VERSION}" torchvision pytorch-triton-rocm \
-    && pip3 install pyyaml packaging setuptools wheel ninja cmake
 
 # --- rdma-core version gate -------------------------------------------------
 # Check Fedora's packaged rdma-core; only if older than v62 build an overlay
@@ -137,10 +176,10 @@ RUN cd /opt/src/vllm \
 RUN cd /opt/src/vllm \
     && REQ=requirements/rocm-build.txt \
     && [ -f "$REQ" ] || REQ=requirements/build.txt \
-    && pip3 install -r "$REQ" \
+    && python3 -m pip install -r "$REQ" \
     && mkdir -p /wheels \
     && set -o pipefail \
-    && MAX_JOBS=$(nproc) pip3 wheel --no-build-isolation --no-deps -w /wheels . 2>&1 | tee /tmp/vllm-build.log \
+    && MAX_JOBS=$(nproc) python3 -m pip wheel --no-build-isolation --no-deps -w /wheels . 2>&1 | tee /tmp/vllm-build.log \
     && grep -q 'gfx1151' /tmp/vllm-build.log \
     && bad=$(grep -oE '(--offload-arch=|-mcpu=|--amdgpu-target=|--gpu-target=)gfx[0-9a-z]+' /tmp/vllm-build.log \
              | grep -oE 'gfx[0-9a-z]+$' | sort -u | grep -vx 'gfx1151' || true) \
@@ -156,56 +195,71 @@ RUN cd /opt/src/vllm \
 # Order matters at runtime (vLLM imports AITER/conch before attention
 # backends); we build wheels here and install in the same order in the final
 # stage. AITER setup.py imports torch, so it needs --no-build-isolation.
-RUN pip3 wheel --no-build-isolation --no-deps -w /wheels \
+RUN python3 -m pip wheel --no-build-isolation --no-deps -w /wheels \
         "git+https://github.com/ROCm/aiter.git@${AITER_REF}"
-RUN pip3 download --no-deps -d /wheels "conch-triton-kernels==${CONCH_VERSION}"
+RUN python3 -m pip download --no-deps -d /wheels "conch-triton-kernels==${CONCH_VERSION}"
 # ROCm flash-attention, branch main_perf (the gfx-tuned line). Long compile;
 # cross-compiling for gfx1151, no GPU needed at build time.
 RUN git clone --depth 1 --branch main_perf https://github.com/ROCm/flash-attention /opt/src/flash-attention \
     && cd /opt/src/flash-attention \
     && FLASH_ATTENTION_FORCE_BUILD=TRUE MAX_JOBS=$(nproc) \
-       pip3 wheel --no-build-isolation --no-deps -w /wheels .
+       python3 -m pip wheel --no-build-isolation --no-deps -w /wheels .
 
 # ---------------------------------------------------------------------------
 FROM fedora:${FEDORA_VERSION} AS final
 
-ARG ROCM_VERSION=7.2
-ARG TORCH_VERSION=2.9.1
+ARG ROCM_VERSION=7.14.0
+ARG TORCH_VERSION=2.13.0
+ARG TORCHVISION_VERSION=0.28.0
 ARG RCCL_IMPL=stock
 ARG CONCH_VERSION=1.2.1
+ARG ROCM_INDEX_URL=https://repo.amd.com/rocm/whl-multi-arch/
 
 ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
 
-# Runtime-only ROCm libs + RDMA userspace (ibv_devices via libibverbs-utils,
-# perftest for link validation) + python.
+# Runtime userspace: python 3.12 + RDMA tooling (ibv_devices via
+# libibverbs-utils, perftest for link validation). ROCm itself comes from the
+# TheRock pip SDK (same as builder, incl. devel, so Triton/AITER JIT and
+# hipcc-based compiles work on the nodes). binutils provides ld for JIT
+# linkers; numactl-libs/libdrm/libatomic are HSA thunk deps.
 RUN dnf install -y ${DNF_FLAGS} \
-        python3 python3-pip \
-        rocm-hip rocm-opencl rocblas hipblas rocfft hipfft rocsparse hipsparse \
-        rocsolver hipsolver rocrand hiprand rocprim hipcub rocthrust \
-        rccl miopen-hip rocm-device-libs comgr hsakmt-roct rocminfo rocm-smi \
+        python3.12 python3.12-devel curl-minimal binutils \
+        numactl-libs libdrm libatomic \
         rdma-core libibverbs-utils librdmacm-utils perftest \
     && dnf clean all
 
-RUN mkdir -p /opt/rocm \
-    && ln -s /usr/bin     /opt/rocm/bin \
-    && ln -s /usr/include /opt/rocm/include \
-    && ln -s /usr/lib64   /opt/rocm/lib \
-    && ln -s /usr/lib64   /opt/rocm/lib64 \
-    && ln -s /usr/share   /opt/rocm/share
+RUN curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
+    && python3.12 /tmp/get-pip.py --no-cache-dir \
+    && rm -f /tmp/get-pip.py \
+    && ln -sf /usr/bin/python3.12 /usr/local/bin/python3
+
+# gfx1151 torch stack + full ROCm SDK (same index/versions as builder).
+RUN python3 -m pip install \
+        --index-url "${ROCM_INDEX_URL}" \
+        --extra-index-url https://pypi.org/simple \
+        "torch==${TORCH_VERSION}+rocm${ROCM_VERSION}" \
+        "amd-torch-device-gfx1151==${TORCH_VERSION}+rocm${ROCM_VERSION}" \
+        "torchvision==${TORCHVISION_VERSION}+rocm${ROCM_VERSION}" \
+        "amd-torchvision-device-gfx1151==${TORCHVISION_VERSION}+rocm${ROCM_VERSION}" \
+        "rocm[devel]==${ROCM_VERSION}" \
+    && python3 -m pip install pyyaml
+
+RUN python3 -m rocm_sdk init \
+    && ln -sfn "$(python3 -m rocm_sdk path --root)" /opt/rocm \
+    && ln -sfn "$(python3 -c 'import _rocm_sdk_core, pathlib; print(pathlib.Path(_rocm_sdk_core.__file__).parent)')" /opt/rocm-core \
+    && ln -sfn "$(python3 -c 'import _rocm_sdk_libraries, pathlib; print(pathlib.Path(_rocm_sdk_libraries.__file__).parent)')" /opt/rocm-libraries \
+    && printf '%s\n' /opt/rocm/lib /opt/rocm-core/lib /opt/rocm-libraries/lib \
+        > /etc/ld.so.conf.d/zz-rocm-pip-sdk.conf \
+    && ldconfig
 
 ENV ROCM_PATH=/opt/rocm \
     ROCM_HOME=/opt/rocm \
     HIP_PATH=/opt/rocm \
-    PATH=/opt/rocm/bin:${PATH} \
+    PATH=/opt/rocm/bin:/opt/rocm-core/bin:${PATH} \
+    LD_LIBRARY_PATH=/opt/rocm/lib:/opt/rocm-core/lib:/opt/rocm-libraries/lib \
     PYTORCH_ROCM_ARCH=gfx1151 \
     GPU_TARGETS=gfx1151 \
     PIP_NO_CACHE_DIR=1
-
-# gfx1151 torch stack (same index as builder).
-RUN pip3 install \
-        --index-url "https://repo.amd.com/rocm/whl-multi-arch/rocm${ROCM_VERSION}/gfx1151/" \
-        "torch==${TORCH_VERSION}" torchvision pytorch-triton-rocm \
-    && pip3 install pyyaml
 
 # rdma-core overlay (only populated when Fedora's package was < v62).
 COPY --from=builder /opt/rdma-overlay /opt/rdma-overlay
@@ -222,20 +276,20 @@ RUN if [ -n "$(ls -A /opt/rdma-overlay 2>/dev/null)" ]; then \
 # so no CUDA torch is pulled in accidentally.
 COPY --from=builder /wheels /wheels
 RUN set -e; \
-    pip3 install --no-deps $(ls /wheels/*aiter*.whl); \
-    pip3 install --no-deps /wheels/conch_triton_kernels-*.whl; \
-    pip3 install --no-deps /wheels/flash_attn-*.whl; \
-    pip3 install --extra-index-url \
-        "https://repo.amd.com/rocm/whl-multi-arch/rocm${ROCM_VERSION}/gfx1151/" \
+    python3 -m pip install --no-deps $(ls /wheels/*aiter*.whl); \
+    python3 -m pip install --no-deps /wheels/conch_triton_kernels-*.whl; \
+    python3 -m pip install --no-deps /wheels/flash_attn-*.whl; \
+    python3 -m pip install --extra-index-url \
+        "${ROCM_INDEX_URL}" \
         /wheels/vllm-*.whl; \
-    pip3 install "ray[default]"; \
+    python3 -m pip install "ray[default]"; \
     rm -rf /wheels
 
 # --- Dependency cut-list (text-MoE cluster, models from local disk) --------
 # gfx1151-only specialization: remove vLLM transitive deps this image never
 # exercises. Each removal is safe ONLY while the cluster serves text MoE
 # models loaded from local NVMe - re-add the package if that changes.
-# pip3 uninstall of an absent package is a no-op warning (exit 0), so this
+# pip uninstall of an absent package is a no-op warning (exit 0), so this
 # stays safe across vLLM dependency churn.
 RUN set -e; \
     # runai-model-streamer: S3/GCS/Azure weight streaming; this cluster loads
@@ -247,7 +301,7 @@ RUN set -e; \
     # through vLLM's own quant paths. \
     # timm + opencv-python-headless: vision-encoder deps; models/registry.yaml
     # has NO vision model. MUST be re-added if a vision model is added. \
-    pip3 uninstall -y \
+    python3 -m pip uninstall -y \
         runai-model-streamer \
         datasets \
         peft \
@@ -261,9 +315,9 @@ RUN set -e; \
     # \
     # CUDA-only reqs: assert absent (never installable from the ROCm index,
     # and a leak here means a CUDA wheel crept into a gfx1151 image). \
-    if pip3 list --format=freeze | grep -qiE '^(flashinfer|bitsandbytes)[= -]'; then \
+    if python3 -m pip list --format=freeze | grep -qiE '^(flashinfer|bitsandbytes)[= -]'; then \
         echo "FATAL: CUDA-only dependency leaked into the gfx1151 image:"; \
-        pip3 list --format=freeze | grep -iE '^(flashinfer|bitsandbytes)[= -]'; \
+        python3 -m pip list --format=freeze | grep -iE '^(flashinfer|bitsandbytes)[= -]'; \
         exit 1; \
     fi; \
     # Fail-safe: if the cut-list broke the import graph, reinstall the cut
@@ -271,22 +325,26 @@ RUN set -e; \
     # runs unconditionally, so a still-broken image fails the build here. \
     if ! python3 -c 'import vllm'; then \
         echo "WARNING: 'import vllm' failed after dependency cut - reinstalling cut packages"; \
-        pip3 install \
+        python3 -m pip install \
             runai-model-streamer datasets peft amd-quark timm opencv-python-headless; \
     fi; \
     python3 -c 'import vllm; print("vLLM import OK after dependency cut:", vllm.__version__)'
 
 # --- Custom RCCL for gfx1151 ------------------------------------------------
-# RCCL_IMPL=custom expects patches/librccl/librccl.so in the build context
-# (produced by the rccl CI workflow artifact or placed manually from the
-# known-good kyuz0/rocm-systems gfx1151-rccl build - upstream RCCL is fragile
-# on gfx1151, ROCm/rocm-systems#5229). Missing file -> warn and keep stock.
+# NOTE: ROCm/rocm-systems#5229 (RCCL broken on gfx1151 in TheRock builds) is
+# CLOSED - fixed via ROCm/TheRock#4935 + #5376, and librccl.so ships in the
+# rocm-sdk-libraries wheel this image installs. Stock RCCL is therefore
+# expected to work; RCCL_IMPL=custom remains as a fallback and expects
+# patches/librccl/librccl.so in the build context (produced by the
+# build-rccl.yml workflow or placed manually from the known-good
+# kyuz0/rocm-systems gfx1151-rccl build). Missing file -> warn and keep stock.
 COPY patches/ /opt/patches/
 RUN if [ "${RCCL_IMPL}" = "custom" ]; then \
         if [ -f /opt/patches/librccl/librccl.so ]; then \
             echo "Installing custom gfx1151 RCCL"; \
-            for f in /usr/lib64/librccl.so.1 \
-                     /usr/local/lib/python3*/site-packages/torch/lib/librccl.so*; do \
+            sdk_libs="$(python3 -c 'import _rocm_sdk_libraries, pathlib; print(pathlib.Path(_rocm_sdk_libraries.__file__).parent)')/lib"; \
+            for f in ${sdk_libs}/librccl.so* \
+                     /usr/local/lib*/python3.12/site-packages/torch/lib/librccl.so*; do \
                 [ -e "$f" ] || continue; \
                 [ -e "${f}.stock" ] || cp -a "$f" "${f}.stock"; \
                 cp -f /opt/patches/librccl/librccl.so "$f"; \
@@ -311,7 +369,7 @@ RUN if [ "${RCCL_IMPL}" = "custom" ]; then \
 # (patches/vendor/gfx1x_tilelang_mqa.py via patch 52). Best-effort: patch 52
 # degrades gracefully to the upstream path without it, so a missing/broken
 # tilelang wheel warns instead of failing the build.
-RUN pip3 install tilelang \
+RUN python3 -m pip install tilelang \
     || echo "WARNING: tilelang install failed - sparse-indexer TileLang kernels will fall back to upstream path"
 
 # Patch 50 (patches/50_conch_moe_mxfp4_tune.py) is deliberately NOT applied by
