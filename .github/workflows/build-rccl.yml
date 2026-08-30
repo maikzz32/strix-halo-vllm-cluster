@@ -53,7 +53,7 @@ jobs:
           # 3.12 to match the image). No Fedora ROCm packages exist for this.
           dnf install -y --setopt=install_weak_deps=False \
             git cmake make gcc-c++ patch python3.12 python3.12-devel curl-minimal \
-            numactl-libs libdrm libatomic
+            numactl-libs libdrm libdrm-devel libatomic
           curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
           python3.12 /tmp/get-pip.py --no-cache-dir
           rm -f /tmp/get-pip.py
