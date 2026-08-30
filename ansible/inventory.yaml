@@ -5,8 +5,14 @@
 #   SAME physical NIC port as RoCE on this setup).
 # RoCEv2 RDMA lives on 192.168.100.0/24 (validated: ib_write_bw node1<->node2
 # = 20.34 Gbps @ 64 KiB messages, PORT_ACTIVE, active_mtu 4096).
-# NIC: 4 RoCE ports per node (rocep197s0f0-f3); node4 sees only f0/f1 and its
-# RoCE IP is on port f1, not f3 — roce_iface differs per node, keep it.
+# NICs (lspci-verified 2026-08-30):
+#   node1-3: Intel E810-C 4-port (8086:1593, ice driver, fw 5.01)
+#   node4:   Intel E830-L 2-port (8086:12de, ice driver, fw 2.11) - only f0/f1
+# Both use irdma (RoCEv2). Heterogeneous RDMA validated live:
+#   node1<->node2 (E810<->E810) = 20.34 Gbps
+#   node1<->node4 (E810<->E830) = 24.50 Gbps  <- near line rate
+# The rdma-core >= v62 requirement (irdma "Unknown completion" with RCCL)
+# applies to BOTH chips - do not relax the Dockerfile overlay.
 strix_nodes:
   vars:
     ansible_user: maik
@@ -28,7 +34,7 @@ strix_nodes:
       roce_iface: enp197s0f3np3
       roce_rdma_dev: rocep197s0f3
     node4:
-      ansible_host: 192.168.1.18    # StrixHalo4 — NOTE: RoCE on port f1,
-      roce_ip: 192.168.100.4        # only 2 RDMA ports present (rocep197s0f0-f1)
+      ansible_host: 192.168.1.18    # StrixHalo4 — Intel E830-L 2-port NIC
+      roce_ip: 192.168.100.4        # (8086:12de); RoCE on port f1
       roce_iface: enp197s0f1np1
       roce_rdma_dev: rocep197s0f1

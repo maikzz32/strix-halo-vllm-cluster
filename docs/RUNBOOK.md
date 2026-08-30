@@ -195,3 +195,20 @@ Diagnose nötig sind.
 - **RCCL-Umgebung:** `NCCL_IB_GID_INDEX=1` (RoCEv2), `NCCL_NET_GDR_LEVEL=0`
   (kein GPU-Direct-Pfad auf der iGPU), `NCCL_SOCKET_IFNAME` aus dem RoCE-Iface —
   alle gesetzt durch `serve.sh`; bei manuellen Starts selbst exportieren.
+
+## Cluster-Hardware-Stand (vermessen 2026-08-30)
+
+- **Nodes:** StrixHalo1–4 = 192.168.1.15–18, Fedora 45, Kernel 7.2.0.
+  Management und RoCE teilen sich denselben physischen Port.
+- **NICs:** node1–3 Intel **E810-C** 4-Port (`8086:1593`, ice, fw 5.01);
+  node4 Intel **E830-L** 2-Port (`8086:12de`, ice, fw 2.11). Beide nutzen
+  `irdma` → die rdma-core-≥-v62-Anforderung im Dockerfile gilt für beide.
+- **RoCE-Messwerte** (`ib_write_bw`, 64-KiB-Messages): node1↔node2
+  (E810↔E810) = 20,34 Gbps; node1↔node4 (E810↔**E830**) = 24,50 Gbps.
+  Die heterogene Strecke ist also die schnellere — kein gemischter
+  Bestand nötig, aber kein Nachteil.
+- **Zu beachten bei E830-L (node4):** RoCE-IP liegt auf Port **f1**
+  (`enp197s0f1np1`, `rocep197s0f1`) — Inventory-Wert `roce_iface` nicht
+  vereinheitlichen. Firmware 2.11 ist älter als auf den E810 (5.01); bei
+  unerklärlichen RCCL/irdma-Problemen zuerst auf dieser Node einen
+  Firmware-Stand prüfen.
