@@ -155,11 +155,17 @@ RUN set -e; \
 # --- vLLM source build ------------------------------------------------------
 WORKDIR /opt/src
 # Fetch works for both tags and raw commit SHAs (GitHub allows fetching
-# reachable SHAs directly).
+# reachable SHAs directly). Tag-looking refs (vX.Y.Z) are fetched with an
+# explicit tag refspec so the versioning backend (vcs_versioning) sees the
+# tag and stamps the wheel with the real version instead of 0.1.dev1.
 RUN git init vllm \
     && cd vllm \
     && git remote add origin https://github.com/vllm-project/vllm.git \
-    && git fetch --depth 1 origin "${VLLM_REF}" \
+    && if [[ "${VLLM_REF}" =~ ^v[0-9] ]]; then \
+           git fetch --depth 1 origin "refs/tags/${VLLM_REF}:refs/tags/${VLLM_REF}"; \
+       else \
+           git fetch --depth 1 origin "${VLLM_REF}"; \
+       fi \
     && git checkout --detach FETCH_HEAD
 
 # Patch layer. apply_all.sh runs with VLLM_SRC pointing at the checkout;
@@ -189,7 +195,9 @@ RUN cd /opt/src/vllm \
 # PYTORCH_ROCM_ARCH compiles for the default multi-arch list instead of
 # failing - the wheel then JIT-fails or silently mis-runs on gfx1151. The
 # grep audit below is the hard guard: the log must mention gfx1151, and no
-# HIP device-compile flag may name any other gfx arch.
+# HIP device-compile flag may name any other gfx arch. `pip wheel -v` is
+# REQUIRED: pip discards a successful build's subprocess output otherwise,
+# leaving the audit an empty log to grep.
 RUN cd /opt/src/vllm \
     && for cand in requirements/build/rocm.txt requirements/rocm-build.txt requirements/build.txt; do \
            if [ -f "$cand" ]; then REQ="$cand"; break; fi; \
@@ -202,7 +210,7 @@ RUN cd /opt/src/vllm \
     && python3 -c "import torch; assert torch.__version__.startswith('${TORCH_VERSION}+rocm'), 'torch clobbered: '+torch.__version__; print('torch pin intact:', torch.__version__)" \
     && mkdir -p /wheels \
     && set -o pipefail \
-    && MAX_JOBS=$(nproc) python3 -m pip wheel --no-build-isolation --no-deps -w /wheels . 2>&1 | tee /tmp/vllm-build.log \
+    && MAX_JOBS=$(nproc) python3 -m pip wheel -v --no-build-isolation --no-deps -w /wheels . 2>&1 | tee /tmp/vllm-build.log \
     && grep -q 'gfx1151' /tmp/vllm-build.log \
     && bad=$(grep -oE '(--offload-arch=|-mcpu=|--amdgpu-target=|--gpu-target=)gfx[0-9a-z]+' /tmp/vllm-build.log \
              | grep -oE 'gfx[0-9a-z]+$' | sort -u | grep -vx 'gfx1151' || true) \
