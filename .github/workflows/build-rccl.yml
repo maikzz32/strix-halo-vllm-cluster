@@ -52,7 +52,7 @@ jobs:
           # gfx1151 torch stack is cp312-only, so the SDK is installed for
           # 3.12 to match the image). No Fedora ROCm packages exist for this.
           dnf install -y --setopt=install_weak_deps=False \
-            git cmake make gcc-c++ python3.12 python3.12-devel curl-minimal \
+            git cmake make gcc-c++ patch python3.12 python3.12-devel curl-minimal \
             numactl-libs libdrm libatomic
           curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
           python3.12 /tmp/get-pip.py --no-cache-dir
@@ -79,6 +79,27 @@ jobs:
           # `|| true` keeps this informational line non-fatal)
           "${ROCM_PATH}/bin/hipcc" --version 2>&1 | head -1 || true
 
+      - name: Probe hipcc on the GPU-less runner + install arch-injecting wrapper
+        run: |
+          set -uo pipefail
+          # Diagnostic: on a GPU-less runner hipcc's default amdgpu-arch
+          # detection fails; RCCL's nested fmt/FetchContent configures don't
+          # inherit -DCMAKE_REQUIRED_FLAGS, so probes there still fail. Wrap
+          # hipcc so EVERY invocation (incl. nested try_compiles) gets
+          # --offload-arch=gfx1151. The probe output documents the actual
+          # failure mode in the run log.
+          echo 'int main(){return 0;}' > /tmp/probe.cpp
+          echo "--- hipcc without --offload-arch (expected to fail):"
+          "${ROCM_PATH}/bin/hipcc" /tmp/probe.cpp -o /tmp/probe1 2>&1 | head -5
+          echo "--- hipcc --offload-arch=gfx1151 (expected to pass):"
+          "${ROCM_PATH}/bin/hipcc" --offload-arch=gfx1151 /tmp/probe.cpp -o /tmp/probe2 2>&1 | head -5 \
+            && echo "arch-pinned hipcc compile OK"
+          printf '#!/bin/sh\nexec "%s/bin/hipcc" --offload-arch=gfx1151 "$@"\n' \
+            "${ROCM_PATH}" > /usr/local/bin/hipcc-gfx1151
+          chmod +x /usr/local/bin/hipcc-gfx1151
+          /usr/local/bin/hipcc-gfx1151 /tmp/probe.cpp -o /tmp/probe3 \
+            && echo "wrapper compile OK"
+
       - name: Clone and build RCCL for gfx1151
         run: |
           set -euo pipefail
@@ -87,8 +108,7 @@ jobs:
           cd rocm-systems/projects/rccl
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_CXX_COMPILER="${ROCM_PATH}/bin/hipcc" \
-            -DCMAKE_REQUIRED_FLAGS=--offload-arch=gfx1151 \
+            -DCMAKE_CXX_COMPILER=/usr/local/bin/hipcc-gfx1151 \
             -DCMAKE_PREFIX_PATH="${ROCM_PATH}/lib/cmake" \
             -DGPU_TARGETS=gfx1151 \
             -DBUILD_TESTS=OFF

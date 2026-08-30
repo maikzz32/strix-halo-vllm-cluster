@@ -30,10 +30,12 @@ model package at all (e.g. a build off vLLM main without PR #53906), the
 patch is not needed and reports SKIP with a note. If GLM-5.3 support IS
 present but the anchors moved, exit 42 (re-audit).
 
-STATUS: expected-to-need-adjustment. Written against the researched PR
-#53906 / vllm#53943 code shape; not yet run against a real checkout of the
-glm-release branch. The exact selector expression (variable names for the
-fp8-KV flag and kv_lora_rank) must be confirmed on the first GLM build.
+STATUS: re-audited against vLLM v0.28.0. Upstream main/stable (incl.
+v0.28.0) has NO glm5_next model package and no shape-keyed selector (the
+referenced upstream issue vllm#53943 is still OPEN), so the patch SKIPs
+there — verified. The exact selector expression (variable names for the
+fp8-KV flag and kv_lora_rank) must still be confirmed on the first GLM
+(PR #53906 glm-release) build; the anchors stay fail-closed for that tree.
 
 Usage:
     python3 58_glm_mtp_sparse_dispatch.py --src /opt/vllm          # apply
@@ -187,12 +189,18 @@ def main() -> int:
     args = ap.parse_args()
     src = Path(args.src)
 
+    # Presence check FIRST (same convention as patch 57): upstream vLLM
+    # main/stable carries ROCMAiterMLASparseImpl._forward_mla WITHOUT the
+    # GLM-5.3 shape-keyed selector, so find_target alone cannot distinguish
+    # "GLM tree" from "upstream tree". The shape selector only exists in the
+    # PR #53906 glm-release branch this patch was written against.
+    if not glm5_present(src):
+        print(f"SKIP: no glm5_next model package under {src} — patch 58 "
+              f"only applies to GLM-5.3 builds (PR #53906 branch).")
+        return 0
+
     target = find_target(src)
     if target is None:
-        if not glm5_present(src):
-            print(f"SKIP: no glm5_next model package under {src} — patch 58 "
-                  f"only applies to GLM-5.3 builds (PR #53906 branch).")
-            return 0
         print(f"ERROR: GLM-5.3 support present but {IMPL_CLASS}."
               f"_forward_mla not found under {src}. Upstream moved the "
               f"sparse-MLA backend; re-audit this patch.", file=sys.stderr)

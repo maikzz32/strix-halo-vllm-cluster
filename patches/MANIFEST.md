@@ -41,8 +41,10 @@ on the first real image build.
 
 ## 20_rocm_smi_rtld.py
 
-- **Purpose:** Load `librocm_smi64` with `RTLD_GLOBAL` to fix a symbol clash
-  on the ROCm stack.
+- **Purpose:** Keep the rtld mode of torch's ROCm library preload
+  (TheRock `rocm_sdk.initialize_process`, default `RTLD_GLOBAL`) runtime-
+  switchable via `VLLM_GFX1X_ROCM_SMI_RTLD` for the unresolved symbol-clash
+  A/B. Re-audited for torch 2.13.0+rocm7.14.0.
 - **Target:** `_rocm_init.py` of the **installed torch package** (not the
   vLLM checkout; located via `importlib.util.find_spec("torch")`).
 - **Upstream reference:** none pinned; re-audit notes should link the torch

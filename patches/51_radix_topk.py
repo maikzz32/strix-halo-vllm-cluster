@@ -13,12 +13,12 @@ Sources:
     (itself adapted from AlexKGwyn/ds4-vllm-public @
     95c45bb94f324fcf3f58ec1f5eaf2d1aaceb87ff), Apache-2.0.
   - dispatch logic ported from kyuz0's patch_dsv4_gfx1x.py
-    (patch_sparse_indexer_topk), adapted to current upstream: the
-    ``torch.ops._C.top_k_per_row_*`` calls now live in the ``else:`` branch
-    of the AITER top-k dispatch. On gfx1x the AITER master toggle is gated
-    off (patch 40), so this else branch is where decode/prefill land; if a
-    future build enables an AITER top-k kernel on gfx1x, that path takes
-    precedence over this patch.
+    (patch_sparse_indexer_topk), adapted to current upstream: vLLM v0.28
+    dropped the AITER top-k if/else dispatch in this file, so the
+    ``torch.ops._C.top_k_per_row_*`` calls are now unconditional and this
+    patch wraps them directly (upstream call retained as fallback). If a
+    future build re-enables an AITER top-k kernel on gfx1x, that dispatch
+    has to be re-audited against this patch.
 
 Gate: VLLM_GFX1X_RADIX_TOPK (default 1 = ON; rocm_aiter_mla_sparse.py only
 serves DeepSeek-style sparse indexers). Qwen3.8 QSA and GLM-5.3 sparse-MLA
@@ -30,9 +30,11 @@ and (b) rewrites the two top-k call sites. The upstream torch.ops call is
 retained as fallback whenever the gate is off, the arch is not gfx1x, or the
 vendored module fails to import.
 
-STATUS: ported, not yet validated on this hardware. Anchors verified against
-vllm main @ 56058fd572f6a7fec6899385f4a4ed7f4b964477; PR-branch checkouts
-with a different rocm_aiter_mla_sparse.py layout exit 42 for re-audit.
+STATUS: ported, not yet validated on this hardware. Call-site anchors
+re-audited against vLLM v0.28.0 (the AITER top-k if/else dispatch around
+top_k_per_row_* was removed upstream; the patch now wraps the unconditional
+call sites). PR-branch checkouts with a different rocm_aiter_mla_sparse.py
+layout exit 42 for re-audit.
 
 Usage:
     python3 51_radix_topk.py --src /opt/vllm          # apply
@@ -120,10 +122,28 @@ def _gfx1x_radix_topk(
 
 '''.replace("{marker}", MARKER)
 
-# Call-site anchors, verbatim from vllm main @
-# 56058fd572f6a7fec6899385f4a4ed7f4b964477 (else-branch of the AITER top-k
-# dispatch). If a PR branch reshapes these, the patch exits 42 for re-audit.
-PREFILL_OLD = """            else:
+# Call-site anchors, verbatim from vLLM v0.28.0 (the AITER top-k dispatch
+# if/else that older trees wrapped these calls in is gone upstream; the
+# torch.ops calls are now unconditional). If a PR branch reshapes these, the
+# patch exits 42 for re-audit.
+PREFILL_OLD = """            torch.ops._C.top_k_per_row_prefill(
+                logits,
+                chunk.cu_seqlen_ks,
+                chunk.cu_seqlen_ke,
+                topk_indices,
+                num_rows,
+                logits.stride(0),
+                logits.stride(1),
+                topk_tokens,
+            )
+"""
+PREFILL_NEW = """            if not _gfx1x_radix_topk(
+                logits,
+                topk_tokens,
+                row_starts=chunk.cu_seqlen_ks,
+                row_ends=chunk.cu_seqlen_ke,
+                out=topk_indices,
+            ):
                 torch.ops._C.top_k_per_row_prefill(
                     logits,
                     chunk.cu_seqlen_ks,
@@ -135,27 +155,21 @@ PREFILL_OLD = """            else:
                     topk_tokens,
                 )
 """
-PREFILL_NEW = """            else:
-                if not _gfx1x_radix_topk(
-                    logits,
-                    topk_tokens,
-                    row_starts=chunk.cu_seqlen_ks,
-                    row_ends=chunk.cu_seqlen_ke,
-                    out=topk_indices,
-                ):
-                    torch.ops._C.top_k_per_row_prefill(
-                        logits,
-                        chunk.cu_seqlen_ks,
-                        chunk.cu_seqlen_ke,
-                        topk_indices,
-                        num_rows,
-                        logits.stride(0),
-                        logits.stride(1),
-                        topk_tokens,
-                    )
-"""
 
-DECODE_OLD = """        else:
+DECODE_OLD = """        torch.ops._C.top_k_per_row_decode(
+            logits,
+            next_n,
+            decode_metadata.seq_lens,
+            topk_indices,
+            num_rows,
+            logits.stride(0),
+            logits.stride(1),
+            topk_tokens,
+        )
+"""
+DECODE_NEW = """        if not _gfx1x_radix_topk(
+            logits, topk_tokens, out=topk_indices
+        ):
             torch.ops._C.top_k_per_row_decode(
                 logits,
                 next_n,
@@ -166,21 +180,6 @@ DECODE_OLD = """        else:
                 logits.stride(1),
                 topk_tokens,
             )
-"""
-DECODE_NEW = """        else:
-            if not _gfx1x_radix_topk(
-                logits, topk_tokens, out=topk_indices
-            ):
-                torch.ops._C.top_k_per_row_decode(
-                    logits,
-                    next_n,
-                    decode_metadata.seq_lens,
-                    topk_indices,
-                    num_rows,
-                    logits.stride(0),
-                    logits.stride(1),
-                    topk_tokens,
-                )
 """
 
 
