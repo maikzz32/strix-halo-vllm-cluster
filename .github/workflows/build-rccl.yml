@@ -82,22 +82,23 @@ jobs:
       - name: Probe hipcc on the GPU-less runner + install arch-injecting wrapper
         run: |
           set -uo pipefail
-          # Diagnostic: on a GPU-less runner hipcc's default amdgpu-arch
-          # detection fails; RCCL's nested fmt/FetchContent configures don't
-          # inherit -DCMAKE_REQUIRED_FLAGS, so probes there still fail. Wrap
+          # RCCL requires CMAKE_CXX_COMPILER to end in "hipcc"; its nested
+          # fmt/FetchContent configures don't inherit -DCMAKE_REQUIRED_FLAGS,
+          # so arch probing must ride along with the compiler itself. Wrap
           # hipcc so EVERY invocation (incl. nested try_compiles) gets
           # --offload-arch=gfx1151. The probe output documents the actual
           # failure mode in the run log.
           echo 'int main(){return 0;}' > /tmp/probe.cpp
-          echo "--- hipcc without --offload-arch (expected to fail):"
+          echo "--- hipcc without --offload-arch:"
           "${ROCM_PATH}/bin/hipcc" /tmp/probe.cpp -o /tmp/probe1 2>&1 | head -5
           echo "--- hipcc --offload-arch=gfx1151 (expected to pass):"
           "${ROCM_PATH}/bin/hipcc" --offload-arch=gfx1151 /tmp/probe.cpp -o /tmp/probe2 2>&1 | head -5 \
             && echo "arch-pinned hipcc compile OK"
+          mkdir -p /opt/hipcc-wrap
           printf '#!/bin/sh\nexec "%s/bin/hipcc" --offload-arch=gfx1151 "$@"\n' \
-            "${ROCM_PATH}" > /usr/local/bin/hipcc-gfx1151
-          chmod +x /usr/local/bin/hipcc-gfx1151
-          /usr/local/bin/hipcc-gfx1151 /tmp/probe.cpp -o /tmp/probe3 \
+            "${ROCM_PATH}" > /opt/hipcc-wrap/hipcc
+          chmod +x /opt/hipcc-wrap/hipcc
+          /opt/hipcc-wrap/hipcc /tmp/probe.cpp -o /tmp/probe3 \
             && echo "wrapper compile OK"
 
       - name: Clone and build RCCL for gfx1151
@@ -108,7 +109,8 @@ jobs:
           cd rocm-systems/projects/rccl
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_CXX_COMPILER=/usr/local/bin/hipcc-gfx1151 \
+            -DCMAKE_CXX_COMPILER=/opt/hipcc-wrap/hipcc \
+            -DROCM_PATH="${ROCM_PATH}" \
             -DCMAKE_PREFIX_PATH="${ROCM_PATH}/lib/cmake" \
             -DGPU_TARGETS=gfx1151 \
             -DBUILD_TESTS=OFF
