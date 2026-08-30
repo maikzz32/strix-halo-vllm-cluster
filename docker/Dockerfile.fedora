@@ -383,8 +383,12 @@ RUN if [ "${RCCL_IMPL}" = "custom" ]; then \
 # tilelang: required at runtime by the vendored sparse-indexer kernels
 # (patches/vendor/gfx1x_tilelang_mqa.py via patch 52). Best-effort: patch 52
 # degrades gracefully to the upstream path without it, so a missing/broken
-# tilelang wheel warns instead of failing the build.
-RUN python3 -m pip install tilelang \
+# tilelang wheel warns instead of failing the build. vLLM v0.28+ pins
+# tilelang (with apache-tvm-ffi) as a runtime dep, so this only installs
+# when that pin is absent - an unpinned reinstall could otherwise upgrade
+# past vLLM's pin and break the tvm-ffi pairing.
+RUN python3 -c 'import tilelang' 2>/dev/null \
+    || python3 -m pip install tilelang \
     || echo "WARNING: tilelang install failed - sparse-indexer TileLang kernels will fall back to upstream path"
 
 # Patch 50 (patches/50_conch_moe_mxfp4_tune.py) is deliberately NOT applied by
