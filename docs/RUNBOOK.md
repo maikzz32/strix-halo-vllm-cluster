@@ -209,6 +209,8 @@ Diagnose nötig sind.
   Bestand nötig, aber kein Nachteil.
 - **Zu beachten bei E830-L (node4):** RoCE-IP liegt auf Port **f1**
   (`enp197s0f1np1`, `rocep197s0f1`) — Inventory-Wert `roce_iface` nicht
-  vereinheitlichen. Firmware 2.11 ist älter als auf den E810 (5.01); bei
-  unerklärlichen RCCL/irdma-Problemen zuerst auf dieser Node einen
-  Firmware-Stand prüfen.
+  vereinheitlichen. Die E830 ist die **neuere** Chip-Generation mit eigener
+  Firmware-Versionshistorie — ihre Versionsnummern (hier 2.11) sind **nicht**
+  mit denen der E810-Linie (hier 5.01) vergleichbar. Bei irdma/RCCL-Problemen
+  auf node4 also nicht „Firmware alt?" gegen die E810 spiegeln, sondern gegen
+  den aktuellen Stand der **E830-eigenen** Release-Linie prüfen.
