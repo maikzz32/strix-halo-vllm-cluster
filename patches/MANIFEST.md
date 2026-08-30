@@ -27,8 +27,9 @@ on the first real image build.
 - **Purpose:** Pin Triton's runtime driver to device ordinal 0. In vLLM's
   forked EngineCore subprocess Triton can initialise with an "invalid device
   ordinal" on gfx1151. Safe because each cluster node has exactly one iGPU.
-- **Target:** `vllm/triton_utils/importing.py` (inserts a wrapper after
-  `import triton`).
+- **Target:** `vllm/triton_utils/importing.py` (inserts the wrapper
+  immediately before `if not HAS_TRITON:`; anchor re-audited for vLLM
+  v0.28.0, which removed the file's top-level `import triton`).
 - **Upstream reference:** ROCm/TheRock#4552
   (<https://github.com/ROCm/TheRock/issues/4552>).
 - **Status:** expected-to-need-adjustment. The wrapped internal

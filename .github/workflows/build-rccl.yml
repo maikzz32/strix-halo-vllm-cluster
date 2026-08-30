@@ -88,6 +88,7 @@ jobs:
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_CXX_COMPILER="${ROCM_PATH}/bin/hipcc" \
+            -DCMAKE_REQUIRED_FLAGS=--offload-arch=gfx1151 \
             -DCMAKE_PREFIX_PATH="${ROCM_PATH}/lib/cmake" \
             -DGPU_TARGETS=gfx1151 \
             -DBUILD_TESTS=OFF

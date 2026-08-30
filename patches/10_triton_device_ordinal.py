@@ -7,9 +7,14 @@ Upstream reference: https://github.com/ROCm/TheRock/issues/4552
 
 Every cluster node exposes exactly one gfx1151 iGPU, so forcing device
 ordinal 0 is safe here. The patch wraps Triton's driver initialisation at
-the point where vLLM first imports triton (vllm/triton_utils/importing.py).
+the point where vLLM's triton shim has just decided triton is usable
+(vllm/triton_utils/importing.py, immediately before `if not HAS_TRITON:`;
+that module runs before vllm/triton_utils/__init__.py performs the real
+`import triton`).
 
-STATUS: expected-to-need-adjustment. The wrapped triton internals
+STATUS: anchor re-audited for vLLM v0.28.0 (v0.28 removed the top-level
+`import triton` from importing.py; previously the block was inserted after
+that import). The wrapped triton internals
 (triton.runtime.driver.active.utils.load_binary) differ between Triton
 releases; the torch.cuda.set_device(0) part is version-independent.
 Validate against the actual Triton version on the first real build.
@@ -38,11 +43,16 @@ PATCH_BLOCK = '''
 # {marker} (upstream: ROCm/TheRock#4552)
 def _gfx1151_pin_triton_device0():
     """Force Triton to use device 0 (gfx1151 nodes have exactly one iGPU)."""
+    if not HAS_TRITON:
+        return
     import torch
     if not torch.cuda.is_available():
         return
     torch.cuda.set_device(0)
     try:
+        # vLLM v0.28+: importing.py only probes triton (find_spec), the real
+        # import moved to vllm/triton_utils/__init__.py - import it here.
+        import triton
         utils = triton.runtime.driver.active.utils
         _orig_load_binary = utils.load_binary
 
@@ -52,7 +62,7 @@ def _gfx1151_pin_triton_device0():
             return _orig_load_binary(name, kernel, shared, 0, *args, **kwargs)
 
         utils.load_binary = _load_binary_device0
-    except AttributeError:
+    except (AttributeError, ImportError):
         # Triton internals moved; torch.cuda.set_device(0) above still applies.
         pass
 
@@ -95,15 +105,21 @@ def main() -> int:
         print(f"SKIP: patch 10 already applied to {target}")
         return 0
 
-    # Anchor: the top-level `import triton` line. Do not hardcode line numbers.
-    m = re.search(r"^import triton\s*$", content, flags=re.MULTILINE)
+    # Anchor: the `if not HAS_TRITON:` line. In vLLM <= v0.27 the file ended
+    # its probe with a top-level `import triton`; vLLM v0.28 restructured
+    # importing.py to only probe via find_spec (the real import moved to
+    # vllm/triton_utils/__init__.py, which imports THIS module first). The pin
+    # must run after the HAS_TRITON probing above is final and before the
+    # placeholder classes are defined, so insert the block immediately before
+    # `if not HAS_TRITON:`. Do not hardcode line numbers.
+    m = re.search(r"^if not HAS_TRITON:\s*$", content, flags=re.MULTILINE)
     if not m:
-        print(f"ERROR: anchor 'import triton' not found in {target}. "
+        print(f"ERROR: anchor 'if not HAS_TRITON:' not found in {target}. "
               f"Upstream restructured the file; re-audit this patch.",
               file=sys.stderr)
         return EXIT_REAUDIT
 
-    patched = content[:m.end()] + PATCH_BLOCK + content[m.end():]
+    patched = content[:m.start()] + PATCH_BLOCK.lstrip('\n') + '\n' + content[m.start():]
     target.write_text(patched)
     print(f"OK: patch 10 applied to {target}")
     return 0
