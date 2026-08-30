@@ -1,0 +1,351 @@
+# syntax=docker/dockerfile:1
+#
+# vLLM gfx1151 (AMD Strix Halo) image, Fedora 44 base.
+#
+# Build context MUST be the repository root (needs ./patches):
+#   podman build -f docker/Dockerfile.fedora \
+#     --build-arg ROCM_VERSION=7.2 \
+#     --build-arg TORCH_VERSION=2.9.1 \
+#     --build-arg VLLM_REF=v0.x.y \
+#     --build-arg RCCL_IMPL=stock \
+#     -t ghcr.io/<org>/vllm-gfx1151:stable .
+#
+# Two-stage build: `builder` compiles vLLM / AITER / ROCm flash-attention
+# wheels against the full ROCm SDK, the final stage carries only runtime
+# packages plus the prebuilt wheels.
+#
+# OWNER MUST VERIFY on first build:
+#  - That Fedora 44's packaged ROCm (rocm-hip-devel & friends, prefix /usr)
+#    is new enough for gfx1151 and ABI-compatible with ROCM_VERSION of the
+#    torch wheels below. If it lags, switch the SDK to AMD's yum repo
+#    (repo.radeon.com) instead of the Fedora packages.
+#  - That ROCM_VERSION/TORCH_VERSION exist under
+#    https://repo.amd.com/rocm/whl-multi-arch/rocm<ROCM_VERSION>/gfx1151/.
+
+ARG FEDORA_VERSION=44
+FROM fedora:${FEDORA_VERSION} AS builder
+
+ARG ROCM_VERSION=7.2
+ARG TORCH_VERSION=2.9.1
+ARG VLLM_REF=main
+ARG RCCL_IMPL=stock
+ARG AITER_REF=v0.1.19
+ARG CONCH_VERSION=1.2.1
+# Fedora's rdma-core must be >= v62 (Ubuntu's v50 had irdma
+# "Unknown completion" errors). Overlay-built from source only if older.
+ARG RDMA_CORE_MIN_MAJOR=62
+ARG RDMA_CORE_REF=v62.0
+
+ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
+
+# --- Full ROCm SDK + build toolchain ---------------------------------------
+# Fedora packages ROCm with prefix /usr (libs in /usr/lib64), NOT /opt/rocm.
+# Building vLLM against the pip-bundled ROCm runtime inside the torch wheel
+# is a known failure, so we build against this system SDK.
+RUN dnf install -y ${DNF_FLAGS} \
+        git cmake ninja-build gcc gcc-c++ make which findutils procps-ng \
+        python3 python3-pip python3-devel \
+        rocm-hip-devel rocm-opencl-devel rocm-comgr-devel rocm-device-libs \
+        hsakmt-roct-devel rocblas-devel hipblas-devel rocfft-devel hipfft-devel \
+        rocsparse-devel hipsparse-devel rocsolver-devel hipsolver-devel \
+        rocrand-devel hiprand-devel rocprim-devel hipcub-devel rocthrust-devel \
+        rccl-devel miopen-hip-devel composable-kernel-devel half-devel \
+        roctracer-devel rocm-cmake rocminfo rocm-smi \
+    && dnf clean all
+
+# ROCm-layout compatibility prefix so tools that expect $ROCM_HOME/{bin,lib,
+# include} (torch cpp_extension, vLLM's cmake) find the Fedora layout.
+RUN mkdir -p /opt/rocm \
+    && ln -s /usr/bin     /opt/rocm/bin \
+    && ln -s /usr/include /opt/rocm/include \
+    && ln -s /usr/lib64   /opt/rocm/lib \
+    && ln -s /usr/lib64   /opt/rocm/lib64 \
+    && ln -s /usr/share   /opt/rocm/share
+
+ENV ROCM_PATH=/opt/rocm \
+    ROCM_HOME=/opt/rocm \
+    HIP_PATH=/opt/rocm \
+    PATH=/opt/rocm/bin:${PATH} \
+    PYTORCH_ROCM_ARCH=gfx1151 \
+    GPU_TARGETS=gfx1151 \
+    VLLM_TARGET_DEVICE=rocm \
+    PIP_NO_CACHE_DIR=1
+# GPU_TARGETS is the AMD-cmake arch variable: vLLM's ROCm cmake path keys off
+# it, while torch cpp_extension keys off PYTORCH_ROCM_ARCH. Setting BOTH is
+# the belt-and-suspenders pin against the silent arch-fallback bug
+# (vllm#22590, audited again from the build log at wheel-build time below).
+
+# --- gfx1151 torch stack from AMD's multi-arch index ------------------------
+# torchvision is needed by vLLM multimodal code; unpinned because the
+# torch<->torchvision pairing in this index is not documented - if the index
+# lacks torchvision, drop it here and pin it manually.
+RUN pip3 install \
+        --index-url "https://repo.amd.com/rocm/whl-multi-arch/rocm${ROCM_VERSION}/gfx1151/" \
+        "torch==${TORCH_VERSION}" torchvision pytorch-triton-rocm \
+    && pip3 install pyyaml packaging setuptools wheel ninja cmake
+
+# --- rdma-core version gate -------------------------------------------------
+# Check Fedora's packaged rdma-core; only if older than v62 build an overlay
+# into /opt/rdma-overlay (copied over /usr in the final stage).
+RUN set -e; \
+    mkdir -p /opt/rdma-overlay; \
+    installed=$(dnf repoquery -q --qf '%{VERSION}' rdma-core 2>/dev/null | sort -V | tail -1); \
+    echo "Fedora rdma-core candidate: ${installed:-unknown}"; \
+    major=${installed%%.*}; \
+    if [ -n "$installed" ] && [ "$major" -ge "${RDMA_CORE_MIN_MAJOR}" ]; then \
+        echo "rdma-core ${installed} >= v${RDMA_CORE_MIN_MAJOR}, no overlay needed"; \
+    else \
+        echo "rdma-core ${installed:-missing} < v${RDMA_CORE_MIN_MAJOR} - building ${RDMA_CORE_REF} from source"; \
+        dnf install -y ${DNF_FLAGS} python3-docutils libudev-devel systemd-devel ethtool lsof && dnf clean all; \
+        git clone --depth 1 --branch "${RDMA_CORE_REF}" https://github.com/linux-rdma/rdma-core /tmp/rdma-core; \
+        cmake -S /tmp/rdma-core -B /tmp/rdma-core/build -GNinja \
+            -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
+            -DNO_MAN_PAGES=1 -DNO_PYVERBS=1 -DENABLE_RESOLVE_NEIGH=0; \
+        DESTDIR=/opt/rdma-overlay ninja -C /tmp/rdma-core/build install; \
+    fi
+
+# --- vLLM source build ------------------------------------------------------
+WORKDIR /opt/src
+# Fetch works for both tags and raw commit SHAs (GitHub allows fetching
+# reachable SHAs directly).
+RUN git init vllm \
+    && cd vllm \
+    && git remote add origin https://github.com/vllm-project/vllm.git \
+    && git fetch --depth 1 origin "${VLLM_REF}" \
+    && git checkout --detach FETCH_HEAD
+
+# Patch layer. apply_all.sh runs with VLLM_SRC pointing at the checkout;
+# --skip-verify because vLLM is not pip-installed in this stage yet (imports
+# would fail) — marker/structure checks run separately right after.
+COPY patches/ /opt/src/patches/
+RUN cd /opt/src/vllm \
+    && if [ -f /opt/src/patches/apply_all.sh ]; then \
+           VLLM_SRC=/opt/src/vllm bash /opt/src/patches/apply_all.sh --skip-verify; \
+           python3 /opt/src/patches/verify_compat.py --src /opt/src/vllm --skip-imports; \
+       else \
+           echo "WARNING: patches/apply_all.sh not found, building unpatched vLLM"; \
+       fi
+
+# Prefer rocm-build.txt when present (vLLM moves requirements between
+# releases); fall back to the generic build requirements.
+# The build log is captured and audited for the gfx1151 arch pin: vLLM's ROCm
+# build has a known silent-fallback bug (vllm#22590) where an unpicked
+# PYTORCH_ROCM_ARCH compiles for the default multi-arch list instead of
+# failing - the wheel then JIT-fails or silently mis-runs on gfx1151. The
+# grep audit below is the hard guard: the log must mention gfx1151, and no
+# HIP device-compile flag may name any other gfx arch.
+RUN cd /opt/src/vllm \
+    && REQ=requirements/rocm-build.txt \
+    && [ -f "$REQ" ] || REQ=requirements/build.txt \
+    && pip3 install -r "$REQ" \
+    && mkdir -p /wheels \
+    && set -o pipefail \
+    && MAX_JOBS=$(nproc) pip3 wheel --no-build-isolation --no-deps -w /wheels . 2>&1 | tee /tmp/vllm-build.log \
+    && grep -q 'gfx1151' /tmp/vllm-build.log \
+    && bad=$(grep -oE '(--offload-arch=|-mcpu=|--amdgpu-target=|--gpu-target=)gfx[0-9a-z]+' /tmp/vllm-build.log \
+             | grep -oE 'gfx[0-9a-z]+$' | sort -u | grep -vx 'gfx1151' || true) \
+    && if [ -n "$bad" ]; then \
+           echo "FATAL: vLLM wheel compiled for non-gfx1151 archs (silent fallback, vllm#22590):"; \
+           echo "$bad"; \
+           echo "Refusing to ship a multi-arch wheel for a gfx1151-only image."; \
+           exit 1; \
+       fi \
+    && echo "Arch audit OK: HIP compile flags target gfx1151 only"
+
+# --- AITER, conch-triton-kernels, ROCm flash-attention ----------------------
+# Order matters at runtime (vLLM imports AITER/conch before attention
+# backends); we build wheels here and install in the same order in the final
+# stage. AITER setup.py imports torch, so it needs --no-build-isolation.
+RUN pip3 wheel --no-build-isolation --no-deps -w /wheels \
+        "git+https://github.com/ROCm/aiter.git@${AITER_REF}"
+RUN pip3 download --no-deps -d /wheels "conch-triton-kernels==${CONCH_VERSION}"
+# ROCm flash-attention, branch main_perf (the gfx-tuned line). Long compile;
+# cross-compiling for gfx1151, no GPU needed at build time.
+RUN git clone --depth 1 --branch main_perf https://github.com/ROCm/flash-attention /opt/src/flash-attention \
+    && cd /opt/src/flash-attention \
+    && FLASH_ATTENTION_FORCE_BUILD=TRUE MAX_JOBS=$(nproc) \
+       pip3 wheel --no-build-isolation --no-deps -w /wheels .
+
+# ---------------------------------------------------------------------------
+FROM fedora:${FEDORA_VERSION} AS final
+
+ARG ROCM_VERSION=7.2
+ARG TORCH_VERSION=2.9.1
+ARG RCCL_IMPL=stock
+ARG CONCH_VERSION=1.2.1
+
+ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
+
+# Runtime-only ROCm libs + RDMA userspace (ibv_devices via libibverbs-utils,
+# perftest for link validation) + python.
+RUN dnf install -y ${DNF_FLAGS} \
+        python3 python3-pip \
+        rocm-hip rocm-opencl rocblas hipblas rocfft hipfft rocsparse hipsparse \
+        rocsolver hipsolver rocrand hiprand rocprim hipcub rocthrust \
+        rccl miopen-hip rocm-device-libs comgr hsakmt-roct rocminfo rocm-smi \
+        rdma-core libibverbs-utils librdmacm-utils perftest \
+    && dnf clean all
+
+RUN mkdir -p /opt/rocm \
+    && ln -s /usr/bin     /opt/rocm/bin \
+    && ln -s /usr/include /opt/rocm/include \
+    && ln -s /usr/lib64   /opt/rocm/lib \
+    && ln -s /usr/lib64   /opt/rocm/lib64 \
+    && ln -s /usr/share   /opt/rocm/share
+
+ENV ROCM_PATH=/opt/rocm \
+    ROCM_HOME=/opt/rocm \
+    HIP_PATH=/opt/rocm \
+    PATH=/opt/rocm/bin:${PATH} \
+    PYTORCH_ROCM_ARCH=gfx1151 \
+    GPU_TARGETS=gfx1151 \
+    PIP_NO_CACHE_DIR=1
+
+# gfx1151 torch stack (same index as builder).
+RUN pip3 install \
+        --index-url "https://repo.amd.com/rocm/whl-multi-arch/rocm${ROCM_VERSION}/gfx1151/" \
+        "torch==${TORCH_VERSION}" torchvision pytorch-triton-rocm \
+    && pip3 install pyyaml
+
+# rdma-core overlay (only populated when Fedora's package was < v62).
+COPY --from=builder /opt/rdma-overlay /opt/rdma-overlay
+RUN if [ -n "$(ls -A /opt/rdma-overlay 2>/dev/null)" ]; then \
+        echo "Applying rdma-core source-built overlay"; \
+        cp -a /opt/rdma-overlay/usr/. /usr/ && ldconfig; \
+    else \
+        echo "Using Fedora-packaged rdma-core (>= v62)"; \
+    fi \
+    && rm -rf /opt/rdma-overlay
+
+# Prebuilt wheels, installed in dependency order: AITER -> conch ->
+# flash-attention -> vLLM. vLLM deps resolve from PyPI plus the gfx1151 index
+# so no CUDA torch is pulled in accidentally.
+COPY --from=builder /wheels /wheels
+RUN set -e; \
+    pip3 install --no-deps $(ls /wheels/*aiter*.whl); \
+    pip3 install --no-deps /wheels/conch_triton_kernels-*.whl; \
+    pip3 install --no-deps /wheels/flash_attn-*.whl; \
+    pip3 install --extra-index-url \
+        "https://repo.amd.com/rocm/whl-multi-arch/rocm${ROCM_VERSION}/gfx1151/" \
+        /wheels/vllm-*.whl; \
+    pip3 install "ray[default]"; \
+    rm -rf /wheels
+
+# --- Dependency cut-list (text-MoE cluster, models from local disk) --------
+# gfx1151-only specialization: remove vLLM transitive deps this image never
+# exercises. Each removal is safe ONLY while the cluster serves text MoE
+# models loaded from local NVMe - re-add the package if that changes.
+# pip3 uninstall of an absent package is a no-op warning (exit 0), so this
+# stays safe across vLLM dependency churn.
+RUN set -e; \
+    # runai-model-streamer: S3/GCS/Azure weight streaming; this cluster loads
+    # models from local disk, so the cloud streaming path is dead weight. \
+    # datasets: HF datasets lib, pulled in for offline eval/bench paths; the
+    # serving stack never imports it. \
+    # peft: LoRA training/adapter toolkit; inference-only image. \
+    # amd-quark: AMD quantization toolchain; unused - registry models run
+    # through vLLM's own quant paths. \
+    # timm + opencv-python-headless: vision-encoder deps; models/registry.yaml
+    # has NO vision model. MUST be re-added if a vision model is added. \
+    pip3 uninstall -y \
+        runai-model-streamer \
+        datasets \
+        peft \
+        amd-quark \
+        timm \
+        opencv-python-headless; \
+    # Deliberately NOT cut: numba (n-gram speculative decode), tokenizers,
+    # the xgrammar/llguidance/outlines structured-output stack, everything
+    # Triton/conch, and depyf/cloudpickle - the Inductor path must survive for
+    # the --compilation-config '{"cudagraph_mode":"NONE"}' A/B experiment. \
+    # \
+    # CUDA-only reqs: assert absent (never installable from the ROCm index,
+    # and a leak here means a CUDA wheel crept into a gfx1151 image). \
+    if pip3 list --format=freeze | grep -qiE '^(flashinfer|bitsandbytes)[= -]'; then \
+        echo "FATAL: CUDA-only dependency leaked into the gfx1151 image:"; \
+        pip3 list --format=freeze | grep -iE '^(flashinfer|bitsandbytes)[= -]'; \
+        exit 1; \
+    fi; \
+    # Fail-safe: if the cut-list broke the import graph, reinstall the cut
+    # packages and warn rather than ship a broken image. The final import
+    # runs unconditionally, so a still-broken image fails the build here. \
+    if ! python3 -c 'import vllm'; then \
+        echo "WARNING: 'import vllm' failed after dependency cut - reinstalling cut packages"; \
+        pip3 install \
+            runai-model-streamer datasets peft amd-quark timm opencv-python-headless; \
+    fi; \
+    python3 -c 'import vllm; print("vLLM import OK after dependency cut:", vllm.__version__)'
+
+# --- Custom RCCL for gfx1151 ------------------------------------------------
+# RCCL_IMPL=custom expects patches/librccl/librccl.so in the build context
+# (produced by the rccl CI workflow artifact or placed manually from the
+# known-good kyuz0/rocm-systems gfx1151-rccl build - upstream RCCL is fragile
+# on gfx1151, ROCm/rocm-systems#5229). Missing file -> warn and keep stock.
+COPY patches/ /opt/patches/
+RUN if [ "${RCCL_IMPL}" = "custom" ]; then \
+        if [ -f /opt/patches/librccl/librccl.so ]; then \
+            echo "Installing custom gfx1151 RCCL"; \
+            for f in /usr/lib64/librccl.so.1 \
+                     /usr/local/lib/python3*/site-packages/torch/lib/librccl.so*; do \
+                [ -e "$f" ] || continue; \
+                [ -e "${f}.stock" ] || cp -a "$f" "${f}.stock"; \
+                cp -f /opt/patches/librccl/librccl.so "$f"; \
+            done; \
+            ldconfig; \
+        else \
+            echo "WARNING: RCCL_IMPL=custom but patches/librccl/librccl.so is missing; falling back to stock RCCL"; \
+        fi; \
+    fi \
+    && echo "Post-install patch: conch triton_kernels gfx1x MXFP4 MoE tune" \
+    && python3 /opt/patches/50_conch_moe_mxfp4_tune.py \
+    && echo "Post-install patch: AITER Triton enablement for gfx1151" \
+    && python3 /opt/patches/54_aiter_rdna_enable.py \
+        --src /opt/src/vllm \
+        --site-packages "$(python3 -c 'import site; print(site.getsitepackages()[0])')" \
+    && echo "Full compatibility check against the installed packages" \
+    && python3 /opt/patches/verify_compat.py \
+        --src "$(python3 -c 'import vllm, pathlib; print(pathlib.Path(vllm.__file__).parent.parent)')" \
+    && rm -rf /opt/patches
+
+# tilelang: required at runtime by the vendored sparse-indexer kernels
+# (patches/vendor/gfx1x_tilelang_mqa.py via patch 52). Best-effort: patch 52
+# degrades gracefully to the upstream path without it, so a missing/broken
+# tilelang wheel warns instead of failing the build.
+RUN pip3 install tilelang \
+    || echo "WARNING: tilelang install failed - sparse-indexer TileLang kernels will fall back to upstream path"
+
+# Patch 50 (patches/50_conch_moe_mxfp4_tune.py) is deliberately NOT applied by
+# apply_all.sh in the builder stage: it edits the INSTALLED triton_kernels
+# package (vendored into the vLLM wheel at vllm/third_party/triton_kernels),
+# which only exists after the pip install above. It defers with SKIP/exit 0
+# pre-install and must succeed here (fail-closed: exit 42 = re-audit).
+# Patch 54 is split the same way: the vLLM-tree side was applied in the
+# builder stage, the aiter/arch_info side targets the installed packages and
+# runs here.
+
+# Fused-MoE tuned Triton configs: vLLM checks $VLLM_TUNED_CONFIG_FOLDER
+# before the wheel-bundled configs, so no source patching is needed
+# (see patches/configs/README.md). The baked files are untuned PLACEHOLDERS
+# until replaced by bench/tune_moe.py output.
+COPY patches/configs/ /opt/vllm-tuned-configs/
+
+# gfx1151 runtime defaults (see models/registry.yaml and README):
+#  - AITER off by default: heavily gated on gfx1x
+#  - gfx1x MoE tune on: measured 11.3 -> 21.8 tok/s decode on MoE models
+#  - Triton cache location: bind-mount a host dir here to avoid ~170 s JIT
+#    on every cold start
+#  - TRITON_STORE_BINARY_ONLY=1: strips source/intermediate files from the
+#    baked Triton cache (~77% smaller, keeps .hsaco+.json - Red Hat verified).
+#    Safe because the cache is only JIT'd/loaded on identical gfx1151 nodes.
+ENV VLLM_ROCM_USE_AITER=0 \
+    VLLM_GFX1X_MOE_TUNE=1 \
+    VLLM_TUNED_CONFIG_FOLDER=/opt/vllm-tuned-configs \
+    VLLM_HOST_TRITON_CACHE=/root/.cache/vllm/triton \
+    TRITON_STORE_BINARY_ONLY=1
+RUN mkdir -p /root/.cache/vllm/triton
+
+COPY docker/smoke_test.sh /usr/local/bin/smoke_test.sh
+RUN chmod +x /usr/local/bin/smoke_test.sh
+
+WORKDIR /root
+CMD ["bash"]

@@ -1,0 +1,85 @@
+name: build-rccl
+
+# Builds the known-good custom RCCL for gfx1151 from kyuz0/rocm-systems
+# (branch gfx1151-rccl - upstream RCCL is fragile on gfx1151, see
+# ROCm/rocm-systems#5229) inside a fedora:44 container with the ROCm SDK.
+# Publishes librccl.so as a workflow artifact AND as release asset
+# 'librccl-gfx1151.so' on the fixed tag 'rccl-gfx1151', where build-dev.yml
+# (RCCL_IMPL=custom) fetches it. Manual-only: rebuild when ROCm major changes
+# or the gfx1151-rccl branch gets fixes.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write   # gh release create/upload
+
+concurrency:
+  group: build-rccl
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: rccl-gfx1151
+  ASSET_NAME: librccl-gfx1151.so
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - name: Install build toolchain + ROCm SDK
+        run: |
+          set -euo pipefail
+          # Package names follow Fedora's ROCm packaging; verify against
+          # Fedora 44 repos if this step breaks (dnf search rocm / rccl).
+          dnf install -y git cmake make gcc-c++ rocm-hip-sdk rocm-cmake
+
+      - name: Clone and build RCCL for gfx1151
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch gfx1151-rccl https://github.com/kyuz0/rocm-systems.git
+          # RCCL lives in projects/rccl inside the rocm-systems monorepo.
+          cd rocm-systems/projects/rccl
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DGPU_TARGETS=gfx1151 \
+            -DBUILD_TESTS=OFF
+          cmake --build build -j"$(nproc)"
+
+      - name: Collect librccl.so
+        run: |
+          set -euo pipefail
+          # Take the real shared object (not a symlink), newest versioned name.
+          so=$(find rocm-systems/projects/rccl/build -type f -name 'librccl.so*' | sort -V | tail -1)
+          [ -n "$so" ] || { echo "::error::librccl.so not found in build tree"; exit 1; }
+          mkdir -p out
+          cp -L "$so" "out/${ASSET_NAME}"
+          ls -l out/
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: librccl-gfx1151
+          path: out/${{ env.ASSET_NAME }}
+          retention-days: 30
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: librccl-gfx1151
+
+      - name: Publish release asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Create the fixed release once; subsequent runs just re-upload.
+          gh release view "$RELEASE_TAG" >/dev/null 2>&1 || \
+            gh release create "$RELEASE_TAG" \
+              --title "Custom RCCL for gfx1151" \
+              --notes "librccl.so built from kyuz0/rocm-systems@gfx1151-rccl in a fedora:44 container (workflow build-rccl.yml). Fetched by build-dev.yml when RCCL_IMPL=custom."
+          gh release upload "$RELEASE_TAG" "${ASSET_NAME}#${ASSET_NAME}" --clobber
+          echo "published: $(gh release view "$RELEASE_TAG" --json url -q .url)"

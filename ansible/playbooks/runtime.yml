@@ -1,0 +1,136 @@
+---
+# runtime.yml — podman, the cluster container (quadlet) and inter-node SSH.
+# Prerequisites:
+#   - base.yml applied (memlock unlimited on the host — podman also gets it
+#     via --ulimit memlock=-1 below)
+#   - container_image in group_vars/all.yaml points to a real ghcr.io image
+#     (built by .github/workflows; contains vllm, ray, rdma-core, perftest)
+- name: Container runtime
+  hosts: strix_nodes
+  become: true
+  tags: runtime
+  handlers:
+    - name: Reload systemd after quadlet change
+      ansible.builtin.command: systemctl daemon-reload
+
+    - name: Restart cluster container
+      ansible.builtin.service:
+        name: "{{ container_name }}"
+        state: restarted
+  tasks:
+    - name: Install podman
+      ansible.builtin.dnf:
+        name: podman
+        state: present
+
+    - name: Create warm-cache snapshot directory (compile-cache distribution)
+      # Snapshots written by scripts/warmup.sh on the head node and pushed to
+      # the workers by scripts/dist_cache.sh. Owned by the login user so
+      # warmup.sh works without sudo.
+      ansible.builtin.file:
+        path: /var/lib/vllm/warm-cache
+        state: directory
+        owner: "{{ ansible_user | default(ansible_user_id) }}"
+        mode: '0755'
+      tags: cache
+
+    - name: Ensure quadlet directory exists
+      ansible.builtin.file:
+        path: /etc/containers/systemd
+        state: directory
+        mode: '0755'
+
+    # Quadlet notes:
+    # - /dev/kfd + /dev/dri are required for ROCm GPU access.
+    # - AddDevice=/dev/infiniband mounts every device node in that directory
+    #   (podman accepts directories here), giving the container full RDMA access.
+    # - GroupAdd=keep-groups needs podman >= 4.8 (fine on Fedora 44); on older
+    #   podman use `GroupAdd=rdma` instead.
+    # - The Triton cache avoids ~170-294 s of JIT on every cold start. It is a
+    #   podman NAMED volume at /triton-cache with TRITON_CACHE_DIR set —
+    #   deliberately identical to what scripts/cluster_up.sh mounts into the
+    #   ray-head/ray-worker containers, so both runtimes share one cache layout
+    #   and scripts/dist_cache.sh can resolve the host mountpoint via
+    #   `podman volume inspect triton-cache` on every node.
+    #   (The triton_cache_dir host-path var in group_vars is no longer used
+    #   here; a host path cannot be kept in sync with cluster_up.sh, which
+    #   owns the named volume.)
+    # - The in-container path assumes the image runs as root — adjust if not.
+    - name: Deploy cluster container quadlet
+      ansible.builtin.copy:
+        dest: "/etc/containers/systemd/{{ container_name }}.container"
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [Unit]
+          Description=vLLM cluster container (Strix Halo)
+
+          [Container]
+          Image={{ container_image }}
+          ContainerName={{ container_name }}
+          Network=host
+          AddDevice=/dev/kfd
+          AddDevice=/dev/dri
+          AddDevice=/dev/infiniband
+          Ulimit=memlock=-1
+          GroupAdd=keep-groups
+          Environment=TRITON_CACHE_DIR=/triton-cache
+          Volume=triton-cache:/triton-cache
+          Exec=sleep infinity
+
+          [Service]
+          Restart=always
+          TimeoutStartSec=900
+
+          [Install]
+          WantedBy=multi-user.target
+      notify:
+        - Reload systemd after quadlet change
+        - Restart cluster container
+
+    - name: Apply quadlet changes before managing the service
+      ansible.builtin.meta: flush_handlers
+
+    - name: Enable and start the cluster container
+      ansible.builtin.service:
+        name: "{{ container_name }}"
+        enabled: true
+        state: started
+
+# Passwordless SSH between nodes, for the login user (ansible_user) — used by
+# scripts/cluster_up.sh and Ray ops tooling. Key is generated on node1 and
+# authorized on every node (including node1 itself).
+- name: Inter-node SSH
+  hosts: strix_nodes
+  tags: runtime
+  tasks:
+    - name: Generate SSH keypair on head node
+      ansible.builtin.command: >-
+        ssh-keygen -t ed25519 -N '' -f {{ ansible_env.HOME }}/.ssh/id_ed25519
+      args:
+        creates: "{{ ansible_env.HOME }}/.ssh/id_ed25519"
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    - name: Read head node public key
+      ansible.builtin.slurp:
+        src: "{{ ansible_env.HOME }}/.ssh/id_ed25519.pub"
+      register: head_pubkey
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    - name: Authorize head key on every node
+      ansible.builtin.authorized_key:
+        user: "{{ ansible_user | default(ansible_user_id) }}"
+        key: "{{ hostvars[groups['strix_nodes'] | first].head_pubkey.content | b64decode }}"
+        state: present
+
+    - name: Auto-accept new host keys for inter-node SSH
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/ssh/ssh_config.d/50-strix-accept-new.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          Host *
+            StrictHostKeyChecking accept-new

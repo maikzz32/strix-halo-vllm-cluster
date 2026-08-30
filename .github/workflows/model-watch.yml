@@ -1,0 +1,42 @@
+name: model-watch
+
+# Daily poll of upstream tracking state for registry models with status
+# dev|blocked (see models/check_support.py). On state changes it creates or
+# updates a 'model-watch: <model> support changed' issue and dispatches
+# build-dev.yml so a fresh :dev image picks up newly landed support. Models
+# with a pinned `vllm_ref` are additionally tracked against their source
+# PR's head SHA; a moved head dispatches build-dev.yml with vllm_ref + model
+# inputs (image tag suffix :dev-<model>).
+# It never edits models/registry.yaml - flipping status is a human decision.
+
+on:
+  schedule:
+    - cron: "23 7 * * *"   # daily 07:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write    # create/update model-watch issues
+  actions: write   # dispatch build-dev.yml
+
+concurrency:
+  group: model-watch
+  cancel-in-progress: true   # only the latest poll matters
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install pyyaml
+        run: pip install pyyaml
+
+      - name: Check upstream support state
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 models/check_support.py

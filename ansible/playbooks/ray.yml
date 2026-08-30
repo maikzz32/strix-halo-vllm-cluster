@@ -1,0 +1,69 @@
+---
+# ray.yml — Ray cluster over the RoCE network.
+# Prerequisites:
+#   - runtime.yml applied (quadlet container "{{ container_name }}" running,
+#     image contains ray per the docker/ contract)
+# Head runs on the first host of group strix_nodes (node1), workers on the
+# rest. All nodes bind to their roce_ip so Ray traffic rides the 25 GbE
+# network, not the management network.
+# NCCL/RCCL env (NCCL_SOCKET_IFNAME, NCCL_IB_GID_INDEX=1, NCCL_NET_GDR_LEVEL=0,
+# RAY_EXPERIMENTAL_NOSET_ROCR_VISIBLE_DEVICES=1, VLLM_HOST_IP) is set at serve
+# time by scripts/serve.sh, not here — it is not needed for `ray start`.
+- name: Ray cluster
+  hosts: strix_nodes
+  become: true
+  tags: ray
+  tasks:
+    - name: Ensure the cluster container is running
+      ansible.builtin.service:
+        name: "{{ container_name }}"
+        state: started
+
+    - name: Check Ray status in the container
+      ansible.builtin.command: podman exec {{ container_name }} ray status
+      register: ray_status
+      changed_when: false
+      failed_when: false
+
+    - name: Start Ray head on the first node
+      ansible.builtin.command: >-
+        podman exec {{ container_name }}
+        ray start --head
+        --node-ip-address {{ roce_ip }}
+        --port {{ ray_port }}
+      when:
+        - inventory_hostname == groups['strix_nodes'] | first
+        - ray_status.rc != 0
+
+    - name: Wait for the Ray head port from workers
+      ansible.builtin.wait_for:
+        host: "{{ hostvars[groups['strix_nodes'] | first].roce_ip }}"
+        port: "{{ ray_port }}"
+        timeout: 60
+      when: inventory_hostname != groups['strix_nodes'] | first
+
+    - name: Start Ray workers (join head via its RoCE IP)
+      ansible.builtin.command: >-
+        podman exec {{ container_name }}
+        ray start
+        --address {{ hostvars[groups['strix_nodes'] | first].roce_ip }}:{{ ray_port }}
+        --node-ip-address {{ roce_ip }}
+      when:
+        - inventory_hostname != groups['strix_nodes'] | first
+        - ray_status.rc != 0
+
+    - name: Give workers a moment to register
+      ansible.builtin.pause:
+        seconds: 10
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    - name: Ray cluster status on head
+      ansible.builtin.command: podman exec {{ container_name }} ray status
+      register: ray_final_status
+      changed_when: false
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    - name: Report Ray cluster status
+      ansible.builtin.debug:
+        var: ray_final_status.stdout_lines
+      when: inventory_hostname == groups['strix_nodes'] | first

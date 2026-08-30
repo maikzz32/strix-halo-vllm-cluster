@@ -1,0 +1,125 @@
+# Model registry — single source of truth for scripts/serve.sh, bench/run_matrix.py
+# and .github/workflows/model-watch.yml.
+#
+# Schema per model entry:
+#   hf_repo            Hugging Face repo id
+#   dtype              weight dtype/quant used for serving (bf16 | awq | mxfp4 | fp8)
+#   approx_size_gib    approximate weights size, for placement planning
+#   context:           native_tokens, yarn_factor (optional), yarn_tokens (optional)
+#   status             supported | dev | blocked
+#                        supported = works on a stable-channel image
+#                        dev       = needs :dev image (vLLM main / PR / special build)
+#                        blocked   = upstream support missing, tracked in `tracking`
+#   tracking           list of upstream URLs (PRs/issues) that gate this model
+#   vllm_ref           optional: full SHA of the vLLM PR head this model is
+#                      built from (pull heads move - pin by SHA for
+#                      reproducibility). When set, model-watch tracks the
+#                      source PR's current head and dispatches build-dev.yml
+#                      with this ref + a `model` input when the head moves;
+#                      build-dev can also be dispatched manually with it
+#                      (image tag suffix :dev-<model>).
+#   env                model-specific env overrides (merged over profiles.defaults.env)
+#   extra_args         list of extra CLI args for `vllm serve`
+#   parsers            tokenizer_mode / tool_call_parser / reasoning_parser (optional)
+#   allowed_profiles   subset of profiles defined in scripts/serve.sh
+#                        (tp4 | pp4 | tp2pp2 | ep | solo); omit = all allowed
+#   notes              free-form operational notes
+#   references         source URLs for the facts above
+
+defaults:
+  env:
+    VLLM_ROCM_USE_AITER: "0"        # AITER sampler/MoE/FP8-linear unsupported on gfx1x
+    VLLM_GFX1X_MOE_TUNE: "1"        # measured 11.3 -> 21.8 tok/s decode on gfx1151 MoE
+    # Cuts HIP allocator fragmentation on gfx1151 unified memory; proven on
+    # Strix Halo cluster setups (tight KV budgets after ROCm/hip#3892 fix).
+    PYTORCH_HIP_ALLOC_CONF: "expandable_segments:True,garbage_collection_threshold:0.85"
+  extra_args:
+    - --enforce-eager               # HIP graph capture deadlocks on gfx1151 (vllm#32180)
+
+models:
+
+  qwen36-35b-a3b:
+    hf_repo: Qwen/Qwen3.6-35B-A3B
+    dtype: bf16
+    approx_size_gib: 71
+    context:
+      native_tokens: 262144
+    status: supported
+    env:
+      VLLM_ATTENTION_BACKEND: ROCM_AITER_UNIFIED_ATTN
+    extra_args: []
+    parsers:
+      tool_call_parser: hermes
+      reasoning_parser: qwen3
+    notes: >
+      Reference model, proven on gfx1151 vLLM (kyuz0 models.py profile).
+      Validate the whole chain end-to-end with this model first.
+      AWQ variant exists but AWQ MoE falls back to slow MoeWNA16 kernels
+      (kyuz0 issue #72) - prefer bf16.
+    references:
+      - https://github.com/kyuz0/amd-strix-halo-vllm-toolboxes/issues/72
+
+  qwen38-flash-next:
+    hf_repo: Qwen/Qwen3.8-Flash-Next
+    dtype: bf16
+    approx_size_gib: 335
+    context:
+      native_tokens: 262144
+      yarn_factor: 4.0
+      yarn_tokens: 1048576
+    status: dev
+    # PR vllm#53899 head (qwen4_exp model + PLE CPU offload, author-blessed
+    # for builds; fork branch peakcrosser7/vllm release/qwen38next_offload).
+    vllm_ref: 935728b4a95e110d91a41ab4e02b6bed06ec66ab
+    tracking:
+      - https://github.com/vllm-project/vllm/releases   # not in any PyPI release yet
+    env:
+      # activates patch 57 (PLE pinned-host offload on the AMD path); on the APU
+      # the "host" table sits in the same unified memory = zero-copy gather at
+      # ~256 GB/s, freeing ~13 GiB/node at TP=4 (NVIDIA path is PCIe-bound)
+      VLLM_PLE_CPU_OFFLOAD: "1"
+    extra_args:
+      - --speculative-config
+      - '{"method":"mtp","num_speculative_tokens":3}'
+      - --hf-overrides
+      - '{"rope_parameters":{"rope_type":"yarn","factor":4.0}}'
+    allowed_profiles: [tp4, solo]   # no PP: PLE embedding table unsupported by pipeline parallel
+    notes: >
+      125B/6B active, 512 experts (10+1 routed), 48 layers (36 Gated DeltaNet +
+      12 sparse attention, 3:1). +51B PLE n-gram embedding table - upstream
+      offload is NVIDIA-only; patch 57 ports it to the AMD path (zero-copy on
+      the APU). BF16 fits TP=4 across 4x ~116 GiB GTT; long context gets tight.
+      FP8 pointless on RDNA 3.5 (emulated at bf16 speed). Build from the pinned
+      PR head above via build-dev.yml (image tag :dev-qwen38-flash-next).
+    references:
+      - https://recipes.vllm.ai/Qwen/Qwen3.8-Flash-Next
+      - https://www.amd.com/en/developer/resources/technical-articles/2026/day-0-support-for-qwen-3-8-on-amd-instinct-gpus.html
+
+  glm53-flash:
+    hf_repo: zai-org/GLM-5.3-Flash
+    dtype: fp8
+    approx_size_gib: 306
+    context:
+      native_tokens: 1048576
+    status: blocked
+    # PR vllm#53906 head (glm5_next support; ROCm officially gfx950-gated,
+    # needs FlashInfer>=0.6.18; fork branch ZJY0516/vllm glm-release).
+    vllm_ref: 36bb3795b258e1b773cee5c2b725d9b8346b0c8d
+    tracking:
+      - https://github.com/vllm-project/vllm/pull/53906   # extends beyond gfx950 to MI300/325
+      - https://github.com/ggml-org/llama.cpp/pull/27773  # llama.cpp glm5_next PR (fallback path)
+    env:
+      VLLM_ATTENTION_BACKEND: ROCM_AITER_MLA_SPARSE       # validate on gfx1151 once unblocked
+      # patch 58: force the Triton sparse-MLA lane (asm/Gluon lanes are
+      # gfx950-only, unreachable on gfx1151) + geometry-keyed MTP dispatch fix
+      VLLM_GFX1X_FORCE_TRITON_SPARSE: "1"
+    extra_args: []
+    notes: >
+      320B/18B active, 45 layers (34 KDA linear + 11 sparse-MLA), 288 experts (8+1),
+      1M context, MIT license. Official ROCm docker image is gfx950-gated (MI355X);
+      gfx1151 untested. MTP not supported on ROCm. FP8 emulated on RDNA 3.5 - if
+      slow, re-quantize AWQ/MXFP4 instead of serving FP8.
+      Do NOT promise this model until tracking PRs land on main.
+    references:
+      - https://huggingface.co/zai-org/GLM-5.3-Flash
+      - https://recipes.vllm.ai/zai-org/GLM-5.3-Flash

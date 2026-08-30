@@ -1,0 +1,20 @@
+# Local overrides / secrets
+ansible/inventory.local.yaml
+*.local
+
+# Benchmark results (keep dir, ignore raw output)
+bench/results/*.json
+!bench/results/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Caches / logs
+*.log
+.triton-cache/
+
+# OS
+Thumbs.db
+Desktop.ini

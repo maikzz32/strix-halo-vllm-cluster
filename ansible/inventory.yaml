@@ -1,0 +1,26 @@
+---
+# Inventory for the 4-node Strix Halo cluster.
+# Placeholder addresses — replace ansible_host / roce_ip with the real IPs.
+# roce_iface is the 25 GbE interface used for RoCEv2 RDMA (name may differ
+# per node; enp1s0f0 is a typical value, verify with `ip link` on the host).
+strix_nodes:
+  vars:
+    ansible_user: fedora
+    ansible_become: true
+  hosts:
+    node1:
+      ansible_host: 192.168.1.11    # management network (SSH)
+      roce_ip: 192.168.100.11       # 25 GbE RoCE interface IP
+      roce_iface: enp1s0f0
+    node2:
+      ansible_host: 192.168.1.12
+      roce_ip: 192.168.100.12
+      roce_iface: enp1s0f0
+    node3:
+      ansible_host: 192.168.1.13
+      roce_ip: 192.168.100.13
+      roce_iface: enp1s0f0
+    node4:
+      ansible_host: 192.168.1.14
+      roce_ip: 192.168.100.14
+      roce_iface: enp1s0f0

@@ -1,0 +1,151 @@
+name: build-stable
+
+# Stable channel: daily check for the newest *complete aligned* gfx1151 torch
+# stack on repo.amd.com + the latest stable vLLM tag. The resulting combo tag
+#   rocm<ver>-torch<ver>-vllm<ver>
+# is immutable: if it already exists on ghcr.io the build is skipped.
+# :latest only moves after a green smoke test.
+
+on:
+  schedule:
+    - cron: "17 5 * * *"   # daily 05:17 UTC (off the :00 herd)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write   # ghcr.io login (manifest check) + push
+
+concurrency:
+  group: build-stable
+  cancel-in-progress: false   # never cancel mid-push
+
+env:
+  IMAGE_NAME: strix-vllm-gfx1151
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      rocm_version: ${{ steps.stack.outputs.rocm_version }}
+      torch_version: ${{ steps.stack.outputs.torch_version }}
+      vllm_ref: ${{ steps.stack.outputs.vllm_ref }}
+      combo: ${{ steps.stack.outputs.combo }}
+      exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Resolve newest aligned gfx1151 stack + latest stable vLLM tag
+        id: stack
+        run: |
+          set -euo pipefail
+          BASE="https://repo.amd.com/rocm/whl-multi-arch"
+          # whl-multi-arch is a PEP 503-style index: generic torch wheels under
+          #   $BASE/torch/                       torch-<tv>+rocm<rv>-cpXX-...-linux_x86_64.whl
+          # plus per-device backend plugin wheels under
+          #   $BASE/amd-torch-device-gfx1151/    amd_torch_device_gfx1151-<tv>+rocm<rv>-...
+          # A "complete aligned gfx1151 stack" = a (torch, rocm) version pair
+          # present in BOTH listings; take the newest such pair.
+          # (%2B is the URL-encoded '+' in hrefs - normalized before parsing.)
+          pairs_t=$(curl -fsSL "$BASE/torch/" | sed 's/%2B/+/g' \
+            | grep -oE 'torch-[0-9]+\.[0-9]+\.[0-9]+\+rocm[0-9]+(\.[0-9]+)+-cp[0-9]+-cp[0-9]+-linux_x86_64' \
+            | sed -E 's/^torch-([0-9.]+)\+rocm([0-9.]+)-.*/\1 \2/' | sort -u)
+          pairs_d=$(curl -fsSL "$BASE/amd-torch-device-gfx1151/" | sed 's/%2B/+/g' \
+            | grep -oE 'amd_torch_device_gfx1151-[0-9]+\.[0-9]+\.[0-9]+\+rocm[0-9]+(\.[0-9]+)+-cp[0-9]+-cp[0-9]+-linux_x86_64' \
+            | sed -E 's/^amd_torch_device_gfx1151-([0-9.]+)\+rocm([0-9.]+)-.*/\1 \2/' | sort -u)
+          best=$(comm -12 <(printf '%s\n' "$pairs_t" | sort) <(printf '%s\n' "$pairs_d" | sort) \
+            | sort -k1,1V -k2,2V | tail -1)
+          [ -n "$best" ] || { echo "::error::no aligned gfx1151 torch stack found under $BASE"; exit 1; }
+          torch_version=$(printf '%s' "$best" | cut -d' ' -f1)
+          rocm_version=$(printf '%s' "$best" | cut -d' ' -f2)
+          # Latest stable vLLM tag: strict semver only, no rc/dev/pre suffixes.
+          # The '$' anchor also drops annotated-tag deref lines (refs/tags/x^{}).
+          vllm_ref=$(git ls-remote --tags https://github.com/vllm-project/vllm.git \
+            | grep -oE 'refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$' \
+            | sed 's|refs/tags/||' | sort -uV | tail -1)
+          [ -n "$vllm_ref" ] || { echo "::error::no stable vLLM tag found"; exit 1; }
+          combo="rocm${rocm_version}-torch${torch_version}-vllm${vllm_ref#v}"
+          echo "resolved: ROCm=$rocm_version torch=$torch_version vLLM=$vllm_ref -> $combo"
+          {
+            echo "rocm_version=$rocm_version"
+            echo "torch_version=$torch_version"
+            echo "vllm_ref=$vllm_ref"
+            echo "combo=$combo"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check if combo tag already exists on ghcr.io (immutable tags)
+        id: check
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          owner=$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')
+          image="ghcr.io/${owner}/${IMAGE_NAME}"
+          echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          if docker manifest inspect "${image}:${{ steps.stack.outputs.combo }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::${image}:${{ steps.stack.outputs.combo }} already exists - build skipped"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: discover
+    if: needs.discover.outputs.exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute lowercase image ref (ghcr.io requires lowercase)
+        run: |
+          owner=$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE=ghcr.io/${owner}/${IMAGE_NAME}" >> "$GITHUB_ENV"
+
+      - name: Build image (load locally, do not push yet)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.fedora
+          load: true
+          tags: ${{ env.IMAGE }}:${{ needs.discover.outputs.combo }}
+          build-args: |
+            ROCM_VERSION=${{ needs.discover.outputs.rocm_version }}
+            TORCH_VERSION=${{ needs.discover.outputs.torch_version }}
+            VLLM_REF=${{ needs.discover.outputs.vllm_ref }}
+            RCCL_IMPL=stock
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test inside the built image
+        # CI runners have no GPU: docker/smoke_test.sh must be able to pass
+        # CPU-only (imports, versions, CLI sanity). GPU validation happens on
+        # the cluster nodes, not here. The script is bind-mounted so it runs
+        # even if the Dockerfile does not bake it in.
+        run: >-
+          docker run --rm
+          -v "${GITHUB_WORKSPACE}/docker/smoke_test.sh:/smoke_test.sh:ro"
+          "${IMAGE}:${{ needs.discover.outputs.combo }}"
+          bash /smoke_test.sh
+
+      - name: Push combo tag + :latest
+        # Single push step, only reached after a green smoke test - this is
+        # what guarantees ":latest updates only on success".
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.fedora
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ needs.discover.outputs.combo }}
+            ${{ env.IMAGE }}:latest
+          build-args: |
+            ROCM_VERSION=${{ needs.discover.outputs.rocm_version }}
+            TORCH_VERSION=${{ needs.discover.outputs.torch_version }}
+            VLLM_REF=${{ needs.discover.outputs.vllm_ref }}
+            RCCL_IMPL=stock
+          cache-from: type=gha

@@ -1,0 +1,7 @@
+# Shell/Python/YAML must stay LF (authored on Windows, executed on Linux/CI)
+*.sh   text eol=lf
+*.py   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.env  text eol=lf
+Dockerfile* text eol=lf

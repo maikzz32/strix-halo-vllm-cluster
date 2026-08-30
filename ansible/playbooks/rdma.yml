@@ -1,0 +1,148 @@
+---
+# rdma.yml — RoCEv2 RDMA setup and validation (node1 <-> node2 smoke test).
+# Prerequisites:
+#   - base.yml applied (memlock limits in place)
+#   - 25 GbE interfaces cabled and configured; roce_ip/roce_iface set per
+#     host in ansible/inventory.yaml
+#   - ansible.posix collection installed (firewalld module):
+#       ansible-galaxy collection install ansible.posix
+# Validates: ibv_devices, ib_write_bw (perftest) and an iperf3 TCP baseline
+# over the RoCE network; reports measured Gbps at the end of the play.
+- name: RDMA setup and validation
+  hosts: strix_nodes
+  become: true
+  tags: rdma
+  tasks:
+    - name: Install RDMA and benchmarking tools
+      ansible.builtin.dnf:
+        name:
+          - rdma-core
+          - libibverbs-utils
+          - perftest
+          - iperf3
+        state: present
+
+    - name: Enable and start firewalld
+      ansible.builtin.service:
+        name: firewalld
+        enabled: true
+        state: started
+
+    - name: Trust the RoCE interface in firewalld
+      ansible.posix.firewalld:
+        interface: "{{ roce_iface }}"
+        zone: trusted
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Refuse jumbo MTU without switch-side validation
+      ansible.builtin.assert:
+        that: mtu | int == 1500 or mtu_switch_validated | bool
+        fail_msg: >-
+          mtu={{ mtu }} requested but the switch side is unknown
+          (mtu_switch_validated=false). One known 4-node setup broke on
+          MTU 9000. Validate jumbo frames end-to-end (switch included),
+          then set mtu_switch_validated=true in group_vars/all.yaml.
+
+    - name: Get NetworkManager connection for the RoCE interface
+      ansible.builtin.command: nmcli -g GENERAL.CONNECTION device show {{ roce_iface }}
+      register: roce_conn
+      changed_when: false
+      when: mtu | int != 1500
+
+    - name: Apply MTU to the RoCE connection
+      ansible.builtin.command: >-
+        nmcli connection modify "{{ roce_conn.stdout }}" 802-3-ethernet.mtu {{ mtu }}
+      register: mtu_applied
+      when: mtu | int != 1500
+
+    - name: Re-activate the RoCE connection to pick up the MTU
+      ansible.builtin.command: nmcli connection up "{{ roce_conn.stdout }}"
+      when: mtu | int != 1500 and mtu_applied.changed
+
+    - name: List RDMA devices
+      ansible.builtin.command: ibv_devices
+      register: ibv_devices_out
+      changed_when: false
+
+    - name: Assert at least one RDMA device is visible
+      ansible.builtin.assert:
+        that: ibv_devices_out.stdout_lines | length > 2
+        fail_msg: >-
+          ibv_devices lists no RDMA device on {{ inventory_hostname }}
+          (iface {{ roce_iface }}). Check NIC driver/firmware and cabling.
+
+    # First two output lines of ibv_devices are the header.
+    - name: Determine first RDMA device name
+      ansible.builtin.set_fact:
+        rdma_device: "{{ ibv_devices_out.stdout_lines[2].split()[0] }}"
+
+    # --- ib_write_bw smoke test: server on node1, client on node2 ---------
+    # If this fails with GID/RoCE errors, the RoCEv2 GID index likely needs
+    # to be selected explicitly (-x <gid>); find it via `ibv_devinfo -v`.
+    - name: Start ib_write_bw server on head node
+      ansible.builtin.command: >-
+        ib_write_bw -d {{ rdma_device }} -F --report_gbits --duration=10
+      async: 90
+      poll: 0
+      register: ibw_server
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    - name: Give the server time to come up
+      ansible.builtin.pause:
+        seconds: 3
+      when: inventory_hostname == groups['strix_nodes'][1]
+
+    - name: Run ib_write_bw client (second node -> head)
+      ansible.builtin.command: >-
+        ib_write_bw -d {{ rdma_device }} -F --report_gbits --duration=10
+        {{ hostvars[groups['strix_nodes'] | first].roce_ip }}
+      register: ibw_client
+      when: inventory_hostname == groups['strix_nodes'][1]
+
+    - name: Collect ib_write_bw server result
+      ansible.builtin.async_status:
+        jid: "{{ ibw_server.ansible_job_id }}"
+      register: ibw_server_result
+      until: ibw_server_result.finished
+      retries: 30
+      delay: 3
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    # --- iperf3 TCP baseline over the RoCE network ------------------------
+    - name: Start iperf3 server on head node (single connection)
+      ansible.builtin.command: iperf3 -s -1 -B {{ roce_ip }}
+      async: 90
+      poll: 0
+      register: iperf_server
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    - name: Give the iperf3 server time to come up
+      ansible.builtin.pause:
+        seconds: 2
+      when: inventory_hostname == groups['strix_nodes'][1]
+
+    - name: Run iperf3 client baseline (second node -> head)
+      ansible.builtin.command: >-
+        iperf3 -c {{ hostvars[groups['strix_nodes'] | first].roce_ip }} -t 10 -f g
+      register: iperf_client
+      when: inventory_hostname == groups['strix_nodes'][1]
+
+    - name: Collect iperf3 server result
+      ansible.builtin.async_status:
+        jid: "{{ iperf_server.ansible_job_id }}"
+      register: iperf_server_result
+      until: iperf_server_result.finished
+      retries: 30
+      delay: 3
+      when: inventory_hostname == groups['strix_nodes'] | first
+
+    - name: Validation recap — measured Gbps (node1 <-> node2)
+      ansible.builtin.debug:
+        msg: >-
+          RDMA validation node1 <-> node2:
+          ib_write_bw => {{ (ibw_client.stdout_lines | select('search', '[0-9]+\.[0-9]+') | list | last) | default('n/a', true) }};
+          iperf3 TCP => {{ ((iperf_client.stdout | regex_search('([0-9.]+)\s+Gbits/sec\s+receiver', '\1')) | first) | default('n/a', true) }} Gbit/s
+          (25 GbE link — expect low-to-mid 20s).
+      when: inventory_hostname == groups['strix_nodes'][1]

@@ -1,0 +1,56 @@
+---
+# Cluster-wide variables for the Strix Halo nodes.
+
+# IOMMU mode: 'pt' (default, safe with RDMA) or 'off' (measured 5-12% faster
+# but may break RDMA). Only switch to 'off' after bench/iommu_ab.sh has
+# validated off+RDMA on this cluster.
+iommu_mode: pt
+
+# GTT carve-out (MiB) so the gfx1151 iGPU can address most of the 128 GB
+# unified memory. ttm_pages_limit must be raised alongside.
+gttsize_mb: 126976
+ttm_pages_limit: 32505856
+
+# RoCE interface MTU. 1500 is the safe default; 9000 is a validated option,
+# not a default — one known 4-node setup broke on jumbo frames.
+mtu: 1500
+# Set true only after verifying jumbo frames end-to-end (switch included).
+# rdma.yml refuses to apply mtu != 1500 while this is false.
+mtu_switch_validated: false
+
+# Cluster container image (built by .github/workflows, pushed to ghcr.io).
+# Replace the placeholder owner/repo with the real ghcr.io path.
+container_image: ghcr.io/YOUR_GITHUB_OWNER/strix-halo-vllm:stable
+container_name: strix-vllm
+
+# Persistent Triton JIT cache (host path, bind-mounted into the container).
+# Without it every cold start pays ~170 s of Triton JIT.
+triton_cache_dir: /var/lib/vllm/triton-cache
+
+ray_port: 6379
+
+# --- GPU SCLK cap (gfx1151 iGPU) -------------------------------------------
+# Measured on Strix Halo (strix-halo-guide issue #24): under sustained LLM
+# load the iGPU boosts unchecked to 2900 MHz / ~180 W / ~111 C and some
+# boxes hard-lock. The SMU ignores ryzenadj STAPM/PPT limits — only a hard
+# SCLK cap via amdgpu sysfs (pp_od_clk_voltage) has any authority.
+# Decode tok/s is FLAT vs clock (decode is DRAM-bandwidth-bound,
+# ~215 GB/s real); prefill scales ~linearly with clock. Measured soak:
+#   2400 MHz -> ~100 W / 70 C; 2500 MHz -> ~107 W; heat-soak onset 2500-2600.
+# Deployed sweet spot: cap at 2400-2500 MHz.
+# CAVEAT: the 2900 MHz hard-lock was NOT reproducible on all units — if your
+# boxes soak fine at higher clocks, use the escape hatch
+# (gpu_sclk_cap_enable: false) or raise gpu_sclk_cap_mhz after a
+# bench_clock_sweep (see below).
+gpu_sclk_cap_enable: true
+gpu_sclk_cap_mhz: 2500
+
+# bench_clock_sweep — find the right cap for YOUR boxes:
+#   decode is DRAM-bandwidth-bound => tok/s is FLAT vs SCLK; prefill is
+#   compute-bound => scales ~linearly with SCLK. So the cap only costs
+#   prefill speed — measure the trade-off before lowering it below 2500.
+#   1. set gpu_sclk_cap_mhz to a candidate, apply base.yml (tag: gpu),
+#   2. run bench/run_matrix.py to sweep prefill + decode shapes,
+#   3. soak >= 30 min under load and watch sclk/temp/power via rocm-smi.
+#   Reference points: 2400 MHz soaked at ~100 W / 70 C, 2500 at ~107 W,
+#   heat-soak onset was 2500-2600 on the reference boxes.

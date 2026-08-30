@@ -1,0 +1,344 @@
+---
+# base.yml — OS baseline for the Strix Halo nodes.
+# Prerequisites:
+#   - Fedora >= 44 installed, ansible_user with sudo (become)
+#   - grubby available (default on Fedora)
+# Does NOT auto-upgrade OS or kernel — it asserts versions and fails with a
+# clear message instead. Applies the kernel cmdline (GTT/TTM + IOMMU mode)
+# via grubby, activates the tuned accelerator-performance profile and sets
+# unlimited memlock (limits.d + systemd drop-in) — without it RCCL fails
+# with: ibv_reg_mr_iova2 ... Cannot allocate memory.
+# Reboots via handler when the kernel cmdline changed.
+# GPU tasks (tag: gpu): asserts linux-firmware >= 20260410 (MES 0x86,
+# ROCm#6165) and installs a persistent SCLK cap for the gfx1151 iGPU
+# (systemd oneshot, survives reboot; see group_vars/all.yaml for why).
+- name: Base provisioning
+  hosts: strix_nodes
+  become: true
+  tags: base
+  handlers:
+    - name: Reboot node to apply kernel cmdline
+      ansible.builtin.reboot:
+        reboot_timeout: 900
+
+    - name: Re-execute systemd manager (memlock drop-in)
+      ansible.builtin.command: systemctl daemon-reexec
+
+    - name: Reload systemd (gfx1151-sclk-cap unit)
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
+    - name: Restart gfx1151 SCLK cap service
+      ansible.builtin.systemd_service:
+        name: gfx1151-sclk-cap.service
+        state: restarted
+  tasks:
+    - name: Assert Fedora >= 44
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.distribution == 'Fedora'
+          - ansible_facts.distribution_major_version | int >= 44
+        fail_msg: >-
+          This playbook targets Fedora >= 44; found
+          {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}.
+          Upgrade the node OS manually — no auto-upgrade is performed here.
+
+    - name: Assert kernel >= 6.18.4
+      ansible.builtin.assert:
+        that: ansible_facts.kernel is version('6.18.4', '>=')
+        fail_msg: >-
+          Kernel >= 6.18.4 required for gfx1151 GTT/TTM support; found
+          {{ ansible_facts.kernel }}. Install a newer kernel manually
+          (e.g. dnf upgrade kernel), reboot, then re-run this playbook.
+
+    - name: Query installed linux-firmware version
+      ansible.builtin.command: rpm -q --qf '%{VERSION}' linux-firmware
+      register: linux_firmware_version
+      changed_when: false
+      tags: gpu
+
+    # ROCm#6165: the MES 0x83 firmware has a page-fault class hang under
+    # sustained vLLM load on gfx1151; fixed by MES 0x86, shipped in
+    # linux-firmware 20260410.
+    - name: Assert linux-firmware >= 20260410 (MES 0x86)
+      ansible.builtin.assert:
+        that: linux_firmware_version.stdout is version('20260410', '>=')
+        fail_msg: >-
+          linux-firmware {{ linux_firmware_version.stdout }} is too old for
+          sustained vLLM on gfx1151: MES 0x83 has a page-fault class hang,
+          fixed in MES 0x86 (linux-firmware >= 20260410). See
+          https://github.com/ROCm/ROCm/issues/6165
+          Upgrade manually (dnf upgrade linux-firmware), reboot, re-run.
+      tags: gpu
+
+    # Era note: ROCm#5750 symptoms were a kernel < 6.16 era problem class.
+    # The >= 6.18.4 assert above already excludes those kernels; keep this
+    # as a loud warning (not a failure) in case that assert is ever relaxed.
+    - name: Warn if ROCm#5750 symptoms are possible (kernel < 6.16 era)
+      ansible.builtin.debug:
+        msg: >-
+          WARNING: kernel {{ ansible_facts.kernel }} predates the 6.16 era —
+          symptoms matching https://github.com/ROCm/ROCm/issues/5750 are
+          possible on gfx1151. Upgrade the kernel before running vLLM.
+      when: ansible_facts.kernel is version('6.16', '<')
+      tags: gpu
+
+    - name: Compute desired kernel cmdline args
+      ansible.builtin.set_fact:
+        strix_kernel_args: >-
+          {{ ['amdgpu.gttsize=' ~ gttsize_mb, 'ttm.pages_limit=' ~ ttm_pages_limit]
+             + (['amd_iommu=off'] if iommu_mode == 'off' else ['iommu=pt']) }}
+        strix_iommu_conflicting_arg: >-
+          {{ 'iommu=pt' if iommu_mode == 'off' else 'amd_iommu=off' }}
+
+    - name: Read current default-kernel cmdline
+      ansible.builtin.command: grubby --info=DEFAULT
+      register: grubby_info
+      changed_when: false
+
+    - name: Remove the conflicting IOMMU arg (mode switch)
+      ansible.builtin.command: grubby --update-kernel=ALL --remove-args="{{ strix_iommu_conflicting_arg }}"
+      register: grubby_removed
+      when: strix_iommu_conflicting_arg in grubby_info.stdout
+      notify: Reboot node to apply kernel cmdline
+
+    # Substring match caveat: 'iommu=pt' would also match a hypothetical
+    # 'amd_iommu=pt' arg — we never set that, so this is safe in practice.
+    - name: Set GTT/TTM/IOMMU kernel args via grubby
+      ansible.builtin.command: grubby --update-kernel=ALL --args="{{ item }}"
+      loop: "{{ strix_kernel_args }}"
+      register: grubby_args
+      when: item not in grubby_info.stdout
+      notify: Reboot node to apply kernel cmdline
+
+    - name: Install tuned
+      ansible.builtin.dnf:
+        name: tuned
+        state: present
+
+    - name: Enable and start tuned
+      ansible.builtin.service:
+        name: tuned
+        enabled: true
+        state: started
+
+    - name: Check active tuned profile
+      ansible.builtin.command: tuned-adm active
+      register: tuned_active
+      changed_when: false
+      failed_when: false
+
+    - name: Activate accelerator-performance profile
+      ansible.builtin.command: tuned-adm profile accelerator-performance
+      when: "'accelerator-performance' not in tuned_active.stdout"
+
+    - name: Unlimited memlock for login sessions (limits.d)
+      ansible.builtin.copy:
+        dest: /etc/security/limits.d/90-memlock.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          # RCCL over RoCE pins large buffers; without this it fails with
+          # ibv_reg_mr_iova2 ... Cannot allocate memory
+          *    -    memlock    unlimited
+
+    - name: Unlimited memlock for systemd services (drop-in)
+      ansible.builtin.copy:
+        dest: /etc/systemd/system.conf.d/50-memlock.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [Manager]
+          DefaultLimitMEMLOCK=infinity
+      notify: Re-execute systemd manager (memlock drop-in)
+
+    # --- gfx1151 SCLK cap ----------------------------------------------------
+    # Persistent via systemd (NOT a one-shot echo) so it survives reboots.
+    # All detection logic lives in the helper script; the unit is a plain
+    # oneshot wrapper. See the script header and group_vars/all.yaml for the
+    # measured rationale (2900 MHz hard-locks, 2400-2500 MHz sweet spot).
+    - name: Install gfx1151 SCLK cap helper script
+      ansible.builtin.copy:
+        dest: /usr/local/sbin/gfx1151-sclk-cap.sh
+        owner: root
+        group: root
+        mode: '0755'
+        content: |
+          #!/usr/bin/env bash
+          # gfx1151-sclk-cap.sh — hard-cap the Strix Halo (gfx1151) iGPU SCLK.
+          #
+          # Why (strix-halo-guide issue #24): under sustained LLM load the iGPU
+          # boosts unchecked to 2900 MHz / ~180 W / ~111 C and some boxes
+          # hard-lock. The SMU ignores ryzenadj STAPM/PPT limits — only
+          # pp_od_clk_voltage has authority. Decode tok/s is FLAT vs clock
+          # (~215 GB/s DRAM-bound); prefill scales ~linearly. Soak-tested sweet
+          # spot: 2400-2500 MHz (2400 -> ~100 W/70 C, 2500 -> ~107 W,
+          # heat-soak onset 2500-2600).
+          #
+          # Usage: gfx1151-sclk-cap.sh <cap_mhz>
+          # Exit 0 on success / already-capped; exit 1 loudly otherwise. The
+          # systemd unit is oneshot + WantedBy (never RequiredBy), so a failure
+          # here is visible in systemctl/journalctl but can NEVER block boot.
+          set -u
+
+          CAP_MHZ="${1:-}"
+          if ! [[ "$CAP_MHZ" =~ ^[0-9]+$ ]]; then
+            echo "gfx1151-sclk-cap: usage: $0 <cap_mhz>" >&2
+            exit 1
+          fi
+
+          # Print "<max_index> <max_mhz>" of the OD_SCLK table, empty on parse failure.
+          sclk_max_level() {
+            awk '
+              /^OD_SCLK:/ { in_sclk=1; next }
+              /^OD_/      { in_sclk=0 }
+              in_sclk && match($0, /^([0-9]+):[[:space:]]+([0-9]+)[Mm][Hh]z/, m) {
+                if (max_idx == "" || m[1]+0 > max_idx) { max_idx=m[1]+0; max_mhz=m[2]+0 }
+              }
+              END { if (max_idx != "") print max_idx, max_mhz }
+            ' "$1"
+          }
+
+          # --- find the gfx1151 card (amdgpu driver), defensively ------------
+          # The card index is NOT stable across kernels/configs — never
+          # hardcode card1. gfx1151 (Strix Halo iGPU) PCI id is 1002:1586;
+          # prefer it, fall back to the first amdgpu-driven card.
+          CARD_DEV=""
+          FALLBACK_DEV=""
+          for dev in /sys/class/drm/card[0-9]/device; do
+            [ -r "$dev/uevent" ] || continue
+            grep -q '^DRIVER=amdgpu$' "$dev/uevent" || continue
+            FALLBACK_DEV="${FALLBACK_DEV:-$dev}"
+            if grep -q '^PCI_ID=1002:1586$' "$dev/uevent"; then
+              CARD_DEV="$dev"
+              break
+            fi
+          done
+          CARD_DEV="${CARD_DEV:-$FALLBACK_DEV}"
+          if [ -z "$CARD_DEV" ]; then
+            echo "gfx1151-sclk-cap: no amdgpu DRM card found — nothing to cap" >&2
+            exit 1
+          fi
+
+          PP="$CARD_DEV/pp_od_clk_voltage"
+          if [ ! -r "$PP" ] || [ ! -w "$PP" ]; then
+            echo "gfx1151-sclk-cap: $PP missing or not writable (amdgpu overdrive interface unavailable) — refusing to guess" >&2
+            exit 1
+          fi
+
+          # --- locate the max SCLK level (index varies by silicon/firmware) --
+          # pp_od_clk_voltage layout (RDNA):
+          #   OD_SCLK:
+          #   0:        800Mhz
+          #   1:       2400Mhz
+          #   OD_RANGE:
+          #   SCLK:     800MHz       2900MHz
+          SCLK_MAX="$(sclk_max_level "$PP")"
+          if [ -z "$SCLK_MAX" ]; then
+            echo "gfx1151-sclk-cap: could not parse OD_SCLK table from $PP — refusing to write blindly" >&2
+            exit 1
+          fi
+          MAX_IDX="${SCLK_MAX%% *}"
+          MAX_MHZ="${SCLK_MAX##* }"
+
+          if [ "$MAX_MHZ" -le "$CAP_MHZ" ]; then
+            echo "gfx1151-sclk-cap: max SCLK level $MAX_IDX already at ${MAX_MHZ} MHz (<= cap ${CAP_MHZ}) on $CARD_DEV — nothing to do"
+            exit 0
+          fi
+
+          echo "gfx1151-sclk-cap: capping $CARD_DEV SCLK level $MAX_IDX to ${CAP_MHZ} MHz (was ${MAX_MHZ})"
+          if ! echo "s $MAX_IDX $CAP_MHZ" > "$PP"; then
+            echo "gfx1151-sclk-cap: write 's $MAX_IDX $CAP_MHZ' to $PP failed" >&2
+            exit 1
+          fi
+          # 'c' commits the overdrive table on RDNA; tolerate auto-commit kernels.
+          echo "c" > "$PP" 2>/dev/null || true
+
+          # --- verify by reading back ----------------------------------------
+          NEW_MAX="$(sclk_max_level "$PP")"
+          NEW_MHZ="${NEW_MAX##* }"
+          if [ -z "$NEW_MAX" ] || [ "$NEW_MHZ" -gt "$CAP_MHZ" ]; then
+            echo "gfx1151-sclk-cap: VERIFICATION FAILED — max SCLK level reads back as ${NEW_MHZ:-unknown} MHz (cap ${CAP_MHZ})" >&2
+            exit 1
+          fi
+          echo "gfx1151-sclk-cap: OK — max SCLK level now ${NEW_MHZ} MHz on $CARD_DEV"
+      notify: Restart gfx1151 SCLK cap service
+      when: gpu_sclk_cap_enable | bool
+      tags: gpu
+
+    - name: Install gfx1151 SCLK cap systemd unit
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/gfx1151-sclk-cap.service
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [Unit]
+          Description=Cap gfx1151 iGPU SCLK at {{ gpu_sclk_cap_mhz }} MHz (Strix Halo)
+          # Boot safety: oneshot + WantedBy only (never RequiredBy). A failure
+          # is loud in systemctl/journalctl but cannot block or brick boot;
+          # the userspace fallback is simply a warning.
+          ConditionPathExistsGlob=/sys/class/drm/card*/device/pp_od_clk_voltage
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=/usr/local/sbin/gfx1151-sclk-cap.sh {{ gpu_sclk_cap_mhz }}
+
+          [Install]
+          WantedBy=multi-user.target
+      notify:
+        - Reload systemd (gfx1151-sclk-cap unit)
+        - Restart gfx1151 SCLK cap service
+      when: gpu_sclk_cap_enable | bool
+      tags: gpu
+
+    - name: Enable and start gfx1151 SCLK cap service
+      ansible.builtin.systemd_service:
+        name: gfx1151-sclk-cap.service
+        enabled: true
+        state: started
+      when: gpu_sclk_cap_enable | bool
+      tags: gpu
+
+    # Escape hatch: cap disabled -> remove the cap path entirely (service
+    # stopped and disabled; the GPU boosts freely again after next boot or
+    # an amdgpu reset).
+    - name: Disable gfx1151 SCLK cap service when cap is disabled
+      ansible.builtin.systemd_service:
+        name: gfx1151-sclk-cap.service
+        enabled: false
+        state: stopped
+      when: not gpu_sclk_cap_enable | bool
+      tags: gpu
+
+    # Validation: report the actual clock state after (re)start. rocm-smi
+    # preferred; fall back to the amdgpu pp_dpm_sclk sysfs (active level is
+    # marked with '*').
+    - name: Read back current GPU clocks (validation)
+      ansible.builtin.command: >-
+        sh -c 'rocm-smi --showclocks 2>/dev/null ||
+        for f in /sys/class/drm/card[0-9]/device/pp_dpm_sclk; do
+          [ -r "$f" ] && { echo "== $f"; cat "$f"; };
+        done'
+      register: gpu_clocks
+      changed_when: false
+      failed_when: false
+      when: gpu_sclk_cap_enable | bool
+      tags: gpu
+
+    - name: Report current GPU clock state
+      ansible.builtin.debug:
+        msg: "{{ gpu_clocks.stdout_lines | default(['no clock info available']) }}"
+      when: gpu_sclk_cap_enable | bool
+      tags: gpu
+
+    - name: Base provisioning summary
+      ansible.builtin.debug:
+        msg: >-
+          Base provisioning done on {{ inventory_hostname }}.
+          {{ 'REBOOT REQUIRED — kernel cmdline changed; the reboot handler runs at the end of this play.'
+             if (grubby_args.changed or grubby_removed.changed)
+             else 'No reboot required — kernel cmdline already correct.' }}

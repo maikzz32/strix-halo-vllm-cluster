@@ -1,0 +1,15 @@
+---
+# site.yml — full cluster provisioning, in order.
+# Run: ansible-playbook -i ansible/inventory.yaml ansible/playbooks/site.yml
+# Or a single concern:  ... site.yml --tags rdma
+- name: Base (OS, kernel cmdline, tuned, memlock)
+  ansible.builtin.import_playbook: base.yml
+
+- name: RDMA (RoCE setup + validation)
+  ansible.builtin.import_playbook: rdma.yml
+
+- name: Runtime (podman, quadlet container, SSH mesh)
+  ansible.builtin.import_playbook: runtime.yml
+
+- name: Ray (head on node1, workers node2-4)
+  ansible.builtin.import_playbook: ray.yml
