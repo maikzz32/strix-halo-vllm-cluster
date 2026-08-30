@@ -194,18 +194,11 @@ jobs:
           bash /smoke_test.sh
 
       - name: Push :dev + dated tag (only after green smoke test)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: docker/Dockerfile.fedora
-          push: true
-          tags: |
-            ${{ env.IMAGE }}:dev${{ env.TAG_SUFFIX }}
-            ${{ env.IMAGE }}:${{ env.DATED_TAG }}
-          build-args: |
-            ROCM_VERSION=${{ steps.stack.outputs.rocm_version }}
-            TORCH_VERSION=${{ steps.stack.outputs.torch_version }}
-            TORCHVISION_VERSION=${{ steps.stack.outputs.torchvision_version }}
-            VLLM_REF=${{ steps.ref.outputs.vllm_ref }}
-            RCCL_IMPL=${{ env.RCCL_IMPL }}
-          cache-from: type=gha
+        # Plain docker push of the already-built image (see build-stable.yml:
+        # re-running the full build with push:true wastes ~45 min when the
+        # gha cache loses blobs).
+        run: |
+          set -euo pipefail
+          docker tag "${IMAGE}:${{ env.DATED_TAG }}" "${IMAGE}:dev${{ env.TAG_SUFFIX }}"
+          docker push "${IMAGE}:${{ env.DATED_TAG }}"
+          docker push "${IMAGE}:dev${{ env.TAG_SUFFIX }}"

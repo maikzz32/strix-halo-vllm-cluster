@@ -153,20 +153,15 @@ jobs:
           bash /smoke_test.sh
 
       - name: Push combo tag + :latest
-        # Single push step, only reached after a green smoke test - this is
-        # what guarantees ":latest updates only on success".
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: docker/Dockerfile.fedora
-          push: true
-          tags: |
-            ${{ env.IMAGE }}:${{ needs.discover.outputs.combo }}
-            ${{ env.IMAGE }}:latest
-          build-args: |
-            ROCM_VERSION=${{ needs.discover.outputs.rocm_version }}
-            TORCH_VERSION=${{ needs.discover.outputs.torch_version }}
-            TORCHVISION_VERSION=${{ needs.discover.outputs.torchvision_version }}
-            VLLM_REF=${{ needs.discover.outputs.vllm_ref }}
-            RCCL_IMPL=stock
-          cache-from: type=gha
+        # Plain docker push of the ALREADY BUILT image (loaded into the
+        # daemon by the build step above), only reached after a green smoke
+        # test - this is what guarantees ":latest updates only on success".
+        # The previous design re-ran the full docker build with push:true;
+        # the gha cache loses blobs at this image size, so that second build
+        # re-executed every layer (~45 min wasted per run).
+        run: |
+          set -euo pipefail
+          COMBO="${{ needs.discover.outputs.combo }}"
+          docker tag "${IMAGE}:${COMBO}" "${IMAGE}:latest"
+          docker push "${IMAGE}:${COMBO}"
+          docker push "${IMAGE}:latest"
