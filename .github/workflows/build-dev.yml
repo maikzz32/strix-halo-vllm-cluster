@@ -94,22 +94,37 @@ jobs:
           # whl-multi-arch is a PEP 503-style index: generic torch wheels under
           # $BASE/torch/ plus per-device plugin wheels under
           # $BASE/amd-torch-device-gfx1151/. An "aligned gfx1151 stack" is a
-          # (torch, rocm) version pair present in BOTH listings.
-          pairs_t=$(curl -fsSL "$BASE/torch/" | sed 's/%2B/+/g' \
-            | grep -oE 'torch-[0-9]+\.[0-9]+\.[0-9]+\+rocm[0-9]+(\.[0-9]+)+-cp[0-9]+-cp[0-9]+-linux_x86_64' \
+          # (torch, rocm) version pair present in BOTH listings. Only pairs
+          # with a cp312 wheel in BOTH listings are eligible (the image runs
+          # Fedora's python3.12; torch 2.13.0+rocm7.14.0 is cp312-only).
+          list_t=$(curl -fsSL "$BASE/torch/" | sed 's/%2B/+/g')
+          list_d=$(curl -fsSL "$BASE/amd-torch-device-gfx1151/" | sed 's/%2B/+/g')
+          pairs_t=$(printf '%s' "$list_t" \
+            | grep -oE 'torch-[0-9]+\.[0-9]+\.[0-9]+\+rocm[0-9]+(\.[0-9]+)+-cp312-cp312-linux_x86_64' \
             | sed -E 's/^torch-([0-9.]+)\+rocm([0-9.]+)-.*/\1 \2/' | sort -u)
-          pairs_d=$(curl -fsSL "$BASE/amd-torch-device-gfx1151/" | sed 's/%2B/+/g' \
-            | grep -oE 'amd_torch_device_gfx1151-[0-9]+\.[0-9]+\.[0-9]+\+rocm[0-9]+(\.[0-9]+)+-cp[0-9]+-cp[0-9]+-linux_x86_64' \
+          pairs_d=$(printf '%s' "$list_d" \
+            | grep -oE 'amd_torch_device_gfx1151-[0-9]+\.[0-9]+\.[0-9]+\+rocm[0-9]+(\.[0-9]+)+-cp312-cp312-linux_x86_64' \
             | sed -E 's/^amd_torch_device_gfx1151-([0-9.]+)\+rocm([0-9.]+)-.*/\1 \2/' | sort -u)
           best=$(comm -12 <(printf '%s\n' "$pairs_t" | sort) <(printf '%s\n' "$pairs_d" | sort) \
             | sort -k1,1V -k2,2V | tail -1)
-          [ -n "$best" ] || { echo "::error::no aligned gfx1151 torch stack found under $BASE"; exit 1; }
+          [ -n "$best" ] || { echo "::error::no aligned gfx1151 torch stack (cp312) found under $BASE"; exit 1; }
           torch_version=$(printf '%s' "$best" | cut -d' ' -f1)
           rocm_version=$(printf '%s' "$best" | cut -d' ' -f2)
-          echo "resolved: ROCm=$rocm_version torch=$torch_version"
+          # torchvision aligned the same way (both listings, this rocm, cp312).
+          pairs_v=$(curl -fsSL "$BASE/torchvision/" | sed 's/%2B/+/g' \
+            | grep -oE "torchvision-[0-9]+\\.[0-9]+\\.[0-9]+\\+rocm${rocm_version}-cp312-cp312-linux_x86_64" \
+            | sed -E 's/^torchvision-([0-9.]+)\+.*/\1/' | sort -u)
+          pairs_vd=$(curl -fsSL "$BASE/amd-torchvision-device-gfx1151/" | sed 's/%2B/+/g' \
+            | grep -oE "amd_torchvision_device_gfx1151-[0-9]+\\.[0-9]+\\.[0-9]+\\+rocm${rocm_version}-cp312-cp312-linux_x86_64" \
+            | sed -E 's/^amd_torchvision_device_gfx1151-([0-9.]+)\+.*/\1/' | sort -u)
+          torchvision_version=$(comm -12 <(printf '%s\n' "$pairs_v" | sort) <(printf '%s\n' "$pairs_vd" | sort) \
+            | sort -V | tail -1)
+          [ -n "$torchvision_version" ] || { echo "::error::no aligned gfx1151 torchvision for rocm $rocm_version"; exit 1; }
+          echo "resolved: ROCm=$rocm_version torch=$torch_version torchvision=$torchvision_version"
           {
             echo "rocm_version=$rocm_version"
             echo "torch_version=$torch_version"
+            echo "torchvision_version=$torchvision_version"
           } >> "$GITHUB_OUTPUT"
 
       - name: Fetch custom librccl for gfx1151 (RCCL_IMPL=custom)
@@ -164,6 +179,7 @@ jobs:
           build-args: |
             ROCM_VERSION=${{ steps.stack.outputs.rocm_version }}
             TORCH_VERSION=${{ steps.stack.outputs.torch_version }}
+            TORCHVISION_VERSION=${{ steps.stack.outputs.torchvision_version }}
             VLLM_REF=${{ steps.ref.outputs.vllm_ref }}
             RCCL_IMPL=${{ env.RCCL_IMPL }}
           cache-from: type=gha
@@ -189,6 +205,7 @@ jobs:
           build-args: |
             ROCM_VERSION=${{ steps.stack.outputs.rocm_version }}
             TORCH_VERSION=${{ steps.stack.outputs.torch_version }}
+            TORCHVISION_VERSION=${{ steps.stack.outputs.torchvision_version }}
             VLLM_REF=${{ steps.ref.outputs.vllm_ref }}
             RCCL_IMPL=${{ env.RCCL_IMPL }}
           cache-from: type=gha
