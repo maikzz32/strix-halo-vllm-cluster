@@ -118,11 +118,19 @@ ENV ROCM_PATH=/opt/rocm \
     PYTORCH_ROCM_ARCH=gfx1151 \
     GPU_TARGETS=gfx1151 \
     VLLM_TARGET_DEVICE=rocm \
+    AITER_TRITON_ONLY=1 \
+    AITER_USE_SYSTEM_TRITON=1 \
+    FLASH_ATTENTION_TRITON_AMD_ENABLE=TRUE \
     PIP_NO_CACHE_DIR=1
 # GPU_TARGETS is the AMD-cmake arch variable: vLLM's ROCm cmake path keys off
 # it, while torch cpp_extension keys off PYTORCH_ROCM_ARCH. Setting BOTH is
 # the belt-and-suspenders pin against the silent arch-fallback bug
 # (vllm#22590, audited again from the build log at wheel-build time below).
+# AITER_TRITON_ONLY/USE_SYSTEM_TRITON: gfx1151 uses only AITER's Triton
+# kernels (CK/ASM are CDNA-only), keep the torch-pinned triton; also
+# inherited by the nested aiter install in flash-attention's triton-backend
+# setup. FLASH_ATTENTION_TRITON_AMD_ENABLE selects ROCm FA's Triton backend
+# (the CK backend is gfx90a/942/950-only) at build AND import time.
 
 # --- rdma-core version gate -------------------------------------------------
 # Check Fedora's packaged rdma-core; only if older than v62 build an overlay
@@ -216,12 +224,16 @@ RUN cd /opt/src/vllm \
 # AITER_USE_SYSTEM_TRITON=1: keep the torch-pinned TheRock triton instead of
 # letting AITER's install_triton.sh replace it.
 RUN python3 -m pip install pybind11 psutil pandas "flydsl==0.2.4" \
-    && AITER_TRITON_ONLY=1 AITER_USE_SYSTEM_TRITON=1 \
-       python3 -m pip wheel --no-build-isolation --no-deps -w /wheels \
+    && python3 -m pip wheel --no-build-isolation --no-deps -w /wheels \
         "git+https://github.com/ROCm/aiter.git@${AITER_REF}"
 RUN python3 -m pip download --no-deps -d /wheels "conch-triton-kernels==${CONCH_VERSION}"
-# ROCm flash-attention, branch main_perf (the gfx-tuned line). Long compile;
-# cross-compiling for gfx1151, no GPU needed at build time.
+# ROCm flash-attention, branch main_perf (the gfx-tuned line), Triton backend
+# (FLASH_ATTENTION_TRITON_AMD_ENABLE=TRUE in the stage ENV): the CK backend
+# only allows gfx90a/gfx942/gfx950 and needs the composable_kernel submodule;
+# the Triton backend routes through aiter.ops.triton (pure python wheel -
+# hence the AITER_TRITON_ONLY build above - provides it at runtime).
+# setup.py self-inits its third_party/aiter submodule (pip-installs it for
+# the build, inheriting the AITER_* env). No GPU needed at build time.
 RUN git clone --depth 1 --branch main_perf https://github.com/ROCm/flash-attention /opt/src/flash-attention \
     && cd /opt/src/flash-attention \
     && FLASH_ATTENTION_FORCE_BUILD=TRUE MAX_JOBS=$(nproc) \
@@ -416,6 +428,9 @@ COPY patches/configs/ /opt/vllm-tuned-configs/
 # gfx1151 runtime defaults (see models/registry.yaml and README):
 #  - AITER off by default: heavily gated on gfx1x
 #  - gfx1x MoE tune on: measured 11.3 -> 21.8 tok/s decode on MoE models
+#  - FLASH_ATTENTION_TRITON_AMD_ENABLE=TRUE: import-time backend selection in
+#    flash_attn/flash_attn_interface.py (routes to aiter.ops.triton) - must
+#    match the Triton backend the wheel was built with above
 #  - Triton cache location: bind-mount a host dir here to avoid ~170 s JIT
 #    on every cold start
 #  - TRITON_STORE_BINARY_ONLY=1: strips source/intermediate files from the
@@ -423,6 +438,7 @@ COPY patches/configs/ /opt/vllm-tuned-configs/
 #    Safe because the cache is only JIT'd/loaded on identical gfx1151 nodes.
 ENV VLLM_ROCM_USE_AITER=0 \
     VLLM_GFX1X_MOE_TUNE=1 \
+    FLASH_ATTENTION_TRITON_AMD_ENABLE=TRUE \
     VLLM_TUNED_CONFIG_FOLDER=/opt/vllm-tuned-configs \
     VLLM_HOST_TRITON_CACHE=/root/.cache/vllm/triton \
     TRITON_STORE_BINARY_ONLY=1
