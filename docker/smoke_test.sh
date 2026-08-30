@@ -16,7 +16,12 @@ fail() { echo "SMOKE FAIL: $*" >&2; exit 1; }
 echo "== python / vllm =="
 python3 -c "import vllm; print('vllm', vllm.__version__)" \
     || fail "import vllm"
-vllm --help >/dev/null || fail "vllm --help"
+# VLLM_TARGET_DEVICE=cpu: vLLM v0.28's CLI eagerly builds VllmConfig even for
+# --help, and its device inference has no GPU-less fallback anymore (the CPU
+# plugin only activates on an explicit cpu target, a cpu wheel, or macOS).
+# The explicit cpu target is upstream's sanctioned mechanism for CPU-only CI
+# reusing an accelerator wheel; the nodes rely on real detection instead.
+VLLM_TARGET_DEVICE=cpu vllm --help >/dev/null || fail "vllm --help"
 echo "vllm --help OK"
 
 echo "== torch (import only, no GPU) =="
