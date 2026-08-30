@@ -63,6 +63,7 @@ ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
 # that the pip SDK does not bundle.
 RUN dnf install -y ${DNF_FLAGS} \
         git cmake ninja-build gcc gcc-c++ make which findutils procps-ng \
+        rust cargo \
         python3.12 python3.12-devel curl-minimal \
         numactl-libs libdrm libatomic \
     && dnf clean all
@@ -165,8 +166,16 @@ RUN cd /opt/src/vllm \
            echo "WARNING: patches/apply_all.sh not found, building unpatched vLLM"; \
        fi
 
-# Prefer rocm-build.txt when present (vLLM moves requirements between
-# releases); fall back to the generic build requirements.
+# Build requirements: vLLM moves these between releases - v0.28 has
+# requirements/build/rocm.txt, older trees requirements/rocm-build.txt or
+# requirements/build.txt. The torch stack lines (torch/torchvision/
+# torchaudio/triton pins + the upstream pytorch.org ROCm index-url) are
+# FILTERED OUT: the image builds against the AMD gfx1151 whl-multi-arch
+# stack installed above, and letting upstream pins through would downgrade
+# or clobber it. The filtered copy is written next to the original so
+# relative includes (-r ../common.txt) keep resolving. A post-install
+# assertion on the torch version is the fail-closed guard against a
+# clobbered torch.
 # The build log is captured and audited for the gfx1151 arch pin: vLLM's ROCm
 # build has a known silent-fallback bug (vllm#22590) where an unpicked
 # PYTORCH_ROCM_ARCH compiles for the default multi-arch list instead of
@@ -174,9 +183,15 @@ RUN cd /opt/src/vllm \
 # grep audit below is the hard guard: the log must mention gfx1151, and no
 # HIP device-compile flag may name any other gfx arch.
 RUN cd /opt/src/vllm \
-    && REQ=requirements/rocm-build.txt \
-    && [ -f "$REQ" ] || REQ=requirements/build.txt \
-    && python3 -m pip install -r "$REQ" \
+    && for cand in requirements/build/rocm.txt requirements/rocm-build.txt requirements/build.txt; do \
+           if [ -f "$cand" ]; then REQ="$cand"; break; fi; \
+       done; \
+       [ -n "${REQ:-}" ] || { echo "FATAL: no ROCm build requirements file found"; exit 1; }; \
+    echo "Using build requirements: $REQ (torch stack lines filtered)" \
+    && filtered="${REQ%.txt}-gfx1151-filtered.txt" \
+    && grep -vE '^[[:space:]]*(torch|torchvision|torchaudio|triton)([=<>![]|$)|^[[:space:]]*--(extra-)?index-url' "$REQ" > "$filtered" \
+    && python3 -m pip install -r "$filtered" \
+    && python3 -c "import torch; assert torch.__version__.startswith('${TORCH_VERSION}+rocm'), 'torch clobbered: '+torch.__version__; print('torch pin intact:', torch.__version__)" \
     && mkdir -p /wheels \
     && set -o pipefail \
     && MAX_JOBS=$(nproc) python3 -m pip wheel --no-build-isolation --no-deps -w /wheels . 2>&1 | tee /tmp/vllm-build.log \
