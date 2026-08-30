@@ -63,9 +63,9 @@ ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
 # that the pip SDK does not bundle.
 RUN dnf install -y ${DNF_FLAGS} \
         git cmake ninja-build gcc gcc-c++ make which findutils procps-ng \
-        rust cargo \
+        rust cargo patch \
         python3.12 python3.12-devel curl-minimal \
-        numactl-libs libdrm libatomic \
+        numactl-libs libdrm libdrm-devel libatomic \
     && dnf clean all
 
 # pip for python3.12 (Fedora's python3-pip targets the 3.14 system python) and
