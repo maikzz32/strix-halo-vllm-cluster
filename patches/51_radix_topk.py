@@ -16,9 +16,14 @@ Sources:
     (patch_sparse_indexer_topk), adapted to current upstream: vLLM v0.28
     dropped the AITER top-k if/else dispatch in this file, so the
     ``torch.ops._C.top_k_per_row_*`` calls are now unconditional and this
-    patch wraps them directly (upstream call retained as fallback). If a
-    future build re-enables an AITER top-k kernel on gfx1x, that dispatch
-    has to be re-audited against this patch.
+    patch wraps them directly (upstream call retained as fallback). The
+    PR #53906 glm-release branch (@ 36bb3795) re-introduced an AITER top-k
+    dispatch, but gated on gfx950 (``_get_aiter_top_k_kernel`` returns None
+    unless ``on_gfx950``), with the torch.ops calls moved into its ``else:``
+    branches one indent deeper; on gfx1x the AITER lane is unreachable, so
+    wrapping the else-branch call preserves this patch's semantics and the
+    gfx950 fast path stays untouched. Both layouts are anchored; any other
+    form exits 42 for re-audit.
 
 Gate: VLLM_GFX1X_RADIX_TOPK (default 1 = ON; rocm_aiter_mla_sparse.py only
 serves DeepSeek-style sparse indexers). Qwen3.8 QSA and GLM-5.3 sparse-MLA
@@ -31,10 +36,10 @@ retained as fallback whenever the gate is off, the arch is not gfx1x, or the
 vendored module fails to import.
 
 STATUS: ported, not yet validated on this hardware. Call-site anchors
-re-audited against vLLM v0.28.0 (the AITER top-k if/else dispatch around
-top_k_per_row_* was removed upstream; the patch now wraps the unconditional
-call sites). PR-branch checkouts with a different rocm_aiter_mla_sparse.py
-layout exit 42 for re-audit.
+cover two verified layouts: vLLM v0.28.0 (unconditional torch.ops calls)
+and the PR #53906 glm-release branch @ 36bb3795 (torch.ops calls in the
+``else:`` of the gfx950-gated AITER top-k dispatch). Checkouts with a
+different rocm_aiter_mla_sparse.py layout exit 42 for re-audit.
 
 Usage:
     python3 51_radix_topk.py --src /opt/vllm          # apply
@@ -122,10 +127,18 @@ def _gfx1x_radix_topk(
 
 '''.replace("{marker}", MARKER)
 
-# Call-site anchors, verbatim from vLLM v0.28.0 (the AITER top-k dispatch
-# if/else that older trees wrapped these calls in is gone upstream; the
-# torch.ops calls are now unconditional). If a PR branch reshapes these, the
-# patch exits 42 for re-audit.
+# Call-site anchors. Two upstream layouts are verified; exactly one form
+# must match exactly once per call site, otherwise the patch exits 42 for
+# re-audit:
+#   - v0.28 form: the AITER top-k if/else dispatch that older trees wrapped
+#     these calls in is gone upstream; the torch.ops calls are unconditional
+#     (audited @ v0.28.0).
+#   - GLM form (PR #53906 glm-release @ 36bb3795): a gfx950-gated AITER
+#     top-k dispatch (_get_aiter_top_k_kernel returns None unless on_gfx950)
+#     wraps the calls; the torch.ops calls sit in its `else:` branches one
+#     indent deeper. The AITER lane is unreachable on gfx1x, so wrapping the
+#     else-branch call keeps the patch semantics identical and leaves the
+#     gfx950 fast path untouched.
 PREFILL_OLD = """            torch.ops._C.top_k_per_row_prefill(
                 logits,
                 chunk.cu_seqlen_ks,
@@ -182,6 +195,62 @@ DECODE_NEW = """        if not _gfx1x_radix_topk(
             )
 """
 
+PREFILL_OLD_GLM = """                torch.ops._C.top_k_per_row_prefill(
+                    logits,
+                    chunk.cu_seqlen_ks,
+                    chunk.cu_seqlen_ke,
+                    topk_indices,
+                    num_rows,
+                    logits.stride(0),
+                    logits.stride(1),
+                    topk_tokens,
+                )
+"""
+PREFILL_NEW_GLM = """                if not _gfx1x_radix_topk(
+                    logits,
+                    topk_tokens,
+                    row_starts=chunk.cu_seqlen_ks,
+                    row_ends=chunk.cu_seqlen_ke,
+                    out=topk_indices,
+                ):
+                    torch.ops._C.top_k_per_row_prefill(
+                        logits,
+                        chunk.cu_seqlen_ks,
+                        chunk.cu_seqlen_ke,
+                        topk_indices,
+                        num_rows,
+                        logits.stride(0),
+                        logits.stride(1),
+                        topk_tokens,
+                    )
+"""
+
+DECODE_OLD_GLM = """            torch.ops._C.top_k_per_row_decode(
+                logits,
+                next_n,
+                decode_metadata.seq_lens,
+                topk_indices,
+                num_rows,
+                logits.stride(0),
+                logits.stride(1),
+                topk_tokens,
+            )
+"""
+DECODE_NEW_GLM = """            if not _gfx1x_radix_topk(
+                logits, topk_tokens, out=topk_indices
+            ):
+                torch.ops._C.top_k_per_row_decode(
+                    logits,
+                    next_n,
+                    decode_metadata.seq_lens,
+                    topk_indices,
+                    num_rows,
+                    logits.stride(0),
+                    logits.stride(1),
+                    topk_tokens,
+                )
+"""
+
 
 def find_target(src: Path) -> Path | None:
     cand = src / REL_PATH
@@ -200,6 +269,26 @@ def replace_once(content: str, old: str, new: str, description: str,
               f"re-audit this patch.", file=sys.stderr)
         sys.exit(EXIT_REAUDIT)
     return content.replace(old, new, 1)
+
+
+def replace_one_of(content: str, forms: list[tuple[str, str]],
+                   description: str, target: Path) -> str:
+    """Apply the single matching (old, new) layout; fail closed otherwise.
+
+    Exactly one known layout may match exactly once; zero or ambiguous
+    matches mean upstream reshaped the file (exit 42, re-audit).
+    """
+    total = sum(content.count(old) for old, _ in forms)
+    if total != 1:
+        print(f"ERROR: {description}: expected one anchor in {target}, "
+              f"found {total} across {len(forms)} known layouts. Upstream "
+              f"reshaped rocm_aiter_mla_sparse.py; re-audit this patch.",
+              file=sys.stderr)
+        sys.exit(EXIT_REAUDIT)
+    for old, new in forms:
+        if old in content:
+            return content.replace(old, new, 1)
+    raise AssertionError("unreachable")
 
 
 def ensure_import_os(content: str, target: Path) -> str:
@@ -261,10 +350,14 @@ def main() -> int:
     content = replace_once(content, DISPATCHER_ANCHOR,
                            DISPATCHER_BLOCK + DISPATCHER_ANCHOR,
                            "radix top-k dispatcher insertion point", target)
-    content = replace_once(content, PREFILL_OLD, PREFILL_NEW,
-                           "prefill radix top-k dispatch", target)
-    content = replace_once(content, DECODE_OLD, DECODE_NEW,
-                           "decode radix top-k dispatch", target)
+    content = replace_one_of(content,
+                             [(PREFILL_OLD, PREFILL_NEW),
+                              (PREFILL_OLD_GLM, PREFILL_NEW_GLM)],
+                             "prefill radix top-k dispatch", target)
+    content = replace_one_of(content,
+                             [(DECODE_OLD, DECODE_NEW),
+                              (DECODE_OLD_GLM, DECODE_NEW_GLM)],
+                             "decode radix top-k dispatch", target)
 
     target.write_text(content)
     print(f"OK: patch 51 applied to {target}")
