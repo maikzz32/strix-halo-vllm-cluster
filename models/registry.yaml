@@ -63,6 +63,12 @@ models:
       # context; raise only with a rebalanced GTT.
       - --max-model-len
       - "32768"
+      # CRITICAL: preprocessor_config allows a 16.7-MP dummy image; vLLM's
+      # multimodal encoder profiling OOM-killed the node with it
+      # (total-vm 440 TiB reservation, global_oom, VLLM::EngineCor killed).
+      # Bench is text-only -> disable vision inputs entirely.
+      - --limit-mm-per-prompt
+      - '{"image": 0}'
     parsers:
       tool_call_parser: hermes
     notes: >
