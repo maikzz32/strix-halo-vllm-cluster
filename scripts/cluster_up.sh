@@ -29,7 +29,7 @@ while read -r name host user; do
   NAMES+=("$name")
   IPS+=("$host")
   if [ -n "$user" ]; then TARGETS+=("$user@$host"); else TARGETS+=("$host"); fi
-done < <("$PY" "$SCRIPT_DIR/lib/registry.py" nodes "$INVENTORY")
+done < <("$PY" "$SCRIPT_DIR/lib/registry.py" nodes "$INVENTORY" | tr -d '\r')
 
 HEAD_IDX=0
 HEAD_NAME="${NAMES[$HEAD_IDX]}"

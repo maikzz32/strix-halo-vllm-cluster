@@ -267,9 +267,11 @@ ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
 # libibverbs-utils, perftest for link validation). ROCm itself comes from the
 # TheRock pip SDK (same as builder, incl. devel, so Triton/AITER JIT and
 # hipcc-based compiles work on the nodes). binutils provides ld for JIT
-# linkers; numactl-libs/libdrm/libatomic are HSA thunk deps.
+# linkers; numactl-libs/libdrm/libatomic are HSA thunk deps. gcc is REQUIRED:
+# Triton's runtime build.py compiles its C launcher stubs on first use and
+# dies with "Failed to find C compiler" without it (hit on StrixHalo1).
 RUN dnf install -y ${DNF_FLAGS} \
-        python3.12 python3.12-devel curl-minimal binutils \
+        python3.12 python3.12-devel curl-minimal binutils gcc \
         numactl-libs libdrm libatomic \
         rdma-core libibverbs-utils librdmacm-utils perftest \
     && dnf clean all

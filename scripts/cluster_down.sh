@@ -19,7 +19,7 @@ NAMES=(); TARGETS=()
 while read -r name host user; do
   NAMES+=("$name")
   if [ -n "$user" ]; then TARGETS+=("$user@$host"); else TARGETS+=("$host"); fi
-done < <("$PY" "$SCRIPT_DIR/lib/registry.py" nodes "$INVENTORY")
+done < <("$PY" "$SCRIPT_DIR/lib/registry.py" nodes "$INVENTORY" | tr -d '\r')
 
 ssh_node() { # ssh_node <idx> <cmd...>
   local idx="$1"; shift

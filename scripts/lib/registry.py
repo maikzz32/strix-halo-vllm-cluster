@@ -96,6 +96,14 @@ def inventory_nodes(path):
         if isinstance(children, dict):
             for child in children.values():
                 walk(child, user)
+        else:
+            # Tolerate inventories that nest groups directly at top level
+            # (e.g. `strix_nodes:` without an `all:` / `children:` wrapper).
+            for key, val in node.items():
+                if key in ("vars", "hosts") or not isinstance(val, dict):
+                    continue
+                if isinstance(val.get("hosts"), dict) or isinstance(val.get("children"), dict):
+                    walk(val, user)
 
     walk(inv.get("all", inv), "")
     if not out:
