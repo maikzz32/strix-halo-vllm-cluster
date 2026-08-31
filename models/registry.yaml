@@ -56,6 +56,13 @@ models:
       # physical). 0.6 until gttsize (126976) is rebalanced vs host RAM.
       - --gpu-memory-utilization
       - "0.6"
+      # CRITICAL: vLLM profiles activations with a dummy run of max_num_tokens
+      # = max_model_len; at the native 262k context that profile run alone
+      # allocates >100 GiB and OOM-kills the node (measured: spike to 124 GiB
+      # in <60 s right after the encoder-cache init log). Cap the bench
+      # context; raise only with a rebalanced GTT.
+      - --max-model-len
+      - "32768"
     parsers:
       tool_call_parser: hermes
     notes: >
