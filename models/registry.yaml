@@ -51,10 +51,11 @@ models:
     env: {}
     extra_args:
       # APU unified memory: 0.9 (vLLM default) budgets ~111 GiB of the 124 GiB
-      # GTT for GPU and OOM-kills the host (measured: global_oom during engine
-      # init on StrixHalo1). 0.8 leaves headroom for OS + engine processes.
+      # GTT for GPU and OOM-kills the host; 0.8 still OOMed at engine init
+      # (KV pool + weights + multimodal profiling + host python > 124 GiB
+      # physical). 0.6 until gttsize (126976) is rebalanced vs host RAM.
       - --gpu-memory-utilization
-      - "0.8"
+      - "0.6"
     parsers:
       tool_call_parser: hermes
     notes: >
