@@ -90,12 +90,14 @@ mkdir -p "$SNAP"
 SERVE_PID=""
 teardown() {
   [ -z "$SERVE_PID" ] || { kill "$SERVE_PID" 2>/dev/null || true; wait "$SERVE_PID" 2>/dev/null || true; }
-  pkill -f 'vllm serve' 2>/dev/null || true
+  # [v] trick: a plain 'vllm serve' pattern matches the pkill command line
+  # itself (and the remote shell carrying it over ssh) and kills the session.
+  pkill -f '[v]llm serve' 2>/dev/null || true
   # Workers only: registry.py lists the head (node1) first, so skip line 1.
   local host user
   while read -r _ host user; do
     # shellcheck disable=SC2086
-    ssh $SSH_OPTS "${user:+$user@}$host" 'pkill -f "vllm serve" || true' 2>/dev/null || true
+    ssh $SSH_OPTS "${user:+$user@}$host" 'pkill -f "[v]llm serve" || true' 2>/dev/null || true
   done < <("$PY" "$REG" nodes "$INVENTORY" | tail -n +2)
 }
 trap teardown EXIT

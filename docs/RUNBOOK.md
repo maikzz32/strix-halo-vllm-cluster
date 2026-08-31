@@ -8,7 +8,11 @@ Diagnose nötig sind.
 ## Routine-Checks
 
 - Cluster hochfahren: `scripts/cluster_up.sh` (idempotent, mit Pre-Flight:
-  memlock, `/dev/infiniband`, `ibv_devices`).
+  memlock, `/dev/infiniband`, `ibv_devices`). Setzt pro Node
+  `NCCL_SOCKET_IFNAME` aus `roce_iface` (ansible/inventory.yaml) als
+  Container-Env und ruft am Ende automatisch `scripts/harden_containers.sh`
+  auf (gcc für Triton-JIT, amd-aiter-Entfernung; SKIP_HARDEN=1 überspringt —
+  bei manuell angelegten Containern selbst aufrufen, siehe Eintrag 12).
 - Gesundheit: `scripts/status.sh` (Ray-Status, GPU-Speicher je Node,
   RDMA-Link-State).
 - Modell starten: `scripts/serve.sh <modell> <profil>` — Profile und Status
@@ -185,6 +189,21 @@ Diagnose nötig sind.
   `--enforce-eager` durch `--compilation-config` +
   `'{"cudagraph_mode":"NONE"}'` ersetzen und Eintrag 3 anpassen.
 
+### 12. Frisch erstellte Container: Triton-JIT ohne gcc / amd-aiter-Import-Crash
+
+- **Symptom:** Nach `cluster_up.sh` mit neu erstellten Containern: `vllm serve`
+  stirbt in der Triton-Kompilierphase (kein C-Compiler im Container), oder der
+  vLLM-Import crasht bereits beim Laden von `aiter` (amd-aiter ist im Image
+  vorinstalliert, sein JIT bricht auf gfx1x schon beim Import —
+  `VLLM_ROCM_USE_AITER=0` gated nur die *Nutzung*, nicht den Import).
+- **Ursache:** Beide Fixes leben in der Container-Schicht und gehen bei
+  Container-Neuanlage verloren; das Image bleibt bewusst stock.
+- **Behebung:** `scripts/harden_containers.sh` (idempotent: installiert
+  gcc/gcc-c++ per dnf, deinstalliert amd-aiter/aiter, verifiziert danach).
+  Läuft automatisch am Ende von `cluster_up.sh`; nach manueller
+  Container-Neuanlage selbst aufrufen. Benötigt laufende Container
+  (`podman exec`), also immer *nach* `cluster_up.sh`.
+
 ## Weitere Hinweise
 
 - **`amd_iommu=off`:** 5–12 % schneller, kann aber RDMA brechen — der Trade-off
@@ -193,8 +212,14 @@ Diagnose nötig sind.
   (`amdgpu.gttsize=126976 ttm.pages_limit=32505856`, ggf. `amd_iommu=off`)
   Reboot nötig.
 - **RCCL-Umgebung:** `NCCL_IB_GID_INDEX=1` (RoCEv2), `NCCL_NET_GDR_LEVEL=0`
-  (kein GPU-Direct-Pfad auf der iGPU), `NCCL_SOCKET_IFNAME` aus dem RoCE-Iface —
-  alle gesetzt durch `serve.sh`; bei manuellen Starts selbst exportieren.
+  (kein GPU-Direct-Pfad auf der iGPU) — gesetzt durch `serve.sh`;
+  `NCCL_SOCKET_IFNAME` dagegen kommt **pro Node** aus `roce_iface`
+  (ansible/inventory.yaml) und wird von `cluster_up.sh` als Container-Env
+  gebacken: node4s E830 heißt anders (`enp197s0f1np1`) als die E810-Ports
+  (`enp197s0f3np3`), und vLLM propagiert die Driver-Env auf **alle**
+  Ray-Worker — ein driver-seitiges Setzen in `serve.sh` würde node4 das
+  Head-Iface aufzwingen. Bei manuellen Starts das Iface des jeweiligen Nodes
+  selbst exportieren.
 
 ## Cluster-Hardware-Stand (vermessen 2026-08-30)
 

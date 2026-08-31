@@ -49,7 +49,7 @@ REGISTRY = REPO_ROOT / "models" / "registry.yaml"
 SERVE_SH = REPO_ROOT / "scripts" / "serve.sh"
 RESULTS_DIR = REPO_ROOT / "bench" / "results"
 
-ALL_PROFILES = ["tp4", "pp4", "tp2pp2", "ep", "solo"]
+ALL_PROFILES = ["tp2", "tp4", "pp4", "tp2pp2", "ep", "solo"]
 DEFAULT_CONCURRENCIES = [1, 4, 8, 16, 32]
 DEFAULT_PROMPT_LENS = [512, 4096, 32768]
 DEFAULT_OUTPUT_LEN = 128
@@ -126,7 +126,9 @@ def teardown(proc=None, logf=None):
     if logf is not None:
         logf.close()
     try:
-        subprocess.run(["pkill", "-f", "vllm serve"], check=False,
+        # [v] trick: a plain 'vllm serve' pattern matches the pkill command
+        # line itself (and remote ssh shells carrying it), killing the session.
+        subprocess.run(["pkill", "-f", "[v]llm serve"], check=False,
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except FileNotFoundError:
         pass  # no procps on this host; serve.sh subprocess was already terminated
@@ -134,7 +136,7 @@ def teardown(proc=None, logf=None):
         try:
             subprocess.run(
                 ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=5",
-                 node, "pkill -f 'vllm serve' || true"],
+                 node, "pkill -f '[v]llm serve' || true"],
                 check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
         except FileNotFoundError:

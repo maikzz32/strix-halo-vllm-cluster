@@ -22,7 +22,7 @@
 #   extra_args         list of extra CLI args for `vllm serve`
 #   parsers            tokenizer_mode / tool_call_parser / reasoning_parser (optional)
 #   allowed_profiles   subset of profiles defined in scripts/serve.sh
-#                        (tp4 | pp4 | tp2pp2 | ep | solo); omit = all allowed
+#                        (tp2 | tp4 | pp4 | tp2pp2 | ep | solo); omit = all allowed
 #   notes              free-form operational notes
 #   references         source URLs for the facts above
 

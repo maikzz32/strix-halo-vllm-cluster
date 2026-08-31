@@ -6,6 +6,12 @@
 # runtime container (ray-head / ray-worker) running `ray start --block`.
 # serve.sh later execs `vllm serve` into the head container.
 #
+# Each container is created with NCCL_SOCKET_IFNAME=<roce_iface> from the
+# inventory. This MUST be per-node: node1-3 use enp197s0f3np3 (E810), node4
+# uses enp197s0f1np1 (E830), and serve.sh must not re-set it driver-side
+# because vLLM propagates the driver's env to ALL Ray workers. Containers
+# with a missing/stale NCCL_SOCKET_IFNAME are recreated automatically.
+#
 # Pre-flight per node (SSH): memlock ulimit unlimited (else RCCL fails with
 # ibv_reg_mr_iova2 ... Cannot allocate memory), /dev/infiniband present,
 # ibv_devices lists at least one RDMA device.
@@ -13,8 +19,11 @@
 # Idempotent: running containers are left alone, stopped ones are started,
 # missing ones are created.
 #
+# After bring-up, scripts/harden_containers.sh runs automatically (gcc for
+# the Triton JIT, amd-aiter removal) — skip with SKIP_HARDEN=1.
+#
 # Usage: cluster_up.sh [inventory.yaml]
-# Env:   VLLM_IMAGE, SSH_OPTS (extra ssh options)
+# Env:   VLLM_IMAGE, SSH_OPTS (extra ssh options), SKIP_HARDEN
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -34,6 +43,24 @@ while read -r name host user; do
   IPS+=("$host")
   if [ -n "$user" ]; then TARGETS+=("$user@$host"); else TARGETS+=("$host"); fi
 done < <("$PY" "$SCRIPT_DIR/lib/registry.py" nodes "$INVENTORY" | tr -d '\r')
+
+# Per-node RoCE interface (same document order as `nodes`). Heterogeneous:
+# node1-3 E810 -> enp197s0f3np3, node4 E830 -> enp197s0f1np1.
+IFACES=()
+while read -r _name iface; do
+  IFACES+=("$iface")
+done < <("$PY" "$SCRIPT_DIR/lib/registry.py" rdma_ifaces "$INVENTORY" | tr -d '\r')
+
+if [ "${#IFACES[@]}" -ne "${#NAMES[@]}" ]; then
+  echo "cluster_up: ERROR: rdma_ifaces/nodes count mismatch for $INVENTORY" >&2
+  exit 1
+fi
+for i in "${!NAMES[@]}"; do
+  if [ -z "${IFACES[$i]}" ]; then
+    echo "cluster_up: ERROR: ${NAMES[$i]} has no roce_iface in $INVENTORY" >&2
+    exit 1
+  fi
+done
 
 HEAD_IDX=0
 HEAD_NAME="${NAMES[$HEAD_IDX]}"
@@ -73,23 +100,43 @@ done
 # where GPU access rides on the user's render-group membership: without it the
 # container root lacks the render group and torch init dies with
 # "Memory critical error ... Reason: Memory in use" (verified on StrixHalo1).
+# NCCL_SOCKET_IFNAME is baked in per node (inventory roce_iface): it must be
+# correct on every node, and serve.sh must not override it from the driver
+# (vLLM copies the driver's env to all Ray workers).
+container_iface() { # container_iface <idx> <name> -> current NCCL_SOCKET_IFNAME or ""
+  ssh_node "$1" "podman inspect '$2' --format '{{range .Config.Env}}{{println .}}{{end}}'" 2>/dev/null \
+    | grep '^NCCL_SOCKET_IFNAME=' | cut -d= -f2- || true
+}
+
 start_container() { # start_container <idx> <name> <ray-start-args...>
   local idx="$1" cname="$2"; shift 2
   if ssh_node "$idx" "podman ps --format '{{.Names}}' | grep -qx '$cname'" 2>/dev/null; then
-    echo "cluster_up: $cname already running on ${NAMES[$idx]}"
+    local cur; cur="$(container_iface "$idx" "$cname")"
+    if [ "$cur" != "${IFACES[$idx]}" ]; then
+      echo "cluster_up: WARNING: running $cname on ${NAMES[$idx]} has NCCL_SOCKET_IFNAME='${cur:-<unset>}'" >&2
+      echo "  (want '${IFACES[$idx]}'; env of a running container cannot change — recreate: cluster_down.sh && cluster_up.sh)" >&2
+    else
+      echo "cluster_up: $cname already running on ${NAMES[$idx]}"
+    fi
     return 0
   fi
   if ssh_node "$idx" "podman container exists '$cname'" 2>/dev/null; then
-    echo "cluster_up: starting stopped container $cname on ${NAMES[$idx]}"
-    ssh_node "$idx" "podman start '$cname'"
-    return 0
+    local cur; cur="$(container_iface "$idx" "$cname")"
+    if [ "$cur" = "${IFACES[$idx]}" ]; then
+      echo "cluster_up: starting stopped container $cname on ${NAMES[$idx]}"
+      ssh_node "$idx" "podman start '$cname'"
+      return 0
+    fi
+    echo "cluster_up: recreating $cname on ${NAMES[$idx]} (NCCL_SOCKET_IFNAME '${cur:-<unset>}' -> '${IFACES[$idx]}')"
+    ssh_node "$idx" "podman rm -f '$cname'"
   fi
-  echo "cluster_up: creating $cname on ${NAMES[$idx]} ($IMAGE)"
+  echo "cluster_up: creating $cname on ${NAMES[$idx]} ($IMAGE, iface ${IFACES[$idx]})"
   ssh_node "$idx" "podman run -d --name '$cname' \
     --network host --ipc host \
     --device /dev/kfd --device /dev/dri --device /dev/infiniband \
     --group-add keep-groups \
     --ulimit memlock=-1 \
+    -e NCCL_SOCKET_IFNAME='${IFACES[$idx]}' \
     -e TRITON_CACHE_DIR=/triton-cache -v triton-cache:/triton-cache \
     -v '$MODELS_DIR':'$MODELS_DIR':ro \
     '$IMAGE' ray start $* --block"
@@ -115,4 +162,11 @@ if [ "$ACTIVE" -lt "$EXPECTED" ]; then
   echo "cluster_up: WARNING: only $ACTIVE/$EXPECTED ray nodes active — check 'podman logs ray-worker' on the missing nodes" >&2
 else
   echo "cluster_up: OK, $ACTIVE/$EXPECTED nodes active"
+fi
+
+# --- container hardening -------------------------------------------------------
+# Fresh containers lack gcc (Triton JIT) and still ship amd-aiter (crashes on
+# import on gfx1x). Idempotent; SKIP_HARDEN=1 disables (e.g. offline nodes).
+if [ "${SKIP_HARDEN:-0}" != "1" ]; then
+  "$SCRIPT_DIR/harden_containers.sh" "$INVENTORY"
 fi

@@ -19,7 +19,7 @@ und maximaler Durchsatz, entschieden durch eigene Benchmarks.
 
 ## Parallel-Profile
 
-`tp4` (Tensor-Parallel über Ray/RCCL), `pp4` (Pipeline-Parallel), `tp2pp2`,
+`tp2`/`tp4` (Tensor-Parallel über Ray/RCCL), `pp4` (Pipeline-Parallel), `tp2pp2`,
 `ep` (Expert-Parallel für MoE), `solo` (1 Node, Baseline). Welches Profil pro
 Modell gewinnt, entscheidet `bench/run_matrix.py` — auf 25 GbE ist das
 empirisch offen (Referenzdaten existieren nur für 100/200 GbE).

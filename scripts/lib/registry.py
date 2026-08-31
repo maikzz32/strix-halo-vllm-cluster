@@ -15,6 +15,9 @@ Usage:
   registry.py allowed_profiles <model>        # space-separated; omit in YAML = all
   registry.py tracking <model>                # upstream URLs, one per line
   registry.py nodes <inventory.yaml>          # "name host user" per line, head (node1) first
+  registry.py rdma_ifaces <inventory.yaml>    # "name roce_iface" per line, same order as nodes
+                                              # (per-node NCCL_SOCKET_IFNAME source; node4's E830
+                                              #  uses a different iface name than node1-3's E810)
 
 Exit code 1 with a message on stderr for unknown models / bad usage.
 """
@@ -25,7 +28,7 @@ from pathlib import Path
 
 import yaml
 
-PROFILES = ("tp4", "pp4", "tp2pp2", "ep", "solo")
+PROFILES = ("tp2", "tp4", "pp4", "tp2pp2", "ep", "solo")
 
 REGISTRY_PATH = Path(__file__).resolve().parents[2] / "models" / "registry.yaml"
 
@@ -68,13 +71,15 @@ def die(msg):
 
 
 def inventory_nodes(path):
-    """Yield (name, host, user) for every host in an ansible YAML inventory.
+    """Yield (name, host, user, roce_iface) for every host in an ansible YAML inventory.
 
     Walks any `hosts:` mapping recursively (all / all.children.<group>.hosts).
     ansible_host defaults to the host name, ansible_user to the group-level
     (vars.ansible_user) value or "" — the ssh wrapper then falls back to the
-    caller's ssh config. Document order is preserved; the inventory lists
-    node1 first, and node1 is the Ray head.
+    caller's ssh config. roce_iface defaults to "" (missing -> the caller must
+    reject; cluster_up.sh bakes it into the container as NCCL_SOCKET_IFNAME).
+    Document order is preserved; the inventory lists node1 first, and node1 is
+    the Ray head.
     """
     with open(path, encoding="utf-8") as fh:
         inv = yaml.safe_load(fh)
@@ -90,7 +95,8 @@ def inventory_nodes(path):
                 hvars = hvars or {}
                 out.append(
                     (name, hvars.get("ansible_host", name),
-                     hvars.get("ansible_user", user or ""))
+                     hvars.get("ansible_user", user or ""),
+                     hvars.get("roce_iface", ""))
                 )
         children = node.get("children")
         if isinstance(children, dict):
@@ -119,8 +125,15 @@ def main(argv):
     if cmd == "nodes":
         if len(argv) != 3:
             die("usage: registry.py nodes <inventory.yaml>")
-        for name, host, user in inventory_nodes(argv[2]):
+        for name, host, user, _iface in inventory_nodes(argv[2]):
             print(f"{name} {host} {user}")
+        return
+
+    if cmd == "rdma_ifaces":
+        if len(argv) != 3:
+            die("usage: registry.py rdma_ifaces <inventory.yaml>")
+        for name, _host, _user, iface in inventory_nodes(argv[2]):
+            print(f"{name} {iface}".rstrip())
         return
 
     if cmd == "profiles":
