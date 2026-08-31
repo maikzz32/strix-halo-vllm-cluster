@@ -65,7 +65,10 @@ done
 # --- container start (idempotent) ----------------------------------------------
 # Container contract (see docker/): --network host, --device /dev/infiniband,
 # --ulimit memlock=-1. /dev/kfd + /dev/dri expose the iGPU, --ipc=host gives
-# Ray/vLLM enough shared memory.
+# Ray/vLLM enough shared memory. --group-add keep-groups is REQUIRED on hosts
+# where GPU access rides on the user's render-group membership: without it the
+# container root lacks the render group and torch init dies with
+# "Memory critical error ... Reason: Memory in use" (verified on StrixHalo1).
 start_container() { # start_container <idx> <name> <ray-start-args...>
   local idx="$1" cname="$2"; shift 2
   if ssh_node "$idx" "podman ps --format '{{.Names}}' | grep -qx '$cname'" 2>/dev/null; then
@@ -81,6 +84,7 @@ start_container() { # start_container <idx> <name> <ray-start-args...>
   ssh_node "$idx" "podman run -d --name '$cname' \
     --network host --ipc host \
     --device /dev/kfd --device /dev/dri --device /dev/infiniband \
+    --group-add keep-groups \
     --ulimit memlock=-1 \
     -e TRITON_CACHE_DIR=/triton-cache -v triton-cache:/triton-cache \
     '$IMAGE' ray start $* --block"
