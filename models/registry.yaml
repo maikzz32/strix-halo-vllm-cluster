@@ -30,6 +30,9 @@ defaults:
   env:
     VLLM_ROCM_USE_AITER: "0"        # AITER sampler/MoE/FP8-linear unsupported on gfx1x
     VLLM_GFX1X_MOE_TUNE: "1"        # measured 11.3 -> 21.8 tok/s decode on gfx1151 MoE
+    # patch 59: skip platform probing (amdsmi is NOT in the image; stock ROCm
+    # detection fails with "Failed to infer device type" without this)
+    VLLM_GFX1X_FAST_PLATFORM: "1"
     # Cuts HIP allocator fragmentation on gfx1151 unified memory; proven on
     # Strix Halo cluster setups (tight KV budgets after ROCm/hip#3892 fix).
     PYTORCH_HIP_ALLOC_CONF: "expandable_segments:True,garbage_collection_threshold:0.85"
