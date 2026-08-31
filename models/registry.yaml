@@ -68,7 +68,7 @@ models:
       # (total-vm 440 TiB reservation, global_oom, VLLM::EngineCor killed).
       # Bench is text-only -> disable vision inputs entirely.
       - --limit-mm-per-prompt
-      - '{"image": 0}'
+      - '{"image": 0, "video": 0}'
     parsers:
       tool_call_parser: hermes
     notes: >
