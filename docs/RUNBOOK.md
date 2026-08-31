@@ -213,13 +213,28 @@ Diagnose nötig sind.
   Reboot nötig.
 - **RCCL-Umgebung:** `NCCL_IB_GID_INDEX=1` (RoCEv2), `NCCL_NET_GDR_LEVEL=0`
   (kein GPU-Direct-Pfad auf der iGPU) — gesetzt durch `serve.sh`;
-  `NCCL_SOCKET_IFNAME` dagegen kommt **pro Node** aus `roce_iface`
-  (ansible/inventory.yaml) und wird von `cluster_up.sh` als Container-Env
-  gebacken: node4s E830 heißt anders (`enp197s0f1np1`) als die E810-Ports
-  (`enp197s0f3np3`), und vLLM propagiert die Driver-Env auf **alle**
-  Ray-Worker — ein driver-seitiges Setzen in `serve.sh` würde node4 das
-  Head-Iface aufzwingen. Bei manuellen Starts das Iface des jeweiligen Nodes
-  selbst exportieren.
+  `NCCL_SOCKET_IFNAME` und `GLOO_SOCKET_IFNAME` dagegen kommen **pro Node**
+  aus `roce_iface` (ansible/inventory.yaml) und werden von `cluster_up.sh`
+  als Container-Env gebacken: node4s E830 heißt anders (`enp197s0f1np1`) als
+  die E810-Ports (`enp197s0f3np3`), und vLLM propagiert die Driver-Env auf
+  **alle** Ray-Worker — ein driver-seitiges Setzen in `serve.sh` würde node4
+  das Head-Iface aufzwingen. Gloo braucht das Iface ebenfalls, sonst
+  advertised es 127.0.0.1 (`Gloo connectFullMesh failed`). Bei manuellen
+  Starts das Iface des jeweiligen Nodes selbst exportieren.
+
+## Validierungsstand Multi-Node (2026-08-31)
+
+- **TP=2 über RoCE (RCCL/RDMA): validiert.** `qwen38-27b-ablit`, Profil
+  `tp2`: 15,53 tok/s @ C=1, 65,60 tok/s aggregiert @ C=16 (dataset random
+  512/128, `bench/run_matrix.py`). Die volle Kette cluster_up → harden →
+  serve läuft mit den Container-Fixes (`--pids-limit -1`,
+  `ray start --num-gpus 1`, per-Node `NCCL_/GLOO_SOCKET_IFNAME`,
+  `VLLM_GFX1X_FAST_PLATFORM` als Container-Env).
+- **TP=4 über RoCE: derzeit blockiert.** Auf node4 (E830) sind die
+  IB-Devices im Container nicht enumerierbar — Debug läuft separat.
+  Workaround: `NCCL_IB_DISABLE=1` (RCCL über TCP-Sockets); damit startet
+  TP=4, aber C=1 liegt **unter** Solo-Niveau — kein Nutzen, nur als
+  Funktionstest brauchbar.
 
 ## Cluster-Hardware-Stand (vermessen 2026-08-30)
 

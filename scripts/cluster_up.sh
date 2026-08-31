@@ -6,11 +6,13 @@
 # runtime container (ray-head / ray-worker) running `ray start --block`.
 # serve.sh later execs `vllm serve` into the head container.
 #
-# Each container is created with NCCL_SOCKET_IFNAME=<roce_iface> from the
-# inventory. This MUST be per-node: node1-3 use enp197s0f3np3 (E810), node4
-# uses enp197s0f1np1 (E830), and serve.sh must not re-set it driver-side
-# because vLLM propagates the driver's env to ALL Ray workers. Containers
-# with a missing/stale NCCL_SOCKET_IFNAME are recreated automatically.
+# Each container is created with NCCL_SOCKET_IFNAME=<roce_iface> and
+# GLOO_SOCKET_IFNAME=<roce_iface> from the inventory. This MUST be per-node:
+# node1-3 use enp197s0f3np3 (E810), node4 uses enp197s0f1np1 (E830), and
+# serve.sh must not re-set them driver-side because vLLM propagates the
+# driver's env to ALL Ray workers. Containers with a missing/stale spec
+# (iface envs, VLLM_GFX1X_FAST_PLATFORM, RAY_EXPERIMENTAL_NOSET_*,
+# --pids-limit) are recreated automatically.
 #
 # Pre-flight per node (SSH): memlock ulimit unlimited (else RCCL fails with
 # ibv_reg_mr_iova2 ... Cannot allocate memory), /dev/infiniband present,
@@ -100,34 +102,48 @@ done
 # where GPU access rides on the user's render-group membership: without it the
 # container root lacks the render group and torch init dies with
 # "Memory critical error ... Reason: Memory in use" (verified on StrixHalo1).
-# NCCL_SOCKET_IFNAME is baked in per node (inventory roce_iface): it must be
-# correct on every node, and serve.sh must not override it from the driver
-# (vLLM copies the driver's env to all Ray workers).
-container_iface() { # container_iface <idx> <name> -> current NCCL_SOCKET_IFNAME or ""
-  ssh_node "$1" "podman inspect '$2' --format '{{range .Config.Env}}{{println .}}{{end}}'" 2>/dev/null \
-    | grep '^NCCL_SOCKET_IFNAME=' | cut -d= -f2- || true
+# --pids-limit -1 is REQUIRED: rootless podman defaults to pids.max=2048 and
+# vLLM dies with "OpenBLAS pthread_create failed: Resource temporarily
+# unavailable" (Ray alone prestarts 32 IDLE workers).
+# NCCL_/GLOO_SOCKET_IFNAME are baked in per node (inventory roce_iface): they
+# must be correct on every node (Gloo otherwise advertises 127.0.0.1 ->
+# connectFullMesh fails on the workers), and serve.sh must not override them
+# from the driver (vLLM copies the driver's env to all Ray workers).
+# VLLM_GFX1X_FAST_PLATFORM + RAY_EXPERIMENTAL_NOSET_ROCR_VISIBLE_DEVICES must
+# be CONTAINER env, not just serve.sh driver env: Ray actors crash before the
+# driver-env propagation kicks in ("current platform None does not support
+# ray" in get_node_and_physical_gpu_ids). `ray start --num-gpus 1` because the
+# image has no amdsmi — Ray would otherwise advertise 0 GPUs and the vLLM
+# placement group hangs ("No available node types can fulfill {'GPU': 1.0}").
+container_spec_ok() { # container_spec_ok <idx> <name> — rc 0 when env+pids are current
+  local idx="$1" cname="$2" spec
+  spec="$(ssh_node "$idx" "podman inspect '$cname' --format '{{range .Config.Env}}{{println .}}{{end}}PidsLimit={{.HostConfig.PidsLimit}}'" 2>/dev/null)" || return 1
+  grep -qx "NCCL_SOCKET_IFNAME=${IFACES[$idx]}" <<<"$spec" || return 1
+  grep -qx "GLOO_SOCKET_IFNAME=${IFACES[$idx]}" <<<"$spec" || return 1
+  grep -qx "VLLM_GFX1X_FAST_PLATFORM=1" <<<"$spec" || return 1
+  grep -qx "RAY_EXPERIMENTAL_NOSET_ROCR_VISIBLE_DEVICES=1" <<<"$spec" || return 1
+  grep -qx "PidsLimit=-1" <<<"$spec" || return 1
+  return 0
 }
 
 start_container() { # start_container <idx> <name> <ray-start-args...>
   local idx="$1" cname="$2"; shift 2
   if ssh_node "$idx" "podman ps --format '{{.Names}}' | grep -qx '$cname'" 2>/dev/null; then
-    local cur; cur="$(container_iface "$idx" "$cname")"
-    if [ "$cur" != "${IFACES[$idx]}" ]; then
-      echo "cluster_up: WARNING: running $cname on ${NAMES[$idx]} has NCCL_SOCKET_IFNAME='${cur:-<unset>}'" >&2
-      echo "  (want '${IFACES[$idx]}'; env of a running container cannot change — recreate: cluster_down.sh && cluster_up.sh)" >&2
+    if ! container_spec_ok "$idx" "$cname"; then
+      echo "cluster_up: WARNING: running $cname on ${NAMES[$idx]} has a stale spec (iface envs /" >&2
+      echo "  VLLM_GFX1X_FAST_PLATFORM / --pids-limit; a running container cannot change — recreate: cluster_down.sh && cluster_up.sh)" >&2
     else
       echo "cluster_up: $cname already running on ${NAMES[$idx]}"
     fi
     return 0
   fi
   if ssh_node "$idx" "podman container exists '$cname'" 2>/dev/null; then
-    local cur; cur="$(container_iface "$idx" "$cname")"
-    if [ "$cur" = "${IFACES[$idx]}" ]; then
+    if container_spec_ok "$idx" "$cname"; then
       echo "cluster_up: starting stopped container $cname on ${NAMES[$idx]}"
       ssh_node "$idx" "podman start '$cname'"
       return 0
     fi
-    echo "cluster_up: recreating $cname on ${NAMES[$idx]} (NCCL_SOCKET_IFNAME '${cur:-<unset>}' -> '${IFACES[$idx]}')"
+    echo "cluster_up: recreating $cname on ${NAMES[$idx]} (stale spec: iface envs / FAST_PLATFORM / --pids-limit)"
     ssh_node "$idx" "podman rm -f '$cname'"
   fi
   echo "cluster_up: creating $cname on ${NAMES[$idx]} ($IMAGE, iface ${IFACES[$idx]})"
@@ -135,11 +151,14 @@ start_container() { # start_container <idx> <name> <ray-start-args...>
     --network host --ipc host \
     --device /dev/kfd --device /dev/dri --device /dev/infiniband \
     --group-add keep-groups \
-    --ulimit memlock=-1 \
+    --ulimit memlock=-1 --pids-limit -1 \
     -e NCCL_SOCKET_IFNAME='${IFACES[$idx]}' \
+    -e GLOO_SOCKET_IFNAME='${IFACES[$idx]}' \
+    -e VLLM_GFX1X_FAST_PLATFORM=1 \
+    -e RAY_EXPERIMENTAL_NOSET_ROCR_VISIBLE_DEVICES=1 \
     -e TRITON_CACHE_DIR=/triton-cache -v triton-cache:/triton-cache \
     -v '$MODELS_DIR':'$MODELS_DIR':ro \
-    '$IMAGE' ray start $* --block"
+    '$IMAGE' ray start --num-gpus 1 $* --block"
 }
 
 start_container "$HEAD_IDX" ray-head --head --port 6379
