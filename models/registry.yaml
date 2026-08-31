@@ -49,7 +49,12 @@ models:
       native_tokens: 262144
     status: supported
     env: {}
-    extra_args: []
+    extra_args:
+      # APU unified memory: 0.9 (vLLM default) budgets ~111 GiB of the 124 GiB
+      # GTT for GPU and OOM-kills the host (measured: global_oom during engine
+      # init on StrixHalo1). 0.8 leaves headroom for OS + engine processes.
+      - --gpu-memory-utilization
+      - "0.8"
     parsers:
       tool_call_parser: hermes
     notes: >
