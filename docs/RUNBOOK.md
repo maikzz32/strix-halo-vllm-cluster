@@ -204,6 +204,24 @@ Diagnose nötig sind.
   Container-Neuanlage selbst aufrufen. Benötigt laufende Container
   (`podman exec`), also immer *nach* `cluster_up.sh`.
 
+### 13. node4 (E830): `ibv_devices` im Container leer / RCCL findet kein RDMA
+
+- **Symptom:** Auf node4 enumeriert `ibv_devices` im Container nichts
+  (host-seitig sind beide E830-Ports sichtbar); RCCL fällt still auf TCP
+  zurück oder TP=4 hängt/schleicht.
+- **Ursache:** Das Image trug rdma-core/libibverbs **61.0** (fc44) — die
+  kennen die E830-PCI-ID `8086:12de` nicht und verwerfen deren RoCE-Devices
+  still bei der Provider-Enumeration. Mit 64.0 (fc45) enumeriert
+  `ibv_devices` sofort beide Devices. Zweite Falle: ohne `--ipc host`
+  enumeriert libibverbs im Container generell keine RDMA-Devices.
+- **Behebung:** Image mit rdma-core ≥ 64 (Dockerfile: Gate
+  `RDMA_CORE_MIN_MAJOR=64` baut ein v64-Source-Overlay, solange fc44 nur
+  v61 paketiert). Übergang für laufende Container: `harden_containers.sh`
+  erkennt E830-Nodes per `lspci -d 8086:12de` und zieht rdma-core/libibverbs
+  64.0 aus den fc45-Host-Repos in den Container (`rpm -Uvh --nodeps`).
+  Nach dem Image-Wechsel den Workaround aus `harden_containers.sh`
+  entfernen.
+
 ## Weitere Hinweise
 
 - **`amd_iommu=off`:** 5–12 % schneller, kann aber RDMA brechen — der Trade-off
@@ -224,17 +242,30 @@ Diagnose nötig sind.
 
 ## Validierungsstand Multi-Node (2026-08-31)
 
-- **TP=2 über RoCE (RCCL/RDMA): validiert.** `qwen38-27b-ablit`, Profil
-  `tp2`: 15,53 tok/s @ C=1, 65,60 tok/s aggregiert @ C=16 (dataset random
-  512/128, `bench/run_matrix.py`). Die volle Kette cluster_up → harden →
-  serve läuft mit den Container-Fixes (`--pids-limit -1`,
-  `ray start --num-gpus 1`, per-Node `NCCL_/GLOO_SOCKET_IFNAME`,
-  `VLLM_GFX1X_FAST_PLATFORM` als Container-Env).
-- **TP=4 über RoCE: derzeit blockiert.** Auf node4 (E830) sind die
-  IB-Devices im Container nicht enumerierbar — Debug läuft separat.
-  Workaround: `NCCL_IB_DISABLE=1` (RCCL über TCP-Sockets); damit startet
-  TP=4, aber C=1 liegt **unter** Solo-Niveau — kein Nutzen, nur als
-  Funktionstest brauchbar.
+- **TP=2 und TP=4 über RoCE (RCCL/RDMA): validiert.** `qwen38-27b-ablit`,
+  dataset random 512/128, `bench/run_matrix.py`. TP=4 ist der schnellste
+  Modus (1,91x @ C=1 / 2,10x @ C=16 ggü. Solo); TP=4-RoCE: ITL 42,6 ms,
+  TTFT 0,74 s. Die volle Kette cluster_up → harden → serve läuft mit den
+  Container-Fixes (`--pids-limit -1`, `ray start --num-gpus 1`, per-Node
+  `NCCL_/GLOO_SOCKET_IFNAME`, `VLLM_GFX1X_FAST_PLATFORM` als Container-Env).
+
+  | Profil        | tok/s @ C=1 | tok/s agg. @ C=16 |
+  |---------------|------------:|------------------:|
+  | solo          |       10,93 |             43,15 |
+  | tp2 (RoCE)    |       15,53 |             65,60 |
+  | tp4 (TCP*)    |       10,02 |             66,66 |
+  | tp4 (RoCE)    |   **20,83** |         **90,61** |
+
+  \* `NCCL_IB_DISABLE=1`, nur Funktionstest — C=1 unter Solo-Niveau.
+- **TP=4-RoCE-Blocker gelöst:** node4/E830-IB-Devices waren im Container
+  nicht enumerierbar — Root Cause: das Image trug rdma-core/libibverbs
+  **61.0** (fc44), das die E830-PCI-ID `8086:12de` nicht kennt (Eintrag 13).
+  Fix: rdma-core ≥ 64 (Dockerfile baut ein v64-Overlay; bis zum neuen Image
+  erledigt das `harden_containers.sh` als Übergang im laufenden Container).
+- **Harte Anforderung: `--ipc host`.** Ohne es enumeriert libibverbs im
+  Container generell **keine** RDMA-Devices (Nebenbefund aus dem Debug) —
+  `cluster_up.sh` setzt es bereits; bei manuellen `podman run` nicht
+  weglassen.
 
 ## Cluster-Hardware-Stand (vermessen 2026-08-30)
 

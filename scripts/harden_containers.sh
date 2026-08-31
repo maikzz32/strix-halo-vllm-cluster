@@ -9,6 +9,14 @@
 #      a compiler the first `vllm serve` dies in the compile phase.
 #   2. remove amd-aiter/aiter — its JIT crashes already on IMPORT on gfx1x
 #      (VLLM_ROCM_USE_AITER=0 from the registry gates usage, not the import).
+#   3. TRANSITIONAL (E830 nodes only): the current image ships rdma-core/
+#      libibverbs 61.0 (fc44), which does not know the Intel E830
+#      (PCI 8086:12de) and silently drops its RoCE devices at provider
+#      enumeration -> ibv_devices is empty, RCCL cannot use RDMA. Fix in the
+#      running container: download rdma-core/libibverbs from the Fedora 45
+#      HOST repos (64.0) and `rpm -Uvh --nodeps` them into the container.
+#      REMOVE this step once the image carries rdma-core >= 64
+#      (docker/Dockerfile.fedora: RDMA_CORE_MIN_MAJOR=64).
 #
 # Requires the containers to be RUNNING (works via podman exec); containers
 # that are absent or stopped are skipped with a note. Safe to re-run:
@@ -62,14 +70,47 @@ harden() { # harden <idx> <container>
   fi
 }
 
+# TRANSITIONAL E830 rdma-core fix (see header item 3 — remove once the image
+# carries rdma-core >= 64). Verified live on node4 by the bench agent.
+fix_e830() { # fix_e830 <idx> <container>
+  local idx="$1" cname="$2"
+  # Only E830 hosts (Intel 8086:12de) are affected; E810 knows its IDs in v61.
+  ssh_node "$idx" "lspci -d 8086:12de 2>/dev/null | grep -q ." || return 0
+  if ! ssh_node "$idx" "podman ps --format '{{.Names}}' | grep -qx '$cname'" 2>/dev/null; then
+    echo "harden: $cname on ${NAMES[$idx]} (E830) not running — rdma-core fix skipped"
+    return 0
+  fi
+  local ver major
+  ver="$(ssh_node "$idx" "podman exec '$cname' rpm -q --qf '%{VERSION}' libibverbs" 2>/dev/null || true)"
+  major="${ver%%.*}"
+  if [ -n "$major" ] && [ "$major" -ge 64 ] 2>/dev/null; then
+    echo "harden: $cname on ${NAMES[$idx]} (E830): libibverbs $ver >= 64 — ok"
+    return 0
+  fi
+  echo "harden: $cname on ${NAMES[$idx]} (E830): libibverbs ${ver:-missing} < 64 — installing fc45 rdma-core"
+  # Host is Fedora 45 -> dnf download yields rdma-core/libibverbs 64.0.
+  ssh_node "$idx" "mkdir -p /tmp/rdma64 && dnf download -y -q rdma-core libibverbs --destdir=/tmp/rdma64"
+  ssh_node "$idx" "podman cp /tmp/rdma64/. '$cname':/tmp/rdma64 \
+    && podman exec '$cname' bash -c 'rpm -Uvh --nodeps /tmp/rdma64/*.rpm && rm -rf /tmp/rdma64' \
+    && rm -rf /tmp/rdma64"
+  # Verify: both E830 devices must enumerate now.
+  if ssh_node "$idx" "podman exec '$cname' bash -c 'ibv_devices 2>/dev/null | tail -n +3 | grep -q .'"; then
+    echo "harden: $cname on ${NAMES[$idx]} (E830): ibv_devices enumerates devices — OK"
+  else
+    echo "harden: $cname on ${NAMES[$idx]} (E830): ibv_devices still EMPTY after rdma-core fix" >&2
+    return 1
+  fi
+}
+
 FAILED=0
 for i in "${!NAMES[@]}"; do
   if [ "$i" -eq 0 ]; then CNAME=ray-head; else CNAME=ray-worker; fi
   harden "$i" "$CNAME" || FAILED=1
+  fix_e830 "$i" "$CNAME" || FAILED=1
 done
 
 if [ "$FAILED" -ne 0 ]; then
-  echo "harden: at least one node failed — Triton JIT / aiter import will break serving there" >&2
+  echo "harden: at least one node failed — serving will break there (gcc / aiter / E830 rdma-core)" >&2
   exit 1
 fi
 echo "harden: done"

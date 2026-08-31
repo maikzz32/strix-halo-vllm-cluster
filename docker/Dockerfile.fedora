@@ -50,10 +50,12 @@ ARG RCCL_IMPL=stock
 ARG AITER_REF=v0.1.19
 ARG CONCH_VERSION=1.2.1
 ARG ROCM_INDEX_URL=https://repo.amd.com/rocm/whl-multi-arch/
-# Fedora's rdma-core must be >= v62 (Ubuntu's v50 had irdma
-# "Unknown completion" errors). Overlay-built from source only if older.
-ARG RDMA_CORE_MIN_MAJOR=62
-ARG RDMA_CORE_REF=v62.0
+# Fedora's rdma-core must be >= v64: fc44 ships v61, which does not know the
+# Intel E830 (PCI 8086:12de, node4) and silently drops its RoCE devices at
+# provider enumeration (v62 was the earlier floor for irdma "Unknown
+# completion" errors). Overlay-built from source only if older.
+ARG RDMA_CORE_MIN_MAJOR=64
+ARG RDMA_CORE_REF=v64.0
 
 ENV DNF_FLAGS="--setopt=install_weak_deps=False --setopt=tsflags=nodocs"
 
@@ -133,7 +135,7 @@ ENV ROCM_PATH=/opt/rocm \
 # (the CK backend is gfx90a/942/950-only) at build AND import time.
 
 # --- rdma-core version gate -------------------------------------------------
-# Check Fedora's packaged rdma-core; only if older than v62 build an overlay
+# Check Fedora's packaged rdma-core; only if older than v64 build an overlay
 # into /opt/rdma-overlay (copied over /usr in the final stage).
 # CMAKE_INSTALL_SBINDIR=bin: Fedora is usrmerged (/usr/sbin is a symlink to
 # bin), so an overlay containing a real sbin/ dir would fail the final
@@ -309,13 +311,13 @@ ENV ROCM_PATH=/opt/rocm \
     GPU_TARGETS=gfx1151 \
     PIP_NO_CACHE_DIR=1
 
-# rdma-core overlay (only populated when Fedora's package was < v62).
+# rdma-core overlay (only populated when Fedora's package was < v64).
 COPY --from=builder /opt/rdma-overlay /opt/rdma-overlay
 RUN if [ -n "$(ls -A /opt/rdma-overlay 2>/dev/null)" ]; then \
         echo "Applying rdma-core source-built overlay"; \
         cp -a /opt/rdma-overlay/usr/. /usr/ && ldconfig; \
     else \
-        echo "Using Fedora-packaged rdma-core (>= v62)"; \
+        echo "Using Fedora-packaged rdma-core (>= v64)"; \
     fi \
     && rm -rf /opt/rdma-overlay
 
