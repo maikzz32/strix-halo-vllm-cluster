@@ -36,8 +36,13 @@ Details: `docs/RUNBOOK.md`.
 
 ## Bekannte Einschränkungen
 
-- GLM-5.3-Flash ist upstream-blockiert (gfx950-gated), siehe `models/registry.yaml`.
-- `--enforce-eager` ist Pflicht (HIP-Graph-Deadlocks auf gfx1151).
+- GLM-5.3-Flash **läuft** (2026-09-01, tp4, Dev-Image `dev-glm53-flash`):
+  upstream gfx950-gated, bei uns via Patch 58 + 61 + Torch-Kpool-Lane
+  (Details: `models/registry.yaml`, `docs/PERFORMANCE.md` §e). Bring-up-
+  Qualitätscaveat beachten (G1-Repetition auf Kurz-Prompts).
+- Graph-**Capture** deadlocked auf gfx1151 (HIP, vllm#32180) — Default ist daher
+  `cudagraph_mode NONE` (Inductor-Fusion bleibt aktiv; gemessen +7–9 % vs.
+  `--enforce-eager`, 600-s-Soak hang-frei, Stand 2026-08-31).
 - `amd_iommu=off` vs. RDMA: ungelöster Trade-off, per `iommu_mode` parametrierbar,
   A/B-Test über `bench/iommu_ab.sh`.
 

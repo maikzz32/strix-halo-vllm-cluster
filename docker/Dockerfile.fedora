@@ -332,7 +332,13 @@ RUN set -e; \
     python3 -m pip install --extra-index-url \
         "${ROCM_INDEX_URL}" \
         /wheels/vllm-*.whl; \
-    python3 -m pip install "ray[default]"; \
+    python3 -m pip install "ray[default]" z3-solver; \
+    # z3-solver's libz3 lives under site-packages/z3/lib, which ld does not
+    # search - torch inductor/sympy dlopens libz3.so.<ver> by name (seen as
+    # worker crash 'libz3.so.4.15: cannot open shared object file' on GLM).
+    z3lib="$(ls /usr/local/lib/python3.12/site-packages/z3/lib/libz3.so.* | sort -V | tail -1)"; \
+    ln -sf "$z3lib" "/usr/lib64/$(basename "$z3lib")"; \
+    ldconfig; \
     rm -rf /wheels
 
 # --- Dependency cut-list (text-MoE cluster, models from local disk) --------

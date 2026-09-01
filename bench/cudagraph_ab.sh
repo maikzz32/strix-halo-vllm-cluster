@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 # cudagraph_ab.sh [model] [profile] — A/B test on gfx1151:
-#   leg A: --enforce-eager                                (current registry default)
+#   leg A: --enforce-eager
 #   leg B: --compilation-config '{"cudagraph_mode":"NONE"}'
+#
+# STATUS 2026-08-31: A/B ran on qwen38-27b-ablit/tp4 — NONE won (+7 % C=1,
+# +9.4 % C=16, 600 s soak clean) and was promoted to the registry default.
+# Re-running this script now requires an '--enforce-eager' line in the
+# registry to swap from (it errors out otherwise, by design).
 #
 # Background: HIP graph CAPTURE deadlocks the gfx1151 driver (vllm#32180),
 # which is why --enforce-eager is mandatory today. cudagraph_mode NONE drops

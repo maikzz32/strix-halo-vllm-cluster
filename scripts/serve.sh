@@ -142,8 +142,9 @@ val="$("$PY" "$REG" parser "$MODEL" tool_call_parser)";    [ -z "$val" ] || CMD+
 val="$("$PY" "$REG" parser "$MODEL" reasoning_parser)";    [ -z "$val" ] || CMD+=(--reasoning-parser "$val")
 val="$("$PY" "$REG" parser "$MODEL" tokenizer_mode)";      [ -z "$val" ] || CMD+=(--tokenizer-mode "$val")
 
-# Model extra_args (registry defaults already merged in; includes --enforce-eager,
-# mandatory on gfx1151 because HIP graph capture deadlocks, vllm#32180).
+# Model extra_args (registry defaults already merged in; default compilation
+# is cudagraph_mode NONE - capture deadlocks on gfx1151, vllm#32180, see
+# models/registry.yaml).
 EXTRA_ARGS=()
 while IFS= read -r line; do
   [ -n "$line" ] || continue

@@ -55,7 +55,30 @@ Ein JSON-Record pro Zelle (JSONL) in `bench/results/<utc-timestamp>.json`:
 | `ttft_ms`, `itl_ms` | Time-to-First-Token / Inter-Token-Latency (Mittelwert) |
 | `output_toks` | Aggregat-Ausgabe-tok/s; bei `concurrency=1` = Single-Stream-Rate |
 | `tool` | `vllm-bench` oder `fallback` |
+| `sanity` | G1: Korrektheitsprobe — `ok`, je Prompt `finish_reason`, `unique_ratio`, `sha256` |
+| `acceptance_len` | G3: MTP-Acceptance (Δaccepted/Δdraft aus `/metrics`); nur wenn der Server die Counter exponiert |
+| `image` | G4: Image-Tag aus `VLLM_IMAGE` (nur wenn gesetzt) |
+| `env` | G4: relevante `VLLM_GFX1X_*`-/`NCCL_*`-Variablen aus der Messumgebung |
+| `sampling` | G4: `temperature`/`ignore_eos` der Messung (`temperature: null` = vllm-bench-CLI-Default) |
+| `prompt_len_exact` | G4: `false` beim Fallback-Generator (Prompt-Länge nur approximiert) |
 | `error` | gesetzt, wenn die Zelle/das Serve fehlschlug |
+
+## Qualitäts-Gates (Geschwindigkeit nur mit Korrektheit)
+
+- **G1 Output-Sanity:** einmal pro (Modell, Profil) nach der ersten Zelle
+  gehen 4 fixe kurze Prompts (de/en) mit `temperature=0` und **ohne**
+  `ignore_eos` gegen den laufenden Server. Geprüft werden
+  `finish_reason == "stop"`, nicht-leerer Output und Unique-Token-Ratio
+  > 0.5 (Repetitions-Detektor); pro Output wird der SHA256 abgelegt. Das
+  Ergebnis steckt als `sanity` in jeder Zelle des Profils.
+- **G3 MTP/Spec-Acceptance:** exponiert der Server
+  `vllm:spec_decode_num_accepted_tokens_total` und
+  `vllm:spec_decode_num_draft_tokens_total` unter `/metrics`, werden die
+  Counter vor/nach jeder Zelle gelesen; `acceptance_len` = Δaccepted/Δdraft.
+- **G4 Messvertrag:** jeder Record trägt `image`, `env`, `sampling` und
+  `prompt_len_exact`. `report.py` warnt, wenn Zellen desselben Modells
+  Tools (`vllm-bench` vs. `fallback`) oder Verträge mischen, und zeigt
+  Sanity/Acceptance im Ergebnis-Abschnitt.
 
 Serve-Logs pro Modell/Profil liegen daneben als
 `bench/results/serve_<timestamp>_<modell>_<profil>.log`.
@@ -72,10 +95,44 @@ der Gewinner für Single-Stream (C=1) und für Aggregat ist **fett**. Der
 Abschnitt **Spark-Vergleich** unter jedem Modell setzt die Cluster-Bestwerte
 ins Verhältnis zu den externen DGX-Spark-Referenzwerten (Quelle:
 [maci0/qwen3.8-flash-next-spark](https://github.com/maci0/qwen3.8-flash-next-spark))
-und markiert jede Metrik als `BEATEN` oder `NOT-YET`. Die Referenzwerte am
+und markiert jede Metrik als `BEATEN` oder `NOT-YET`. Der Abschnitt
+**Toolbox-C-Vergleich** vergleicht pro Concurrency-Stufe (C=1/8/32) die
+beste Cluster-Zelle als tok/s pro Request (Aggregat/C) gegen die offiziellen
+kyuz0-Toolbox-C-Werte (Qwen3.8-27B, 1 Node, MTP: 43,55 / 16,84 / 7,46).
+Die Referenzwerte am
 Ende sind externe Literaturwerte (andere Hardware/Interconnect/Quantisierung)
 — Strategie, Begründung und Akzeptanzkriterium stehen in
 [docs/PERFORMANCE.md](../docs/PERFORMANCE.md).
+
+## Prefix-Cache-Probe
+
+```bash
+python3 bench/prefix_probe.py --model /home/maik/qwen38_ablit --prefix-tokens 2048
+```
+
+APC (Automatic Prefix Caching) ist in vLLM V1 defaultmäßig an; dieses Skript
+misst den Nachweis und den Nutzen: TTFT einer langen, geteilten Prefix kalt
+vs. warm. Gemessen 2026-08-31 (qwen38-27b-ablit, tp4, MTP): kalt 5517 ms →
+warm Ø 1958 ms bei ~2K-Token-Prefix (2,8×).
+
+
+## kpool-Sparse-Indexer: Triton-Lane (GLM-5.3-Flash, gfx1151)
+
+```bash
+# im Container auf node1 (ray-head), kein Server nötig:
+python3 bench/kpool_triton_validate.py --lane /tmp/kpool_triton_lane.py
+python3 bench/kpool_triton_validate.py --installed   # gepatchtes Modul
+```
+
+Validiert die Triton-Hotpaths aus `patches/runtime_glm53_kpool_triton.py`
+(Standalone-Spiegel: `bench/kpool_triton_lane.py`) gegen die Torch-Lane
+(v1.4) als Goldene Referenz und misst beide: Decode-Paged-Logits ~20–37×
+schneller, Prefill-Logits ~4,5–5,4×, Gather bit-exakt, Top-k/Expand-Indizes
+exakt identisch, Logits max. rel. Diff ~3e-7. Vertrag: Cache
+`[nb, 32, 132]` uint8 (fp8 + fp32-Scale, 16×16-Preshuffle), block_table in
+288-Pool-Einheiten (num_states = 1152/4). Laufzeit-Gate:
+`VLLM_GFX1X_KPOOL_TRITON=1` (Default aus).
+
 
 ## A/B: Ethernet/TCP vs. RDMA (RoCE)
 

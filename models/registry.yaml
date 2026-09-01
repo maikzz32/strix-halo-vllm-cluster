@@ -37,7 +37,13 @@ defaults:
     # Strix Halo cluster setups (tight KV budgets after ROCm/hip#3892 fix).
     PYTORCH_HIP_ALLOC_CONF: "expandable_segments:True,garbage_collection_threshold:0.85"
   extra_args:
-    - --enforce-eager               # HIP graph capture deadlocks on gfx1151 (vllm#32180)
+    # HIP graph CAPTURE deadlocks on gfx1151 (vllm#32180), but cudagraph_mode
+    # NONE only drops the capture and keeps Inductor fusion - measured win on
+    # qwen38-27b-ablit/tp4: 44.3 -> 47.4 tok/s @C=1, 104.3 -> 114.2 @C=16,
+    # 600 s soak without a single hang (bench/cudagraph_ab.sh, 2026-08-31).
+    # Verified for this model/profile; re-verify when enabling new models.
+    - --compilation-config
+    - '{"cudagraph_mode":"NONE"}'
 
 models:
 
@@ -69,13 +75,18 @@ models:
       # Bench is text-only -> disable vision inputs entirely.
       - --limit-mm-per-prompt
       - '{"image": 0, "video": 0}'
+      # MTP speculative decoding (mtp_num_hidden_layers present in config).
+      # Same method the Toolbox-C reference values (docs/PERFORMANCE.md
+      # section c) were measured with - the bar to beat.
+      - --speculative-config
+      - '{"method":"mtp","num_speculative_tokens":3}'
     parsers:
       tool_call_parser: hermes
     notes: >
       Dense hybrid model (config model_type qwen3_5): 64 layers, hidden 5120,
       GQA 24/4, vocab 248320, linear attention + full attention every 4 layers,
-      MTP head present (mtp_num_hidden_layers -> test --speculative-config
-      '{"method":"mtp","num_speculative_tokens":3}' after baseline).
+      MTP head present (mtp_num_hidden_layers); MTP 3 is enabled via
+      extra_args above (Toolbox-C comparison config, no baseline run yet).
       GPTQ int4 pack-quantized (group 128, symmetric) -> vLLM GPTQ path on
       gfx1151 must be validated (Marlin availability on RDNA uncertain,
       Triton fallback possible). 17 GiB fits easily per node: profile solo
@@ -83,6 +94,42 @@ models:
       but bench is text-only (timm/opencv were cut from the image - re-add
       if vision is ever needed). First bench target of this repo.
     references: []
+
+  qwen38-27b-ablit-dflash:
+    hf_repo: /home/maik/qwen38_ablit   # local path, present on ALL 4 nodes (same path)
+    dtype: gptq-int4
+    approx_size_gib: 17
+    context:
+      native_tokens: 262144
+    status: supported
+    env: {}
+    extra_args:
+      # Same memory/context guards as qwen38-27b-ablit (APU unified memory,
+      # 0.9/0.8 OOM-killed the node; 262k profile run OOMs; bench is text-only).
+      - --gpu-memory-utilization
+      - "0.6"
+      - --max-model-len
+      - "32768"
+      - --limit-mm-per-prompt
+      - '{"image": 0, "video": 0}'
+      # DFlash2 block-diffusion drafter (upstream via vllm PR #52816).
+      # num_speculative_tokens=7 == trained block_size 8 (1 bonus query + 7
+      # mask queries), the official quick-start value on the model card; the
+      # draft config carries no n_predict, so it must be set explicitly.
+      - --speculative-config
+      - '{"method":"dflash","model":"incoai/Qwen3.8-27B-DFlash2","num_speculative_tokens":7}'
+    parsers:
+      tool_call_parser: hermes
+    notes: >
+      Same target as qwen38-27b-ablit but with the DFlash2 block-diffusion
+      drafter (incoai/Qwen3.8-27B-DFlash2, ~3.85 GB bf16, ungated) instead of
+      the built-in MTP head. DFlash2DraftModel forces use_v2_model_runner
+      (candidate selector exists only in the V2 speculator); draft attention
+      needs non-causal support - ROCM_ATTN advertises supports_non_causal.
+      A/B experiment vs the MTP3 entry (bench prompt-length 512, C=1/8/32).
+    references:
+      - https://huggingface.co/incoai/Qwen3.8-27B-DFlash2
+      - https://github.com/vllm-project/vllm/pull/52816
 
   qwen36-35b-a3b:
     hf_repo: Qwen/Qwen3.6-35B-A3B
@@ -142,12 +189,12 @@ models:
       - https://www.amd.com/en/developer/resources/technical-articles/2026/day-0-support-for-qwen-3-8-on-amd-instinct-gpus.html
 
   glm53-flash:
-    hf_repo: zai-org/GLM-5.3-Flash
-    dtype: fp8
-    approx_size_gib: 306
+    hf_repo: /home/maik/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
+    dtype: gptq-int4                  # compressed-tensors pack-quantized 4-bit group 32
+    approx_size_gib: 199
     context:
       native_tokens: 1048576
-    status: blocked
+    status: dev
     # PR vllm#53906 head (glm5_next support; ROCm officially gfx950-gated,
     # needs FlashInfer>=0.6.18; fork branch ZJY0516/vllm glm-release).
     vllm_ref: 36bb3795b258e1b773cee5c2b725d9b8346b0c8d
@@ -159,13 +206,79 @@ models:
       # patch 58: force the Triton sparse-MLA lane (asm/Gluon lanes are
       # gfx950-only, unreachable on gfx1151) + geometry-keyed MTP dispatch fix
       VLLM_GFX1X_FORCE_TRITON_SPARSE: "1"
-    extra_args: []
+      # Triton hot-path lane for the kpool indexer (runtime patch
+      # runtime_glm53_kpool_triton.py, layered on torch lane v1.5).
+      # "0" falls back to the pure torch lane.
+      VLLM_GFX1X_KPOOL_TRITON: "1"
+    extra_args:
+      # APU unified memory: weights ~50 GiB/node at tp4; 0.6 leaves room for
+      # KV + activations + host python without OOM-killing the node (same
+      # hard-learned lesson as qwen38-27b-ablit).
+      - --gpu-memory-utilization
+      - "0.6"
+      # 1M native context makes the engine-init profile run alone allocate
+      # >100 GiB. Cap the bench context; raise only with a rebalanced GTT.
+      - --max-model-len
+      - "32768"
     notes: >
       320B/18B active, 45 layers (34 KDA linear + 11 sparse-MLA), 288 experts (8+1),
-      1M context, MIT license. Official ROCm docker image is gfx950-gated (MI355X);
-      gfx1151 untested. MTP not supported on ROCm. FP8 emulated on RDNA 3.5 - if
-      slow, re-quantize AWQ/MXFP4 instead of serving FP8.
-      Do NOT promise this model until tracking PRs land on main.
+      1M context, MIT license. Local checkpoint is a compressed-tensors
+      pack-quantized int4 re-quant (group 32, 199 GB) instead of the FP8
+      upstream weights (FP8 is emulated at BF16 speed on RDNA 3.5).
+      RUNS on gfx1151 since 2026-09-01 (tp4, dev image dev-glm53-flash):
+      patch 58 (Triton sparse-MLA lane) + patch 61 (AWQ name remap +
+      int4 dequant of the BF16-built KDA/MLA projections) + kpool indexer
+      lanes: torch v1.5 (runtime_glm53_kpool_torch.py, batched-head logits)
+      + Triton hot paths (runtime_glm53_kpool_triton.py, gate
+      VLLM_GFX1X_KPOOL_TRITON above) + z3-solver/libz3 (Dockerfile).
+      Numbers (prompt 512): 9.9/20.7/48.2 tok/s aggregate at C=1/8/32 -
+      the indexer share is tiny at short context; the Triton lane pays off
+      at 8k+ contexts (standalone up to 38x on decode logits vs torch v1.4).
+      With MTP see glm53-flash-mtp (14.1/61.5/102.5). Quality caveat:
+      G1 greedy short prompts show repetition (int4 requant behavior;
+      needle test at 4.5k context passes, short-form answers coherent).
+      None of the runtime patches are baked into the image yet - a
+      container rebuild needs them re-applied.
     references:
       - https://huggingface.co/zai-org/GLM-5.3-Flash
       - https://recipes.vllm.ai/zai-org/GLM-5.3-Flash
+
+  glm53-flash-mtp:
+    hf_repo: /home/maik/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
+    dtype: gptq-int4                  # compressed-tensors pack-quantized 4-bit group 32
+    approx_size_gib: 199
+    context:
+      native_tokens: 1048576
+    status: dev
+    # Same pinned PR vllm#53906 head as glm53-flash (glm5_next support).
+    vllm_ref: 36bb3795b258e1b773cee5c2b725d9b8346b0c8d
+    tracking:
+      - https://github.com/vllm-project/vllm/pull/53906
+      - https://github.com/vllm-project/vllm/issues/53943   # ROCm MTP gaps upstream
+    env:
+      VLLM_ATTENTION_BACKEND: ROCM_AITER_MLA_SPARSE
+      # patch 58: geometry-keyed MTP dispatch covers draft/verify shapes
+      # (NoPE checkpoint: head_size == kv_lora_rank == 512)
+      VLLM_GFX1X_FORCE_TRITON_SPARSE: "1"
+      VLLM_GFX1X_KPOOL_TRITON: "1"
+    extra_args:
+      - --gpu-memory-utilization
+      - "0.6"          # watch: +~4.5 GiB/rank BF16 draft weights + draft KV groups
+      - --max-model-len
+      - "32768"
+      # MTP head = layer 45 (BF16 in the local requant); 1 MTP layer recycled
+      # per draft step; 5 = official recipe value - WINS the A/B against 3
+      # (2026-09-01: 14.1/61.5/102.5 vs 11.6/44.3/100.4 tok/s agg @C=1/8/32).
+      - --speculative-config
+      - '{"method":"mtp","num_speculative_tokens":5}'
+    notes: >
+      glm53-flash plus the built-in MTP draft head. REQUIRES patch 62
+      (patches/62_glm53_mtp_draft_bf16.py: the draft must not inherit the
+      compressed-tensors int4 method - layer 45 experts/shared-MLP/head are
+      BF16 in the local requant; do NOT use with the upstream FP8 checkpoint).
+      Draft/verify shapes ride the ragged Triton sparse-MLA lane (patch 58)
+      and the kpool indexer lanes (torch v1.5 / Triton, both spec-aware).
+      Verify acceptance via vllm:spec_decode_num_* counters (G3).
+    references:
+      - https://recipes.vllm.ai/zai-org/GLM-5.3-Flash
+      - https://huggingface.co/zai-org/GLM-5.3-Flash

@@ -12,8 +12,15 @@ For each (model, profile) cell it:
   3. benchmarks each (prompt_len, concurrency) combination, preferring
      `vllm bench serve` and falling back to a raw OpenAI-compatible load
      generator (requests + threads) when the bench CLI is unavailable,
-  4. tears the server down (pkill on all nodes - see TODO below),
-  5. appends one JSON record per cell (JSONL) to bench/results/<timestamp>.json.
+  4. probes output correctness once per (model, profile) after its first
+     cell (G1 quality gate: fixed greedy prompts, finish_reason / repetition
+     checks + SHA256) and attaches the result to every record of the profile,
+  5. reads the MTP/spec-decode counters from /metrics around every cell and
+     derives the acceptance length (G3),
+  6. tears the server down (pkill on all nodes - see TODO below),
+  7. appends one JSON record per cell (JSONL) to bench/results/<timestamp>.json,
+     including the G4 measurement contract (image, env, sampling,
+     prompt_len_exact).
 
 Resumable: pass --resume <file> to skip cells already present in that file.
 
@@ -30,6 +37,7 @@ the pkill fallback below (cluster_down.sh is owned by another agent).
 
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import re
@@ -54,6 +62,34 @@ DEFAULT_CONCURRENCIES = [1, 4, 8, 16, 32]
 DEFAULT_PROMPT_LENS = [512, 4096, 32768]
 DEFAULT_OUTPUT_LEN = 128
 HEALTH_TIMEOUT_S = 20 * 60  # first boot JITs Triton for ~170 s; be generous
+
+# G1 quality gate: fixed correctness probes (short, DE+EN). Sent greedily
+# (temperature=0) WITHOUT ignore_eos, so a healthy model must terminate with
+# finish_reason == "stop" by itself. max_tokens=192: verbose chatty answers
+# (esp. German) exceed 96 tokens without being degenerate - "length" with a
+# healthy unique ratio is a cap artifact, not corruption.
+SANITY_PROMPTS = [
+    {"id": "de-landmarks",
+     "prompt": "Nenne drei deutsche Großstädte und zu jeder ein bekanntes Wahrzeichen.",
+     "max_tokens": 192},
+    {"id": "de-explain",
+     "prompt": "Erkläre in zwei bis drei Sätzen, was ein GPU-Cluster ist.",
+     "max_tokens": 192},
+    {"id": "en-capitals",
+     "prompt": "Name the capitals of France, Japan and Canada, one per line.",
+     "max_tokens": 192},
+    {"id": "en-story",
+     "prompt": "Write a two-sentence story about a robot learning to swim.",
+     "max_tokens": 192},
+]
+SANITY_MIN_UNIQUE_RATIO = 0.5  # below this the output is considered degenerate repetition
+
+# G3: Prometheus counters that exist only when speculative decoding (MTP) is on.
+SPEC_ACCEPTED = "vllm:spec_decode_num_accepted_tokens_total"
+SPEC_DRAFT = "vllm:spec_decode_num_draft_tokens_total"
+
+# G4: env-var prefixes that change server behavior (forwarded to serve.sh).
+CONTRACT_ENV_PREFIXES = ("VLLM_GFX1X_", "NCCL_")
 
 
 def log(msg):
@@ -255,8 +291,99 @@ def run_fallback_bench(base_url, hf_repo, prompt_len, output_len, concurrency, n
     }
 
 
+# ---------------------------------------------------------------------------
+# Quality gates: G1 output sanity, G3 spec-decode acceptance, G4 contract
+# ---------------------------------------------------------------------------
+
+def unique_token_ratio(text):
+    """Repetition detector: ratio of unique whitespace-tokens (no tokenizer
+    is available in this harness). 1.0 means no token repeats."""
+    tokens = text.split()
+    return len(set(tokens)) / len(tokens) if tokens else 0.0
+
+
+def run_sanity_probe(base_url, hf_repo):
+    """G1: send SANITY_PROMPTS greedily against the live server; check
+    finish_reason == 'stop', non-empty text and unique-token ratio > 0.5.
+    Returns a JSON-serializable dict that is stored verbatim in every cell
+    record of the profile. Raises on transport/HTTP errors (the caller
+    converts that into an error probe result)."""
+    checks = []
+    for spec in SANITY_PROMPTS:
+        payload = {
+            "model": hf_repo,
+            "prompt": spec["prompt"],
+            "max_tokens": spec["max_tokens"],
+            "temperature": 0.0,
+            "stream": False,
+            # no ignore_eos on purpose: the model must stop by itself
+        }
+        r = requests.post(f"{base_url}/v1/completions", json=payload, timeout=300)
+        r.raise_for_status()
+        body = r.json()
+        choice = (body.get("choices") or [{}])[0]
+        text = choice.get("text") or ""
+        finish = choice.get("finish_reason")
+        ratio = unique_token_ratio(text)
+        ok = (finish == "stop" and bool(text.strip())
+              and ratio > SANITY_MIN_UNIQUE_RATIO)
+        checks.append({
+            "id": spec["id"],
+            "ok": ok,
+            "finish_reason": finish,
+            "completion_tokens": (body.get("usage") or {}).get("completion_tokens"),
+            "unique_ratio": round(ratio, 3),
+            "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+        })
+    return {"ok": all(c["ok"] for c in checks), "checks": checks}
+
+
+def parse_spec_counters(metrics_text):
+    """Sum the G3 Prometheus counters over all label series. Returns
+    (accepted_total, draft_total), or None when either counter is absent
+    (speculative decoding disabled)."""
+    totals, seen = {}, set()
+    for line in metrics_text.splitlines():
+        if not line or line.startswith("#"):
+            continue
+        fields = line.split()
+        if len(fields) < 2:
+            continue
+        name = fields[0].split("{", 1)[0]
+        if name not in (SPEC_ACCEPTED, SPEC_DRAFT):
+            continue
+        try:
+            # vLLM emits no explicit timestamps; the value is the last field
+            totals[name] = totals.get(name, 0.0) + float(fields[-1])
+            seen.add(name)
+        except ValueError:
+            pass
+    if seen != {SPEC_ACCEPTED, SPEC_DRAFT}:
+        return None
+    return totals[SPEC_ACCEPTED], totals[SPEC_DRAFT]
+
+
+def scrape_spec_counters(base_url):
+    """G3: read the spec-decode totals from /metrics; None when the server
+    does not expose them (MTP/spec decode off or endpoint unreachable)."""
+    try:
+        r = requests.get(f"{base_url}/metrics", timeout=10)
+        if r.status_code != 200:
+            return None
+    except requests.RequestException:
+        return None
+    return parse_spec_counters(r.text)
+
+
+def contract_env():
+    """G4: snapshot of the env vars that change server behavior."""
+    return {k: os.environ[k] for k in sorted(os.environ)
+            if k.startswith(CONTRACT_ENV_PREFIXES)}
+
+
 def run_cell(base_url, hf_repo, prompt_len, output_len, concurrency):
     num_prompts = max(8, concurrency * 4)
+    spec_before = scrape_spec_counters(base_url)  # G3
     metrics = run_vllm_bench(base_url, hf_repo, prompt_len, output_len,
                              concurrency, num_prompts)
     tool = "vllm-bench"
@@ -264,7 +391,7 @@ def run_cell(base_url, hf_repo, prompt_len, output_len, concurrency):
         metrics = run_fallback_bench(base_url, hf_repo, prompt_len, output_len,
                                      concurrency, num_prompts)
         tool = "fallback"
-    return {
+    rec = {
         "prompt_len": prompt_len,
         "output_len": output_len,
         "concurrency": concurrency,
@@ -273,7 +400,26 @@ def run_cell(base_url, hf_repo, prompt_len, output_len, concurrency):
         "ttft_ms": round(metrics["ttft_ms"], 1) if metrics["ttft_ms"] is not None else None,
         "itl_ms": round(metrics["itl_ms"], 1) if metrics["itl_ms"] is not None else None,
         "output_toks": round(metrics["output_toks"], 2) if metrics["output_toks"] is not None else None,
+        # G4 measurement contract: what produced these numbers. Both backends
+        # force ignore_eos; vllm-bench keeps its CLI-default temperature
+        # (version-dependent, hence null), the fallback pins 0.0.
+        "sampling": {"temperature": 0.0 if tool == "fallback" else None,
+                     "ignore_eos": True},
+        # vllm-bench's --random-input-len is exact in tokens; the fallback
+        # approximates the length via characters (no tokenizer available)
+        "prompt_len_exact": tool == "vllm-bench",
+        "env": contract_env(),
     }
+    image = os.environ.get("VLLM_IMAGE")
+    if image:
+        rec["image"] = image
+    spec_after = scrape_spec_counters(base_url)  # G3
+    if spec_before and spec_after:
+        d_accepted = spec_after[0] - spec_before[0]
+        d_draft = spec_after[1] - spec_before[1]
+        if d_draft > 0:
+            rec["acceptance_len"] = round(d_accepted / d_draft, 3)
+    return rec
 
 
 # ---------------------------------------------------------------------------
@@ -401,6 +547,7 @@ def main():
                     continue
 
                 log(f"healthy, benchmarking (serve log: {serve_log})")
+                sanity = None  # G1 probe runs once after the first (warm) cell
                 for prompt_len in prompt_lens:
                     for concurrency in concurrencies:
                         if (model, profile, prompt_len, concurrency) in resume_keys:
@@ -411,8 +558,19 @@ def main():
                         try:
                             rec.update(run_cell(args.base_url, entry["hf_repo"],
                                                 prompt_len, args.output_len, concurrency))
+                            if sanity is None:
+                                log("    G1 sanity probe (4 fixed prompts, greedy, EOS allowed)")
+                                try:
+                                    sanity = run_sanity_probe(args.base_url, entry["hf_repo"])
+                                except Exception as e:
+                                    sanity = {"ok": False, "error": str(e)}
+                                log(f"    sanity: {'OK' if sanity['ok'] else 'FAILED'}")
+                            rec["sanity"] = sanity
+                            extra = (f", acceptance_len {rec['acceptance_len']}"
+                                     if rec.get("acceptance_len") is not None else "")
                             log(f"    -> {rec['output_toks']} tok/s agg, "
-                                f"TTFT {rec['ttft_ms']} ms, ITL {rec['itl_ms']} ms [{rec['tool']}]")
+                                f"TTFT {rec['ttft_ms']} ms, ITL {rec['itl_ms']} ms "
+                                f"[{rec['tool']}]{extra}")
                         except Exception as e:  # record and continue the matrix
                             log(f"    ERROR: {e}")
                             rec.update({"prompt_len": prompt_len, "concurrency": concurrency,
