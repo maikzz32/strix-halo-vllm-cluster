@@ -134,6 +134,25 @@ exakt identisch, Logits max. rel. Diff ~3e-7. Vertrag: Cache
 `VLLM_GFX1X_KPOOL_TRITON=1` (Default aus).
 
 
+## MoE int4 (WNA16) Skinny-GEMV (GLM-5.3-Flash, gfx1151)
+
+```bash
+# im Container (ray-head), kein Server nötig:
+python3 /tmp/moe_int4_sweep.py        # Stock-Kernel Config-Sweep + Layout-Aufbau
+python3 /tmp/moe_int4_ab.py           # Endausbau: vllm vs Split-K-Pfad über M
+python3 /tmp/moe_int4_patch_check.py  # Dispatch-Check am gepatchten Modul
+```
+
+Standalone-Harness für `patches/runtime_glm53_moe_int4_tune.py` (Kernel-Spiegel:
+`bench/moe_int4_gemv_proto.py`). Baut synthetische Gewichte im exakten
+Runtime-Layout (uint8 N-first, 2 Nibbles/Byte entlang K, bf16-Scales,
+asymmetrische ZP gruppe 32) und misst die WNA16-Triton-MoE-Aufrufe
+(`fused_moe_kernel_gptq_awq`, w13 + w2) gegen den Split-K-Pfad: M=1 ~1,84×,
+M=6 (MTP-Verify) ~1,52×, M=32 ~1,21× schneller; Numerik max. rel. Diff
+6,5–7,8e-3 (Split-K-Reassoziation an bf16-Rundungsgrenzen; SPLIT_K=1
+bit-exakt). Laufzeit-Gate: `VLLM_GFX1X_MOE_INT4_GEMV=1` (Default an).
+
+
 ## A/B: Ethernet/TCP vs. RDMA (RoCE)
 
 ```bash
