@@ -237,6 +237,61 @@ models:
       - https://recipes.vllm.ai/Qwen/Qwen3.8-Flash-Next
       - https://github.com/vllm-project/vllm/pull/53896   # merged 2026-08-31
 
+  # The INT4 re-quant that already sits on all four nodes and produced the
+  # 28.4 tok/s single-stream figure in the old FLASHNEXT notes. Same weights,
+  # now served off the RELEASE TAG instead of a PR head - that is the A/B.
+  # Measured from the checkpoint (2026-09-02): compressed-tensors
+  # pack-quantized, 4 bit, group 32, ASYMMETRIC (73,728 weight_zero_point
+  # tensors). The 51 B n-gram table and the whole vision tower are in the
+  # quantization ignore list, i.e. they stay BF16 - which is why 176 GiB and
+  # not ~70. Asymmetric MoE is fine here: the "Only symmetric quantization is
+  # supported for MoE" assert lives in the flydsl and W4A8 paths, while
+  # compressed_tensors_moe_wna16.py handles zero points explicitly.
+  # This checkpoint is the STOCK Qwen quantization, i.e. NOT decensored.
+  qwen38-flash-next-int4:
+    hf_repo: /home/maik/qwen38_flashnext   # local INT4 re-quant, present on ALL 4 nodes
+    dtype: gptq-int4
+    approx_size_gib: 176
+    context:
+      native_tokens: 262144
+    status: dev
+    # vLLM release tag v0.29.0rc1 (contains vllm#53896, the merged qwen4_exp model).
+    vllm_ref: 33898f832c53c3e98999e0ec2c689f61ee92a9bc
+    tracking:
+      - https://github.com/vllm-project/vllm/pull/53899   # PLE offload, still open
+    env: {}
+    extra_args:
+      - --speculative-config
+      - '{"method":"mtp","num_speculative_tokens":3}'
+      # Vision tower is present in this checkpoint (BF16, in the ignore list).
+      # The multimodal encoder profiler allocated a 16.7 MP dummy image and
+      # OOM-killed a node on qwen38-27b-ablit; the bench is text-only anyway.
+      - --limit-mm-per-prompt
+      - '{"image": 0, "video": 0}'
+      # vLLM profiles activations with a dummy run of max_num_tokens =
+      # max_model_len; at the native 262k that run alone OOM-killed a node.
+      # Raise deliberately, with the GTT budget rechecked.
+      - --max-model-len
+      - "32768"
+      # 0.9 (the vLLM default) budgets ~111 of the 124 GiB GTT and killed the
+      # host on multi-node bring-up; weights are only ~44 GiB/node at TP4, so
+      # 0.8 leaves room for KV without touching the host. UNVERIFIED for this
+      # model - watch the first bring-up and lower if the node gets tight.
+      - --gpu-memory-utilization
+      - "0.8"
+    allowed_profiles: [tp4, solo]   # no PP: hard NotImplementedError when ple_layer_ids and PP>1
+    notes: >
+      Serves the existing local INT4 weights on the v0.29.0rc1 image. Point of
+      the run: compare against the 28.4 tok/s the same weights reached on the
+      PR-head build, and exercise the ROCm W4A16 zero-point transpose fix
+      (vllm#48998, in this tag) which decides transposition from output_dim
+      instead of guessing from tensor shape - this checkpoint is asymmetric,
+      so it takes that path. Roughly 3.4x fewer bytes per token than the BF16
+      checkpoints (~4.65 effective bits/weight vs 16), so BF16 is the slower
+      option here, not the faster one.
+    references:
+      - https://github.com/vllm-project/vllm/pull/48998
+
   glm53-flash:
     hf_repo: /home/maik/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
     dtype: gptq-int4                  # compressed-tensors pack-quantized 4-bit group 32
