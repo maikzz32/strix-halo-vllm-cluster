@@ -274,12 +274,14 @@ models:
       - --max-model-len
       - "32768"
       # 0.9 (the vLLM default) budgets ~111 of the 124 GiB GTT and killed the
-      # host on multi-node bring-up; weights are only ~44 GiB/node at TP4, so
-      # 0.8 leaves room for KV without touching the host. UNVERIFIED for this
-      # model - watch the first bring-up and lower if the node gets tight.
+      # host on multi-node bring-up. Measured 2026-09-02: at TP4 0.8 is ample;
+      # at TP2 (89.9 GiB weights/rank) 0.8 leaves NO KV cache (-2.4 GiB) and
+      # 0.85 leaves 3.02 GiB - enough for the c=1 bench only. TP2 measured
+      # 18.09 vs 23.06 tok/s at TP4 (same bench), kept in allowed_profiles for
+      # experiments, not for serving.
       - --gpu-memory-utilization
-      - "0.8"
-    allowed_profiles: [tp4, solo]   # no PP: hard NotImplementedError when ple_layer_ids and PP>1
+      - "0.85"
+    allowed_profiles: [tp4, tp2, solo]   # no PP: hard NotImplementedError when ple_layer_ids and PP>1
     notes: >
       Serves the existing local INT4 weights on the v0.29.0rc1 image. Point of
       the run: compare against the 28.4 tok/s the same weights reached on the

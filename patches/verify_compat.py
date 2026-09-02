@@ -38,6 +38,7 @@ EXPECTED = {
     "56_apu_memory_reporting": "vllm-src",
     "59_platform_fastpath": "vllm-src",
     "60_skinny_gemm_m1": "vllm-src",
+    "64_device_name_without_amdsmi": "vllm-src",
 }
 
 # Conditional patches: marker required only when at least one of the listed
@@ -51,6 +52,7 @@ CONDITIONAL = {
     "30_tensorizer_pin": ["requirements/rocm.txt"],
     "58_glm_mtp_sparse_dispatch": ["vllm/models/glm5next",
                                    "vllm/models/glm5_next"],
+    "63_qsa_no_flash_attn": ["vllm/models/qwen4_exp"],
 }
 
 # Conditional on file CONTENT, not mere existence: patch id -> (relative
