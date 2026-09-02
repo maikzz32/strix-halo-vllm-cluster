@@ -73,6 +73,14 @@ EXIT_REAUDIT = 42
 
 PKG_REL = "vllm/models/qwen4_exp"
 PLE_REL = f"{PKG_REL}/amd/ple_layer.py"
+
+# Positive fingerprint of the MERGED upstream layer (vllm#53896). The PR
+# branch this patch was written against builds the table with
+# VocabParallelEmbedding (see PLE_CTOR_OLD); the merged tree introduced its
+# own PLEVocabParallelEmbedding and carries no offload mechanism at all,
+# because #53899 (the offload) is still open. Checked against v0.29.0rc1
+# (33898f832c) on 2026-09-02.
+MERGED_CTOR = "self.ngram_embedding = PLEVocabParallelEmbedding("
 MODEL_REL = f"{PKG_REL}/amd/model.py"
 ENVS_REL = "vllm/envs.py"
 
@@ -587,6 +595,24 @@ def main() -> int:
         return EXIT_REAUDIT
 
     ple_content = ple.read_text()
+
+    # Merged-upstream tree (#53896 in, #53899 still open): there is no PLE
+    # offload here to port onto, so this is not a moved anchor and must not
+    # fail the build. Defer with exit 0, the way patch 50 defers before the
+    # triton_kernels install. Use vLLM's generic UVA offload instead:
+    #   --cpu-offload-gb N --cpu-offload-params ngram_embedding
+    # (vllm/config/offload.py UVAOffloadConfig, arg_utils.py --cpu-offload-params).
+    # That covers the offload but NOT this patch's prefetch overlap.
+    # Re-audit and re-anchor once #53899 lands; the ctor is the first anchor
+    # that actually differs, the imports and class anchors still apply.
+    if (MARKER not in ple_content
+            and PLE_CTOR_OLD not in ple_content
+            and MERGED_CTOR in ple_content):
+        print(f"SKIP: {ple} is the merged upstream layer (vllm#53896) with no "
+              f"PLE offload to port; #53899 is not in this tree. Serve with "
+              f"--cpu-offload-gb N --cpu-offload-params ngram_embedding "
+              f"instead (no prefetch overlap).")
+        return 0
 
     if args.check:
         if MARKER in ple_content:

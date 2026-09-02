@@ -49,9 +49,20 @@ EXPECTED = {
 # SKIPs it.
 CONDITIONAL = {
     "30_tensorizer_pin": ["requirements/rocm.txt"],
-    "57_ple_offload_amd": ["vllm/models/qwen4_exp"],
     "58_glm_mtp_sparse_dispatch": ["vllm/models/glm5next",
                                    "vllm/models/glm5_next"],
+}
+
+# Conditional on file CONTENT, not mere existence: patch id -> (relative
+# path, substring that must be present for the patch to have anything to do).
+# Patch 57 ports the PLE offload from vllm#53899. A tree with #53896 merged
+# but #53899 still open HAS vllm/models/qwen4_exp yet nothing to port onto,
+# so a plain path check would demand a marker the patch cannot produce.
+# `pid in found` keeps it fail-closed the other way round: once the marker is
+# there, it is still verified even though the patch rewrote the anchor.
+CONDITIONAL_CONTENT = {
+    "57_ple_offload_amd": ("vllm/models/qwen4_exp/amd/ple_layer.py",
+                           "self.ngram_embedding = VocabParallelEmbedding("),
 }
 
 # Post-install-only patches (marker lands in installed third-party packages,
@@ -134,6 +145,16 @@ def main() -> int:
         applies = any((src / rel).exists() for rel in relpaths)
         if not applies:
             print(f"SKIP conditional patch {pid} (no {relpaths[0]} in tree)")
+        elif pid in found:
+            print(f"OK   marker for conditional patch {pid}")
+        else:
+            failures.append(f"marker for conditional patch {pid} not found")
+            print(f"FAIL marker for conditional patch {pid} not found")
+    for pid, (rel, needle) in CONDITIONAL_CONTENT.items():
+        target = src / rel
+        text = target.read_text(errors="ignore") if target.is_file() else ""
+        if not (needle in text or pid in found):
+            print(f"SKIP conditional patch {pid} (nothing to patch in {rel})")
         elif pid in found:
             print(f"OK   marker for conditional patch {pid}")
         else:

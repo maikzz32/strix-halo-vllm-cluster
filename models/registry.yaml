@@ -188,6 +188,55 @@ models:
       - https://recipes.vllm.ai/Qwen/Qwen3.8-Flash-Next
       - https://www.amd.com/en/developer/resources/technical-articles/2026/day-0-support-for-qwen-3-8-on-amd-instinct-gpus.html
 
+  # Same model off the RELEASE TAG instead of the PR head. vllm#53896 (the
+  # qwen4_exp model) is merged and contained in v0.29.0rc1; vllm#53899 (the
+  # PLE offload) is NOT, so patch 57 has nothing to port and defers there.
+  # The offload is replaced by vLLM's generic UVA path, which lands the table
+  # in the same unified memory but WITHOUT patch 57's prefetch overlap - that
+  # is the one thing this entry gives up versus qwen38-flash-next.
+  # Keep both until the A/B is measured; drop this one if the overlap wins.
+  qwen38-flash-next-tag:
+    hf_repo: Qwen/Qwen3.8-Flash-Next
+    dtype: bf16
+    approx_size_gib: 335
+    context:
+      native_tokens: 262144
+      yarn_factor: 4.0
+      yarn_tokens: 1048576
+    status: dev
+    # vLLM release tag, not a moving PR head: v0.29.0rc1 = 33898f832c.
+    vllm_ref: 33898f832c53c3e98999e0ec2c689f61ee92a9bc
+    tracking:
+      - https://github.com/vllm-project/vllm/pull/53899   # PLE offload, still open
+    env: {}
+    extra_args:
+      - --speculative-config
+      - '{"method":"mtp","num_speculative_tokens":3}'
+      - --hf-overrides
+      - '{"rope_parameters":{"rope_type":"yarn","factor":4.0}}'
+      # Generic UVA offload replaces patch 57. `ngram_embedding` is the AMD
+      # parameter segment (qwen4_exp/amd/ple_layer.py); matching is by exact
+      # name segment. The budget is a starting value derived from patch 57's
+      # "~13 GiB/node at TP=4" - UNMEASURED on this path, raise it if the
+      # table does not fit and lower it once the real figure is known.
+      - --cpu-offload-gb
+      - "16"
+      - --cpu-offload-params
+      - ngram_embedding
+    allowed_profiles: [tp4, solo]   # no PP: hard NotImplementedError when ple_layer_ids and PP>1
+    notes: >
+      Tag-based twin of qwen38-flash-next. Registry entries in v0.29.0rc1:
+      Qwen4ExpForCausalLM / Qwen4ExpForConditionalGeneration / Qwen4ExpMTP,
+      ROCm dispatch to qwen4_exp/amd without any arch gate and with zero AITER
+      calls. FP8 is not merely slow but blocked on gfx1151: supports_fp8() is
+      on_cdna() or on_rdna4(), and with no FP8 MoE backend left the oracle
+      raises - so BF16 stays the only option here. First run must confirm that
+      --cpu-offload-params actually matches ngram_embedding and that the UVA
+      backend engages; if it does not, fall back to qwen38-flash-next.
+    references:
+      - https://recipes.vllm.ai/Qwen/Qwen3.8-Flash-Next
+      - https://github.com/vllm-project/vllm/pull/53896   # merged 2026-08-31
+
   glm53-flash:
     hf_repo: /home/maik/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
     dtype: gptq-int4                  # compressed-tensors pack-quantized 4-bit group 32
