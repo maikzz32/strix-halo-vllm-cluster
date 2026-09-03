@@ -34,6 +34,14 @@ on:
           - custom
           - stock
         default: custom
+      rocm_index:
+        description: "PEP 503 index for the torch/ROCm SDK wheels. Default = TheRock multi-arch (7.x). ROCm 10.0: https://stable.repo.amd.com/rocm/whl-next"
+        default: "https://repo.amd.com/rocm/whl-multi-arch"
+        required: false
+      tag_suffix:
+        description: "Extra image-tag suffix (e.g. rocm10) so the build never moves :dev / :dev-<model>."
+        default: ""
+        required: false
 
 permissions:
   contents: read
@@ -53,6 +61,8 @@ jobs:
       # Scheduled runs have no inputs -> fall back to the defaults.
       RCCL_IMPL: ${{ inputs.rccl_impl || 'custom' }}
       MODEL: ${{ inputs.model || '' }}
+      ROCM_INDEX: ${{ inputs.rocm_index || 'https://repo.amd.com/rocm/whl-multi-arch' }}
+      EXTRA_SUFFIX: ${{ inputs.tag_suffix || '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -89,7 +99,8 @@ jobs:
         id: stack
         run: |
           set -euo pipefail
-          BASE="https://repo.amd.com/rocm/whl-multi-arch"
+          BASE="${ROCM_INDEX%/}"
+          echo "index: $BASE"
           # Same discovery as build-stable.yml; keep both in sync.
           # whl-multi-arch is a PEP 503-style index: generic torch wheels under
           # $BASE/torch/ plus per-device plugin wheels under
@@ -153,6 +164,8 @@ jobs:
           # Sanitize the optional model name into a docker-tag-safe suffix.
           model=$(printf '%s' "$MODEL" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9-' | sed 's/^-*//; s/-*$//')
           suffix=""; [ -n "$model" ] && suffix="-$model"
+          extra=$(printf '%s' "$EXTRA_SUFFIX" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9-' | sed 's/^-*//; s/-*$//')
+          [ -n "$extra" ] && suffix="${suffix}-${extra}"
           echo "TAG_SUFFIX=$suffix" >> "$GITHUB_ENV"
           echo "DATED_TAG=dev-$(date -u +%Y%m%d)${suffix}" >> "$GITHUB_ENV"
 
@@ -182,6 +195,7 @@ jobs:
             TORCHVISION_VERSION=${{ steps.stack.outputs.torchvision_version }}
             VLLM_REF=${{ steps.ref.outputs.vllm_ref }}
             RCCL_IMPL=${{ env.RCCL_IMPL }}
+            ROCM_INDEX_URL=${{ env.ROCM_INDEX }}/
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
