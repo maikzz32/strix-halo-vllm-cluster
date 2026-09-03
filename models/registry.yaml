@@ -281,8 +281,23 @@ models:
       # experiments, not for serving.
       - --gpu-memory-utilization
       - "0.85"
+      # Measured 2026-09-03 (ShareGPT c=1, greedy, MTP k=3, GEMV lane on):
+      # 29.27 -> 29.83 tok/s. Small but consistent; CPU-side gaps are the
+      # dominant cost on gfx1151 (one M=1 forward = 64 ms, ~48 ms of it
+      # launch/sync latency), so anything that hides them helps.
+      - --async-scheduling
     allowed_profiles: [tp4, tp2, solo]   # no PP: hard NotImplementedError when ple_layer_ids and PP>1
     notes: >
+      REQUIRES the runtime patch patches/runtime_glm53_moe_int4_tune.py (v1.4,
+      small-K branch for the 160-wide w2 shard) in every container: the
+      split-K int4 GEMV lane took greedy c=1 from 26.80 to 29.27 tok/s and
+      model-default sampling from 23.64 to 25.15 (2026-09-03). MTP k=3 beats
+      k=2 (29.83 vs 28.07 greedy); without MTP the same server does 15.00
+      tok/s = 64 ms per single-token forward, which is the number to beat:
+      ~16 ms of it is bandwidth, ~9 ms RCCL all-reduce (96 x ~95 us), the
+      rest eager launch/sync. HIP graphs (FULL_DECODE_ONLY and PIECEWISE)
+      capture fine on ROCm 7.14 but hang on the first step / before READY,
+      so cudagraph_mode NONE stays mandatory (vllm#32180 reproduced).
       Serves the existing local INT4 weights on the v0.29.0rc1 image. Point of
       the run: compare against the 28.4 tok/s the same weights reached on the
       PR-head build, and exercise the ROCm W4A16 zero-point transpose fix

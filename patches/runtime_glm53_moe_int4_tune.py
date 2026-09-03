@@ -61,7 +61,7 @@ import sys
 P = "/usr/local/lib64/python3.12/site-packages/vllm/model_executor/layers/fused_moe/fused_moe.py"
 
 HELPER = '''
-# glm53 moe int4 gemv lane version: v1.3 (gfx1x split-K skinny dequant GEMV)
+# glm53 moe int4 gemv lane version: v1.4 (gfx1x split-K skinny dequant GEMV)
 
 
 def _glm53_moe_int4_enabled():
@@ -262,8 +262,19 @@ def _glm53_moe_int4_gemv(
         return False
     if K >= 2048:
         SPLITK, BN, BK, num_warps, num_stages = 4, 64, 128, 4, 2
-    else:
+    elif K >= 512:
         SPLITK, BN, BK, num_warps, num_stages = 2, 64, 256, 4, 1
+    else:
+        # v1.4: small-K w2 shapes (Qwen3.8-Flash-Next tp4: K = 640/4 = 160).
+        # BK must be a power of two >= GS; split the K range one group-block
+        # per program so the divisibility rule below still holds (160 = 5*32).
+        # Measured on gfx1151 (E=512, N=2560, K=160, top_k=10): M=4 0.107 ->
+        # 0.074 ms, M=8 0.204 -> 0.160, but M=16 0.43 -> 0.64 and M=32 0.81 ->
+        # 1.70 -- the 16-byte packed rows stop paying off once the grid is
+        # wide, so leave num_valid > 128 to the stock kernel.
+        if num_valid > 128:
+            return False
+        SPLITK, BN, BK, num_warps, num_stages = K // 32, 64, 32, 4, 1
     if K % (BK * SPLITK) or BK % GS or N % BN or N % 2:
         return False
 
@@ -327,7 +338,7 @@ def _glm53_moe_int4_gemv(
 
 '''
 
-MARKER = "# glm53 moe int4 gemv lane version: v1.3"
+MARKER = "# glm53 moe int4 gemv lane version: v1.4"
 
 # Injection point: immediately before the wna16 Triton launcher def.
 ANCHOR_FN = "def invoke_fused_moe_wna16_triton_kernel(\n"
@@ -389,7 +400,7 @@ def main():
 
     ast.parse(s)  # fail closed: never write an unparseable tree
     io.open(P, "w", encoding="utf-8", newline="\n").write(s)
-    print("   v1.3 injected (split-K skinny int4 MoE GEMV for gfx1x)")
+    print("   v1.4 injected (split-K skinny int4 MoE GEMV for gfx1x)")
     return 0
 
 
