@@ -10,8 +10,8 @@ for i in $(seq 1 24); do ok=1; line=""
     line="$line $h:${g:-?}GiB"; [ "${g:-0}" -ge 100 ] 2>/dev/null || ok=0; done
   echo "frei:$line"; [ $ok -eq 1 ] && break; sleep 10; done
 [ $ok -eq 1 ] || { echo "GPU-Speicher nicht frei -> Abbruch"; exit 1; }
-export CG_MODE=FULL_DECODE_ONLY MTP_K=3 EXTRA_E="-e VLLM_GFX1X_SPEC_CUDAGRAPH=0 -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_LAUNCH_MODE=GROUP"
-r=1; for h in 192.168.100.2 192.168.100.3 192.168.100.4; do ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h "CG_MODE=$CG_MODE MTP_K=$MTP_K EXTRA_E='$EXTRA_E' MAX_LEN='${MAX_LEN:-32768}' EXTRA_ARGS='${EXTRA_ARGS:-}' setsid nohup /tmp/start_mp_exp.sh $r ray-worker $h $T >/dev/null 2>&1 < /dev/null &"; r=$((r+1)); done
+export CG_MODE=${CG_MODE:-FULL_DECODE_ONLY} MTP_K=3 EXTRA_E="-e VLLM_GFX1X_SPEC_CUDAGRAPH=0 -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_LAUNCH_MODE=GROUP"
+r=1; for h in 192.168.100.2 192.168.100.3 192.168.100.4; do ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h "CG_MODE=$CG_MODE MTP_K=$MTP_K EXTRA_E='$EXTRA_E' MAX_LEN='${MAX_LEN:-32768}' EXTRA_ARGS='${EXTRA_ARGS:-}' MM_LIMIT='${MM_LIMIT:-}' setsid nohup /tmp/start_mp_exp.sh $r ray-worker $h $T >/dev/null 2>&1 < /dev/null &"; r=$((r+1)); done
 t0=$(date +%s); setsid nohup /tmp/start_mp_exp.sh 0 ray-head 192.168.100.1 "$T" >/dev/null 2>&1 < /dev/null & sleep 3
 if bash /tmp/wait_ready.sh "/tmp/tp4_${T}_r0.log"; then echo "READY nach $(( $(date +%s)-t0 )) s"; else echo "START FEHLGESCHLAGEN"; exit 1; fi
 grep -E "torch.compile took|Loading weights took|Graph capturing finished" "/tmp/tp4_${T}_r0.log" | grep "Worker_TP0" | tail -3 | cut -c40-160

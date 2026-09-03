@@ -6,13 +6,20 @@ stop_all() {
     scp -q -o BatchMode=yes -o StrictHostKeyChecking=no /tmp/kill_vllm.sh $h:/tmp/kill_vllm.sh
     ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h 'pkill -9 -f "[s]bin/vllm serve" 2>/dev/null; podman exec -i ray-worker bash < /tmp/kill_vllm.sh' | sed "s/^/$h /"
   done
-  sleep 8
+  # Ray drains for up to 30 s after an adopted child dies; wait it out before
+  # checking container state, otherwise the container exits under a fresh start.
+  sleep 40
   # Orphaned VLLM::Worker processes get reparented to the container's PID 1
   # (ray start --block); its subprocess monitor stops the container when such
   # an adopted child dies. Make sure every container is running again.
   podman container inspect ray-head --format '{{.State.Running}}' 2>/dev/null | grep -q true || podman start ray-head >/dev/null
   for h in 192.168.100.2 192.168.100.3 192.168.100.4; do
     ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h 'podman container inspect ray-worker --format "{{.State.Running}}" 2>/dev/null | grep -q true || { podman start ray-worker >/dev/null && echo "'$h' ray-worker neu gestartet"; }'
+  done
+  sleep 5
+  for h in local 192.168.100.2 192.168.100.3 192.168.100.4; do C=ray-worker; [ $h = local ] && C=ray-head
+    if [ $h = local ]; then st=$(podman container inspect $C --format '{{.State.Running}}'); else st=$(ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h "podman container inspect $C --format '{{.State.Running}}'"); fi
+    echo "container $h $C running=$st"
   done
 }
 start_all() {  # start_all TAG SCRIPT
