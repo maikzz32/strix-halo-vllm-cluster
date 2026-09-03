@@ -59,8 +59,12 @@ ssh_node() { # ssh_node <idx> <cmd...>
 }
 
 # sha256 manifest of the snapshot's Triton tree, checked on each target node.
+# *.autotune.json is excluded: Triton rewrites those per node at runtime with
+# the node's own autotune results, so they legitimately differ (node3 failed
+# the check on chunk_gated_delta_rule_fwd_kernel_h_blockdim64.autotune.json,
+# 2026-09-03). They are still copied, just not verified.
 MANIFEST="$SNAP/triton.sha256"
-( cd "$SNAP/triton" && find . -type f -print0 | sort -z | xargs -0 sha256sum ) > "$MANIFEST"
+( cd "$SNAP/triton" && find . -type f ! -name '*.autotune.json' -print0 | sort -z | xargs -0 sha256sum ) > "$MANIFEST"
 NFILES=$(wc -l < "$MANIFEST")
 echo "dist_cache: snapshot $SNAP ($NFILES files, fingerprint $(cut -c1-12 "$SNAP/fingerprint")...)"
 
