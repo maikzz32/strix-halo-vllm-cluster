@@ -7,6 +7,13 @@ stop_all() {
     ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h 'pkill -9 -f "[s]bin/vllm serve" 2>/dev/null; podman exec -i ray-worker bash < /tmp/kill_vllm.sh' | sed "s/^/$h /"
   done
   sleep 8
+  # Orphaned VLLM::Worker processes get reparented to the container's PID 1
+  # (ray start --block); its subprocess monitor stops the container when such
+  # an adopted child dies. Make sure every container is running again.
+  podman container inspect ray-head --format '{{.State.Running}}' 2>/dev/null | grep -q true || podman start ray-head >/dev/null
+  for h in 192.168.100.2 192.168.100.3 192.168.100.4; do
+    ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h 'podman container inspect ray-worker --format "{{.State.Running}}" 2>/dev/null | grep -q true || { podman start ray-worker >/dev/null && echo "'$h' ray-worker neu gestartet"; }'
+  done
 }
 start_all() {  # start_all TAG SCRIPT
   r=1; for h in 192.168.100.2 192.168.100.3 192.168.100.4; do scp -q -o BatchMode=yes -o StrictHostKeyChecking=no "$2" $h:/tmp/; ssh -o BatchMode=yes -o StrictHostKeyChecking=no $h "chmod +x $2; setsid nohup $2 $r ray-worker $h $1 >/dev/null 2>&1 < /dev/null &"; r=$((r+1)); done
