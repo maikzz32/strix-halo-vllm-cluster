@@ -59,7 +59,9 @@ import argparse
 import sys
 from pathlib import Path
 
-MARKER = "gfx1151-patch: device-name-without-amdsmi"
+MARKER = "gfx1151-patch: 64_device_name_without_amdsmi"
+# Containers patched on 2026-09-02 carry this earlier marker text; accept it.
+LEGACY_MARKER = "gfx1151-patch: device-name-without-amdsmi"
 EXIT_REAUDIT = 42
 
 ROCM_REL = "vllm/platforms/rocm.py"
@@ -145,13 +147,13 @@ def main() -> int:
     content = rocm.read_text()
 
     if args.check:
-        if MARKER in content:
+        if MARKER in content or LEGACY_MARKER in content:
             print(f"OK: patch 64 present in {rocm}")
             return 0
         print(f"FAIL: patch 64 marker not found in {rocm}", file=sys.stderr)
         return 1
 
-    if MARKER in content:
+    if MARKER in content or LEGACY_MARKER in content:
         print(f"SKIP: patch 64 already applied to {rocm}")
         return 0
 
