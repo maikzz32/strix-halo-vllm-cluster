@@ -63,7 +63,9 @@ import argparse
 import sys
 from pathlib import Path
 
-MARKER = "gfx1151-patch: qsa-no-flash-attn"
+MARKER = "gfx1151-patch: 63_qsa_no_flash_attn"
+# Containers patched on 2026-09-02 carry this earlier marker text; accept it.
+LEGACY_MARKER = "gfx1151-patch: qsa-no-flash-attn"
 EXIT_REAUDIT = 42
 
 QSA_REL = "vllm/models/qwen4_exp/amd/qsa.py"
@@ -184,13 +186,13 @@ def main() -> int:
     content = qsa.read_text()
 
     if args.check:
-        if MARKER in content:
+        if MARKER in content or LEGACY_MARKER in content:
             print(f"OK: patch 63 present in {qsa}")
             return 0
         print(f"FAIL: patch 63 marker not found in {qsa}", file=sys.stderr)
         return 1
 
-    if MARKER in content:
+    if MARKER in content or LEGACY_MARKER in content:
         print(f"SKIP: patch 63 already applied to {qsa}")
         return 0
 
