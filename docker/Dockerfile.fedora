@@ -196,6 +196,12 @@ RUN cd /opt/src/vllm \
 # relative includes (-r ../common.txt) keep resolving. A post-install
 # assertion on the torch version is the fail-closed guard against a
 # clobbered torch.
+# amdsmi is filtered as well: vLLM's ROCm build requirements pull the PyPI
+# amdsmi wheel (7.0.x), whose ctypes wrapper binds symbols against the SDK's
+# libamd_smi.so; with the ROCm 10.0 SDK (libamd_smi.so.27) that import fails
+# (undefined symbol amdsmi_set_gpu_clk_range) and torch.cuda cannot be
+# imported in the builder. The image runs without amdsmi by design
+# (patches 59/64, harden_containers.sh).
 # The build log is captured and audited for the gfx1151 arch pin: vLLM's ROCm
 # build has a known silent-fallback bug (vllm#22590) where an unpicked
 # PYTORCH_ROCM_ARCH compiles for the default multi-arch list instead of
@@ -209,9 +215,9 @@ RUN cd /opt/src/vllm \
            if [ -f "$cand" ]; then REQ="$cand"; break; fi; \
        done; \
        [ -n "${REQ:-}" ] || { echo "FATAL: no ROCm build requirements file found"; exit 1; }; \
-    echo "Using build requirements: $REQ (torch stack lines filtered)" \
+    echo "Using build requirements: $REQ (torch stack + amdsmi lines filtered)" \
     && filtered="${REQ%.txt}-gfx1151-filtered.txt" \
-    && grep -vE '^[[:space:]]*(torch|torchvision|torchaudio|triton)([=<>![]|$)|^[[:space:]]*--(extra-)?index-url' "$REQ" > "$filtered" \
+    && grep -vE '^[[:space:]]*(torch|torchvision|torchaudio|triton|amdsmi)([=<>![]|$)|^[[:space:]]*--(extra-)?index-url' "$REQ" > "$filtered" \
     && python3 -m pip install -r "$filtered" \
     && python3 -c "import torch; assert torch.__version__.startswith('${TORCH_VERSION}+rocm'), 'torch clobbered: '+torch.__version__; print('torch pin intact:', torch.__version__)" \
     && mkdir -p /wheels \
