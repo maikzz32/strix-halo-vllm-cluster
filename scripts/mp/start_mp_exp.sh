@@ -1,9 +1,11 @@
 #!/bin/bash
 # start_mp_exp.sh <rank> <container> <ip> <tag>  -- mp-Verbund, Experiment-Variante ueber Env:
 #   CG_MODE (NONE|FULL_DECODE_ONLY|PIECEWISE), CAP_SIZES (z.B. [1]), MTP_K (0 = kein MTP), EXTRA_E ("-e X=1 -e Y=2"),
-#   MAX_LEN (Default 32768; nativ 262144), EXTRA_ARGS (weitere vllm-Argumente, z.B. --max-num-batched-tokens 8192)
+#   MM_LIMIT (Default Bilder/Video aus; z.B. {"image": 2, "video": 0}), MAX_LEN (Default 32768; nativ 262144), EXTRA_ARGS (weitere vllm-Argumente, z.B. --max-num-batched-tokens 8192)
 R="${1:?rank}"; C="${2:?container}"; IP="${3:?ip}"; T="${4:-exp}"
 HL=""; [ "$R" != "0" ] && HL="--headless"
+# MM_LIMIT: Braces inside a ${VAR:-default} confuse bash, so resolve it first.
+MM="${MM_LIMIT:-}"; [ -n "$MM" ] || MM='{"image": 0, "video": 0}'
 CC="{\"cudagraph_mode\":\"${CG_MODE:-NONE}\""; [ -n "${CAP_SIZES:-}" ] && CC="$CC,\"cudagraph_capture_sizes\":${CAP_SIZES}"; CC="$CC}"
 SPEC=(); [ "${MTP_K:-3}" != "0" ] && SPEC=(--speculative-config "{\"method\":\"mtp\",\"num_speculative_tokens\":${MTP_K:-3}}")
 exec podman exec ${EXTRA_E:-} -e VLLM_GFX1X_MOE_INT4_GEMV=1 \
@@ -14,5 +16,5 @@ exec podman exec ${EXTRA_E:-} -e VLLM_GFX1X_MOE_INT4_GEMV=1 \
   --tensor-parallel-size 4 --nnodes 4 --node-rank "$R" --master-addr 192.168.100.1 --master-port 50001 \
   --distributed-executor-backend mp $HL \
   --compilation-config "$CC" "${SPEC[@]}" \
-  --limit-mm-per-prompt '{"image": 0, "video": 0}' \
+  --limit-mm-per-prompt "$MM" \
   --max-model-len "${MAX_LEN:-32768}" --gpu-memory-utilization 0.85 --async-scheduling ${EXTRA_ARGS:-} > "/tmp/tp4_${T}_r$R.log" 2>&1

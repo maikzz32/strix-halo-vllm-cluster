@@ -40,6 +40,7 @@ EXPECTED = {
     "60_skinny_gemm_m1": "vllm-src",
     "64_device_name_without_amdsmi": "vllm-src",
     "65_spec_cudagraph_gate": "vllm-src",
+    "66_vit_sdpa_math_gfx1x": "vllm-src",
 }
 
 # Conditional patches: marker required only when at least one of the listed
