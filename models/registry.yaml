@@ -259,8 +259,19 @@ models:
     vllm_ref: 33898f832c53c3e98999e0ec2c689f61ee92a9bc
     tracking:
       - https://github.com/vllm-project/vllm/pull/53899   # PLE offload, still open
-    env: {}
+    env:
+      # HIP graphs on gfx1151 TP4: target-model graphs only (patch 65 keeps the
+      # MTP speculator eager) and RCCL graph mixing enabled. Both RCCL envs are
+      # required - without them the ranks freeze after ~15 iterations
+      # (2026-09-03: E4/E6/E8 hang, E7 41.0 tok/s greedy, 600 s soak clean).
+      VLLM_GFX1X_SPEC_CUDAGRAPH: "0"
+      NCCL_GRAPH_MIXING_SUPPORT: "1"
+      NCCL_LAUNCH_MODE: "GROUP"
     extra_args:
+      # Overrides the registry default (NONE); verified only together with the
+      # env above and the mp executor (scripts/serve_mp_node.sh).
+      - --compilation-config
+      - '{"cudagraph_mode":"FULL_DECODE_ONLY"}'
       - --speculative-config
       - '{"method":"mtp","num_speculative_tokens":3}'
       # Vision tower is present in this checkpoint (BF16, in the ignore list).

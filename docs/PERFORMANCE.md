@@ -157,3 +157,6 @@ Hauptlast).
 
 ### mp-Executor über Nodes (2026-09-03)
 `scripts/serve_mp_node.sh`: vLLM-mp-Executor mit `--nnodes 4 --node-rank N --headless` statt Ray. qwen38-flash-next-int4/tp4, greedy c=1, MTP k=3: 29,9 → **31,27 tok/s** (+4,5 %). Follower ohne `--headless` scheitern mit „collective_rpc should not be called on follower node". Das DGX-Spark-Rezept (MiaAI-Lab, 2 Nodes: 36,4 Prosa / 55,8 Code) nutzt denselben Executor plus FULL_DECODE_ONLY-Graphen — die auf gfx1151 hängen (vllm#32180, in beiden Modi reproduziert).
+
+### HIP-Graphen auf gfx1151 funktionieren doch (2026-09-03)
+Der Deadlock aus vllm#32180 ist kein Capture-Problem: Capture läuft in allen Modi durch, der **Replay** hängt, sobald eager RCCL-Kollektive (MTP-Draft) und graph-aufgezeichnete Kollektive (Target-Verify) auf demselben Communicator abwechseln (py-spy: alle Ränge in `rocr::BusyWaitSignal` hinter `short_conv_attn.py:333`). Ohne MTP laufen Graphen sofort (15,0 → 25,9 tok/s). Mit MTP: Patch 65 (`VLLM_GFX1X_SPEC_CUDAGRAPH=0`, Speculator eager) **plus** `NCCL_GRAPH_MIXING_SUPPORT=1` **und** `NCCL_LAUNCH_MODE=GROUP` (RCCL 2.30.4 kennt beide; einer allein hängt) → **41,0 tok/s greedy, TPOT 22,4 ms, 600-s-Soak ×4 ohne Fehler** (eager mp-Verbund: 31,3). Speculator-Prefill-Graph (`=prefill`) läuft mit den Envs ebenfalls (~42 tok/s). Referenz Dual-DGX-Spark: 36,4 (Prosa).
