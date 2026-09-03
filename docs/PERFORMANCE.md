@@ -154,3 +154,6 @@ Hauptlast).
   maci0-Repo bereits SGLang-spec-Varianten >80 tok/s Single). Die Latte
   in Abschnitt c) ist der Stand von 2026-08-30 und muss periodisch
   nachgezogen werden.
+
+### mp-Executor über Nodes (2026-09-03)
+`scripts/serve_mp_node.sh`: vLLM-mp-Executor mit `--nnodes 4 --node-rank N --headless` statt Ray. qwen38-flash-next-int4/tp4, greedy c=1, MTP k=3: 29,9 → **31,27 tok/s** (+4,5 %). Follower ohne `--headless` scheitern mit „collective_rpc should not be called on follower node". Das DGX-Spark-Rezept (MiaAI-Lab, 2 Nodes: 36,4 Prosa / 55,8 Code) nutzt denselben Executor plus FULL_DECODE_ONLY-Graphen — die auf gfx1151 hängen (vllm#32180, in beiden Modi reproduziert).
