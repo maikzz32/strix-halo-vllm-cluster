@@ -13,8 +13,8 @@ exec podman exec ${EXTRA_E:-} -e VLLM_GFX1X_MOE_INT4_GEMV=1 \
   -e PYTORCH_HIP_ALLOC_CONF=expandable_segments:True,garbage_collection_threshold:0.85 \
   -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e VLLM_HOST_IP="$IP" \
   "$C" vllm serve /home/maik/qwen38_flashnext --host 0.0.0.0 --port 8000 \
-  --tensor-parallel-size 4 --nnodes 4 --node-rank "$R" --master-addr 192.168.100.1 --master-port 50001 \
+  --tensor-parallel-size "${TP:-4}" --nnodes "${TP:-4}" --node-rank "$R" --master-addr "${MASTER:-192.168.100.1}" --master-port 50001 \
   --distributed-executor-backend mp $HL \
   --compilation-config "$CC" "${SPEC[@]}" \
   --limit-mm-per-prompt "$MM" \
-  --max-model-len "${MAX_LEN:-32768}" --gpu-memory-utilization 0.85 --async-scheduling ${EXTRA_ARGS:-} > "/tmp/tp4_${T}_r$R.log" 2>&1
+  --max-model-len "${MAX_LEN:-32768}" --gpu-memory-utilization "${GPU_UTIL:-0.85}" --async-scheduling ${EXTRA_ARGS:-} > "/tmp/tp4_${T}_r$R.log" 2>&1
