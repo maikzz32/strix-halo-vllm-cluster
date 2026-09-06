@@ -40,9 +40,9 @@ EXPECTED = {
     "60_skinny_gemm_m1": "vllm-src",
     "64_device_name_without_amdsmi": "vllm-src",
     "65_spec_cudagraph_gate": "vllm-src",
-    "66_vit_sdpa_math_gfx1x",
-    "67_gdn_decode_geometry",
-    "68_shared_expert_replicate",
+    "66_vit_sdpa_math_gfx1x": "vllm-src",
+    "67_gdn_decode_geometry": "vllm-src",
+    "68_shared_expert_replicate": "vllm-src",
     "69_lm_head_quant": "vllm-src",
 }
 
@@ -58,6 +58,7 @@ CONDITIONAL = {
     "58_glm_mtp_sparse_dispatch": ["vllm/models/glm5next",
                                    "vllm/models/glm5_next"],
     "63_qsa_no_flash_attn": ["vllm/models/qwen4_exp"],
+    "73_qsa_draft_decode_metadata_update": ["vllm/models/qwen4_exp"],
 }
 
 # Conditional on file CONTENT, not mere existence: patch id -> (relative
