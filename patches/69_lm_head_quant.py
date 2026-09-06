@@ -21,6 +21,19 @@ Gate: VLLM_GFX1X_LM_HEAD_QUANT=1 (default) / 0 = upstream behaviour.
 Usage: python3 69_lm_head_quant.py --src <site-packages> [--check]
 Exit codes: 0 applied/ok, 1 check failed, 42 anchor moved -> re-audit.
 Written against vLLM v0.29.0rc1 (33898f832c).
+
+WICHTIG (gemessen 06.09.2026):
+  1. Der Layer heisst intern "language_model.lm_head", nicht "lm_head". Im
+     Checkpoint muss das Ziel deshalb als Regex stehen:
+         "targets": ["Linear", "re:.*lm_head$"]
+     Ein Ziel "lm_head" matcht NICHT.
+  2. Der MTP-Kopf (qwen4_exp/amd/mtp.py) hat einen zweiten ParallelLMHead und
+     braucht dieselbe Aenderung, sonst scheitert das Laden dort.
+
+Ergebnis auf zwei Nodes (TP2, greedy, ShareGPT):
+  dichte Teile in 4 Bit               35,52 tok/s   TPOT 25,05 ms
+  zusaetzlich LM-Head in 4 Bit        39,51 tok/s   TPOT 22,56 ms
+Akzeptanzrate steigt dabei leicht (52,1 -> 53,3 %), Ausgabe bleibt korrekt.
 """
 import argparse, sys
 from pathlib import Path
