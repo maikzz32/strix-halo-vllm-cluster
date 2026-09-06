@@ -254,7 +254,9 @@ mehreren gleichzeitigen Anfragen liefert derselbe Cluster deutlich mehr:
 
 | gleichzeitige Anfragen | Gesamtdurchsatz | Zeit je Token |
 |---|---|---|
-| 1 | 47,25 tok/s | 18,77 ms |
+| 1 | 47,33 tok/s | 18,73 ms |
+| 2 | **61,91 tok/s** | -- |
+| 3 | **71,05 tok/s** | -- |
 | 4 | 82,51 tok/s | 40,23 ms |
 | 8 | 94,80 tok/s | 74,05 ms |
 | 16 | 96,12 tok/s | 71,57 ms |
