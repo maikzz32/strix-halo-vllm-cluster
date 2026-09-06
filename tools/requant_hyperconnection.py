@@ -1,5 +1,24 @@
 #!/usr/bin/env python3
-"""Quantisiert die Hyper-Connection-Projektionen -- FUNKTIONIERT NICHT, siehe unten.
+"""Quantisiert die Hyper-Connection-Projektionen -- ZERSTOERT DAS MODELL, nicht benutzen.
+
+Die Hyper-Connection-Mischer sind mit 1,23 GiB der letzte groessere Posten in BF16, der bei
+jedem Token vollstaendig gelesen wird. Rechnerisch braechten sie 1,15 ms je Iteration.
+
+Technisch laedt es, wenn man BEIDE Teile des Merges quantisiert (input_mix_weight_down und
+block_inject_weight) und keinen der drei Namen -- inklusive des synthetischen
+_input_mix_padding -- auf der Ignore-Liste laesst. Dann bekommen alle dasselbe Schema.
+
+ABER gemessen (zwei Nodes, sonst identische Konfiguration):
+
+    ohne                40,34 tok/s   Akzeptanz 54,0 %   Laenge 2,62
+    mit quantisierten    6,58 tok/s   Akzeptanz 19,8 %   Laenge 1,59
+
+Die Hyper-Connections mischen den Residual-Strom ueber alle 48 Layer; Quantisierungsfehler
+akkumulieren dort, statt sich lokal auszumitteln. Der Entwurfskopf trifft kaum noch zu.
+Deshalb erzeugt vLLM sie ausdruecklich mit quant_config=None. Patch 70 bleibt per
+VLLM_GFX1X_HC_QUANT=0 aus.
+
+Quantisiert die Hyper-Connection-Projektionen -- FUNKTIONIERT NICHT, siehe unten.
 
 Die Hyper-Connection-Mischer sind mit 1,23 GiB der letzte groessere Posten in BF16,
 der bei jedem Token vollstaendig gelesen wird. Ihre Formen waeren sauber
