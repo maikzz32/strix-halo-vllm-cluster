@@ -202,3 +202,22 @@ Beim LM-Head zwei Stolpersteine: der Layer heisst intern `language_model.lm_head
 
 Der HIP-Kernel `wvSplitK_int4_g` **ist** im Image vorhanden (`torch.ops._rocm_C` laedt lazy),
 der dichte 4-Bit-Pfad laeuft also bereits ueber HIP.
+
+### Vier Nodes mit dem requantisierten Checkpoint (06.09.2026)
+
+| Konfiguration | tok/s | TPOT | KV-Cache |
+|---|---|---|---|
+| vier Nodes, 32k | 47,41 | 18,96 ms | 2,27 M Token |
+| vier Nodes, 262k (Produktion) | 45,30 | 18,81 ms | 3,50 M Token |
+| zwei Nodes, 32k | 39,78 | 22,4 ms | -- |
+| zwei Nodes, 262k | 38,77 | 22,78 ms | 0,69 M Token |
+| vorher, vier Nodes, alter Checkpoint | 41,0 | 22,4 ms | 3,44 M Token |
+
+Zeitbudget bei vier Raengen: 6,4 ms Gewichte + 9,1 ms Kollektive + 13,5 ms Fixanteil = 29 ms,
+mal 2,6 akzeptierte Tokens ergibt die gemessenen 47,4 tok/s. Fuer 60 tok/s muesste die Iteration
+auf 23 ms sinken; die beiden grossen Posten (Kollektive, Fixanteil) sind mit vLLM auf dieser
+Hardware nicht weiter senkbar.
+
+**node4 hatte 97 GB im Treiber gebunden** -- weder Container-Neustart, Container-Neuaufbau noch
+`rocm-smi --gpureset` (auf APUs nicht unterstuetzt) halfen. Erst ein Maschinenneustart gab den
+Speicher frei.
