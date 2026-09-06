@@ -367,3 +367,99 @@ Metadaten auf persistente Puffer zeigen. Der QSA-Bauer nutzt solche Puffer berei
 **Folge fuer das Ziel:** Entwurfsschritte auf 2 ms brachten 38 ms je Iteration und damit
 68 tok/s; schon eine Halbierung auf 3,3 ms reicht fuer 43 ms und **61 tok/s**. Die
 60-tok/s-Marke haengt an diesem Pfad, nicht an RDMA und nicht an den Kollektiven.
+
+
+## Messmethodik: der erste Lauf nach einem Serverstart zaehlt nicht (2026-09-06)
+
+Vier Benchmarks auf **einem** Serverprozess, ohne Neuladen dazwischen (TP4,
+qwen38_rest, k=3, SPEC_CG=prefill, ShareGPT c=1, seed 42, T=0):
+
+| Lauf | Governor | tok/s | TPOT | TTFT |
+|---|---|---|---|---|
+| 1 (kalt) | powersave | 46,97 | 18,46 ms | 557,6 ms |
+| 2 | performance + C3 aus | 49,21 | 17,94 ms | 556,1 ms |
+| 3 | powersave | **49,21** | 17,96 ms | 554,0 ms |
+| 4 | performance + C3 aus | 49,14 | 17,96 ms | — |
+
+Der Erstlauf liegt **4,8 % zu niedrig**, die drei warmen Laeufe streuen 0,14 %.
+Konsequenz fuer alle frueheren Zahlen: die k-Serie (k=0 29,25 / k=3 48,2 /
+k=4 46,68) besteht aus Erstlaeufen und ist systematisch zu niedrig. Untereinander
+bleibt sie gueltig — die Steigung `31,8 ms + 7,25 ms x k` haelt —, aber der
+**Ist-Stand ist 49,2 tok/s warm**, nicht 48,2.
+
+Ab sofort: je Konfiguration ein Aufwaermlauf (`bench_k.sh`, startet den Server) und
+danach der Messlauf auf demselben Prozess (`bench_only.sh`). A/B nie ohne
+Rueckschalt-Lauf, also immer **A/B/A**.
+
+## Governor und C-States: widerlegt (2026-09-06)
+
+Die Tabelle oben ist zugleich der A/B/A-Test des CPU-Governors. Unter laufender
+Decode-Last betreten die Nodes C3 rund 8.500–11.500 Mal je Sekunde und verbringen
+81–86 % der Kernzeit dort, bei 350 µs Austrittslatenz und 2,3 GHz statt moeglichen
+5,2 GHz. Das sieht nach einem grossen Hebel aus und ist keiner: `performance` +
+`epp=performance` + C3 deaktiviert (verifiziert: C3-Eintritte fallen auf **0**)
+liefert **denselben** Durchsatz wie `powersave`. Der scheinbare Gewinn von +4,8 %
+war die Aufwaermung des Erstlaufs.
+
+Damit sind auch `idle=poll`, `processor.max_cstate=1` und `pm_qos_resume_latency_us`
+erledigt — sie adressieren dieselbe Ursache. Die Entwurfsschritte haengen an
+Kernel-Startlatenz und GPU-Arbeit, nicht an CPU-Rechenzeit.
+
+## Zielrechnung, aus dem warmen Stand (2026-09-06)
+
+Aus Durchsatz, TTFT und TPOT folgt eine mittlere Ausgabelaenge von 227 Token. Bei
+unveraendertem TTFT (556 ms) verlangen **60 tok/s**:
+
+| Groesse | jetzt (warm) | noetig |
+|---|---|---|
+| TPOT | 17,95 ms | **14,28 ms** (−20,4 %) |
+| Iterationszeit | 47,0 ms | **37,4 ms** |
+| davon je Entwurfsschritt | ~6,3 ms | **~3,2 ms** |
+
+Es bleibt bei einer Halbierung der Entwurfsschritte: der bessere Ausgangswert
+verschiebt die Marke kaum, weil die konstante TTFT mitgetragen werden muss.
+Der Hebel dafuer ist Patch 73 (fusionierter Mehrschritt-Entwurf), zusammen mit
+Patch 65 auf `VLLM_GFX1X_SPEC_CUDAGRAPH=1`, damit alle k Schritte in **einen**
+Graphen fallen.
+
+
+## Patch 73 gemessen: der Entwurfs-Overhead ist NICHT die Ursache (2026-09-06)
+
+Patch 73 hebt den fusionierten Mehrschritt-Entwurf (`supports_draft_decode_metadata_update`
+am `QSAMetadataBuilder`). Auf allen vier Nodes angewandt, Anker exakt einmal getroffen,
+Marker in jedem Container verifiziert. Er **wirkt** — die Zeile „Fused multi-step draft
+decode is not supported" verschwindet aus dem Startlog — und er ist **korrekt**: die
+Akzeptanz ist in jedem Lauf identisch (4505 Entwuerfe, 54,0 %, 2,620 Token je Iteration);
+bei seed 42 / T=0 bedeutet das bitgleiche Ausgaben. Waere die In-Place-Aktualisierung
+falsch, liefen die Entwurfsschritte auf veralteten Sequenzlaengen und die Akzeptanz braeche
+ein.
+
+Nur schneller ist er nicht (alle Werte warm, also zweiter Lauf):
+
+| Konfiguration | tok/s | TPOT |
+|---|---|---|
+| ohne Patch, `SPEC_CG=prefill` | 49,21 | 17,95 ms |
+| p1: Patch 73, fusioniert | 49,20 | 17,97 ms |
+| p2: Patch 73 + `SPEC_CG=1` | 49,32 | 17,93 ms |
+
+Bei p2 werden **79 „decode CUDA graphs (FULL)"** aufgezeichnet (Graph-Speicher 2,78 -> 4,69
+GiB), alle drei Entwurfsschritte laufen also als ein Replay statt als einzeln gestartete
+Kernel. Ergebnis: 0,25 % Streuung, kein Effekt.
+
+**Damit sind beide Overhead-Erklaerungen einzeln widerlegt:**
+- der Python-Metadatenaufbau zwischen den Schritten kostet nichts (p1),
+- die Kernel-Startlatenz der Entwurfsschritte kostet nichts (p2).
+
+Die 7,25 ms je Entwurfsschritt sind **echte Arbeit im MTP-Entwurfsmodell**. Das erklaert
+rueckblickend, warum die alte „Startlatenz"-Bilanz nie zu den Messwerten passte. Ein
+Entwurfsschritt ist nicht „ein Layer": dazu kommen `VocabParallelEmbedding`,
+`fc_embedding`/`fc_hidden` (beide `gather_output=True`, je ein AllGather), der LM-Head ueber
+248320 Eintraege und das Sampling — was das Zielmodell **einmal je Iteration** macht, macht
+der Entwurf **je Schritt**.
+
+**Folge:** Kein weiterer Overhead-Hebel am Entwurfspfad. Der naechste Ansatz muss die Arbeit
+verkleinern oder vermeiden — `method: "ngram"` / `"suffix"` laeuft ohne Modell-Forward und
+braucht laut Kostenmodell nur **1,95 Token je Iteration** (~32 % Akzeptanz) fuer 60 tok/s,
+gegenueber 2,620 bei MTP. Patch 73 bleibt dennoch nuetzlich: er macht `SPEC_CG=1` erstmals
+ohne Hang lauffaehig (frueher 17,1 tok/s). Produktion weiter mit `SPEC_CG=prefill`, weil die
+Entwurfsgraphen 1,9 GiB kosten und nichts einbringen.
