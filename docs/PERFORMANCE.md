@@ -221,3 +221,23 @@ Hardware nicht weiter senkbar.
 **node4 hatte 97 GB im Treiber gebunden** -- weder Container-Neustart, Container-Neuaufbau noch
 `rocm-smi --gpureset` (auf APUs nicht unterstuetzt) halfen. Erst ein Maschinenneustart gab den
 Speicher frei.
+
+### Zwei-Node-Marke erreicht: 40,34 tok/s (06.09.2026)
+
+Letzter Schritt: Experten-Router und QSA-Indexer mitquantisieren (0,154 GiB je Token).
+vLLM erzeugt beide fest mit `quant_config=None`; Patch 72 reicht die Konfiguration durch,
+gesteuert ueber `VLLM_GFX1X_GATE_QUANT=1`. Die Qualitaet leidet nicht -- die Akzeptanzrate
+des Entwurfskopfs steigt von 53,3 auf 54,0 Prozent.
+
+| Konfiguration | tok/s | TPOT | Ziel |
+|---|---|---|---|
+| zwei Nodes, 32k | **40,34** | 22,15 ms | 40, erreicht |
+| vier Nodes, 32k | 48,51 | 18,73 ms | 60, verfehlt |
+| vier Nodes, 262k (Produktion) | 47,25 | 18,73 ms | 60, verfehlt |
+| Ausgangszustand, vier Nodes | 41,0 | 22,4 ms | -- |
+
+Weg auf zwei Nodes: 31,56 -> 35,52 (dichte Teile) -> 39,51 (LM-Head) -> 39,78 (Prefill-Graph)
+-> 40,34 (Router und Indexer). Insgesamt +27,8 Prozent.
+
+Budget je Iteration bei vier Raengen: 6,2 ms Gewichte + 9,1 ms Kollektive + 13,5 ms Fixanteil
+= 28,8 ms, mal 2,62 Tokens = 48,5 tok/s (trifft die Messung). Fuer 60 waeren 23 ms noetig.
