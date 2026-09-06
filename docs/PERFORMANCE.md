@@ -333,3 +333,37 @@ Kein Parameter bewegt etwas.
 reproduzierbar an `ibv_reg_mr_iova2 failed with error Invalid argument` -- getestet mit
 NCCL_NET_GDR_LEVEL 3/5/SYS und NCCL_DMABUF_ENABLE=1. Auf dieser APU laesst sich GPU-Speicher
 nicht fuer RDMA registrieren. Plattformeigenschaft, keine Einstellung.
+
+### Korrektur des Zeitbudgets: der Entwurf kostet 40 Prozent (2026-09-06)
+
+Die Tabelle oben war aus Einzelposten rekonstruiert und beschreibt nur den Ziel-Forward.
+Direkt gemessen (vier Nodes, `qwen38_rest`, FULL_DECODE_ONLY, `SPEC_CG=prefill`, ShareGPT c=1):
+
+| Konfiguration | Durchsatz | TPOT | Tokens je Iteration | Iterationszeit |
+|---|---|---|---|---|
+| `MTP_K=0` (ohne Spekulation) | 29,25 tok/s | 31,80 ms | 1 | **31,8 ms** |
+| `MTP_K=3` (Produktion) | 48,2 tok/s | 20,6 ms | 2,607 | **53,7 ms** |
+
+Der Ziel-Forward kostet also 32 ms fuer 48 Layer. Die drei Entwurfsschritte kosten die
+Differenz, rund **20 ms, also ~6,6 ms je Schritt fuer einen einzigen Layer** -- elfmal
+so viel je Layer wie im Zielmodell.
+
+**Ursache:** Der MTP-Entwurf ist kein leichter Kopf, sondern ein vollstaendiger
+`Qwen4ExpDecoderLayer` mit `layer_type="full_attention"` (`models/qwen4_exp/amd/mtp.py:205`):
+QSA-Attention mit Indexer (Budget 2048), komplette MoE ueber 512 Experten, dazu
+`fc_embedding`/`fc_hidden` (beide `gather_output=True`) und ein eigener Kopf ueber
+248320 Vokabeleintraege. Und er laeuft **eager**: `speculator.py:145` setzt den
+`decode_cudagraph_manager` auf NONE, sobald `VLLM_GFX1X_SPEC_CUDAGRAPH` auf `0` oder
+`prefill` steht (Patch 65). Kollektive erklaeren davon nur ~2,3 ms.
+
+Zweite Bremse im selben Pfad: `use_fused_multi_step_decode` ist aus, weil unser
+QSA-Backend `QWEN4_EXP_EXP_QSA_STATE` kein `supports_draft_decode_metadata_update`
+meldet. Deshalb baut `_multi_step_decode` (`speculator.py:505`) zwischen jedem Schritt
+die Attention-Metadaten in Python neu auf, ausserhalb jedes Graphen. Beim Triton-Backend
+ist diese Update-Methode schlicht leer -- das Flag ist nur die Zusicherung, dass die
+Metadaten auf persistente Puffer zeigen. Der QSA-Bauer nutzt solche Puffer bereits
+(`qsa_cache.py:590-612`) und baut per Triton-Kernel.
+
+**Folge fuer das Ziel:** Entwurfsschritte auf 2 ms brachten 38 ms je Iteration und damit
+68 tok/s; schon eine Halbierung auf 3,3 ms reicht fuer 43 ms und **61 tok/s**. Die
+60-tok/s-Marke haengt an diesem Pfad, nicht an RDMA und nicht an den Kollektiven.
