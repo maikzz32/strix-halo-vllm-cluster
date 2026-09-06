@@ -1,0 +1,610 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "experiment": "Four-rank HIP graph with native CPU-RDMA all-reduce",
+  "report_date_local": "2026-09-07",
+  "measurement_date_utc": "2026-09-06",
+  "scope": "Isolated GPU-resident input -> D2H -> native verbs all-reduce -> H2D -> GPU-resident output; no model integration or model quality claim.",
+  "hardware": {
+    "nodes": [
+      15,
+      16,
+      17,
+      18
+    ],
+    "gpu": "AMD Strix Halo gfx1151",
+    "system_ram_GiB_per_node": 128,
+    "network": "Intel 25 Gb/s RoCE",
+    "gid_index": 1,
+    "master_ipv4": "192.168.100.1",
+    "hca_by_node": {
+      "15": "rocep197s0f3",
+      "16": "rocep197s0f3",
+      "17": "rocep197s0f3",
+      "18": "rocep197s0f1"
+    }
+  },
+  "implementation": {
+    "hip_runtime_version": 71526333,
+    "build_location": "Preserved rootless Podman ray-head / ray-worker containers (Fedora 44 userspace), not Fedora 45 hosts",
+    "torch_import": false,
+    "BF16_values_per_rank": 10240,
+    "payload_bytes": 20480,
+    "rdma_tx_payload_bytes_per_rank": 61440,
+    "pinned_arena_bytes": 204800,
+    "separate_gpu_input_output_bytes": 40960,
+    "graph_nodes": [
+      "D2H memcpy",
+      "native CPU host callback: verbs + AVX2 sum",
+      "H2D memcpy"
+    ],
+    "protocol": "Three parallel RC RDMA_WRITE_WITH_IMM sends to peers; fixed-rank-order local sum; two receive slots; all send completions awaited.",
+    "allocation_and_registration": "Preallocated: one borrowed HIP-pinned 10-slot arena registered once via ibv_reg_mr; input slot 8 and output slot 9. No HIP/Python calls inside callback."
+  },
+  "provenance": {
+    "executed_source_sha256_utf8_LF": {
+      "cpu_rdma_transport.c": "0cf49346c49578114b7dfa9948392ef16ecb6d12b26b6fb9a5ffa2ec95f808f7",
+      "cpu_rdma_transport.h": "cbc92ac00eb2fe3983dc431d703d128fd709935e031ce63b97ae6df07e532fcf",
+      "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+      "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+      "hip_rdma_graph.cpp": "6dbc4f4c5f5fb5a7bfef2d9ab6512f8c2f6e77d40bf8d28a5f342cced61e67d6",
+      "bench_hip_rdma_graph.py": "61b45838d394144b6826444974884f9aa1985b033a5ef41c99d119d69d84e111"
+    },
+    "normalization": "Driver reads sources in text mode then sends UTF-8 with LF. Local Windows raw-file hashes can differ; archived sources normalize to the same measured bytes.",
+    "binary_sha256_all_eight_rank_builds": "256ff7e4a763ab0f46673a27765b66efc80fd93655cf6baf8ea6f56851bd3e8b",
+    "published_driver_raw_sha256": "16ff0de590346219fd3bcd724ab3116d0b2115d5c35618a9e73161ba6139d5d4",
+    "published_driver_tests_raw_sha256": "430d431eb2e97b726c61e92da023ddb860ff750e3a55960d5adf9218529a82ea",
+    "post_measurement_change": "Published driver additionally validates each case rank/run_id; this local result-validation fix changed none of the six remote sources.",
+    "raw_evidence_location": "Workspace results directories, outside this repository record; filenames and SHA-256 below."
+  },
+  "timing": {
+    "per_sample": "HIP events enclose a C++ loop launching one-collective graphs and synchronizing the end event; elapsed time divided by replay count. Wall timing includes event enqueue and end-event synchronization.",
+    "excluded": "Allocation, MR/TCP/QP setup, capture/instantiate, warmup, input updates and result readback/validation; no GPU producer/consumer kernels included.",
+    "input_changes": "Four direct preflight phases, each checked warmup, and each sample use new finite nonzero inputs; each timing sample repeats its fixed input out-of-place.",
+    "headline_aggregation": "Maximum across four per-rank medians; do not add medians from separate experiments."
+  },
+  "correctness_scope": {
+    "reference": "Bitwise scalar CPU reference using the selected fixed rank order and rounding mode; zero observed BF16 bit mismatches.",
+    "modes": {
+      "fp32_then_bf16": "Accumulate four rank values in FP32, then round once to BF16.",
+      "bf16_each_add": "Round to BF16 after each fixed-order addition."
+    },
+    "main_and_callback_selftest": "32 finite banks and eight sets of 65,536 raw BF16 patterns, scalar/AVX2 comparison; FE_TONEAREST, MXCSR RNE with FTZ=0 and DAZ=0. FP exception status flags may change.",
+    "terminal_negative_case": "Invalid count 10239 must fail before sending; a second graph replay retains sticky failure and canonical NaN output without another collective.",
+    "not_proven": [
+      "RCCL reduction-tree bit parity",
+      "Model logits, acceptance or output equivalence",
+      "Integrated model tokens/s gain",
+      "Cold-cache or long-running failure/recovery behavior"
+    ]
+  },
+  "runs": [
+    {
+      "name": "hip-rdma-coupled-smoke-20260907",
+      "run_id": "e41df360d1c04c669ce28b6afb7dc482",
+      "manifest_timestamp_utc": "2026-09-06T22:57:51.641526+00:00",
+      "raw_artifact_sha256": {
+        "manifest.json": "1dd30665cce6fac6b6f3620b57d9f0020748da8ce264b384eaf4ea80dd5818cc",
+        "status.json": "2934a6a24aa4f9a5c14ab36d735cb58292c843baa834023e91b6040b3426b04d",
+        "release.json": "340f2797c2b36aa7cd270a69642e373e4cce24b40db226c6f76cea78b74c7575",
+        "serving-after.json": "1656a45a706c881b52ffa18e9eddb0cef012c5fb54bcce41445ac03184c4f72f"
+      },
+      "serving_before": {
+        "timestamp_utc": "2026-09-06T22:57:51.654525+00:00",
+        "requests": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "successful_requests": 66.0
+      },
+      "serving_after": {
+        "timestamp_utc": "2026-09-06T22:57:55.846203+00:00",
+        "requests": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "successful_requests": 66.0
+      },
+      "rank_results": [
+        {
+          "rank": 0,
+          "node": 15,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "7d22580cc70c6e50c3e68a523e497110",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:57:53.470532+00:00",
+              "end_utc": "2026-09-06T22:57:54.230586+00:00",
+              "wall_median_us": 72.2755,
+              "hip_event_median_us": 70.29800117015839,
+              "wall_samples_us": [
+                72.2755
+              ],
+              "hip_event_samples_us": [
+                70.29800117015839
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "3cba067ee232acf178e40f5f93b9e18d",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:57:54.231006+00:00",
+              "end_utc": "2026-09-06T22:57:54.317373+00:00",
+              "wall_median_us": 75.768,
+              "hip_event_median_us": 73.72774928808212,
+              "wall_samples_us": [
+                75.768
+              ],
+              "hip_event_samples_us": [
+                73.72774928808212
+              ]
+            }
+          ]
+        },
+        {
+          "rank": 1,
+          "node": 16,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "7d22580cc70c6e50c3e68a523e497110",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:57:53.794166+00:00",
+              "end_utc": "2026-09-06T22:57:54.232462+00:00",
+              "wall_median_us": 57.79825,
+              "hip_event_median_us": 55.41824921965599,
+              "wall_samples_us": [
+                57.79825
+              ],
+              "hip_event_samples_us": [
+                55.41824921965599
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "3cba067ee232acf178e40f5f93b9e18d",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:57:54.232943+00:00",
+              "end_utc": "2026-09-06T22:57:54.317438+00:00",
+              "wall_median_us": 68.31525,
+              "hip_event_median_us": 66.12774729728699,
+              "wall_samples_us": [
+                68.31525
+              ],
+              "hip_event_samples_us": [
+                66.12774729728699
+              ]
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "node": 17,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "7d22580cc70c6e50c3e68a523e497110",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:57:53.478148+00:00",
+              "end_utc": "2026-09-06T22:57:54.231948+00:00",
+              "wall_median_us": 57.846,
+              "hip_event_median_us": 55.24874851107597,
+              "wall_samples_us": [
+                57.846
+              ],
+              "hip_event_samples_us": [
+                55.24874851107597
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "3cba067ee232acf178e40f5f93b9e18d",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:57:54.232477+00:00",
+              "end_utc": "2026-09-06T22:57:54.318330+00:00",
+              "wall_median_us": 63.59575,
+              "hip_event_median_us": 61.34824827313423,
+              "wall_samples_us": [
+                63.59575
+              ],
+              "hip_event_samples_us": [
+                61.34824827313423
+              ]
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "node": 18,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "7d22580cc70c6e50c3e68a523e497110",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:57:54.138662+00:00",
+              "end_utc": "2026-09-06T22:57:54.229500+00:00",
+              "wall_median_us": 70.698,
+              "hip_event_median_us": 68.59800219535828,
+              "wall_samples_us": [
+                70.698
+              ],
+              "hip_event_samples_us": [
+                68.59800219535828
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "3cba067ee232acf178e40f5f93b9e18d",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:57:54.229947+00:00",
+              "end_utc": "2026-09-06T22:57:54.316516+00:00",
+              "wall_median_us": 71.3805,
+              "hip_event_median_us": 69.30799782276154,
+              "wall_samples_us": [
+                71.3805
+              ],
+              "hip_event_samples_us": [
+                69.30799782276154
+              ]
+            }
+          ]
+        }
+      ],
+      "configuration": {
+        "iterations": 4,
+        "samples": 1,
+        "warmup": 4
+      },
+      "common_proofs_all_eight_cases": {
+        "exact": 1,
+        "finite": 1,
+        "pinned_mr_ok": 1,
+        "negative_test_passed": 1,
+        "arena_released": 1,
+        "returncode": 0,
+        "main_selftest_rc": 0,
+        "callback_selftest_rc": 0,
+        "cleanup_rc": 0,
+        "max_abs_error": 0.0,
+        "node_count": 3,
+        "host_nodes": 1,
+        "memcpy_nodes": 2,
+        "callback_calls": 10,
+        "successful_collectives": 8,
+        "expected_collectives": 8,
+        "direct_pinned_checks": 4,
+        "graph_numeric_checks": 5,
+        "expected_negative_code": -1
+      },
+      "release": {
+        "all_four_native_and_launcher_exit_zero": true,
+        "all_four_temporary_builds_removed": true,
+        "all_four_run_id_scans_empty": true,
+        "scan_errors": [],
+        "serving_success_counter_unchanged": true
+      },
+      "max_rank_median_us": {
+        "fp32_then_bf16": {
+          "wall": 72.2755,
+          "hip_event": 70.29800117015839
+        },
+        "bf16_each_add": {
+          "wall": 75.768,
+          "hip_event": 73.72774928808212
+        }
+      }
+    },
+    {
+      "name": "hip-rdma-coupled-32x3-20260907",
+      "run_id": "b6d3a4ebdacb4c569d654d24340330b0",
+      "manifest_timestamp_utc": "2026-09-06T22:58:17.993883+00:00",
+      "raw_artifact_sha256": {
+        "manifest.json": "269657ccd7d02cf5d661eb6a0e949d67cd2ca09b118e4a53dadf8f21140b39d4",
+        "status.json": "0780cdd30a9da9dc2c50738a7a2713c1f13055dea2bb2501bfb575cbee1dc463",
+        "release.json": "747343fd91e01dd01dbeaa927487a9eb7cdbf7467eccfc681b9dad39f8f4096b",
+        "serving-after.json": "d8541024ab6897f3196d52a2b25fb382585ec01eab7af9104aa9d13c23de5480"
+      },
+      "serving_before": {
+        "timestamp_utc": "2026-09-06T22:58:18.029153+00:00",
+        "requests": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "successful_requests": 66.0
+      },
+      "serving_after": {
+        "timestamp_utc": "2026-09-06T22:58:21.266755+00:00",
+        "requests": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "successful_requests": 66.0
+      },
+      "rank_results": [
+        {
+          "rank": 0,
+          "node": 15,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "0c63a984a98801df3cb084440fe4803a",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:58:19.552447+00:00",
+              "end_utc": "2026-09-06T22:58:19.660810+00:00",
+              "wall_median_us": 58.39021875,
+              "hip_event_median_us": 58.13565477728844,
+              "wall_samples_us": [
+                58.39021875,
+                58.82615625,
+                54.99878125
+              ],
+              "hip_event_samples_us": [
+                58.13565477728844,
+                58.640625327825546,
+                54.820749908685684
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "b6c272cd5c68c8f2617b3ff64985f989",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:58:19.661251+00:00",
+              "end_utc": "2026-09-06T22:58:19.748312+00:00",
+              "wall_median_us": 59.11896875,
+              "hip_event_median_us": 58.93687531352043,
+              "wall_samples_us": [
+                59.34803125,
+                59.11896875,
+                59.04615625
+              ],
+              "hip_event_samples_us": [
+                59.094373136758804,
+                58.93687531352043,
+                58.86315554380417
+              ]
+            }
+          ]
+        },
+        {
+          "rank": 1,
+          "node": 16,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "0c63a984a98801df3cb084440fe4803a",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:58:19.554164+00:00",
+              "end_utc": "2026-09-06T22:58:19.660834+00:00",
+              "wall_median_us": 58.19625,
+              "hip_event_median_us": 57.93309211730957,
+              "wall_samples_us": [
+                58.19625,
+                59.10653125,
+                54.4298125
+              ],
+              "hip_event_samples_us": [
+                57.93309211730957,
+                58.89681354165077,
+                54.2457178235054
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "b6c272cd5c68c8f2617b3ff64985f989",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:58:19.661300+00:00",
+              "end_utc": "2026-09-06T22:58:19.748653+00:00",
+              "wall_median_us": 59.03121875,
+              "hip_event_median_us": 58.7754063308239,
+              "wall_samples_us": [
+                59.03121875,
+                58.73125,
+                59.1965625
+              ],
+              "hip_event_samples_us": [
+                58.7754063308239,
+                58.54418873786926,
+                59.02540683746338
+              ]
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "node": 17,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "0c63a984a98801df3cb084440fe4803a",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:58:19.555793+00:00",
+              "end_utc": "2026-09-06T22:58:19.661634+00:00",
+              "wall_median_us": 58.17253125,
+              "hip_event_median_us": 57.899560779333115,
+              "wall_samples_us": [
+                58.17253125,
+                58.7765625,
+                54.482625
+              ],
+              "hip_event_samples_us": [
+                57.899560779333115,
+                58.50578099489212,
+                54.22215536236763
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "b6c272cd5c68c8f2617b3ff64985f989",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:58:19.662105+00:00",
+              "end_utc": "2026-09-06T22:58:19.749129+00:00",
+              "wall_median_us": 59.4090625,
+              "hip_event_median_us": 59.137001633644104,
+              "wall_samples_us": [
+                59.4090625,
+                59.69840625,
+                58.8646875
+              ],
+              "hip_event_samples_us": [
+                59.137001633644104,
+                59.510719031095505,
+                58.69324877858162
+              ]
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "node": 18,
+          "exit_code": 0,
+          "verified": true,
+          "cases": [
+            {
+              "mode": "fp32_then_bf16",
+              "transport_run_id": "0c63a984a98801df3cb084440fe4803a",
+              "transport_port": 29881,
+              "start_utc": "2026-09-06T22:58:19.536526+00:00",
+              "end_utc": "2026-09-06T22:58:19.659993+00:00",
+              "wall_median_us": 58.09184375,
+              "hip_event_median_us": 57.83453211188316,
+              "wall_samples_us": [
+                58.09184375,
+                58.9549375,
+                54.85471875
+              ],
+              "hip_event_samples_us": [
+                57.83453211188316,
+                58.75953286886215,
+                54.70340698957443
+              ]
+            },
+            {
+              "mode": "bf16_each_add",
+              "transport_run_id": "b6c272cd5c68c8f2617b3ff64985f989",
+              "transport_port": 29882,
+              "start_utc": "2026-09-06T22:58:19.660457+00:00",
+              "end_utc": "2026-09-06T22:58:19.747658+00:00",
+              "wall_median_us": 58.9724375,
+              "hip_event_median_us": 58.71206149458885,
+              "wall_samples_us": [
+                58.9724375,
+                60.1605,
+                58.67525
+              ],
+              "hip_event_samples_us": [
+                58.71206149458885,
+                59.969499707221985,
+                58.48456174135208
+              ]
+            }
+          ]
+        }
+      ],
+      "configuration": {
+        "iterations": 32,
+        "samples": 3,
+        "warmup": 4
+      },
+      "common_proofs_all_eight_cases": {
+        "exact": 1,
+        "finite": 1,
+        "pinned_mr_ok": 1,
+        "negative_test_passed": 1,
+        "arena_released": 1,
+        "returncode": 0,
+        "main_selftest_rc": 0,
+        "callback_selftest_rc": 0,
+        "cleanup_rc": 0,
+        "max_abs_error": 0.0,
+        "node_count": 3,
+        "host_nodes": 1,
+        "memcpy_nodes": 2,
+        "callback_calls": 102,
+        "successful_collectives": 100,
+        "expected_collectives": 100,
+        "direct_pinned_checks": 4,
+        "graph_numeric_checks": 7,
+        "expected_negative_code": -1
+      },
+      "release": {
+        "all_four_native_and_launcher_exit_zero": true,
+        "all_four_temporary_builds_removed": true,
+        "all_four_run_id_scans_empty": true,
+        "scan_errors": [],
+        "serving_success_counter_unchanged": true
+      },
+      "max_rank_median_us": {
+        "fp32_then_bf16": {
+          "wall": 58.39021875,
+          "hip_event": 58.13565477728844
+        },
+        "bf16_each_add": {
+          "wall": 59.4090625,
+          "hip_event": 59.137001633644104
+        }
+      }
+    }
+  ],
+  "rccl_comparison": {
+    "evidence_summary_path": "results/rccl-tp4-20k-summary-20260906.json",
+    "evidence_summary_sha256": "1056fa5a690ebf346729577121f498130ae1e68c705f73dcdbc313be246b9c91",
+    "payload_bytes": 20480,
+    "dtype": "BF16",
+    "world_size": 4,
+    "actual_algorithm_protocol_channels": "Ring / LL / 4",
+    "rccl_version": "2.30.4-HEAD 6b0e43f",
+    "torch_version": "2.13.0+rocm10.0.0",
+    "controls": [
+      {
+        "case": "auto4",
+        "run_id": "65a76ce6adbf417a8013894479441cc2",
+        "max_rank_median_hip_event_us": 85.26765927672386,
+        "source_sha256": "50289a9cb1470ec5885af7e2253521cc9444b560e245728d04bd54b0df15c790"
+      },
+      {
+        "case": "auto4-repeat",
+        "run_id": "2ac6f92244fa4c4daec1f58c5be0816d",
+        "max_rank_median_hip_event_us": 85.25040745735168,
+        "source_sha256": "50289a9cb1470ec5885af7e2253521cc9444b560e245728d04bd54b0df15c790"
+      },
+      {
+        "case": "auto4-final",
+        "run_id": "96579128375c4dc0869e928597d98920",
+        "max_rank_median_hip_event_us": 85.28945595026016,
+        "source_sha256": "50289a9cb1470ec5885af7e2253521cc9444b560e245728d04bd54b0df15c790"
+      }
+    ],
+    "differences": [
+      "RCCL: 32 collectives captured inside one graph, 20 timed graph replays, 50 eager and 3 graph warmups. Coupled: one collective per graph, 32 launches per sample, 3 samples, 4 checked graph warmups.",
+      "RCCL: in-place SUM of zero buffers during timing, with separate nonzero eager/captured proofs. Coupled: out-of-place nonzero input.",
+      "RCCL uses Torch/distributed plus device communication; coupled uses native HIP/C++ callback and CPU verbs.",
+      "Historical RCCL controls; no interleaved matched A/B against this exact harness.",
+      "Different reduction orders; numerical equivalence to RCCL is not established."
+    ]
+  },
+  "model_projection_only": {
+    "assumed_replaceable_collectives_per_M4_target": 96,
+    "basis": "Historical RCCL auto4 max-rank median HIP-event time minus integrated graph max-rank median HIP-event time, multiplied by 96.",
+    "estimated_saved_ms": {
+      "fp32_then_bf16": 2.604672431945801,
+      "bf16_each_add": 2.5085431337356567
+    },
+    "measured_model_gain": null,
+    "status": "Hypothesis only; model integration, arithmetic validation and matched A/B required."
+  }
+}

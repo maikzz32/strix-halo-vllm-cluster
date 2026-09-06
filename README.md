@@ -36,6 +36,13 @@ Streaming-Zeitpunkte; `bench/compare_streams.py` vergleicht passende Läufe
 und prüft identische Ausgaben. `bench/bench_sharegpt.sh` wiederholt den
 bisherigen C1-Benchmark. Die Optimierungsversuche sind noch nicht abgeschlossen.
 
+Ein isolierter [HIP/RDMA-Versuch](docs/2026-09-07-hip-rdma-coupled.md)
+misst den vollständigen Austausch von 20 KiB zwischen den vier GPUs mit
+58–59 µs, einschließlich GPU-Kopien und nativer CPU-Summierung. Die bisherigen
+RCCL-Kontrollen lagen bei etwa 85 µs. Der neue Pfad ist experimentell:
+Der laufende Modelldienst verwendet weiterhin RCCL; ein zusätzlicher
+Geschwindigkeitsgewinn im Modell ist damit noch nicht nachgewiesen.
+
 ## Struktur
 
 - `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)

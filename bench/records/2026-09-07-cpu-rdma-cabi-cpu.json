@@ -1,0 +1,49 @@
+{
+  "results": [
+    {
+      "step": 0,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "step": 1,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "step": 2,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "step": 3,
+      "exit_code": 0,
+      "stdout": "{\"event\":\"cpu_transport_unit\",\"numeric_parity\":true,\"fp_state_guard\":true,\"invalid_args_guard\":true,\"borrowed_arena_survives_create_failure\":true,\"device_queries_mocked\":1,\"network_or_gpu_access\":false}\n",
+      "stderr": ""
+    },
+    {
+      "step": 4,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "step": 5,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "ssh_exit": 0,
+  "surface": "node15/ray-head Fedora44 container",
+  "network_or_gpu_access": false,
+  "sources": {
+    "tools/cpu_rdma_transport.c": "028b73bc16e2f1413e6121ee0df17ae4d93806299d6b1c1e9183187094842095",
+    "tools/cpu_rdma_transport.h": "cbc92ac00eb2fe3983dc431d703d128fd709935e031ce63b97ae6df07e532fcf",
+    "tools/cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+    "tests/test_cpu_rdma_transport.c": "c5f5dbce739608c404b38ae6dbc10efd46acc8728cd37bd857ae1f65f870717e"
+  }
+}
