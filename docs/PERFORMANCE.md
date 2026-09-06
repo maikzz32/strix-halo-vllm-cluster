@@ -163,3 +163,42 @@ Der Deadlock aus vllm#32180 ist kein Capture-Problem: Capture läuft in allen Mo
 
 ### ROCm 10.0 (2026-09-03)
 Image `dev-20260903-rocm10` (= `:dev-rocm10`, ID 4ed662efe674) aus `build-dev.yml` mit `rocm_index=https://stable.repo.amd.com/rocm/whl-next`, `tag_suffix=rocm10`: torch 2.13.0+rocm10.0.0, Triton 3.8.0, RCCL 2.30.x. Zwei Build-Fixes: Marker-Konvention der Patches 63/64 und amdsmi-Filter in den vLLM-Build-Requirements (PyPI-amdsmi 7.0.2 bindet gegen libamd_smi.so.27 nicht). Auf Hardware (mp-Verbund, Graphen, MTP k=3, Patch 65 + GEMV v1.4 zur Laufzeit): **40,7 tok/s greedy, TPOT 21,8 ms, 48/48** — Parität zu ROCm 7.14 (41,0). Kosmetik: `vllm.__version__` meldet `0.1.dev1+g33898f832` (setuptools-scm ohne Tags im Build-Checkout).
+
+### Flash-Next auf zwei Nodes: 31,6 auf 39,8 tok/s durch Requantisierung (06.09.2026)
+
+Der ausgelieferte Checkpoint laesst genau die Gewichte in BF16, die bei jedem Token
+vollstaendig gelesen werden. Von 175 GiB Modell sind das rund 9 GiB je Forward, davon
+7,7 GiB dichte Teile. Sie selbst zu quantisieren ist der einzige Hebel, der die
+Groessenordnung aendert.
+
+| Stufe | tok/s | TPOT | Akzeptanz |
+|---|---|---|---|
+| Ausgangszustand | 31,56 | 28,46 ms | 51,6 % |
+| dichte Projektionen in 4 Bit (`tools/requant_dense.py`) | 35,52 | 25,05 ms | 52,1 % |
+| zusaetzlich LM-Head (`tools/requant_lmhead.py`, Patch 69) | 39,51 | 22,56 ms | 53,3 % |
+| zusaetzlich Entwurfs-Prefill-Graph | **39,78** | 22,4 ms | 53,3 % |
+| dieselbe Konfiguration mit 262k Kontext | 38,77 | 22,78 ms | 53,3 % |
+
+Wichtig: **Gruppengroesse 32.** `moe_intermediate_size` (640) geteilt durch die Rangzahl muss
+durch die Gruppengroesse teilbar sein. Alle fertigen W4A16-Varianten auf HuggingFace nutzen 128
+und laden deshalb weder bei TP2 noch bei TP4.
+
+Beim LM-Head zwei Stolpersteine: der Layer heisst intern `language_model.lm_head` (Ziel muss
+`re:.*lm_head$` sein), und der MTP-Kopf hat einen zweiten ParallelLMHead.
+
+**Gemessene Sackgassen** (alle auf zwei Nodes, Basis 31,56 bzw. 39,78):
+
+| Versuch | Ergebnis |
+|---|---|
+| Entwurfsgraphen (`VLLM_GFX1X_SPEC_CUDAGRAPH=1`) | 17,1 tok/s, 45 % langsamer |
+| RCCL Protokoll LL, zwei Kanaele | 30,7 |
+| GDN-Kernelgeometrie (BV 16, zwei Waves) | 31,95 / 31,76 |
+| `HIP_FORCE_DEV_KERNARG` + hipBLASLt | 31,77 |
+| `HSA_USE_SVM=0` | 31,72 |
+| MTP-Kopf quantisieren | 38,79 (Akzeptanz faellt auf 50,6 %) |
+| `num_speculative_tokens=7` | QSA ring capacity 12 teilt Blockgroesse 1648 nicht |
+| Hyper-Connections quantisieren | dreifach verdrahtet: Merge, packed_modules_mapping und synthetisches `_input_mix_padding` |
+| Expert-Parallelitaet | Deadlock beim alten, unnoetig beim neuen Checkpoint |
+
+Der HIP-Kernel `wvSplitK_int4_g` **ist** im Image vorhanden (`torch.ops._rocm_C` laedt lazy),
+der dichte 4-Bit-Pfad laeuft also bereits ueber HIP.
