@@ -277,9 +277,18 @@ acht Decode-Schritte, zwei Raenge:
 | MoE mit Shared Expert | 16,3 ms | 16 |
 | Kollektive | 10,3 ms | 104 |
 
-Rund 127 Speicherkopien je Decode-Schritt. Deckt sich mit pytorch#171687 (auf gfx1151 besteht
-LLM-Decode zu ueber 90 Prozent aus hipMemcpyWithStream). Einzelne GPU-Kernel sind im Trace nicht
-sichtbar, weil sie in HIP-Graphen gekapselt sind.
+**Korrektur nach Messung mit Aufrufstapeln:** die Kopien sind NICHT der Engpass. Von 630
+Kopieroperationen dauern nur sechs laenger als 0,2 ms; der Rest sind Skalare und
+Ein-Element-Tensoren (int, bool) -- Zaehler, Flags, Indizes. Die grossen Zahlen oben sind
+verschachtelt gezaehlt (aten::to enthaelt aten::_to_copy enthaelt aten::copy_) und ergeben
+aufsummiert 122 Prozent der Schrittzeit.
+
+Der Fixanteil ist GPU-Rechenzeit vieler kleiner Kernel, die der Profiler nicht aufloest, weil sie
+in HIP-Graphen gekapselt sind. Das Modell hat je Layer sieben getrennte GDN-Projektionen,
+Hyper-Connection-Mischung ueber vier Stroeme, gruppierte Normen, Router und Experten-Gather --
+bei 48 Layern mehrere hundert Kernelaufrufe je Token. Der einzige Hebel waere Kernel-Fusion;
+vLLMs fusionierte Bausteine greifen auf gfx1151 nicht (AITER ist CDNA-only, der fusionierte
+GDN-Decode-Kernel wird nur fuer CUDA gebaut).
 
 Naheliegender Verdacht geprueft: `--mamba-ssm-cache-dtype bfloat16` statt des vom Modell
 gesetzten float32 ergibt **39,06 statt 40,34 tok/s** -- die Akzeptanzrate faellt von 54,0 auf
