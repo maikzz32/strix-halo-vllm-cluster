@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "date_local": "2026-09-07",
+  "timezone": "Europe/Berlin",
+  "host": "192.168.1.18",
+  "container": "ray-worker",
+  "sources": {
+    "tests/hip_graph_host_callback.cpp": {
+      "sha256": "d11a48eb3448dcee18e2ab69c0840d382bf7f1afeb122fdc228a3f067f752887",
+      "bytes": 9345
+    },
+    "tests/bench_hip_graph_host_callback.py": {
+      "sha256": "c2b23d116bd6686bf4048c01720e172cac3a03c85960ff1ce3e74efde9b16c40",
+      "bytes": 4001
+    }
+  },
+  "binary": {
+    "container_path": "/tmp/libstrix_hip_graph_host_callback.so",
+    "sha256": null,
+    "sha256_status": "not_recorded; binary is remote and unavailable in the local evidence set",
+    "size_bytes": 32408,
+    "mtime_utc": "2026-09-06T22:12:27.335706+00:00"
+  },
+  "execution_utc": {
+    "start": "2026-09-06T22:19:16.384802+00:00",
+    "end": "2026-09-06T22:19:16.661543+00:00",
+    "process_wall_seconds": 0.2767491490012617,
+    "returncode": 0,
+    "remaining_micro_pids": []
+  },
+  "hip_runtime_version": 71526333,
+  "method": {
+    "BF16_elements": 10240,
+    "bytes_per_direction": 20480,
+    "checked_initial_replays": 4,
+    "timing_samples": 5,
+    "replays_per_sample": 50,
+    "source_changed": "before each initial replay and each timing batch, outside graph",
+    "peak_explicit_pinned_plus_device_bytes": 61440,
+    "allocation_excludes": "HIP runtime/context and 20480-byte CPU readback vector"
+  },
+  "cases": [
+    {
+      "method": "host_callback_only",
+      "graph_nodes": {
+        "total": 1,
+        "host": 1,
+        "memcpy": 0
+      },
+      "wall_median_us": 7.88598,
+      "wall_samples_us": [
+        17.4091,
+        7.88598,
+        7.96318,
+        7.79398,
+        7.81178
+      ],
+      "hip_event_median_us": 7.7222,
+      "hip_event_samples_us": [
+        17.07312,
+        7.7222,
+        7.83258,
+        7.683,
+        7.7014
+      ],
+      "numerical": {
+        "finite": true,
+        "exact": true,
+        "max_abs_error": 0.0,
+        "bad_input_count": 0,
+        "callbacks": 254,
+        "expected_callbacks": 254
+      }
+    },
+    {
+      "method": "20KiB_D2H_H2D_identity",
+      "graph_nodes": {
+        "total": 2,
+        "host": 0,
+        "memcpy": 2
+      },
+      "wall_median_us": 6.23404,
+      "wall_samples_us": [
+        6.30402,
+        6.19582,
+        6.26464,
+        6.22842,
+        6.23404
+      ],
+      "hip_event_median_us": 6.11584,
+      "hip_event_samples_us": [
+        6.15662,
+        6.07742,
+        6.14784,
+        6.11182,
+        6.11584
+      ],
+      "numerical": {
+        "finite": true,
+        "exact": true,
+        "max_abs_error": 0.0,
+        "bad_input_count": 0,
+        "callbacks": 0,
+        "expected_callbacks": 0
+      }
+    },
+    {
+      "method": "20KiB_D2H_negate_H2D",
+      "graph_nodes": {
+        "total": 3,
+        "host": 1,
+        "memcpy": 2
+      },
+      "wall_median_us": 15.97696,
+      "wall_samples_us": [
+        15.97696,
+        15.91956,
+        15.93876,
+        16.04136,
+        16.04754
+      ],
+      "hip_event_median_us": 15.834661,
+      "hip_event_samples_us": [
+        15.834661,
+        15.77948,
+        15.79788,
+        15.90028,
+        15.90346
+      ],
+      "numerical": {
+        "finite": true,
+        "exact": true,
+        "max_abs_error": 0.0,
+        "bad_input_count": 0,
+        "callbacks": 254,
+        "expected_callbacks": 254
+      }
+    }
+  ],
+  "limitations": [
+    "Native isolated graph replay; no Torch model or concurrent GPU workload.",
+    "No RDMA transport, inter-node reduction/barrier or multi-rank scheduling tested.",
+    "Timing reports replay-batch throughput; the first slower host-only sample is retained.",
+    "The weights/model/runtime were not modified.",
+    "Binary SHA256 was not captured; source SHA256 and binary size/mtime are available."
+  ]
+}
