@@ -241,3 +241,8 @@ Weg auf zwei Nodes: 31,56 -> 35,52 (dichte Teile) -> 39,51 (LM-Head) -> 39,78 (P
 
 Budget je Iteration bei vier Raengen: 6,2 ms Gewichte + 9,1 ms Kollektive + 13,5 ms Fixanteil
 = 28,8 ms, mal 2,62 Tokens = 48,5 tok/s (trifft die Messung). Fuer 60 waeren 23 ms noetig.
+
+**Tree-Kollektive bei vier Raengen geprueft und verworfen:** Der Ring braucht sechs
+Netzwerk-Spruenge, ein Baum nur vier -- rechnerisch 95 auf 59 us je AllReduce. Gemessen mit
+`RCCL_OVERRIDE_ALGO=TREE`, `PROTO=LL`, zwei Kanaelen: **41,02 statt 48,51 tok/s**, TPOT 21,29
+statt 18,73. Der Ring bleibt auf dieser Strecke klar besser.
