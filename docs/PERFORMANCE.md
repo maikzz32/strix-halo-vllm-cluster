@@ -510,3 +510,60 @@ schreibgeschuetzt -- Ergebnis nach /tmp schreiben und mit `podman cp` heraushole
 
 Produktion bleibt auf `qwen38_rest`. Der quantisierte Checkpoint `qwen38_mtpq` liegt auf allen
 vier Nodes und kostet dank Hardlinks auf die unveraenderten Shards nur ~2,7 GB je Node.
+
+
+## Die Iteration, vollstaendig aufgeschluesselt (2026-09-06)
+
+Erste DIREKTE Messung statt Ableitung aus dem Durchsatz. Beide fertigen Profiler sind hier
+unbrauchbar -- der Torch-Profiler stirbt beim Export, rocprofv3 haengt (zweimal
+reproduziert, Exit 124 schon bei einem trivialen Matmul; ein Altlauf aus einer frueheren
+Sitzung hing 18 h unbemerkt). vLLMs eingebauter `StepTimingCollector` hilft ebenfalls
+nicht: er ist nur im `_dummy_run` vollstaendig verdrahtet, im Produktivpfad fehlen
+`forward_end` und die drafter-Marker (model_runner.py:1731/1734 gegen 777/782/825).
+Also eigene HIP-Events, ohne synchronize im heissen Pfad -- Patch 74 (Phasen im
+Entwurfsschritt) und Patch 76 (Zielmodell-Forward nach Batchgroesse). Die Messung selbst
+kostet nichts: 49,31 gegen 49,21 tok/s.
+
+**Zielmodell-Forward nach Batchgroesse** (n=100 je Tabelle, ueber 11800 bzw. 4600 Forwards):
+
+| Batchgroesse | Forward | Aufschlag |
+|---|---|---|
+| 1 Token (k=0) | **30,86 ms** | — |
+| 4 Token (k=3, Verify) | **39,0 ms** | +8,14 ms → **2,71 ms je zusaetzlichem Token** |
+
+**Entwurfsschritt** (ueber 9200 Schritte, Streuung < 3 %):
+forward 1,22 ms (63 %) + sample 0,70 ms (36 %) + update_inputs 0,009 ms = **1,93 ms**.
+
+**Beide Iterationen gehen exakt auf:**
+
+| | Forward | Entwurf | Rest | Summe | gemessen |
+|---|---|---|---|---|---|
+| k=0 | 30,86 | — | 0,96 | 31,82 | 31,82 ms |
+| k=3 | 39,00 | 3 x 1,93 = 5,79 | 1,99 | 46,78 | 46,78 ms |
+
+Anteile bei k=3: **Verifikation 82 %, Entwurf 12 %, Rest 5 %.**
+Kostenmodell: **Iteration(k) = 31,82 + 4,98 k ms**, wobei 4,98 = 1,93 Entwurf
++ 2,71 Verifikationsaufschlag + ~0,34 Rejection.
+
+**Damit ist die bisherige Zerlegung widerlegt.** „Iteration = Zielmodell + k x Entwurf"
+schlug alles, was mit k waechst, dem Entwurf zu -- auch die Verifikation. Die Entwurfskosten
+schienen deshalb bei 5,08 ms zu liegen, wo tatsaechlich 1,93 ms stehen. Das erklaert
+rueckwirkend, warum drei gut begruendete Entwurfsoptimierungen wirkungslos blieben (Patch 73
+fusionierter Metadatenpfad; volle CUDA-Graphen ueber alle Entwurfsschritte; INT4-Quantisierung
+des MTP-Kopfs): alle drei zielten auf 12 % der Iteration.
+
+**k=3 ist nachweislich optimal.** Ein zusaetzlicher Entwurfsschritt kostet 4,64 ms. Bei
+k=3→4 bringt er 0,225 Token = 0,048 Tok/ms gegen einen Durchschnitt von 0,056 -- daher war
+k=4 schlechter (46,7 gegen 49,3 tok/s). Bei k=2→3 bringt er ~0,36 Token = 0,078 Tok/ms.
+
+**Folge fuer das 60-tok/s-Ziel.** Noetig waeren 36,5 ms je Iteration bei 2,615 Token. Allein
+der Ein-Token-Forward kostet 30,86 ms und ist latenzgebunden -- TP2 und TP4 liefern dort
+dasselbe (31,94 gegen 31,80 ms), mehr Nodes helfen nicht. Selbst wenn Entwurf UND
+Verifikationsaufschlag vollstaendig verschwaenden, blieben 32,9 ms, also ca. 67 tok/s als
+theoretische Obergrenze. Der einzige grosse verbleibende Hebel ist die Akzeptanz: bei
+unveraenderter Iteration braeuchte es 3,35 statt 2,615 Token (+28 %) -- eine Frage der
+Qualitaet des Entwurfskopfs, nicht der Ausfuehrung.
+
+Messwerkzeuge bleiben installiert und sind per Env aus (Default 0):
+`VLLM_GFX1X_DRAFT_TIMING=N` (Patch 74), `VLLM_GFX1X_TARGET_TIMING=N` (Patch 76).
+Patch 75 (Aktivierung des eingebauten Collectors) ist wirkungslos und bleibt inert.
