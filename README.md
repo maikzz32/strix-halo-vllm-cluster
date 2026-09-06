@@ -6,6 +6,31 @@ verbunden über 25 GbE RDMA (RoCEv2). Ziel: immer aktuelle, lauffähige Images
 (Stable-Kanal: letztes vLLM-Release, Dev-Kanal: vLLM main für Day-0-Modelle)
 und maximaler Durchsatz, entschieden durch eigene Benchmarks.
 
+## Aktueller Versuch: Qwen3.8 Flash Next, eine laufende Antwort
+
+Für die vorhandenen vier Fedora-45-Systeme gibt es jetzt einen separaten
+[nativen Startpfad](scripts/native/README.md) mit vLLM `mp`, TP4 und MTP3.
+Er verwendet die vorhandenen Container `ray-head`/`ray-worker` und prüft alle
+Ranks vor dem Start. Die Modellgewichte liegen auf jedem Node unter
+`/home/maik/qwen38_rest`. Der Image-Tag allein enthält nicht alle Änderungen
+der bereits installierten Laufzeit; die Voraussetzungen im Runbook beachten.
+
+Dieser Pfad wurde mit `FULL_DECODE_ONLY` getestet. Die ältere allgemeine
+Graph-Einschränkung weiter unten gilt daher nicht für diese konkrete Kombination
+aus Runtime, Patches und Modell. Für andere Kombinationen bleiben eigene Tests
+erforderlich.
+
+Die reproduzierte Ausgangsmessung ist **48,60 Output-Token/s** bei ShareGPT,
+48 Anfragen, jeweils einer gleichzeitig. Separate kurze Coding-Antworten
+erreichten schon vor den neuen Änderungen etwa 67 Decode-Token/s. Diese
+unterschiedlichen Workloads dürfen nicht als Vorher/Nachher-Gewinn verglichen
+werden. [DGX-Spark-Vergleich](docs/2026-09-06-spark-comparison.md).
+
+`bench/bench_stream.py` speichert vollständige Requests, Antworten und
+Streaming-Zeitpunkte; `bench/compare_streams.py` vergleicht passende Läufe
+und prüft identische Ausgaben. `bench/bench_sharegpt.sh` wiederholt den
+bisherigen C1-Benchmark. Die Optimierungsversuche sind noch nicht abgeschlossen.
+
 ## Struktur
 
 - `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)
