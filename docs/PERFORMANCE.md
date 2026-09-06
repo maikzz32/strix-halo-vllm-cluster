@@ -295,3 +295,19 @@ GDN-Decode-Kernel wird nur fuer CUDA gebaut).
 Naheliegender Verdacht geprueft: `--mamba-ssm-cache-dtype bfloat16` statt des vom Modell
 gesetzten float32 ergibt **39,06 statt 40,34 tok/s** -- die Akzeptanzrate faellt von 54,0 auf
 52,4 Prozent, der ungenauere Zustand kostet mehr als die gesparten Konversionen bringen.
+
+### RCCL-Kanalzahl bei vier Raengen: vier ist das Optimum (06.09.2026)
+
+Bei zwei Raengen war die Kanalreduktion schlechter, bei vier Raengen isoliert nachgemessen
+(ohne Baum-Algorithmus, Standardprotokoll):
+
+| Kanaele | tok/s |
+|---|---|
+| 2 | 32,49 |
+| **4** | **49,41** |
+| 8 | 48,73 |
+| Standard (12) | 48,51 |
+| 4 + PROTO=LL | 47,04 |
+
+`NCCL_MAX_NCHANNELS=4 NCCL_MIN_NCHANNELS=4` bringt 1,9 Prozent. In der Produktion mit 262k
+Kontext: 48,04 statt 47,33 tok/s.
