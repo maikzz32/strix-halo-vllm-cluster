@@ -17,6 +17,7 @@ Request-Overhead. TPOT beschreibt die Zeit je Ausgabetoken nach dem ersten Token
 | MTP Local Argmax | 48,44 | 18,12 ms | 11839 | 54,14 % |
 | QSA unsichtbare Tiles überspringen | 48,92 | 17,69 ms | 11839 | 54,14 % |
 | QSA, aufgewärmter Wiederholungslauf | 49,56 | 17,75 ms | 11839 | 54,14 % |
+| TP4 + Expert Parallelism + QSA + K640-Kernel | 46,22 | 19,09 ms | 11871 | 53,73 % |
 
 Alle 48 Requests waren erfolgreich. Die vollständigen ShareGPT-Ausgaben der
 QSA- und Argmax-Läufe einschließlich der QSA-Wiederholung sind identisch. Für die ursprüngliche Ausgangsmessung
@@ -35,6 +36,13 @@ werden Decode-Rate und Anlaufzeit getrennt dokumentiert. Der erste vollständige
 QSA-ShareGPT-Lauf enthält diese Anlaufkosten. Die Wiederholung erreicht
 49,56 Token/s bei 609 ms mittlerer TTFT und bestätigt den kleinen Gewinn.
 Ein vollständig alternierender A/B/A-Nachweis liegt noch nicht vor.
+
+Expert Parallelism war im vollständigen Modelltest langsamer. Die sechs kurzen
+Streaming-Ausgaben änderten sich; ihre Decode-Rate sank gegenüber QSA ohne EP
+im Median um 10,37 %. Alle 48 ShareGPT-Anfragen gelangen, aber bei veränderten
+Texten und Tokenzahlen. Der dafür getestete K640-Kernel wurde auf allen vier
+Nodes exakt auf seine gesicherte Originaldatei zurückgesetzt. Die laufende
+Konfiguration verwendet wieder gewöhnliches TP4.
 
 Eine kleine zusätzliche JSON-/Logikprobe bestand 11 von 12 Aufgaben. Das Modell
 antwortete auf die Rekurrenz `x=2; x=3*x+1` nach drei Schritten mit 79 statt 67.
@@ -63,7 +71,7 @@ Ein großer Gewinn allein durch längere Entwürfe ist daraus nicht belegt.
 ## Laufzeit und Wiederherstellung
 
 Die native Steuerung wurde mit erfolgreichen Starts und Stopps auf allen vier
-Nodes geprüft. 21 lokale Lifecycle-/Deployment-Tests bestehen. Logs, genaue
+Nodes geprüft. 22 lokale Lifecycle-/Deployment-Tests bestehen. Logs, genaue
 Startkonfigurationen und wiederherstellbare Deployment-Dateien liegen unter
 `/home/maik/strix-halo-next` auf den Nodes.
 
@@ -85,7 +93,13 @@ und erst durch `VLLM_QSA_SKIP_INVISIBLE_TILES=1` aktiv. Ohne Flag bleibt der
 alte Rechenpfad erhalten. Der Patcher bewahrt eine SHA-gekennzeichnete Originaldatei
 und unterstützt `--restore --apply`; Modellgewichte werden nicht verändert.
 
-Weitere Untersuchung: vollständiges GPU-Kernelbudget mit ROCProfiler. Ein erster
-Attach ohne vorbereitete Laufzeit scheiterte sauber; der Server blieb intakt.
-Der nächste Start verwendet dafür `ROCP_TOOL_ATTACH=1`. Profiling-Durchsatz wird
-nicht mit ungestörten Benchmark-Raten vermischt.
+Weitere Untersuchung: vollständiges GPU-Kernelbudget. Externes ROCProfiler-Attach
+und ein separater Start mit ROCProfiler funktionierten in dieser Laufzeit nicht;
+die Fehlversuche wurden beendet. Ein kleiner integrierter Torch-Profiler-Test
+zeichnet fünf GPU-Graph-Replays korrekt auf. Die anschließende Aufzeichnung von
+16 Decode-Runden aus dem echten Modell enthält jedoch nur CPU-Ereignisse. Sie
+belegt keine GPU-Zeitanteile. Der Parser lehnt diese unvollständige Aufzeichnung ab.
+Der passende [PyTorch-Fehlerbericht #182373](https://github.com/pytorch/pytorch/issues/182373)
+beschreibt fehlende GPU-Ereignisse in gestarteten Kindprozessen nach GPU-Initialisierung
+im Elternprozess. Die lokale Reproduktion und ein begrenzter Workaround werden
+geprüft. Profiling-Durchsatz wird nicht mit ungestörten Benchmark-Raten vermischt.
