@@ -463,3 +463,50 @@ braucht laut Kostenmodell nur **1,95 Token je Iteration** (~32 % Akzeptanz) fuer
 gegenueber 2,620 bei MTP. Patch 73 bleibt dennoch nuetzlich: er macht `SPEC_CG=1` erstmals
 ohne Hang lauffaehig (frueher 17,1 tok/s). Produktion weiter mit `SPEC_CG=prefill`, weil die
 Entwurfsgraphen 1,9 GiB kosten und nichts einbringen.
+
+
+## MTP-Entwurfskopf nach INT4: gelungen und wirkungslos (2026-09-06)
+
+Der MTP-Entwurfskopf war im Checkpoint komplett **BF16, 5,214 GB**, waehrend das Zielmodell
+durchgehend INT4 ist -- er steht ausdruecklich auf der ignore-Liste. Groesste Posten:
+`mtp.layers.0.mlp.experts.gate_up_proj` [512,1280,2560] = 3355 MB und `...down_proj`
+[512,2560,640] = 1678 MB. Da der Entwurfsschritt 5,08 ms kostet (TP4) und fast linear mit der
+Rangzahl skaliert (TP2: 8,74 ms), lag die Bandbreitenhypothese nahe.
+
+Quantisiert (compressed-tensors pack-quantized, W4A16, group 32, asymmetrisch), dabei vom
+gebuendelten 3D-Layout ins per-Experte-Layout ueberfuehrt -- das ist Pflicht, weil
+`build_expert_params_mapping` Fused-Eintraege nur fuer den unquantisierten Namen
+`experts.w13_weight` kennt, nicht fuer `weight_packed`. Ergebnis: 6144 Tensoren,
+**1,455 GB statt 5,033 GB**.
+
+| | BF16-Kopf | INT4-Kopf |
+|---|---|---|
+| Durchsatz | 49,21 tok/s | 49,34 tok/s |
+| TPOT | 17,95 ms | 18,22 ms |
+| Akzeptanz | 54,0 % | 53,1 % |
+| Token je Iteration | 2,620 | 2,592 |
+| Iterationszeit | 47,03 ms | 47,23 ms |
+| **je Entwurfsschritt** | **5,08 ms** | **5,14 ms** |
+| Modellspeicher je Rang | 45,13 GiB | 44,33 GiB |
+
+Die Quantisierung greift nachweislich (0,80 GiB weniger je Rang, erwartet 0,89 GB), aber die
+Entwurfskosten bleiben unveraendert. **Die Bandbreitenhypothese ist damit experimentell
+widerlegt.** Der BF16-MoE-Pfad liest sparse -- nur ~10 von 512 Experten, ca. 98 MB --, weil der
+INT4-GEMV-Patch `use_int4_w4a16` und `B.dtype == uint8` verlangt (`fused_moe.py:853-860`) und
+sonst der stock-Triton-Kernel uebernimmt. Die vorherige Rechnung ("5 GB je Schritt, passt auf
+248/288 GB/s") traf nur zufaellig plausible Werte.
+
+**Damit sind alle drei Erklaerungen fuer die Entwurfskosten widerlegt:** Metadatenaufbau
+(Patch 73), Kernel-Startlatenz (volle Graphen ueber alle Entwurfsschritte) und Gewichts-
+bandbreite (dieser Versuch). Die 5,08 ms bleiben unerklaert, obwohl sie mit der Rangzahl
+skalieren waehrend das Zielmodell das nicht tut.
+
+**Zwei Fallen fuer eine Wiederholung:** (1) Die ignore-Liste enthaelt neben 30 expliziten
+mtp-Eintraegen den Regex `re:mtp\..*`, und dieser traegt den ganzen Schutz -- die expliziten
+Namen greifen nach `_remap_ignored_layers` (mtp.layers.0 -> .48) NICHT. Nur den Regex zu
+entfernen laesst den Router quantisiert erwarten und den Start scheitern; richtig ist ein
+Lookahead `re:mtp\.(?!layers\.\d+\.mlp\.experts\.).*`. (2) `/home/maik` ist im Container
+schreibgeschuetzt -- Ergebnis nach /tmp schreiben und mit `podman cp` herausholen.
+
+Produktion bleibt auf `qwen38_rest`. Der quantisierte Checkpoint `qwen38_mtpq` liegt auf allen
+vier Nodes und kostet dank Hardlinks auf die unveraenderten Shards nur ~2,7 GB je Node.
