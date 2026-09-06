@@ -311,3 +311,25 @@ Bei zwei Raengen war die Kanalreduktion schlechter, bei vier Raengen isoliert na
 
 `NCCL_MAX_NCHANNELS=4 NCCL_MIN_NCHANNELS=4` bringt 1,9 Prozent. In der Produktion mit 262k
 Kontext: 48,04 statt 47,33 tok/s.
+
+### Warum vier Nodes nicht doppelt so schnell sind (06.09.2026)
+
+| Posten je Iteration | zwei Nodes | vier Nodes |
+|---|---|---|
+| Gewichte lesen | 12,4 ms | 6,2 ms |
+| Kollektive | 3,7 ms | 9,1 ms |
+| Kernel-Startlatenz | 13,5 ms | 13,5 ms |
+| Summe | 29,6 ms | 28,8 ms |
+
+Nur das Gewichte-Streaming wird durch mehr Raenge kleiner. Die Kollektive wachsen, weil der Ring
+bei vier Raengen sechs Netzwerkspruenge braucht statt zwei.
+
+**Kollektiv-Latenz isoliert gemessen** (5 KB AllReduce, vier Raenge, 400 Wiederholungen):
+Standard 90,7 us / 2 Kanaele 85,4 / 1 Kanal 87,8 / 4 Kanaele 96,4 / HSA_NO_SCRATCH_RECLAIM 90,5 /
+NTHREADS 128 bzw. 512: 92,1 / 90,8 / NCHANNELS_PER_NET_PEER=1 90,7 / QPS=1 ohne Split 90,0.
+Kein Parameter bewegt etwas.
+
+**GPU-Direct-RDMA waere der Hebel** (etwa 40 us, das ergaebe 59 tok/s), scheitert aber
+reproduzierbar an `ibv_reg_mr_iova2 failed with error Invalid argument` -- getestet mit
+NCCL_NET_GDR_LEVEL 3/5/SYS und NCCL_DMABUF_ENABLE=1. Auf dieser APU laesst sich GPU-Speicher
+nicht fuer RDMA registrieren. Plattformeigenschaft, keine Einstellung.
