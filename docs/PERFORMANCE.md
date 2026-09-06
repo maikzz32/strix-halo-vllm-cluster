@@ -567,3 +567,32 @@ Qualitaet des Entwurfskopfs, nicht der Ausfuehrung.
 Messwerkzeuge bleiben installiert und sind per Env aus (Default 0):
 `VLLM_GFX1X_DRAFT_TIMING=N` (Patch 74), `VLLM_GFX1X_TARGET_TIMING=N` (Patch 76).
 Patch 75 (Aktivierung des eingebauten Collectors) ist wirkungslos und bleibt inert.
+
+
+## k-Wahl und Indexer-Sharing: k=3 ohne Zusaetze ist das Optimum (2026-09-06)
+
+Alle Laeufe warm, TP4, SPEC_CG=prefill, MAX_LEN 32768, mit aktiven Messpatches
+(die selbst nichts kosten: 49,31 gegen 49,21 tok/s):
+
+| Konfiguration | tok/s | TPOT | Token je Iteration | Akzeptanz |
+|---|---|---|---|---|
+| **k=3** | **49,31** | 17,89 ms | 2,615 | 53,8 % |
+| k=3 + index_share | 48,84 | 18,31 ms | 2,589 | 53,0 % |
+| k=2 + index_share | 48,46 | 18,72 ms | 2,282 | 64,1 % |
+| k=2 | 48,14 | 18,87 ms | 2,264 | 63,2 % |
+| k=4 (kalt) | 46,68 | 18,79 ms | 2,840 | 46,0 % |
+
+`index_share_for_mtp_iteration` (nur Entwurfsschritt 0 rechnet den QSA-Indexer-Top-k,
+Schritte 1+ teilen den Puffer) ist nutzbar -- `models/qwen4_exp/amd/mtp.py:254/260`
+implementiert `set_skip_topk` und `compact_topk_indices`, der V2-Speculator wertet es aus --
+bringt aber **keine Zeit**: der `forward`-Anteil je Entwurfsschritt bleibt bei 1,21 ms
+(gegen 1,22 ms ohne). Der Indexer ist also nicht der teure Teil des Entwurfs-Forwards; die
+Durchsatzunterschiede (+0,7 % bei k=2, -1,0 % bei k=3) sind Akzeptanzrauschen.
+
+Bemerkenswert: bei k=2 ist die Akzeptanzrate mit 63-64 % deutlich hoeher als bei k=3
+(53-54 %) -- die frueheren Entwurfstoken sind treffsicherer, die spaeteren verwaessern die
+Quote. Trotzdem gewinnt k=3, weil 2,615 Token je Iteration mehr wert sind als die hoehere
+Trefferquote bei nur 2,264 Token.
+
+Die Verifikationskurve ist damit an vier Punkten belegt und linear:
+1 Token 30,86 ms | 3 Token 36,1 ms | 4 Token 39,0 ms -> **2,67-2,71 ms je zusaetzlichem Token**.
