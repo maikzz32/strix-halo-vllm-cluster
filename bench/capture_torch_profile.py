@@ -4,6 +4,7 @@ import concurrent.futures
 import datetime
 import json
 from pathlib import Path
+import sys
 import time
 import urllib.request
 
@@ -26,6 +27,7 @@ def main():
               'note': 'Timings are perturbed by profiling and are not a performance benchmark.'}
     started = time.perf_counter()
     fragments, thoughts, usage = [], [], {}
+    stream_done = False
 
     def profile_call(endpoint):
         stamp = time.perf_counter() - started
@@ -37,6 +39,8 @@ def main():
                 'finished_s': time.perf_counter() - started, 'status': status}
 
     future = None
+    workload_error = None
+    start_recorded = False
     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
         try:
             req = urllib.request.Request(args.url + '/v1/chat/completions',
@@ -44,7 +48,10 @@ def main():
             with urllib.request.urlopen(req, timeout=120) as response:
                 for raw in response:
                     line = raw.decode().strip()
-                    if not line.startswith('data: ') or line == 'data: [DONE]':
+                    if line == 'data: [DONE]':
+                        stream_done = True
+                        continue
+                    if not line.startswith('data: '):
                         continue
                     event = json.loads(line[6:])
                     if event.get('usage'):
@@ -66,19 +73,43 @@ def main():
             if future is None:
                 raise RuntimeError('No generated output; profiler was not started')
             record['profile_calls'].append(future.result(timeout=35))
+            start_recorded = True
+            if not stream_done or usage.get('completion_tokens') != request_body['max_tokens']:
+                raise RuntimeError('Profiling workload ended before its complete 2048-token stream')
+        except BaseException as error:
+            workload_error = error
+            record['workload_error'] = repr(error)
+            raise
         finally:
+            cleanup_error = None
             if future is not None:
                 # vLLM normally stops itself after its configured 16 active rounds.
-                # This also cleans up when generation fails before that boundary.
+                # A failed/lost start response can still leave some ranks profiling.
+                # Settle that call, then attempt stop independently of its result.
                 try:
-                    future.result(timeout=35)
+                    start_call = future.result(timeout=35)
+                    if not start_recorded:
+                        record['profile_calls'].append(start_call)
+                except Exception as error:
+                    record['profile_start_error'] = repr(error)
+                try:
                     record['profile_calls'].append(profile_call('/stop_profile'))
                 except Exception as error:
+                    cleanup_error = error
                     record['profile_cleanup_error'] = repr(error)
             record.update(content=''.join(fragments), reasoning=''.join(thoughts), usage=usage,
+                          stream_done=stream_done,
+                          workload_complete=stream_done and usage.get('completion_tokens') == request_body['max_tokens'],
                           wall_seconds=time.perf_counter() - started)
-            args.output.parent.mkdir(parents=True, exist_ok=True)
-            args.output.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding='utf-8')
+            try:
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding='utf-8')
+            except Exception as error:
+                if workload_error is None:
+                    raise
+                print(f'Could not save profiling workload: {error!r}', file=sys.stderr)
+            if cleanup_error is not None and workload_error is None:
+                raise RuntimeError('Profiling cleanup failed; workload artifact saved') from cleanup_error
     print(json.dumps({'saved': str(args.output), 'usage': usage,
                       'profile_calls': record['profile_calls'],
                       'cleanup_error': record.get('profile_cleanup_error')}), flush=True)

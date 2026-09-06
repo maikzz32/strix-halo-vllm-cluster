@@ -31,7 +31,8 @@
     "NCCL_NET_GDR_LEVEL": "0",
     "PYTORCH_HIP_ALLOC_CONF": "expandable_segments:True,garbage_collection_threshold:0.85",
     "VLLM_QSA_SKIP_INVISIBLE_TILES": "1",
-    "ROCPROFILER_SET_ROCPROFILER_REGISTER_LIBRARY": "0"
+    "ROCPROFILER_SET_ROCPROFILER_REGISTER_LIBRARY": "0",
+    "ROCPROFILER_QUEUE_INTERPOSITION": "0"
   },
   "nodes": [
     {
@@ -61,7 +62,7 @@
   ],
   "profiler_config": {
     "profiler": "torch",
-    "torch_profiler_dir": "/tmp/qwen38-torch-fixed-20260906",
+    "torch_profiler_dir": "/tmp/qwen38-torch-queuefix-20260906",
     "torch_profiler_with_stack": false,
     "torch_profiler_record_shapes": false,
     "torch_profiler_with_memory": false,

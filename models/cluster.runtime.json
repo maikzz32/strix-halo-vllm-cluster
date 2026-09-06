@@ -7,8 +7,13 @@
   "max_num_seqs": 8,
   "max_num_batched_tokens": 8192,
   "gpu_memory_utilization": 0.85,
-  "speculative_config": {"method": "mtp", "num_speculative_tokens": 3},
-  "compilation_config": {"cudagraph_mode": "FULL_DECODE_ONLY"},
+  "speculative_config": {
+    "method": "mtp",
+    "num_speculative_tokens": 3
+  },
+  "compilation_config": {
+    "cudagraph_mode": "FULL_DECODE_ONLY"
+  },
   "environment": {
     "VLLM_PLUGINS": "lora_filesystem_resolver,lora_hf_hub_resolver",
     "VLLM_GFX1X_HC_QUANT": "0",
@@ -24,12 +29,33 @@
     "NCCL_MIN_NCHANNELS": "4",
     "NCCL_IB_GID_INDEX": "1",
     "NCCL_NET_GDR_LEVEL": "0",
-    "PYTORCH_HIP_ALLOC_CONF": "expandable_segments:True,garbage_collection_threshold:0.85"
+    "PYTORCH_HIP_ALLOC_CONF": "expandable_segments:True,garbage_collection_threshold:0.85",
+    "VLLM_QSA_SKIP_INVISIBLE_TILES": "1"
   },
   "nodes": [
-    {"host": "192.168.1.15", "rdma_ip": "192.168.100.1", "container": "ray-head", "iface": "enp197s0f3np3"},
-    {"host": "192.168.1.16", "rdma_ip": "192.168.100.2", "container": "ray-worker", "iface": "enp197s0f3np3"},
-    {"host": "192.168.1.17", "rdma_ip": "192.168.100.3", "container": "ray-worker", "iface": "enp197s0f3np3"},
-    {"host": "192.168.1.18", "rdma_ip": "192.168.100.4", "container": "ray-worker", "iface": "enp197s0f1np1"}
+    {
+      "host": "192.168.1.15",
+      "rdma_ip": "192.168.100.1",
+      "container": "ray-head",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.16",
+      "rdma_ip": "192.168.100.2",
+      "container": "ray-worker",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.17",
+      "rdma_ip": "192.168.100.3",
+      "container": "ray-worker",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.18",
+      "rdma_ip": "192.168.100.4",
+      "container": "ray-worker",
+      "iface": "enp197s0f1np1"
+    }
   ]
 }

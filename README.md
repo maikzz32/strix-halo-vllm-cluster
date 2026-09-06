@@ -20,8 +20,13 @@ Graph-Einschränkung weiter unten gilt daher nicht für diese konkrete Kombinati
 aus Runtime, Patches und Modell. Für andere Kombinationen bleiben eigene Tests
 erforderlich.
 
-Die reproduzierte Ausgangsmessung ist **48,60 Output-Token/s** bei ShareGPT,
-48 Anfragen, jeweils einer gleichzeitig. Separate kurze Coding-Antworten
+Die QSA-Läufe erreichen **49,56–50,30 statt 48,60 Output-Token/s** bei ShareGPT,
+48 Anfragen, jeweils einer gleichzeitig. Die reine Generierung verbessert sich
+um etwa 2 % durch das Überspringen unsichtbarer QSA-Score-Tiles bei unveränderten Gewichten.
+Die 50,30 im abschließenden Neustarttest enthalten zusätzlich kürzere Anlaufzeiten.
+Das Ziel einer deutlich schnelleren einzelnen Antwort ist noch nicht erreicht.
+[Messungen und verworfene Varianten](docs/2026-09-06-single-stream.md).
+Separate kurze Coding-Antworten
 erreichten schon vor den neuen Änderungen etwa 67 Decode-Token/s. Diese
 unterschiedlichen Workloads dürfen nicht als Vorher/Nachher-Gewinn verglichen
 werden. [DGX-Spark-Vergleich](docs/2026-09-06-spark-comparison.md).

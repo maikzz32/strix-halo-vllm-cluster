@@ -18,6 +18,7 @@ Request-Overhead. TPOT beschreibt die Zeit je Ausgabetoken nach dem ersten Token
 | QSA unsichtbare Tiles überspringen | 48,92 | 17,69 ms | 11839 | 54,14 % |
 | QSA, aufgewärmter Wiederholungslauf | 49,56 | 17,75 ms | 11839 | 54,14 % |
 | TP4 + Expert Parallelism + QSA + K640-Kernel | 46,22 | 19,09 ms | 11871 | 53,73 % |
+| QSA, normale Produktion nach Neustart (7. September) | 50,30 | 17,73 ms | 11839 | 54,14 % |
 
 Alle 48 Requests waren erfolgreich. Die vollständigen ShareGPT-Ausgaben der
 QSA- und Argmax-Läufe einschließlich der QSA-Wiederholung sind identisch. Für die ursprüngliche Ausgangsmessung
@@ -36,6 +37,24 @@ werden Decode-Rate und Anlaufzeit getrennt dokumentiert. Der erste vollständige
 QSA-ShareGPT-Lauf enthält diese Anlaufkosten. Die Wiederholung erreicht
 49,56 Token/s bei 609 ms mittlerer TTFT und bestätigt den kleinen Gewinn.
 Ein vollständig alternierender A/B/A-Nachweis liegt noch nicht vor.
+
+Der normale Neustart ohne Profiler bestätigte die Konfiguration mit 50,30
+Output-Token/s, 542,87 ms mittlerer TTFT und erneut exakt denselben 48 Antworten.
+Die TPOT bleibt mit 17,73 ms nahe am vorigen QSA-Lauf. Der zusätzliche Anstieg
+von 49,56 auf 50,30 geht vor allem mit geringerer Anlaufzeit einher; er ist kein
+weiterer nachgewiesener Decode-Kernelgewinn. Gegenüber der ursprünglichen TPOT
+von 18,08 ms bleibt die reine Generierungsverbesserung ungefähr 2 %.
+
+Eine anschließende Streaming-Kontrolle enthielt eine vorübergehende Episode
+von ungefähr 16 Sekunden: Die letzten Tokens einer deutschen Antwort und die
+ersten Tokens der folgenden Analyse kamen langsamer, bei identischen Texten.
+Diese beiden Antworten erreichten insgesamt nur 40,80 bzw. 41,41 Decode-Token/s;
+die Analyse hatte zudem 5,99 Sekunden TTFT. Alle sechs Antworten der nächsten
+Kontrolle lagen wieder bei etwa 56/65/68 Token/s. Die Ursache ist bisher offen;
+der Ausreißer wird nicht aus dem Versuchsprotokoll entfernt. Die gleichzeitige
+Hardware-Telemetrie der Wiederholung kann die frühere Episode nicht erklären.
+Die [beiden vollständigen Streaming-Vergleiche](../bench/records/2026-09-07-production-streams.json)
+enthalten auch diese langsamen Antworten.
 
 Expert Parallelism war im vollständigen Modelltest langsamer. Die sechs kurzen
 Streaming-Ausgaben änderten sich; ihre Decode-Rate sank gegenüber QSA ohne EP
@@ -57,16 +76,36 @@ nicht der Änderung zugeordnet werden. Die erwartete Lösung bleibt unverändert
 | QSA Radix TopK | Bei kurzen Kontexten etwa doppelt so langsam; Gleichstände können andere Sets liefern | Nicht übernehmen |
 | QSA vollständige Sparse Attention | Etwa 38–43 µs je Layer, zwölf Target-Layer | Kein großer Restengpass belegt |
 | HC BF16 über BLAS | Warmer Cache täuschte Gewinn vor; wechselnde Gewichte langsamer | Nicht übernehmen |
+| HC BF16 mit vorab transponierten Gewichten | Down 42,16 auf 37,38 µs, Up langsamer; Down allein grob 0,46 ms je Verify | Kleiner Kandidat, nicht im Modell getestet oder übernommen |
 | HC W8 | Verlustbehaftet; isolierte Einsparung grob 1,54 ms pro Verify, zusätzlicher Speicher | Nicht übernehmen |
 | GDN Verify-Geometrie | Beste Variante spart insgesamt nur etwa 17 µs über 36 Layer | Nicht übernehmen |
 | Routed MoE W1-Geometrie | Fünf Varianten in vier Routerverteilungen langsamer; 60 Numerikfälle bestanden | Bestehende Geometrie beibehalten |
+| Routed W2 als SIMD-GEMV pro Route | Bei disjunkten Experten bis 1,29× schneller, bei hoher Wiederverwendung etwa 2× langsamer; auch mit rotierenden Gewichten geprüft | Kein allgemeiner Ersatz; nicht übernehmen |
 | RCCL Tree/LL, vier Ranks | 8/16 KiB etwa 19/37 % langsamer; Korrektheit und Teardown bestanden | Automatische Auswahl beibehalten |
+| RCCL bei tatsächlichen 20 KiB | Auto/LL4 stabil 85,25–85,29 µs; LL2, LL1 und Simple langsamer | Bestehende Auswahl beibehalten |
 | MTP Local Argmax | Texte gleich, kein belegter Gesamtgewinn | Default bleibt aus |
 
 K5/K6 können den Vorteil zusätzlicher akzeptierter Tokens durch mehr Draftarbeit
 und den Verlust des Dense-INT4-Skinny-Pfads bei mehr als fünf Target-Tokens
 aufbrauchen. Die gemessene positionsweise Akzeptanz ist 73,66/51,57/37,20 %.
 Ein großer Gewinn allein durch längere Entwürfe ist daraus nicht belegt.
+
+## Vorhandener Lucebox-Fork
+
+Zusätzlich wurde der lokal vorhandene Cluster-Port mit Source-Stand `60f51d1`
+geprüft. Er unterstützt Qwen4Exp, native MTP und RDMA tatsächlich. Derselbe
+gebaute Server sowie vollständige Q3_K_M-Referenzgewichte und das MTP-Modell
+liegen auf allen vier Hosts. Seine früher dokumentierten warmen Raten betragen
+33,2 / 30,6 / 25,7 Token/s für einen / zwei / vier Nodes. Die zugehörigen finalen
+Rohmessungen wurden nicht gefunden; dies sind frühere Protokollangaben, keine
+neuen ShareGPT-Gegenmessungen. Die verwendete Q3_K_M-Quantisierung und MTP1
+unterscheiden sich von der hier gemessenen INT4-/MTP3-Konfiguration.
+
+Der Fork lädt QSA-Indexergewichte, verwendet sie jedoch nicht im Attention-Graph;
+stattdessen ruft er gewöhnliche volle Attention auf. Die kurze Funktionsprobe
+belegt deshalb keine gleichwertige Sparse-Attention-Semantik bei langen Kontexten.
+Diese vorhandene Alternative wurde nicht erneut als Leistungsversuch gestartet.
+Die aktuellen Messungen und Änderungen bleiben auf vLLM beschränkt.
 
 ## Laufzeit und Wiederherstellung
 
@@ -93,13 +132,25 @@ und erst durch `VLLM_QSA_SKIP_INVISIBLE_TILES=1` aktiv. Ohne Flag bleibt der
 alte Rechenpfad erhalten. Der Patcher bewahrt eine SHA-gekennzeichnete Originaldatei
 und unterstützt `--restore --apply`; Modellgewichte werden nicht verändert.
 
-Weitere Untersuchung: vollständiges GPU-Kernelbudget. Externes ROCProfiler-Attach
-und ein separater Start mit ROCProfiler funktionierten in dieser Laufzeit nicht;
-die Fehlversuche wurden beendet. Ein kleiner integrierter Torch-Profiler-Test
-zeichnet fünf GPU-Graph-Replays korrekt auf. Die anschließende Aufzeichnung von
-16 Decode-Runden aus dem echten Modell enthält jedoch nur CPU-Ereignisse. Sie
-belegt keine GPU-Zeitanteile. Der Parser lehnt diese unvollständige Aufzeichnung ab.
-Der passende [PyTorch-Fehlerbericht #182373](https://github.com/pytorch/pytorch/issues/182373)
-beschreibt fehlende GPU-Ereignisse in gestarteten Kindprozessen nach GPU-Initialisierung
-im Elternprozess. Die lokale Reproduktion und ein begrenzter Workaround werden
-geprüft. Profiling-Durchsatz wird nicht mit ungestörten Benchmark-Raten vermischt.
+## Gemessenes GPU-Zeitbudget
+
+Nach zwei separat reproduzierten ROCm-Profilerfehlern gelang die vollständige
+Aufzeichnung auf allen vier Nodes. Je Rank sind 16 vollständige Target-Graphen
+mit 2694 Kernels ausgewertet. Ein Target-Graph dauert unter Instrumentierung
+etwa 40,1 ms, eine vollständige Runde einschließlich Draftarbeit etwa 48,9 ms.
+Im Target entfallen ungefähr 8,7–9,1 ms auf 98 RCCL-Kernels, 8,0–8,3 ms auf
+die beiden gerouteten MoE-Projektionen und 7,1 ms auf HC-Projektionen.
+RCCL-Zeiten enthalten Wartezeit. Die Zeitspannen der vier Target-Ranks liegen
+innerhalb von 0,15 %; ein einzelner klar langsamer Node ist damit nicht belegt.
+
+Weitere 6,4–6,6 ms liegen zwischen Kernels. Der Profiler verändert den Queue-Pfad;
+diese Lücken sind deshalb kein nachgewiesenes, vollständig nutzbares
+Optimierungspotenzial. Für 20 % mehr Durchsatz müssten bei gleichbleibender
+Token-Akzeptanz grob 8,1 ms pro Runde entfallen. Keine der bisher geprüften
+Einzeländerungen erreicht diese Größenordnung.
+
+Details stehen im [GPU-Zeitbudget](2026-09-06-gpu-budget.md) und in der
+[Profiling-Anleitung](2026-09-06-profiler.md). Leistungsgewinne werden ohne
+Profiler geprüft. Die normalen Laufzeitvorgaben enthalten keine Profiler-Flags.
+Die [maschinenlesbaren ShareGPT-Messungen](../bench/records/2026-09-06-sharegpt.json)
+bewahren Kennzahlen, Quellen-Hashes und Hashes der gespeicherten Antworten.

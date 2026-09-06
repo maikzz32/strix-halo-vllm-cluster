@@ -8,8 +8,11 @@ target decode graphs, draft prefill graphs, four RCCL channels and RoCEv2 GID1.
 **The existing `ray-head`/`ray-worker` containers are a prerequisite.** Their
 approximately 6 GB writable overlays contain installed packages and patches;
 the `dev-rocm10` base tag does not reproduce this runtime. A snapshot of 2,357
-Python sources, `.pth` files and the package list exists, but that is not a binary
-image backup. Do not recreate the containers from the base tag expecting an
+Python sources, `.pth` files and the package list exists. Node 1 also retains
+the local binary snapshot `localhost/strix-halo-runtime:20260906-qsa-gated`
+(image ID `718fdd7ceb8ad3fa889361f1cec132d966ed3eb21059fbf2898e2a51352cefb1`).
+A replacement container has not been tested; models, named volumes and host
+RDMA configuration remain external. Do not recreate containers from the base tag expecting an
 equivalent installation. This deployment preserves existing containers and does
 not rebuild images, install runtime packages, change weights or RDMA settings.
 
@@ -32,6 +35,28 @@ launch configuration are retained under `/home/maik/strix-halo-next/logs` on eac
 node. `--force-stop` is an explicit recovery option for a broken or busy server.
 
 Model endpoint: `http://192.168.1.15:8000/v1`.
+
+The current normal config enables `VLLM_QSA_SKIP_INVISIBLE_TILES=1` and uses
+no profiler configuration or profiler environment overrides. Install the
+matching `patches/qsa_invisible_tiles.py` patch before using this setting on a
+restored runtime. The previous operator config is retained on all four hosts as
+`config/cluster.pre-qsa-20260906.json`. Measured ShareGPT48 performance is
+49.56–50.30 versus 48.60 output tokens/s (the final run also has lower TTFT);
+decode improvement remains about 2%. This is a modest gain, not the original
+goal of substantially faster single-answer generation.
+
+Startup is manual. The detached rank launchers survive SSH disconnection, but
+there is no configured boot startup, crash supervisor or automatic failover.
+After a host reboot, start the preserved `ray-head` container on node 1, wait
+for its Ray service on port 6379, then start the three preserved `ray-worker`
+containers. Their PID 1 still runs Ray, although inference uses native `mp`.
+Once all containers are running, use the native controller. This reboot sequence
+has not been tested by rebooting the hosts.
+
+The obsolete `dflash-27b.service` on node 1 was stopped and disabled after its
+826 failed retries against a missing `strix-halo-llm-finetuning` container.
+Its unit file was preserved. Restoring that older service requires restoring
+its separate container first; it is not part of this Qwen Flash Next cluster.
 
 Configuration is `/home/maik/strix-halo-next/config/cluster.json` **on every node**.
 For an experiment, copy one identical JSON file to all four nodes and pass its
