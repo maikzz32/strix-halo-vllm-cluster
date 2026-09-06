@@ -42,7 +42,8 @@ EXPECTED = {
     "65_spec_cudagraph_gate": "vllm-src",
     "66_vit_sdpa_math_gfx1x",
     "67_gdn_decode_geometry",
-    "68_shared_expert_replicate": "vllm-src",
+    "68_shared_expert_replicate",
+    "69_lm_head_quant": "vllm-src",
 }
 
 # Conditional patches: marker required only when at least one of the listed
