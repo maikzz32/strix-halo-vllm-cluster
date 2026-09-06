@@ -246,3 +246,18 @@ Budget je Iteration bei vier Raengen: 6,2 ms Gewichte + 9,1 ms Kollektive + 13,5
 Netzwerk-Spruenge, ein Baum nur vier -- rechnerisch 95 auf 59 us je AllReduce. Gemessen mit
 `RCCL_OVERRIDE_ALGO=TREE`, `PROTO=LL`, zwei Kanaelen: **41,02 statt 48,51 tok/s**, TPOT 21,29
 statt 18,73. Der Ring bleibt auf dieser Strecke klar besser.
+
+### Durchsatz bei paralleler Nutzung (vier Nodes, 262k Kontext, 06.09.2026)
+
+Alle Optimierungszahlen oben sind Einzelanfrage-Latenz (Konkurrenz 1). Im Agentenbetrieb mit
+mehreren gleichzeitigen Anfragen liefert derselbe Cluster deutlich mehr:
+
+| gleichzeitige Anfragen | Gesamtdurchsatz | Zeit je Token |
+|---|---|---|
+| 1 | 47,25 tok/s | 18,77 ms |
+| 4 | 82,51 tok/s | 40,23 ms |
+| 8 | 94,80 tok/s | 74,05 ms |
+| 16 | 96,12 tok/s | 71,57 ms |
+| 32 | 97,65 tok/s | 72,48 ms |
+
+Saettigung zwischen acht und sechzehn gleichzeitigen Anfragen bei knapp 98 tok/s.
