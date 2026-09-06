@@ -261,3 +261,26 @@ mehreren gleichzeitigen Anfragen liefert derselbe Cluster deutlich mehr:
 | 32 | 97,65 tok/s | 72,48 ms |
 
 Saettigung zwischen acht und sechzehn gleichzeitigen Anfragen bei knapp 98 tok/s.
+
+### Der Fixanteil gemessen: Speicherkopien dominieren (06.09.2026)
+
+Torch-Profiler (in 0.29 ueber `--profiler-config`, nicht mehr ueber eine Umgebungsvariable),
+acht Decode-Schritte, zwei Raenge:
+
+| Operation | Gesamtzeit | Aufrufe |
+|---|---|---|
+| aten::copy_ | 309,3 ms | 1016 |
+| aten::to | 309,0 ms | 800 |
+| aten::_to_copy | 308,7 ms | 568 |
+| kompilierter Graph | 49,0 ms | 32 |
+| QSA-Attention | 22,3 ms | 16 |
+| MoE mit Shared Expert | 16,3 ms | 16 |
+| Kollektive | 10,3 ms | 104 |
+
+Rund 127 Speicherkopien je Decode-Schritt. Deckt sich mit pytorch#171687 (auf gfx1151 besteht
+LLM-Decode zu ueber 90 Prozent aus hipMemcpyWithStream). Einzelne GPU-Kernel sind im Trace nicht
+sichtbar, weil sie in HIP-Graphen gekapselt sind.
+
+Naheliegender Verdacht geprueft: `--mamba-ssm-cache-dtype bfloat16` statt des vom Modell
+gesetzten float32 ergibt **39,06 statt 40,34 tok/s** -- die Akzeptanzrate faellt von 54,0 auf
+52,4 Prozent, der ungenauere Zustand kostet mehr als die gesparten Konversionen bringen.
