@@ -75,7 +75,9 @@ Er spart dort rund 3 Mikrosekunden; ein Modellgewinn ist noch nicht gemessen.
 
 Die [MoE-Kachelprüfung](docs/2026-09-07-moe-occupancy.md) findet einen
 W1-Kandidaten mit 3–6 % weniger isolierter Operatorzeit bei wechselnden Experten
-und bitgleichen Testergebnissen. Ein vollständiger Modelltest steht noch aus.
+und bitgleichen Testergebnissen. Im [vollständigen Modellvergleich](docs/2026-09-07-moe-w1-model.md)
+bleiben gegenüber der stärkeren Kontrolle nur 0,57 % schnellere Generierung;
+alle Antworten stimmen überein. Der ursprüngliche Kernel bleibt aktiv.
 
 ## Struktur
 
