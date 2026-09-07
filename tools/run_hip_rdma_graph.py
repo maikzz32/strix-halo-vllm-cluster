@@ -38,6 +38,19 @@ SOURCES = {
     'bench_hip_rdma_graph.py': 'tests/bench_hip_rdma_graph.py',
 }
 
+BACKEND_SOURCES = {
+    'cpu_rdma_transport.c': 'tools/cpu_rdma_transport.c',
+    'cpu_rdma_transport.h': 'tools/cpu_rdma_transport.h',
+    'cpu_rdma_reduce_avx2.h': 'tools/cpu_rdma_reduce_avx2.h',
+    'cpu_rdma_reference.py': 'tools/cpu_rdma_reference.py',
+    'cpu_rdma_ring4_reference.py': 'tools/cpu_rdma_ring4_reference.py',
+    'analyze_rccl_bf16_reference.py': 'tools/analyze_rccl_bf16_reference.py',
+    'hip_rdma_backend.cpp': 'tools/hip_rdma_backend.cpp',
+    'hip_rdma_backend.py': 'tools/hip_rdma_backend.py',
+    'validate_rccl_ring4.py': 'tools/validate_rccl_ring4.py',
+    'bench_hip_rdma_backend.py': 'tests/bench_hip_rdma_backend.py',
+}
+
 REMOTE = r'''
 import hashlib, json, os, pathlib, signal, subprocess, sys, tempfile, time
 cfg = CONFIG
@@ -111,6 +124,7 @@ signal.signal(signal.SIGINT, interrupted)
 def command(argv, seconds, cwd):
     global proc
     environment = os.environ.copy()
+    environment.update(cfg.get('environment', {}))
     environment[marker_name] = cfg['run_id']
     proc = subprocess.Popen(argv, cwd=cwd, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, start_new_session=True, env=environment)
@@ -151,7 +165,7 @@ try:
         command(['gcc', '-std=c11', '-O3', '-fPIC', '-Wall', '-Wextra', '-Werror',
                  '-I.', '-c', 'cpu_rdma_transport.c', '-o', 'transport.o'], 25, stage)
         command(['g++', '-std=c++17', '-O2', '-fPIC', '-shared', '-D__HIP_PLATFORM_AMD__',
-                 '-I.', '-I/opt/rocm/include', 'hip_rdma_graph.cpp', 'transport.o',
+                 '-I.', '-I/opt/rocm/include', cfg.get('cpp_source', 'hip_rdma_graph.cpp'), 'transport.o',
                  '-L/opt/rocm/lib', '-Wl,-rpath,/opt/rocm/lib', '-lamdhip64',
                  '-libverbs', '-lpthread', '-lm', '-o', 'libhip_rdma_graph.so'], 25, stage)
         library = stage / 'libhip_rdma_graph.so'
@@ -160,7 +174,8 @@ try:
                           'binary_sha256':hashlib.sha256(library.read_bytes()).hexdigest()}), flush=True)
         output = stage / 'result.json'
         try:
-            command(['python3', '-S', str(stage / 'bench_hip_rdma_graph.py'),
+            command(['python3', *([] if cfg.get('use_site') else ['-S']),
+                     str(stage / cfg.get('rank_script', 'bench_hip_rdma_graph.py')),
                      '--library', str(library), '--output', str(output), *cfg['arguments']],
                     cfg['deadline'], stage)
         finally:
@@ -243,22 +258,52 @@ def verify_artifact(artifact, config, modes, expected_collectives):
     return True
 
 
+def verify_backend_artifact(artifact, config, iterations, samples):
+    if (artifact.get('status') != 'passed' or artifact.get('mode') != 'ring4' or
+            artifact.get('rank') != config['rank'] or artifact.get('run_id') != config['run_id']):
+        return False
+    flags = ('exact', 'finite', 'unsupported_shape_falls_back', 'graphs_destroyed',
+             'backend_closed', 'pynccl_destroyed', 'cpu_group_destroyed')
+    if any(artifact.get(k) is not True for k in flags) or artifact.get('cleanup_error'):
+        return False
+    if (artifact.get('operations_per_graph') != 32 or artifact.get('iterations') != iterations or
+            artifact.get('samples') != samples or artifact.get('warmup') != 4 or
+            artifact.get('graph_output_checks') != (4+samples)*32):
+        return False
+    for key in ('wall_samples_us', 'hip_event_samples_us'):
+        values = artifact.get(key, [])
+        if len(values) != samples or any(not isinstance(v, (float,int)) or not math.isfinite(v) or v <= 0 for v in values):
+            return False
+    proof = artifact.get('parity_proof', {})
+    if proof.get('banks') != 32 or proof.get('elements_per_rank') != 10240:
+        return False
+    if any(proof.get(k) is not True for k in ('exact_eager','exact_graph','validated_against_active_pynccl','repeat_bank0','graph_destroyed')):
+        return False
+    ranks = proof.get('rank_results', [])
+    return (len(ranks) == 4 and {r.get('rank') for r in ranks} == {0,1,2,3}
+            and all(r.get('errors') == [] for r in ranks))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--backend-test', action='store_true', help='Test isolated descriptor backend, including active PyNccl parity; no serving hook')
     parser.add_argument('--output', type=Path)
     parser.add_argument('--port', type=int, default=29881)
     parser.add_argument('--deadline', type=int, default=45)
     parser.add_argument('--replays', type=int, default=32)
     parser.add_argument('--samples', type=int, default=3)
-    parser.add_argument('--mode', choices=['fp32', 'bf16', 'both'], default='both')
+    parser.add_argument('--mode', choices=['fp32', 'bf16', 'both', 'ring4'], default='both')
     parser.add_argument('--url', default='http://192.168.1.15:8000')
     args = parser.parse_args()
     if not 1024 <= args.port <= 65534 or not 10 <= args.deadline <= 50:
         parser.error('base port 1024–65534 and deadline 10–50 seconds required')
     if not 1 <= args.replays <= 128 or not 1 <= args.samples <= 5:
         parser.error('replays 1–128 and samples 1–5 required')
-    sources = {name: (ROOT / path).read_text(encoding='utf-8') for name, path in SOURCES.items()}
+    if args.backend_test != (args.mode == 'ring4'):
+        parser.error('--backend-test requires --mode ring4, and ring4 requires --backend-test')
+    source_paths = BACKEND_SOURCES if args.backend_test else SOURCES
+    sources = {name: (ROOT / path).read_text(encoding='utf-8') for name, path in source_paths.items()}
     hashes = {name: hashlib.sha256(text.encode('utf-8')).hexdigest() for name, text in sources.items()}
     run_id = uuid.uuid4().hex
     configs = []
@@ -267,13 +312,23 @@ def main():
         arguments = ['--rank', str(rank), '--run-id', run_id,
                      '--device', 'rocep197s0f1' if node == 18 else 'rocep197s0f3',
                      '--master', '192.168.100.1', '--port', str(args.port), '--gid-index', '1',
-                     '--deadline', '10', '--iterations', str(args.replays), '--warmup', '4',
+                     '--deadline', '40' if args.backend_test else '10', '--iterations', str(args.replays), '--warmup', '4',
                      '--samples', str(args.samples), '--mode', args.mode]
         configs.append({'rank':rank, 'node':node, 'container':container, 'run_id':run_id,
                         'arguments':arguments, 'deadline':args.deadline, 'source_sha256':hashes})
+        if args.backend_test:
+            configs[-1].update(cpp_source='hip_rdma_backend.cpp',
+                               rank_script='bench_hip_rdma_backend.py', use_site=True,
+                               environment={'NCCL_IB_GID_INDEX':'1','NCCL_NET_GDR_LEVEL':'0',
+                                            'NCCL_MIN_NCHANNELS':'4','NCCL_MAX_NCHANNELS':'4',
+                                            'NCCL_LAUNCH_MODE':'GROUP','NCCL_GRAPH_MIXING_SUPPORT':'1',
+                                            'NCCL_DEBUG':'INFO',
+                                            'NCCL_SOCKET_IFNAME':'enp197s0f1np1' if node == 18 else 'enp197s0f3np3',
+                                            'GLOO_SOCKET_IFNAME':'enp197s0f1np1' if node == 18 else 'enp197s0f3np3'})
     manifest = {'run_id':run_id, 'source_sha256':hashes, 'configs':configs,
                 'payload_bytes':20480, 'gpu_dependency':True,
-                'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+                'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                'backend_test':args.backend_test}
     if not args.execute:
         print(json.dumps(manifest, indent=2)); return 0
     before = serving_snapshot(args.url)
@@ -304,8 +359,12 @@ def main():
         artifacts = [r['artifact'] for r in own if r.get('event') == 'rank_artifact']
         modes = {'fp32_then_bf16', 'bf16_each_add'} if args.mode == 'both' else {
             'fp32_then_bf16' if args.mode == 'fp32' else 'bf16_each_add'}
-        good = code == 0 and joined and len(artifacts) == 1 and verify_artifact(
-            artifacts[0], config, modes, 4 + args.replays * args.samples)
+        if args.backend_test:
+            good = code == 0 and joined and len(artifacts) == 1 and verify_backend_artifact(
+                artifacts[0], config, args.replays, args.samples)
+        else:
+            good = code == 0 and joined and len(artifacts) == 1 and verify_artifact(
+                artifacts[0], config, modes, 4 + args.replays * args.samples)
         print(f"rank {config['rank']} / node {config['node']}: exit={code}, verified={good}", flush=True)
         return {'rank':config['rank'], 'node':config['node'], 'exit_code':code,
                 'verified':good, 'records':rows}

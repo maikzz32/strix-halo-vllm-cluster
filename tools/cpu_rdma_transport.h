@@ -17,7 +17,9 @@ extern "C" {
 typedef struct cpu_rdma_ctx cpu_rdma_ctx;
 typedef enum cpu_rdma_mode {
     CPU_RDMA_FP32_THEN_BF16 = 0,
-    CPU_RDMA_BF16_EACH_ADD = 1
+    CPU_RDMA_BF16_EACH_ADD = 1,
+    /* Fixed 20-KiB Ring/LL/four-channel profile, requiring live calibration. */
+    CPU_RDMA_RCCL_RING4_BF16 = 2
 } cpu_rdma_mode;
 typedef enum cpu_rdma_status {
     CPU_RDMA_OK = 0,
@@ -71,6 +73,13 @@ int cpu_rdma_run(cpu_rdma_ctx *ctx, const void *input_host, void *output_host,
  */
 int cpu_rdma_destroy(cpu_rdma_ctx *ctx);
 const char *cpu_rdma_last_error(const cpu_rdma_ctx *ctx);
+
+/* CPU-only arithmetic entry point, with the same FP-state and shape guards.
+ * Four complete input arrays; output must not partially overlap an input.
+ * No device access, allocation or communication. Mode 2 is topology-specific,
+ * not a general guarantee of RCCL equivalence. */
+int cpu_rdma_reduce_host(const uint16_t *inputs[4], uint16_t *output,
+                         size_t values, cpu_rdma_mode mode);
 
 /* CPU-only, no device/network access, heap allocation or control-state changes.
  * Verifies current thread RNE + disabled FTZ/DAZ, then scalar/AVX2 bit parity

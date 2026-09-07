@@ -84,6 +84,37 @@ static int fp_state_ok(void) {
 #endif
     return 1;
 }
+int cpu_rdma_reduce_host(const uint16_t *inputs[4], uint16_t *output,
+                         size_t values, cpu_rdma_mode mode) {
+    if (!inputs || !output || values != N || mode < 0 || mode > 2)
+        return CPU_RDMA_INVALID;
+    for (unsigned r = 0; r < NR; ++r) {
+        if (!inputs[r]) return CPU_RDMA_INVALID;
+        uintptr_t a = (uintptr_t)inputs[r], b = (uintptr_t)output;
+        if (a != b && (a > b ? a-b : b-a) < BYTES) return CPU_RDMA_INVALID;
+    }
+    if (!fp_state_ok()) return CPU_RDMA_UNSUPPORTED;
+    if (mode != CPU_RDMA_RCCL_RING4_BF16) {
+        reduce_avx2(inputs, output, values, (int)mode);
+        return CPU_RDMA_OK;
+    }
+    /* Profile 2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80.
+     * Independently logged rings; source-derived 3072/3072/3072/1024 partition.
+     * Owner's successor contributes first; owner contributes last. */
+    static const unsigned rings[4][4] = {{0,2,1,3},{0,2,3,1},{0,3,1,2},{0,1,3,2}};
+    size_t offset = 0;
+    for (unsigned channel = 0; channel < 4; ++channel) {
+        size_t chunk = channel == 3 ? 256 : 768;
+        for (unsigned owner = 0; owner < 4; ++owner) {
+            const uint16_t *ordered[4];
+            for (unsigned r = 0; r < 4; ++r)
+                ordered[r] = inputs[rings[channel][(owner + 1 + r) % 4]] + offset;
+            reduce_avx2(ordered, output + offset, chunk, 1);
+            offset += chunk;
+        }
+    }
+    return CPU_RDMA_OK;
+}
 static int wait_fd(struct cpu_rdma_ctx *s, int fd, short events) {
     while (!expired(s)) {
         struct pollfd p = {.fd = fd, .events = events};
@@ -261,7 +292,7 @@ static int collective(struct cpu_rdma_ctx *s, const uint16_t *input, uint16_t *o
     atomic_thread_fence(memory_order_acquire);
     const uint16_t *a[NR];
     for (int r = 0; r < NR; ++r) a[r] = r == s->rank ? input : s->memory + (slot * NR + r) * N;
-    reduce_avx2(a, output, N, mode);
+    if (cpu_rdma_reduce_host(a, output, N, (cpu_rdma_mode)mode) != CPU_RDMA_OK) return -1;
     atomic_thread_fence(memory_order_release);
     s->recv_mask[slot] = 0; s->sequence++;
     return 0;
@@ -360,7 +391,8 @@ int cpu_rdma_run(cpu_rdma_ctx *s, const void *input_host, void *output_host,
     if (!s->ready || s->poisoned) return CPU_RDMA_POISONED;
     if (input_host != (char *)s->memory + CPU_RDMA_INPUT_OFFSET ||
         output_host != (char *)s->memory + CPU_RDMA_OUTPUT_OFFSET || values != CPU_RDMA_VALUES ||
-        (mode != CPU_RDMA_FP32_THEN_BF16 && mode != CPU_RDMA_BF16_EACH_ADD) ||
+        (mode != CPU_RDMA_FP32_THEN_BF16 && mode != CPU_RDMA_BF16_EACH_ADD &&
+         mode != CPU_RDMA_RCCL_RING4_BF16) ||
         s->sequence >= UINT32_MAX - 1u) {
         s->poisoned = 1;
         copy_error(s->error, sizeof(s->error), "invalid fixed input/output alias, count, mode or exhausted sequence");

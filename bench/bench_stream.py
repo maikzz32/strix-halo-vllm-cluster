@@ -88,7 +88,7 @@ def main():
         for f in concurrent.futures.as_completed(futures):
             results.append(f.result())
             report={'created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(), 'arguments':vars(args), 'models':models,'results':results,'elapsed_s':time.perf_counter()-started}
-            target.write_text(json.dumps(report,indent=2,ensure_ascii=False))
+            target.write_text(json.dumps(report,indent=2,ensure_ascii=False), encoding='utf-8')
     print('SAVED',target,flush=True)
 
 if __name__=='__main__':

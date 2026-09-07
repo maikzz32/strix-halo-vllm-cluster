@@ -36,12 +36,16 @@ Streaming-Zeitpunkte; `bench/compare_streams.py` vergleicht passende Läufe
 und prüft identische Ausgaben. `bench/bench_sharegpt.sh` wiederholt den
 bisherigen C1-Benchmark. Die Optimierungsversuche sind noch nicht abgeschlossen.
 
-Ein isolierter [HIP/RDMA-Versuch](docs/2026-09-07-hip-rdma-coupled.md)
-misst den vollständigen Austausch von 20 KiB zwischen den vier GPUs mit
-58–59 µs, einschließlich GPU-Kopien und nativer CPU-Summierung. Die bisherigen
-RCCL-Kontrollen lagen bei etwa 85 µs. Der neue Pfad ist experimentell:
-Der laufende Modelldienst verwendet weiterhin RCCL; ein zusätzlicher
-Geschwindigkeitsgewinn im Modell ist damit noch nicht nachgewiesen.
+Der [kalibrierte HIP/RDMA-Versuch](docs/2026-09-07-hip-rdma-ring4.md)
+verkürzt den isolierten 20-KiB-All-reduce auf 56,42 µs gegenüber ungefähr
+85,3 µs mit RCCL. Im vollständigen Modelltest entsteht daraus jedoch kein
+Gewinn: **49,79 statt 50,49 Output-Token/s** im direkten ShareGPT-Kontrolllauf,
+bei 48 identischen Antworten und gleicher MTP-Akzeptanz. Der Versuch wurde
+zurückgebaut; der laufende Dienst verwendet die bewährte QSA/RCCL-Konfiguration.
+Die [GitHub-Recherche](docs/github-vllm-projects-20260907.md) bewertet acht
+Projekte und benennt konkrete nächste Kernel- und Kommunikationsansätze.
+Der daraus abgeleitete [AITER-HC-Test](docs/2026-09-07-aiter-hc.md) war bei
+allen drei Zielgrößen langsamer als die bereits vorhandenen BF16-Kernel.
 
 ## Struktur
 
