@@ -73,6 +73,10 @@ Der isolierte [W2-Abschlusstest](docs/2026-09-07-moe-w2-epilogue.md) verbindet
 Teilprodukt-Reduktion und Expertensumme bei erhaltener BF16-Zwischenrundung.
 Er spart dort rund 3 Mikrosekunden; ein Modellgewinn ist noch nicht gemessen.
 
+Die [MoE-Kachelprüfung](docs/2026-09-07-moe-occupancy.md) findet einen
+W1-Kandidaten mit 3–6 % weniger isolierter Operatorzeit bei wechselnden Experten
+und bitgleichen Testergebnissen. Ein vollständiger Modelltest steht noch aus.
+
 ## Struktur
 
 - `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)
