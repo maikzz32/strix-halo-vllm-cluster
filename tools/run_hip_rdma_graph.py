@@ -297,6 +297,7 @@ def main():
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--backend-test', action='store_true', help='Test isolated descriptor backend, including active PyNccl parity; no serving hook')
     parser.add_argument('--uma-backend',action='store_true',help='Use the isolated one-kernel UMA backend with --backend-test')
+    parser.add_argument('--avx512-reduce',action='store_true',help='Isolated exact AVX512 CPU reduction; requires UMA backend')
     parser.add_argument('--uma-threads',type=int,choices=[256,512,1024],default=256)
     parser.add_argument('--output', type=Path)
     parser.add_argument('--port', type=int, default=29881)
@@ -314,11 +315,17 @@ def main():
         parser.error('--backend-test requires --mode ring4, and ring4 requires --backend-test')
     if args.uma_backend and not args.backend_test:
         parser.error('--uma-backend requires --backend-test --mode ring4')
+    if args.avx512_reduce and not args.uma_backend:
+        parser.error('--avx512-reduce requires --uma-backend')
     source_paths = dict(BACKEND_SOURCES if args.backend_test else SOURCES)
     if args.uma_backend:
         source_paths.pop('hip_rdma_backend.cpp')
         source_paths['hip_uma_backend.hip']='tools/hip_uma_backend.hip'
     sources = {name: (ROOT / path).read_text(encoding='utf-8') for name, path in source_paths.items()}
+    if args.avx512_reduce:
+        from build_cpu_rdma_wide import generate
+        sources['cpu_rdma_transport.c']=generate(sources['cpu_rdma_transport.c'])
+        sources['cpu_rdma_reduce_avx512.h']=(ROOT/'tests/cpu_rdma_reduce_avx512.h').read_text(encoding='utf-8')
     hashes = {name: hashlib.sha256(text.encode('utf-8')).hexdigest() for name, text in sources.items()}
     run_id = uuid.uuid4().hex
     configs = []
@@ -343,7 +350,7 @@ def main():
     manifest = {'run_id':run_id, 'source_sha256':hashes, 'configs':configs,
                 'payload_bytes':20480, 'gpu_dependency':True,
                 'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                'backend_test':args.backend_test,'uma_backend':args.uma_backend}
+                'backend_test':args.backend_test,'uma_backend':args.uma_backend,'avx512_reduce':args.avx512_reduce}
     if not args.execute:
         print(json.dumps(manifest, indent=2)); return 0
     before = serving_snapshot(args.url)

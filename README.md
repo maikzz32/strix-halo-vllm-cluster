@@ -83,6 +83,10 @@ Die [Transport-Zeitmessung](docs/2026-09-07-rdma-phases.md) bestätigt den berei
 direkten Austausch mit allen Peers. Das Einstellen der Sendungen kostet weniger
 als 1 Mikrosekunde; die CPU-Summierung bleibt ein messbarer weiterer Ansatz.
 
+Die [AVX-512-Prüfung](docs/2026-09-07-uma-avx512.md) senkt die isolierte
+GPU-/UMA-Kollektivzeit von 54,1 auf 48,0 Mikrosekunden bei bitgleichen Ergebnissen.
+Eine separate Bibliothek ist für den Modellvergleich vorbereitet, noch nicht aktiv.
+
 ## Struktur
 
 - `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)
