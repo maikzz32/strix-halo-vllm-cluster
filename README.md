@@ -69,6 +69,10 @@ häufige HC-Operatoren mit diesem Format. Eine unkomprimierte Kernelvariante
 spart isoliert 8 % beim Up-Operator; ein Modellgewinn ist nicht nachgewiesen.
 Der laufende Modelldienst bleibt unverändert.
 
+Der isolierte [W2-Abschlusstest](docs/2026-09-07-moe-w2-epilogue.md) verbindet
+Teilprodukt-Reduktion und Expertensumme bei erhaltener BF16-Zwischenrundung.
+Er spart dort rund 3 Mikrosekunden; ein Modellgewinn ist noch nicht gemessen.
+
 ## Struktur
 
 - `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)

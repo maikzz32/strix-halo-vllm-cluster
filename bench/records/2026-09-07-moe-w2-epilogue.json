@@ -1,0 +1,210 @@
+{
+  "manifest": {
+    "run_id": "19ebb5d1aab94d60b399cc3cf082459b",
+    "source_sha256": {
+      "bench_moe_w2_epilogue.py": "a6270de88cf939020357d94b1c1ba30829a177309fe0547594f0500ba4b2c631",
+      "moe_w2_reduce_sum_kernel.py": "bacdd7f7bcf31c88d32d1b254f828c83a22964606a28fee736e89b6f9eaef643"
+    },
+    "before_request_counts": {
+      "running": 0.0,
+      "waiting": 0.0
+    },
+    "before_success_total": 6.0
+  },
+  "result": {
+    "run_id": "19ebb5d1aab94d60b399cc3cf082459b",
+    "root": "/tmp/strix-w2-epilogue-19ebb5d1aab94d60b399cc3cf082459b",
+    "exit_code": 0,
+    "previous_owned_processes": [],
+    "remaining_owned_processes": [],
+    "report": {
+      "status": "passed",
+      "source_sha256": "4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070",
+      "cases": [
+        {
+          "pattern": "normal",
+          "pool_bytes": 49155840,
+          "methods": [
+            {
+              "method": "installed",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                15.00525176525116,
+                14.620598157246908,
+                14.606431126594543,
+                14.59826628367106,
+                14.598676562309265
+              ],
+              "median_us": 14.606431126594543
+            },
+            {
+              "method": "fused_64",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                12.343325217564901,
+                11.995335419972738,
+                11.961835622787476,
+                11.997668941815695,
+                11.97316845258077
+              ],
+              "median_us": 11.995335419972738
+            },
+            {
+              "method": "fused_128",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                12.51773734887441,
+                12.176079551378885,
+                12.193245689074198,
+                12.143248319625854,
+                12.17024823029836
+              ],
+              "median_us": 12.176079551378885
+            },
+            {
+              "method": "fused_256",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                11.97291910648346,
+                11.597512165705362,
+                11.597679058710733,
+                11.593262354532877,
+                11.598012844721476
+              ],
+              "median_us": 11.597679058710733
+            }
+          ]
+        },
+        {
+          "pattern": "cancellation",
+          "pool_bytes": 49155840,
+          "methods": [
+            {
+              "method": "installed",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                15.452320377031961,
+                15.074333548545837,
+                15.068249901135763,
+                15.046832958857218,
+                15.092249711354574
+              ],
+              "median_us": 15.074333548545837
+            },
+            {
+              "method": "fused_64",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                12.363327542940775,
+                11.991418401400248,
+                11.986918250719706,
+                12.003666162490845,
+                11.979252099990845
+              ],
+              "median_us": 11.991418401400248
+            },
+            {
+              "method": "fused_128",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                12.454489866892496,
+                12.054002285003662,
+                12.068667014439901,
+                12.076416611671448,
+                12.078750133514404
+              ],
+              "median_us": 12.076416611671448
+            },
+            {
+              "method": "fused_256",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                12.215826908747355,
+                11.794341603914896,
+                11.84533933798472,
+                11.847589413324991,
+                11.840339501698812
+              ],
+              "median_us": 11.84533933798472
+            }
+          ]
+        },
+        {
+          "pattern": "wide_range",
+          "pool_bytes": 49155840,
+          "methods": [
+            {
+              "method": "installed",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                14.833923180898031,
+                14.631845553716024,
+                14.622762799263,
+                14.609596133232117,
+                14.630096157391867
+              ],
+              "median_us": 14.630096157391867
+            },
+            {
+              "method": "fused_64",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                12.598985433578491,
+                12.184744079907736,
+                12.260493636131287,
+                12.214746077855429,
+                12.246244152386984
+              ],
+              "median_us": 12.246244152386984
+            },
+            {
+              "method": "fused_128",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                12.678898374239603,
+                12.329493959744772,
+                12.321577469507853,
+                12.327491243680319,
+                12.204496065775553
+              ],
+              "median_us": 12.327491243680319
+            },
+            {
+              "method": "fused_256",
+              "bit_mismatches": 0,
+              "changed_input_graph_exact": true,
+              "samples_us": [
+                11.777092019716898,
+                11.437352498372396,
+                11.439935366312662,
+                11.43501897652944,
+                11.441101630528768
+              ],
+              "median_us": 11.439935366312662
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "service_check": {
+    "before_success_total": 6.0,
+    "after_success_total": 6.0,
+    "unchanged": true,
+    "after_request_counts": {
+      "running": 0.0,
+      "waiting": 0.0
+    }
+  }
+}
