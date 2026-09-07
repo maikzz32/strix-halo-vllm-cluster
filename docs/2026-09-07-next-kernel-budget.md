@@ -67,21 +67,4 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 tools/analyze_hc_lossless.py \
   --model /home/maik/qwen38_rest --output /tmp/hc-lossless-survey.json
 ```
 
-No compressed GPU format or serving integration exists yet. The byte estimate
-does not prove faster decoding: extra descriptor reads, unpacking instructions,
-fallback blocks and occupancy may erase the bandwidth saving. Decompressing
-into a separate full-size GPU tensor on every invocation would introduce
-additional memory traffic; the candidate must decode inside the compute kernel.
-
-The next bounded experiment should preserve the existing HC arithmetic and
-replace only weight loads. The matching-revision
-[vLLM skinny GEMM source](https://github.com/vllm-project/vllm/blob/33898f832/csrc/rocm/skinny_gemms.cu)
-has three relevant vector-weight-load sites in its small, general and large
-`wvSplitK` kernels. The downloaded source SHA256 is
-`013f14b570cd8f25e254bf47643ba2802ab7d5fdd2069adb111bc6ff560f6682`.
-Before modifying it, an isolated unmodified build must match the actually
-installed operator, since the revision alone does not prove build equivalence.
-Then test packed loads against the same BF16 values and arithmetic across
-changing inputs and a weight pool larger than cache, including graph replay.
-Only a measured operator gain with preserved numerical quality would justify
-a matched full-model experiment.
+The subsequent [native GPU experiment](2026-09-07-hc-native.md) implemented and tested in-kernel lossless decoding. It preserved the tested BF16 results but slowed the common merged-down and up projections; no serving integration was promoted. An uncompressed unroll adjustment improved the isolated up operator by 8%, with an estimated full-model opportunity below 1% that remains unvalidated.

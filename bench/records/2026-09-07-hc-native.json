@@ -1,0 +1,1646 @@
+{
+  "scope": "Isolated synthetic-weight microbenchmarks, no model deployment",
+  "upstream_source_sha256": "013f14b570cd8f25e254bf47643ba2802ab7d5fdd2069adb111bc6ff560f6682",
+  "build_mapping_note": "Build to run mapping recorded from executed hash-guarded commands; historical run manifests omitted library identifiers.",
+  "runs": [
+    {
+      "variant": 1,
+      "build": {
+        "root": "/tmp/hc-lossless-d366b6c879b84997a933e8e66101cfbb",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-std=c++17",
+          "-O3",
+          "--offload-arch=gfx1151",
+          "-fPIC",
+          "-shared",
+          "native.hip",
+          "-o",
+          "native.so"
+        ],
+        "exit_code": 0,
+        "binary_sha256": "52ce5d2ac166940c59d2d38fe0c131c601ca77483ac282187e461103cf91d052"
+      },
+      "native_source_sha256": "a2205b4326be850979207cda20c133ba23ea72e50a9914da3b755415deee7f23",
+      "manifest": {
+        "run_id": "dd558b658aae449690d378e75bee9b12",
+        "source_sha256": {
+          "bench_hc_lossless.py": "f0b294f6a0032409cb0893a4ee22e83c9c44d6cb6cd71e6bf4dbb15fea2aa978"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 6.0
+      },
+      "result": {
+        "run_id": "dd558b658aae449690d378e75bee9b12",
+        "root": "/tmp/strix-hc-lossless-dd558b658aae449690d378e75bee9b12",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "report": {
+          "status": "passed",
+          "synthetic_weights": true,
+          "pool_size": 24,
+          "cases": [
+            {
+              "shape": [
+                4,
+                336,
+                10240
+              ],
+              "label": "merged_down",
+              "raw_bytes": 165150720,
+              "packed_bytes": 125677184,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    43.35596958796183,
+                    43.3888832728068,
+                    43.44304800033569,
+                    43.37963263193766,
+                    43.50563287734985
+                  ],
+                  "median_us": 43.3888832728068,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    43.35405031840006,
+                    43.334551652272545,
+                    43.33655039469401,
+                    43.249050776163735,
+                    43.3888832728068
+                  ],
+                  "median_us": 43.33655039469401,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    70.0473149617513,
+                    70.15589078267415,
+                    70.0650691986084,
+                    70.0127363204956,
+                    70.03200054168701
+                  ],
+                  "median_us": 70.0473149617513,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                320,
+                10240
+              ],
+              "label": "final_down",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119708672,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    49.26955699920654,
+                    49.3340531984965,
+                    49.377548694610596,
+                    49.30488665898641,
+                    49.28079843521118
+                  ],
+                  "median_us": 49.30488665898641,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    49.179391066233315,
+                    49.27680889765421,
+                    49.1676410039266,
+                    49.168225129445396,
+                    49.2680549621582
+                  ],
+                  "median_us": 49.179391066233315,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    44.086949030558266,
+                    44.10620133082072,
+                    44.09569899241129,
+                    44.120617707570396,
+                    44.10053491592407
+                  ],
+                  "median_us": 44.10053491592407,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                10240,
+                320
+              ],
+              "label": "up",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119721856,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    34.221720695495605,
+                    34.44371620814005,
+                    34.52471097310384,
+                    34.31771596272787,
+                    34.31596755981445
+                  ],
+                  "median_us": 34.31771596272787,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    35.02161502838135,
+                    35.03636121749878,
+                    35.10844707489014,
+                    35.11636257171631,
+                    34.96586481730143
+                  ],
+                  "median_us": 35.03636121749878,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    66.98298454284668,
+                    66.8236494064331,
+                    66.90206527709961,
+                    66.97364648183186,
+                    66.97798569997151
+                  ],
+                  "median_us": 66.97364648183186,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            }
+          ],
+          "device": "AMD Radeon 8060S Graphics",
+          "cu_count": 20,
+          "torch": "2.13.0+rocm10.0.0",
+          "notes": [
+            "Same weights and arithmetic, only packed load sites differ.",
+            "24 distinct weights per shape exceed150MiB; cache misses not profiled.",
+            "Every packed matrix is unpacked on GPU and checked bit-exactly.",
+            "Both isolated GEMMs must equal installed vLLM outputs before timing."
+          ],
+          "elapsed_s": 3.0000108889980766
+        }
+      },
+      "service_check": {
+        "before_success_total": 6.0,
+        "after_success_total": 6.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "variant": 2,
+      "build": {
+        "root": "/tmp/hc-lossless-c7efc6256e9946c0a127cb0dc6a428ea",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-std=c++17",
+          "-O3",
+          "--offload-arch=gfx1151",
+          "-fPIC",
+          "-shared",
+          "native.hip",
+          "-o",
+          "native.so"
+        ],
+        "exit_code": 0,
+        "binary_sha256": "40d67bb9f6873922c5a91a42b88bee49b3ddff5cf0dec263f63a8ea8cfe57c75"
+      },
+      "native_source_sha256": "024a0152715dc057a908cfb57cdf9f7d4df53d106dbd3ac6d4cce2713b8ea48e",
+      "manifest": {
+        "run_id": "d99ba3cc63cb4a7bb8531fab24577b33",
+        "source_sha256": {
+          "bench_hc_lossless.py": "f0b294f6a0032409cb0893a4ee22e83c9c44d6cb6cd71e6bf4dbb15fea2aa978"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 6.0
+      },
+      "result": {
+        "run_id": "d99ba3cc63cb4a7bb8531fab24577b33",
+        "root": "/tmp/strix-hc-lossless-d99ba3cc63cb4a7bb8531fab24577b33",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "report": {
+          "status": "passed",
+          "synthetic_weights": true,
+          "pool_size": 24,
+          "cases": [
+            {
+              "shape": [
+                4,
+                336,
+                10240
+              ],
+              "label": "merged_down",
+              "raw_bytes": 165150720,
+              "packed_bytes": 125677184,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    43.101306756337486,
+                    43.12813679377238,
+                    43.11879873275757,
+                    43.09180974960327,
+                    43.153886000315346
+                  ],
+                  "median_us": 43.11879873275757,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    42.96189149220785,
+                    42.92039076487223,
+                    42.99614032109579,
+                    42.98330942789713,
+                    43.00114313761393
+                  ],
+                  "median_us": 42.98330942789713,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    68.6974287033081,
+                    68.68010361989339,
+                    68.72859001159668,
+                    68.74284744262695,
+                    68.72951189676921
+                  ],
+                  "median_us": 68.72859001159668,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                320,
+                10240
+              ],
+              "label": "final_down",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119708672,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    49.220053354899086,
+                    49.28346474965414,
+                    49.19146696726481,
+                    49.20163551966349,
+                    49.20454819997152
+                  ],
+                  "median_us": 49.20454819997152,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    49.16813770929972,
+                    49.179136753082275,
+                    49.218551317850746,
+                    49.1711417833964,
+                    49.18996493021647
+                  ],
+                  "median_us": 49.179136753082275,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    43.06013981501261,
+                    43.07889143625895,
+                    43.114638328552246,
+                    43.11355749766032,
+                    43.107807636260986
+                  ],
+                  "median_us": 43.107807636260986,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                10240,
+                320
+              ],
+              "label": "up",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119721856,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    34.213717778523765,
+                    34.38929716746012,
+                    34.432379404703774,
+                    34.319464365641274,
+                    34.20021931330363
+                  ],
+                  "median_us": 34.319464365641274,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    35.03652811050415,
+                    35.2109432220459,
+                    35.03394524256388,
+                    35.03894408543905,
+                    34.96103286743164
+                  ],
+                  "median_us": 35.03652811050415,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    65.33602476119995,
+                    65.33669233322144,
+                    65.4386043548584,
+                    65.47751824061076,
+                    65.46260515848796
+                  ],
+                  "median_us": 65.4386043548584,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            }
+          ],
+          "device": "AMD Radeon 8060S Graphics",
+          "cu_count": 20,
+          "torch": "2.13.0+rocm10.0.0",
+          "notes": [
+            "Same weights and arithmetic, only packed load sites differ.",
+            "24 distinct weights per shape exceed150MiB; cache misses not profiled.",
+            "Every packed matrix is unpacked on GPU and checked bit-exactly.",
+            "Both isolated GEMMs must equal installed vLLM outputs before timing."
+          ],
+          "elapsed_s": 3.037132757999643
+        }
+      },
+      "service_check": {
+        "before_success_total": 6.0,
+        "after_success_total": 6.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "variant": 3,
+      "build": {
+        "root": "/tmp/hc-lossless-d3460963700a4e9da7c3ef6b09787ef7",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-std=c++17",
+          "-O3",
+          "--offload-arch=gfx1151",
+          "-fPIC",
+          "-shared",
+          "native.hip",
+          "-o",
+          "native.so"
+        ],
+        "exit_code": 0,
+        "binary_sha256": "58d020bf8c0ef803cd7f9ddfa4643b1ab938aa4e8b35f75ecca2d96edc164e8a"
+      },
+      "native_source_sha256": "74f2f16822ccbe4fbefe6a363ab19d58d7e67a48e8f529a78d92a8e54d408c0b",
+      "manifest": {
+        "run_id": "62f4556ce51e41448dbb3552f81640d5",
+        "source_sha256": {
+          "bench_hc_lossless.py": "4a864496a8d9a8a5e3efb21c190face1005dd45ad6edc4ac8dd2c40c6ce75298"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 6.0
+      },
+      "result": {
+        "run_id": "62f4556ce51e41448dbb3552f81640d5",
+        "root": "/tmp/strix-hc-lossless-62f4556ce51e41448dbb3552f81640d5",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "report": {
+          "status": "passed",
+          "synthetic_weights": true,
+          "pool_size": 24,
+          "cases": [
+            {
+              "shape": [
+                4,
+                336,
+                10240
+              ],
+              "label": "merged_down",
+              "raw_bytes": 165150720,
+              "packed_bytes": 125677184,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    43.415300051371254,
+                    43.39113235473633,
+                    43.382795651753746,
+                    43.43654712041219,
+                    43.441879749298096
+                  ],
+                  "median_us": 43.415300051371254,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    43.36387713750204,
+                    43.25313170750936,
+                    43.15688610076904,
+                    43.245299657185875,
+                    43.220134576161705
+                  ],
+                  "median_us": 43.245299657185875,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    68.37159792582194,
+                    68.36826801300049,
+                    68.31827163696289,
+                    68.35610866546631,
+                    68.41451327006023
+                  ],
+                  "median_us": 68.36826801300049,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed_w8",
+                  "samples_us": [
+                    91.53629938761394,
+                    91.52088165283203,
+                    91.66629314422607,
+                    91.5972073872884,
+                    91.56604607899983
+                  ],
+                  "median_us": 91.56604607899983,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0,
+              "packed_w8_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                320,
+                10240
+              ],
+              "label": "final_down",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119708672,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    49.47555065155029,
+                    49.44955110549927,
+                    49.437880516052246,
+                    49.47404464085897,
+                    49.48954184850057
+                  ],
+                  "median_us": 49.47404464085897,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    49.3834654490153,
+                    49.37204917271932,
+                    49.47695732116699,
+                    49.43480094273885,
+                    49.42704439163208
+                  ],
+                  "median_us": 49.42704439163208,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    43.31263303756714,
+                    43.350883324941,
+                    43.36013396581014,
+                    43.35263172785441,
+                    43.3764656384786
+                  ],
+                  "median_us": 43.35263172785441,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed_w8",
+                  "samples_us": [
+                    43.25721661249796,
+                    43.33730141321818,
+                    43.36905082066854,
+                    43.35754712422689,
+                    43.38138500849406
+                  ],
+                  "median_us": 43.35754712422689,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0,
+              "packed_w8_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                10240,
+                320
+              ],
+              "label": "up",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119721856,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    33.65714947382609,
+                    33.83214473724365,
+                    33.84681145350138,
+                    33.68356625239054,
+                    33.69064728418986
+                  ],
+                  "median_us": 33.69064728418986,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    34.58162546157837,
+                    34.561709562937416,
+                    34.59237416585287,
+                    34.60304339726766,
+                    34.61837371190389
+                  ],
+                  "median_us": 34.59237416585287,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    65.65034786860149,
+                    65.64126412073772,
+                    65.66526492436726,
+                    65.71609179178874,
+                    65.66301584243774
+                  ],
+                  "median_us": 65.66301584243774,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed_w8",
+                  "samples_us": [
+                    75.66312948862712,
+                    65.3101921081543,
+                    65.31210740407307,
+                    65.33885796864827,
+                    65.40518601735432
+                  ],
+                  "median_us": 65.33885796864827,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0,
+              "packed_w8_bit_mismatches": 0
+            }
+          ],
+          "device": "AMD Radeon 8060S Graphics",
+          "cu_count": 20,
+          "torch": "2.13.0+rocm10.0.0",
+          "notes": [
+            "Same weights and arithmetic, only packed load sites differ.",
+            "24 distinct weights per shape exceed150MiB; cache misses not profiled.",
+            "Every packed matrix is unpacked on GPU and checked bit-exactly.",
+            "Both isolated GEMMs must equal installed vLLM outputs before timing."
+          ],
+          "elapsed_s": 3.559580969998933
+        }
+      },
+      "service_check": {
+        "before_success_total": 6.0,
+        "after_success_total": 6.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "variant": 4,
+      "build": {
+        "root": "/tmp/hc-lossless-eaf1c45d23c34f9f9638ac831aa829c5",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-std=c++17",
+          "-O3",
+          "--offload-arch=gfx1151",
+          "-fPIC",
+          "-shared",
+          "native.hip",
+          "-o",
+          "native.so"
+        ],
+        "exit_code": 0,
+        "binary_sha256": "da88d3c712ef256477790ca43b17781e24caf5f6cbf762c44822252e1423b836"
+      },
+      "native_source_sha256": "d538403d1d714152e7cedadbe94fbb19739950021ec03d539de13e28cba70498",
+      "manifest": {
+        "run_id": "8c9dd7ebfefa47cca906fc13423e19e7",
+        "source_sha256": {
+          "bench_hc_lossless.py": "6a48bb922910dd75bdd0f39e225fca664ebfa84d64244394ffed7a34e1231ac6"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 6.0
+      },
+      "result": {
+        "run_id": "8c9dd7ebfefa47cca906fc13423e19e7",
+        "root": "/tmp/strix-hc-lossless-8c9dd7ebfefa47cca906fc13423e19e7",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "report": {
+          "status": "passed",
+          "synthetic_weights": true,
+          "pool_size": 24,
+          "cases": [
+            {
+              "shape": [
+                4,
+                336,
+                10240
+              ],
+              "label": "merged_down",
+              "raw_bytes": 165150720,
+              "packed_bytes": 125677184,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    43.05147329966227,
+                    43.028807640075684,
+                    43.052403132120766,
+                    43.038407961527504,
+                    43.072990576426186
+                  ],
+                  "median_us": 43.05147329966227,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    42.94814268747965,
+                    42.87989536921183,
+                    42.98372666041056,
+                    42.891224225362144,
+                    42.92130867640177
+                  ],
+                  "median_us": 42.92130867640177,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    61.376468340555824,
+                    61.29854917526245,
+                    61.39363447825114,
+                    61.38838132222494,
+                    61.38746738433838
+                  ],
+                  "median_us": 61.38746738433838,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                320,
+                10240
+              ],
+              "label": "final_down",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119708672,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    49.604292710622154,
+                    49.58995978037516,
+                    49.589709440867104,
+                    49.57479238510132,
+                    49.6325413386027
+                  ],
+                  "median_us": 49.58995978037516,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    49.66454108556112,
+                    49.6236244837443,
+                    49.62445894877116,
+                    49.61378971735636,
+                    49.59504206975301
+                  ],
+                  "median_us": 49.6236244837443,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    39.693148930867515,
+                    39.75015083948771,
+                    39.77522850036621,
+                    39.717066287994385,
+                    39.7573987642924
+                  ],
+                  "median_us": 39.75015083948771,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                10240,
+                320
+              ],
+              "label": "up",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119721856,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    34.011642138163246,
+                    34.419965744018555,
+                    34.417215983072914,
+                    34.21846628189087,
+                    34.15213425954183
+                  ],
+                  "median_us": 34.21846628189087,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    34.939114252726235,
+                    34.99619563420614,
+                    34.9541982014974,
+                    35.05853017171224,
+                    34.89495118459066
+                  ],
+                  "median_us": 34.9541982014974,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    61.622373263041176,
+                    61.634790897369385,
+                    61.58829132715861,
+                    61.56137784322103,
+                    61.585541566212974
+                  ],
+                  "median_us": 61.58829132715861,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            }
+          ],
+          "device": "AMD Radeon 8060S Graphics",
+          "cu_count": 20,
+          "torch": "2.13.0+rocm10.0.0",
+          "notes": [
+            "Same weights and arithmetic, only packed load sites differ.",
+            "24 distinct weights per shape exceed150MiB; cache misses not profiled.",
+            "Every packed matrix is unpacked on GPU and checked bit-exactly.",
+            "Both isolated GEMMs must equal installed vLLM outputs before timing."
+          ],
+          "elapsed_s": 3.106637334996776
+        }
+      },
+      "service_check": {
+        "before_success_total": 6.0,
+        "after_success_total": 6.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "variant": 5,
+      "build": {
+        "root": "/tmp/hc-lossless-8d733f76895e4991ab323aa3abaceaac",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-std=c++17",
+          "-O3",
+          "-save-temps",
+          "--offload-arch=gfx1151",
+          "-fPIC",
+          "-shared",
+          "native.hip",
+          "-o",
+          "native.so"
+        ],
+        "exit_code": 0,
+        "binary_sha256": "dd18c11088e9e6f24ebee9b60378f43172745d9585b9edfbc7270504f3887955"
+      },
+      "native_source_sha256": "1184e32d3b6f4158cbaf912f596b8b944dfa810dbadd949652b7459eba79d594",
+      "manifest": {
+        "run_id": "d74d64651f214f69a03a758e123667a2",
+        "source_sha256": {
+          "bench_hc_lossless.py": "6a48bb922910dd75bdd0f39e225fca664ebfa84d64244394ffed7a34e1231ac6"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 6.0
+      },
+      "result": {
+        "run_id": "d74d64651f214f69a03a758e123667a2",
+        "root": "/tmp/strix-hc-lossless-d74d64651f214f69a03a758e123667a2",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "report": {
+          "status": "passed",
+          "synthetic_weights": true,
+          "pool_size": 24,
+          "cases": [
+            {
+              "shape": [
+                4,
+                336,
+                10240
+              ],
+              "label": "merged_down",
+              "raw_bytes": 165150720,
+              "packed_bytes": 125677184,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    43.744540214538574,
+                    43.63903999328613,
+                    43.75894864400228,
+                    43.66262356440226,
+                    43.75286897023519
+                  ],
+                  "median_us": 43.744540214538574,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    43.651958306630455,
+                    43.66204341252645,
+                    43.52545738220215,
+                    43.54937473932902,
+                    43.61587365468343
+                  ],
+                  "median_us": 43.61587365468343,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    69.20233567555745,
+                    69.24341519673665,
+                    69.2294994990031,
+                    69.25500233968098,
+                    69.16282971700032
+                  ],
+                  "median_us": 69.2294994990031,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                320,
+                10240
+              ],
+              "label": "final_down",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119708672,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    49.45288101832072,
+                    49.361467361450195,
+                    49.39388036727905,
+                    49.38079913457235,
+                    49.45212999979655
+                  ],
+                  "median_us": 49.39388036727905,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    49.332801500956215,
+                    49.3032177289327,
+                    49.36096668243408,
+                    49.36180114746094,
+                    49.35271739959717
+                  ],
+                  "median_us": 49.35271739959717,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    42.35848983128866,
+                    42.40582386652628,
+                    42.40782658259074,
+                    42.47282346089681,
+                    42.476908365885414
+                  ],
+                  "median_us": 42.40782658259074,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                10240,
+                320
+              ],
+              "label": "up",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119721856,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    34.59304173787435,
+                    35.167439778645836,
+                    35.234359900156655,
+                    35.352933406829834,
+                    35.26469071706136
+                  ],
+                  "median_us": 35.234359900156655,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    35.97108920415243,
+                    36.718316872914635,
+                    36.697399616241455,
+                    36.691649754842125,
+                    36.59323453903198
+                  ],
+                  "median_us": 36.691649754842125,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    43.96286805470785,
+                    44.128525257110596,
+                    43.967533111572266,
+                    43.984782695770264,
+                    44.057114919026695
+                  ],
+                  "median_us": 43.984782695770264,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            }
+          ],
+          "device": "AMD Radeon 8060S Graphics",
+          "cu_count": 20,
+          "torch": "2.13.0+rocm10.0.0",
+          "notes": [
+            "Same weights and arithmetic, only packed load sites differ.",
+            "24 distinct weights per shape exceed150MiB; cache misses not profiled.",
+            "Every packed matrix is unpacked on GPU and checked bit-exactly.",
+            "Both isolated GEMMs must equal installed vLLM outputs before timing."
+          ],
+          "elapsed_s": 3.2097033350000856
+        }
+      },
+      "service_check": {
+        "before_success_total": 6.0,
+        "after_success_total": 6.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "variant": 6,
+      "build": {
+        "root": "/tmp/hc-lossless-0250e1c6213a485a93874bc9902252fe",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-std=c++17",
+          "-O3",
+          "-save-temps",
+          "--offload-arch=gfx1151",
+          "-fPIC",
+          "-shared",
+          "native.hip",
+          "-o",
+          "native.so"
+        ],
+        "exit_code": 0,
+        "binary_sha256": "ae7c17353a341bca79219f4a22346ba9a96ee5a4202932d8bc6609cc675b0344"
+      },
+      "native_source_sha256": "04505ae5ad10ede7eea8a082f5b97f13bface90d08fa85f957a47ed6a5d86b32",
+      "manifest": {
+        "run_id": "111f9ee1c66d4735b5f7925f4677a6b9",
+        "source_sha256": {
+          "bench_hc_lossless.py": "6a48bb922910dd75bdd0f39e225fca664ebfa84d64244394ffed7a34e1231ac6"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 6.0
+      },
+      "result": {
+        "run_id": "111f9ee1c66d4735b5f7925f4677a6b9",
+        "root": "/tmp/strix-hc-lossless-111f9ee1c66d4735b5f7925f4677a6b9",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "report": {
+          "status": "passed",
+          "synthetic_weights": true,
+          "pool_size": 24,
+          "cases": [
+            {
+              "shape": [
+                4,
+                336,
+                10240
+              ],
+              "label": "merged_down",
+              "raw_bytes": 165150720,
+              "packed_bytes": 125677184,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    43.56229305267334,
+                    43.51629018783569,
+                    43.579792976379395,
+                    43.61712535222372,
+                    43.57354243596395
+                  ],
+                  "median_us": 43.57354243596395,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    43.5292919476827,
+                    43.53512525558472,
+                    43.52712631225586,
+                    43.439881006876625,
+                    43.545289834340416
+                  ],
+                  "median_us": 43.5292919476827,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    61.5616242090861,
+                    61.6162101427714,
+                    61.56687339146932,
+                    61.67628765106201,
+                    61.55454317728678
+                  ],
+                  "median_us": 61.56687339146932,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                320,
+                10240
+              ],
+              "label": "final_down",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119708672,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    49.57029024759928,
+                    49.581376711527504,
+                    49.537622928619385,
+                    49.55704212188721,
+                    49.56462383270264
+                  ],
+                  "median_us": 49.56462383270264,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    49.42746559778849,
+                    49.50087865193685,
+                    49.51112667719523,
+                    49.5190421740214,
+                    49.510625998179115
+                  ],
+                  "median_us": 49.510625998179115,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    39.25841252009074,
+                    39.32715654373169,
+                    39.3300731976827,
+                    39.30732806523641,
+                    39.34099276860555
+                  ],
+                  "median_us": 39.32715654373169,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                10240,
+                320
+              ],
+              "label": "up",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119721856,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    34.412129720052086,
+                    34.8940372467041,
+                    34.89361604054769,
+                    34.76853370666504,
+                    34.66037114461263
+                  ],
+                  "median_us": 34.76853370666504,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    35.87217330932617,
+                    35.943750540415444,
+                    36.06799840927124,
+                    36.03891531626383,
+                    36.1478328704834
+                  ],
+                  "median_us": 36.03891531626383,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    45.22550106048584,
+                    45.4261581103007,
+                    45.28207381566366,
+                    45.50440708796183,
+                    45.52307526270548
+                  ],
+                  "median_us": 45.4261581103007,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0
+            }
+          ],
+          "device": "AMD Radeon 8060S Graphics",
+          "cu_count": 20,
+          "torch": "2.13.0+rocm10.0.0",
+          "notes": [
+            "Same weights and arithmetic, only packed load sites differ.",
+            "24 distinct weights per shape exceed150MiB; cache misses not profiled.",
+            "Every packed matrix is unpacked on GPU and checked bit-exactly.",
+            "Both isolated GEMMs must equal installed vLLM outputs before timing."
+          ],
+          "elapsed_s": 3.1455062099994393
+        }
+      },
+      "service_check": {
+        "before_success_total": 6.0,
+        "after_success_total": 6.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "variant": 7,
+      "build": {
+        "root": "/tmp/hc-lossless-0e28eac714b54fb3a083fef3692157a2",
+        "command": [
+          "/opt/rocm/bin/hipcc",
+          "-std=c++17",
+          "-O3",
+          "-save-temps",
+          "--offload-arch=gfx1151",
+          "-fPIC",
+          "-shared",
+          "native.hip",
+          "-o",
+          "native.so"
+        ],
+        "exit_code": 0,
+        "binary_sha256": "8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc"
+      },
+      "native_source_sha256": "c7f58bd072be47826a06bd7dfab4abbeb92ef8154dd68119b7e8f89301bee3c8",
+      "manifest": {
+        "run_id": "c7ccfe4563db48dd84c1b514fcf4d717",
+        "source_sha256": {
+          "bench_hc_lossless.py": "b4dc0d6dced25a545efc35371ddb29ef8bd6085f8ab5915509366c7c4cf3004c"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 6.0
+      },
+      "result": {
+        "run_id": "c7ccfe4563db48dd84c1b514fcf4d717",
+        "root": "/tmp/strix-hc-lossless-c7ccfe4563db48dd84c1b514fcf4d717",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "report": {
+          "status": "passed",
+          "synthetic_weights": true,
+          "pool_size": 24,
+          "cases": [
+            {
+              "shape": [
+                4,
+                336,
+                10240
+              ],
+              "label": "merged_down",
+              "raw_bytes": 165150720,
+              "packed_bytes": 125677184,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    43.29938888549805,
+                    43.46288442611694,
+                    43.353633085886635,
+                    43.350883324941,
+                    43.323965867360435
+                  ],
+                  "median_us": 43.350883324941,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    43.31396818161011,
+                    43.273635705312095,
+                    43.38630040486654,
+                    43.23388338088989,
+                    43.29963127772013
+                  ],
+                  "median_us": 43.29963127772013,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    62.08186546961466,
+                    62.1030330657959,
+                    62.10569938023885,
+                    62.077534198760986,
+                    62.07353274027506
+                  ],
+                  "median_us": 62.08186546961466,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference_u1",
+                  "samples_us": [
+                    51.28891468048096,
+                    51.34324630101522,
+                    51.347831885019936,
+                    51.36666297912598,
+                    51.26908222834269
+                  ],
+                  "median_us": 51.34324630101522,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference_u2",
+                  "samples_us": [
+                    43.029725551605225,
+                    43.088058630625405,
+                    43.16964149475098,
+                    42.985896269480385,
+                    43.055808544158936
+                  ],
+                  "median_us": 43.055808544158936,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0,
+              "reference_u1_bit_mismatches": 0,
+              "reference_u2_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                320,
+                10240
+              ],
+              "label": "final_down",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119708672,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    49.58329598108927,
+                    49.55446322758993,
+                    49.55496390660604,
+                    49.51988458633423,
+                    49.60387945175171
+                  ],
+                  "median_us": 49.55496390660604,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    49.4387149810791,
+                    49.47871764500936,
+                    49.48712984720866,
+                    49.56096808115641,
+                    49.484050273895264
+                  ],
+                  "median_us": 49.484050273895264,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    39.02325630187988,
+                    39.02400732040405,
+                    39.056249459584556,
+                    39.009674390157066,
+                    39.065257708231606
+                  ],
+                  "median_us": 39.02400732040405,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference_u1",
+                  "samples_us": [
+                    46.75487677256266,
+                    46.71304225921631,
+                    46.663125356038414,
+                    46.59820795059204,
+                    46.67079051335653
+                  ],
+                  "median_us": 46.67079051335653,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference_u2",
+                  "samples_us": [
+                    47.35177357991537,
+                    47.193777561187744,
+                    47.60160048802694,
+                    47.46034940083822,
+                    47.325356801350914
+                  ],
+                  "median_us": 47.35177357991537,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0,
+              "reference_u1_bit_mismatches": 0,
+              "reference_u2_bit_mismatches": 0
+            },
+            {
+              "shape": [
+                4,
+                10240,
+                320
+              ],
+              "label": "up",
+              "raw_bytes": 157286400,
+              "packed_bytes": 119721856,
+              "gpu_unpack_exact": true,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    34.45538282394409,
+                    34.67345635096232,
+                    34.76512432098389,
+                    34.64712301890055,
+                    34.67212518056234
+                  ],
+                  "median_us": 34.67212518056234,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference",
+                  "samples_us": [
+                    36.08125448226929,
+                    36.27899487813314,
+                    36.18591626485189,
+                    36.19191646575928,
+                    36.28483215967814
+                  ],
+                  "median_us": 36.19191646575928,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "packed",
+                  "samples_us": [
+                    45.24266719818115,
+                    45.30141750971476,
+                    45.50382296244303,
+                    45.55724064509074,
+                    45.392914613087974
+                  ],
+                  "median_us": 45.392914613087974,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference_u1",
+                  "samples_us": [
+                    35.38368542989095,
+                    35.5825146039327,
+                    35.60818433761597,
+                    35.09011268615723,
+                    35.18994251887003
+                  ],
+                  "median_us": 35.38368542989095,
+                  "changed_input_graph_exact": true
+                },
+                {
+                  "method": "reference_u2",
+                  "samples_us": [
+                    31.936033566792805,
+                    31.887284914652508,
+                    31.878783305486042,
+                    31.89736803372701,
+                    31.912201642990112
+                  ],
+                  "median_us": 31.89736803372701,
+                  "changed_input_graph_exact": true
+                }
+              ],
+              "reference_bit_mismatches": 0,
+              "packed_bit_mismatches": 0,
+              "reference_u1_bit_mismatches": 0,
+              "reference_u2_bit_mismatches": 0
+            }
+          ],
+          "device": "AMD Radeon 8060S Graphics",
+          "cu_count": 20,
+          "torch": "2.13.0+rocm10.0.0",
+          "notes": [
+            "Same weights and arithmetic, only packed load sites differ.",
+            "24 distinct weights per shape exceed150MiB; cache misses not profiled.",
+            "Every packed matrix is unpacked on GPU and checked bit-exactly.",
+            "Both isolated GEMMs must equal installed vLLM outputs before timing."
+          ],
+          "elapsed_s": 3.7177552549983375
+        }
+      },
+      "service_check": {
+        "before_success_total": 6.0,
+        "after_success_total": 6.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    }
+  ]
+}

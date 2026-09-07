@@ -64,8 +64,10 @@ teilweise unterschiedlich. Die TP2-Konfiguration bleibt separat erhalten.
 Die [weitere Kernelprüfung](docs/2026-09-07-next-kernel-budget.md) misst rund
 9 Mikrosekunden verbleibende CPU-Summierung pro All-reduce. Ein separater
 verlustfreier BF16-Speicherversuch spart rechnerisch 23,5 % der HC-Gewichtsbytes
-und stellt alle ursprünglichen Bits wieder her. Ein GPU-Geschwindigkeitsgewinn
-ist dafür noch nicht gemessen; der laufende Modelldienst bleibt unverändert.
+und stellt alle ursprünglichen Bits wieder her. Der [native GPU-Test](docs/2026-09-07-hc-native.md) zeigt jedoch langsamere
+häufige HC-Operatoren mit diesem Format. Eine unkomprimierte Kernelvariante
+spart isoliert 8 % beim Up-Operator; ein Modellgewinn ist nicht nachgewiesen.
+Der laufende Modelldienst bleibt unverändert.
 
 ## Struktur
 
