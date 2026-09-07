@@ -80,3 +80,5 @@ stayed at 54 with empty queues. Direct GDN import is sufficient to pursue a
 bounded operator/state-parity test; making the unrelated quant availability
 check pass is not a prerequisite for that experiment.
 [Import records](../bench/records/2026-09-07-aiter-imports.json).
+
+Packed GDN follow-up: [isolated recurrence correctness and timing](2026-09-07-aiter-gdn.md). The upstream zero-state sentinel required adaptation; no serving activation yet.
