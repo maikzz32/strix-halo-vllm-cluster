@@ -1,6 +1,6 @@
 # UCCL review for the four Strix Halo nodes
 
-Inspected upstream commit `79b64ae7ca58ea78bb39c6275b0f91443e33a3f2` from a local shallow checkout, following the user's repository link. A separate plugin now builds successfully on Node18, as detailed below. No plugin loading, installation into serving, or service switch has occurred.
+Inspected upstream commit `79b64ae7ca58ea78bb39c6275b0f91443e33a3f2` from a local shallow checkout, following the user's repository link. The plugin builds and initializes, but isolated four-rank connection attempts fail on unsupported queue capabilities. No installation into serving or service switch has occurred.
 
 UCCL is relevant as an alternative RCCL network transport. Its RDMA collective component supports AMD GPUs and RoCE, and the current code contains explicit Intel/irdma adaptations despite the top-level support summary mainly naming Nvidia and Broadcom NICs. That makes it a concrete test candidate; it does not prove gfx1151 compatibility or better single-answer throughput.
 
@@ -18,7 +18,7 @@ Keep the installed vLLM, checkpoint and weights. First build a separate plugin w
 
 Only after those pass should a full-model trial disable the direct UMA override for the UCCL arm. Identical weights alone do not guarantee bitwise equality if the collective algorithm changes; preserve and compare answer texts, token lengths and MTP statistics. EP and KV-cache-transfer features are separate from the current TP4 single-answer workload and are not evidence of faster decoding here.
 
-The W2 kernel trial remains a separate candidate. Its CPU dispatch checks now accept the intended shape and reject 24 alternatives, with two modified-source rejections. A fresh original-kernel ShareGPT48 run completed successfully while UCCL was inspected. The original TP4/UMA service remains active; UCCL has never been activated. The separate W2 trial is documented in the model comparison.
+The W2 kernel trial remains a separate candidate. Its CPU dispatch checks accept the intended shape and reject 24 alternatives, with two modified-source rejections. The original TP4/UMA service remains active; UCCL has only been loaded in isolated probe processes. The separate W2 trial is documented in the model comparison.
 
 ## Isolated build completed
 
@@ -27,3 +27,17 @@ The W2 kernel trial remains a separate candidate. Its CPU dispatch checks now ac
 The first build compiled all five plugin translation units but failed to link absent `libz`/`libelf` development names. Inspection found no corresponding calls in these plugin sources. The second build drops those unused libraries, links HIP explicitly and uses `-Wl,-z,defs` to reject unresolved symbols. It succeeds and exports `ncclNetPlugin_v8`.
 
 The resulting file is `/tmp/strix-uccl-build-86ea2a5eebc8454b8f58084daa6dc5ae/build/librccl-net-uccl.so`, SHA256 `fbeaff859ba8322921b91de3d31ecada7852ec1280b264239f2eeb23a73b3c39`. Both build processes finished before the W2 after-control benchmark began. No system packages changed. This proves compilation/linking only, not usable non-GDR transport, installed-RCCL compatibility or performance. [Build manifests and logs](../bench/records/2026-09-07-uccl-build.json) retain both attempts.
+
+## Initialization works; connection establishment does not
+
+A bounded C++ probe loads the plugin's v8 table and successfully calls init, devices and getProperties on Node18. It reports the correct Intel HCA, 25000Mbps and pointer support5 (HOST plus DMA-BUF). Thus the host-only debug assertion is not the immediate obstacle on this system. This advertisement does not prove that GPU DMA-BUF transfers work; the following network tests explicitly keep `NCCL_NET_GDR_LEVEL=0`.
+
+The identical binary was staged separately on all four nodes. An isolated four-rank PyNccl reference run explicitly selects `NCCL_NET=RDMA_Plugin`, the connected per-node HCA, GID1, RC mode, one UCCL engine and one entropy path. RCCL logs confirm that it loads and selects the plugin. Every rank aborts at `util_rdma_create_cq_ex` before any collective completes.
+
+A separate verbs probe isolates the unsupported option: CQ sizes1 and16384 both fail with `EOPNOTSUPP` when completion timestamps are requested; both succeed when only that option is removed. Queue capacity is not the cause (`max_cqe=1048574`). The build preparer therefore adds an explicit `--software-timestamps` option using UCCL's existing `kTestNoHWTimestamp` path; debug assertions stay enabled. The resulting library hash is `9810684421fea34ed3ba8b8ad200d1177c5209f770a167fe020d887289db850e`, staged at `/opt/strix-halo-next/uccl-20260907-r2/librccl-net-uccl.so` on all ranks.
+
+The second isolated run passes CQ creation but all four ranks abort at `util_rdma_create_srq`. Direct device queries on every connected HCA report `max_srq=0`, while the current UCCL `SharedIOContext` unconditionally creates and fills an SRQ. Its source includes no fallback at that construction site. The reported nonzero per-SRQ size limits do not override the zero supported SRQ count.
+
+This is a concrete compatibility gap in the inspected UCCL path on the current Intel/irdma configuration, not a general claim about all Intel devices or future UCCL versions. Proceeding would require a per-QP receive-queue implementation and corresponding credit/replenishment changes, or a different supported hardware/driver capability. Repeating the same build flags cannot supply an unavailable SRQ.
+
+All eight test ranks terminate, and process-command checks find no remaining ranks from either run. Serving stays idle with its success counter unchanged at54. No UCCL collective latency, numerical parity or model speed has been measured. [Probe, capability, build and failed-rank evidence](../bench/records/2026-09-07-uccl-probe.json) preserves both attempts rather than treating initialization as a successful transport test.

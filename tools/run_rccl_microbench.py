@@ -80,6 +80,7 @@ def main():
     parser.add_argument("--deadline", type=int, default=120)
     parser.add_argument("--sizes", help="Comma-separated positive even byte counts; default 4096,8192,16384 (profile smoke: 20480)")
     parser.add_argument("--env", action="append", default=[])
+    parser.add_argument("--hca-by-node", action="store_true", help="Select the known connected Intel port on each node")
     parser.add_argument("--output", type=pathlib.Path)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--graph", action="store_true")
@@ -120,8 +121,8 @@ def main():
                          'OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1'})
     for override in args.env:
         key, separator, value = override.partition("=")
-        if not separator or not re.fullmatch(r"(?:NCCL|RCCL)_[A-Z0-9_]+", key) or "\n" in value:
-            parser.error("--env accepts NCCL_/RCCL_ NAME=VALUE entries only")
+        if not separator or not re.fullmatch(r"(?:NCCL|RCCL|UCCL)_[A-Z0-9_]+", key) or "\n" in value:
+            parser.error("--env accepts NCCL_/RCCL_/UCCL_ NAME=VALUE entries only")
         baseline[key] = value
     source = pathlib.Path(__file__).with_name("rccl_bf16_reference.py" if args.bf16_reference else "rccl_microbench.py").read_text(encoding="utf-8")
     generator_sha = None
@@ -139,6 +140,10 @@ def main():
                     "MASTER_ADDR": f"192.168.100.{nodes[0] - 14}", "MASTER_PORT": str(args.port),
                     "NCCL_SOCKET_IFNAME": "enp197s0f1np1" if node == 18 else "enp197s0f3np3"})
         container = "ray-head" if node == 15 else "ray-worker"
+        if args.hca_by_node:
+            env['NCCL_IB_HCA'] = 'rocep197s0f1' if node == 18 else 'rocep197s0f3'
+            env['UCCL_IB_HCA'] = env['NCCL_IB_HCA']
+            env['UCCL_SOCKET_IFNAME'] = env['NCCL_SOCKET_IFNAME']
         remote = ["podman", "exec", "-i"]
         for key, value in env.items():
             remote += ["-e", f"{key}={value}"]

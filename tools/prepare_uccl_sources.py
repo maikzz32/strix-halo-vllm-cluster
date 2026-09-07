@@ -7,7 +7,7 @@ RCCL='532f54c2444501b3655e65fbce6d00d4bfc19c0b'
 def git(root,*args):return subprocess.run(['git','-C',str(root),*args],capture_output=True,check=True).stdout
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--source',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--source',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--software-timestamps',action='store_true');a=p.parse_args()
  assert git(a.source,'rev-parse','HEAD').decode().strip()==UCCL
  rccl=a.source/'thirdparty/rccl';assert git(rccl,'rev-parse','HEAD').decode().strip()==RCCL
  files={}
@@ -16,6 +16,10 @@ def main():
   with tarfile.open(fileobj=io.BytesIO(raw)) as ar:
    for entry in ar:
     if entry.isfile():files[prefix+entry.name]=ar.extractfile(entry).read()
+ if a.software_timestamps:
+  name='collective/rdma/transport_config.h';original=files[name]
+  anchor=b'static constexpr bool kTestNoHWTimestamp = false;';assert original.count(anchor)==1
+  files[name]=original.replace(anchor,b'static constexpr bool kTestNoHWTimestamp = true;',1)
  text=git(rccl,'show','HEAD:src/nccl.h.in').decode()
  versions={'NCCL_MAJOR':'2','NCCL_MINOR':'23','NCCL_PATCH':'4','NCCL_SUFFIX':'','NCCL_VERSION':'22304'}
  for key,value in versions.items():text=text.replace('${'+key+'}',value)
@@ -36,7 +40,7 @@ g++ -shared -Wl,-z,defs -Wl,-soname,librccl-net-uccl.so -o build/librccl-net-ucc
 sha256sum build/librccl-net-uccl.so
 nm -D build/librccl-net-uccl.so | grep ncclNetPlugin
 '''
- manifest={'uccl_commit':UCCL,'rccl_header_commit':RCCL,'generated_header_versions':versions,'files':{k:hashlib.sha256(v).hexdigest() for k,v in sorted(files.items())},'scope':'Build inputs only; host C++ plugin, Intel macro enabled, debug assertions retained, no RCCL replacement or activation.'}
+ manifest={'uccl_commit':UCCL,'rccl_header_commit':RCCL,'software_timestamps':a.software_timestamps,'generated_header_versions':versions,'files':{k:hashlib.sha256(v).hexdigest() for k,v in sorted(files.items())},'scope':'Build inputs only; host C++ plugin, Intel macro enabled, debug assertions retained, no RCCL replacement or activation.'}
  a.output.mkdir(parents=True,exist_ok=False)
  with tarfile.open(a.output/'source.tar.gz','w:gz') as ar:
   for name,content in files.items():
