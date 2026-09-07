@@ -1,0 +1,524 @@
+{
+  "scope": "Isolated W1 scheduling/cache tests; no serving changes",
+  "runs": [
+    {
+      "kind": "cache",
+      "trial": 1,
+      "manifest": {
+        "run_id": "52297dd460f746da8f493cee682f334a",
+        "seed": 9345,
+        "source_sha256": {
+          "bench_moe_w1_cache.py": "ae2e2a2bf33e476edbd14d03e81d85901cb69dc7d6408de31f4eede26f28f4db",
+          "moe_w1_cache_kernel.py": "d49fb56a3ea261867d928192340a0560483a0990f97333ecdfcf00a1b13bfa02"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "report": {
+        "status": "passed",
+        "source_sha256": "25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7",
+        "seed": 9345,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  38.669657707214355,
+                  39.667133490244545,
+                  39.67179854710897,
+                  39.6787166595459,
+                  39.81479008992513
+                ],
+                "median_us": 39.67179854710897
+              },
+              {
+                "method": "cg",
+                "samples_us": [
+                  39.64838186899821,
+                  38.84781996409098,
+                  39.64254458745321,
+                  39.38663800557455,
+                  39.986626307169594
+                ],
+                "median_us": 39.64254458745321
+              },
+              {
+                "method": "cv",
+                "samples_us": [
+                  67.56834189097087,
+                  67.13934739430745,
+                  67.76142120361328,
+                  67.39709377288818,
+                  67.8510030110677
+                ],
+                "median_us": 67.56834189097087
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "cg": 0,
+              "cv": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap25",
+            "distinct_experts": 462,
+            "packed_working_set_bytes": 218803200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  84.21403566996257,
+                  85.03776391347249,
+                  85.19152005513509,
+                  85.18150647481282,
+                  85.17710367838542
+                ],
+                "median_us": 85.17710367838542
+              },
+              {
+                "method": "cg",
+                "samples_us": [
+                  85.11885007222493,
+                  84.61494445800781,
+                  85.19193331400554,
+                  84.50436592102051,
+                  85.57833035786946
+                ],
+                "median_us": 85.11885007222493
+              },
+              {
+                "method": "cv",
+                "samples_us": [
+                  203.7689208984375,
+                  204.00214195251465,
+                  203.71824900309244,
+                  204.18265660603842,
+                  203.90899976094565
+                ],
+                "median_us": 203.90899976094565
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "cg": 0,
+              "cv": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint40",
+            "distinct_experts": 477,
+            "packed_working_set_bytes": 225907200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  122.42537339528401,
+                  124.70773061116536,
+                  124.53289826711018,
+                  122.68862724304199,
+                  123.95374774932861
+                ],
+                "median_us": 123.95374774932861
+              },
+              {
+                "method": "cg",
+                "samples_us": [
+                  123.89108339945476,
+                  121.45740191141765,
+                  124.19265906016032,
+                  122.89845148722331,
+                  123.45109780629475
+                ],
+                "median_us": 123.45109780629475
+              },
+              {
+                "method": "cv",
+                "samples_us": [
+                  328.0168851216634,
+                  328.05423736572266,
+                  327.2441546122233,
+                  328.19067637125653,
+                  327.67127354939777
+                ],
+                "median_us": 328.0168851216634
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "cg": 0,
+              "cv": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "service": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "run_id": "52297dd460f746da8f493cee682f334a",
+      "remaining_owned_processes": []
+    },
+    {
+      "kind": "order",
+      "trial": 1,
+      "manifest": {
+        "run_id": "3c2cc42609d54c269dd5911d6c0c95d8",
+        "seed": 9346,
+        "source_sha256": {
+          "bench_moe_w1_order.py": "617093abd9c3542b4f9fd701e8d8fdd9639355d4edcd5ce54e2b1d7f944ef988",
+          "moe_w1_order_kernel.py": "25025020272e0e20ffd9e391373bc4cf97e7e0dd6576a7897c87fa3e1edf9249"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "report": {
+        "status": "passed",
+        "source_sha256": "25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7",
+        "seed": 9346,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  38.48741054534912,
+                  39.31872049967448,
+                  39.47304884592692,
+                  39.303807417551674,
+                  39.20372327168783
+                ],
+                "median_us": 39.303807417551674
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  38.776071866353355,
+                  38.984314600626625,
+                  38.881234327952065,
+                  38.82890144983927,
+                  38.63590955734253
+                ],
+                "median_us": 38.82890144983927
+              },
+              {
+                "method": "expert_nfast",
+                "samples_us": [
+                  38.99472951889038,
+                  39.147392908732094,
+                  39.1842246055603,
+                  39.028143882751465,
+                  38.93681764602661
+                ],
+                "median_us": 39.028143882751465
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0,
+              "expert_nfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap25",
+            "distinct_experts": 462,
+            "packed_working_set_bytes": 218803200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  82.42691357930501,
+                  81.97218577067058,
+                  81.66485627492268,
+                  81.0590426127116,
+                  80.52105903625488
+                ],
+                "median_us": 81.66485627492268
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  75.23362636566162,
+                  74.51297442118327,
+                  73.79133701324463,
+                  73.41442108154297,
+                  72.18754291534424
+                ],
+                "median_us": 73.79133701324463
+              },
+              {
+                "method": "expert_nfast",
+                "samples_us": [
+                  74.57855542500813,
+                  74.5103120803833,
+                  73.2410987218221,
+                  73.26533794403076,
+                  72.13912804921468
+                ],
+                "median_us": 73.26533794403076
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0,
+              "expert_nfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint40",
+            "distinct_experts": 477,
+            "packed_working_set_bytes": 225907200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  114.25843238830566,
+                  113.62269719441731,
+                  113.44103813171387,
+                  113.51846059163411,
+                  113.37438424428304
+                ],
+                "median_us": 113.51846059163411
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  110.3954553604126,
+                  109.36274528503418,
+                  108.68800481160481,
+                  109.19524828592937,
+                  108.87991587320964
+                ],
+                "median_us": 109.19524828592937
+              },
+              {
+                "method": "expert_nfast",
+                "samples_us": [
+                  110.56920687357585,
+                  109.81330871582031,
+                  109.51281388600667,
+                  109.89547570546468,
+                  109.15158589680989
+                ],
+                "median_us": 109.81330871582031
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0,
+              "expert_nfast": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "service": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "run_id": "3c2cc42609d54c269dd5911d6c0c95d8",
+      "remaining_owned_processes": []
+    },
+    {
+      "kind": "order",
+      "trial": 2,
+      "manifest": {
+        "run_id": "fdd237adc60f475cab81a20e207349b2",
+        "seed": 9347,
+        "source_sha256": {
+          "bench_moe_w1_order.py": "617093abd9c3542b4f9fd701e8d8fdd9639355d4edcd5ce54e2b1d7f944ef988",
+          "moe_w1_order_kernel.py": "25025020272e0e20ffd9e391373bc4cf97e7e0dd6576a7897c87fa3e1edf9249"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "report": {
+        "status": "passed",
+        "source_sha256": "25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7",
+        "seed": 9347,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  38.04008960723877,
+                  38.90698353449503,
+                  38.82023890813192,
+                  38.74157667160034,
+                  38.93464803695679
+                ],
+                "median_us": 38.82023890813192
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  38.99089892705282,
+                  39.07231489817301,
+                  39.17389313379923,
+                  39.01181618372599,
+                  38.99473349253336
+                ],
+                "median_us": 39.01181618372599
+              },
+              {
+                "method": "expert_nfast",
+                "samples_us": [
+                  39.39271767934164,
+                  39.322141806284584,
+                  39.3251379330953,
+                  39.33372497558594,
+                  39.20614322026571
+                ],
+                "median_us": 39.3251379330953
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0,
+              "expert_nfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap25",
+            "distinct_experts": 462,
+            "packed_working_set_bytes": 218803200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  83.72571468353271,
+                  84.06771024068196,
+                  83.88871351877849,
+                  83.03173383076985,
+                  82.9179843266805
+                ],
+                "median_us": 83.72571468353271
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  75.88202158610027,
+                  75.96176465352376,
+                  75.90734958648682,
+                  75.52420298258464,
+                  74.68839486440022
+                ],
+                "median_us": 75.88202158610027
+              },
+              {
+                "method": "expert_nfast",
+                "samples_us": [
+                  76.04259649912517,
+                  75.78694025675456,
+                  75.5090316136678,
+                  75.07187525431316,
+                  74.49147701263428
+                ],
+                "median_us": 75.5090316136678
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0,
+              "expert_nfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint40",
+            "distinct_experts": 477,
+            "packed_working_set_bytes": 225907200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  117.17526912689209,
+                  113.86228402455647,
+                  114.15243943532307,
+                  114.15069103240967,
+                  114.07944361368816
+                ],
+                "median_us": 114.15069103240967
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  111.65684858957927,
+                  110.15029748280843,
+                  109.52831904093425,
+                  110.3084643681844,
+                  109.58481629689534
+                ],
+                "median_us": 110.15029748280843
+              },
+              {
+                "method": "expert_nfast",
+                "samples_us": [
+                  111.28826936086018,
+                  111.02802753448486,
+                  110.72053114573161,
+                  110.36005020141602,
+                  110.2234681447347
+                ],
+                "median_us": 110.72053114573161
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0,
+              "expert_nfast": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "service": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "run_id": "fdd237adc60f475cab81a20e207349b2",
+      "remaining_owned_processes": []
+    }
+  ]
+}
