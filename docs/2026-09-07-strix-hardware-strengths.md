@@ -151,3 +151,12 @@ Das historische HARDWARE_GFX1151.md wurde gezielt bei Eager-Pflicht,
 256-Thread-Grenze und INT4-WMMA/W4A16 korrigiert. Andere dortige Community-
 Zahlen sind nicht durch diese Recherche neu validiert. Insbesondere kein
 Takt-Cap oder IOMMU-/Firmware-Wechsel ohne konkretes neues Messergebnis.
+
+
+## Lokale Topologie und abgeschlossener W1-Test
+
+Die read-only sysfs-Abfrage aller vier Hosts bestaetigt dieselben zwei CPU-L3-Gruppen: `0-7,16-23` und `8-15,24-31`. Die SMT-Paare sind den gespeicherten `thread_siblings_list` zu entnehmen; diese Gruppen sind CPU-Caches, keine GPU-Caches. Alle logischen CPUs0-31 sind fuer den abgefragten Hostprozess erlaubt. Das belegt noch keine Affinitaet des Container- oder Kommunikationsthreads.
+
+Die RDMA-Geraete melden `numa_node=-1` und `local_cpulist=0-31`. Daraus ergibt sich keine bevorzugte CPU-L3-Gruppe fuer die NIC. Es wurde keine Affinitaet geaendert. Vor einem Test muessen der konkrete Progress-Thread und dessen erlaubte CPUs festgestellt werden.
+
+Der W1-Modellvergleich ist inzwischen abgeschlossen: 54.9197 / 56.0396 / 54.8789 Output-Token/s vor / Kandidat / nach, alle48 Antworten exakt. Details und Einschraenkung der zeitlichen Kontrollnaehe stehen in [W1-Bericht](2026-09-07-moe-w1-order.md). Damit verbleiben gegenueber dem Kandidaten rund7.1% mehr Gesamtdurchsatz bis60 Token/s.
