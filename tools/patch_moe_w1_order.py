@@ -7,7 +7,7 @@ BASE_SHA = '25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7'
 
 def patched(base):
     assert hashlib.sha256(base).hexdigest() == BASE_SHA
-    source = base.decode()
+    source = base.decode().replace('\r\n', '\n')
     anchor = '    _glm53_moe_int4_gemv_partial[grid]('
     assert source.count(anchor) == 1
     replacement = '''    partial_kernel = _glm53_moe_int4_gemv_partial
