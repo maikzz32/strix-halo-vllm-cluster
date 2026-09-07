@@ -1290,6 +1290,6 @@
     "backend": "canonical TP4 UMA AVX2",
     "idle": true
   },
-  "decision": "Candidate passes model and matched-stream parity, with positive decode gains against both controls. Original service restored; production promotion and post-promotion verification remain pending. This is a small improvement, not completion of the large single-answer speed goal.",
+  "decision": "Trial completed with original service restored at that time. Subsequently promoted and verified; see 2026-09-07-moe-w2-production.json. The 60 output tokens/s goal remains open.",
   "control_throughput_drift_pct": -1.6402699626258732
 }

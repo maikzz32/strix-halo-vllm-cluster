@@ -8,6 +8,18 @@ und maximaler Durchsatz, entschieden durch eigene Benchmarks.
 
 ## Aktueller Versuch: Qwen3.8 Flash Next, eine laufende Antwort
 
+Der aktuelle geprüfte TP4-Stand mit QSA, UMA/RDMA und serieller W2-Fusion erreicht
+**53,85 Output-Token/s** im ShareGPT-Test mit 48 Anfragen und Parallelität eins.
+Alle 48 Antworten stimmen exakt mit der vorherigen Kontrolle überein; Gewichte
+und Rechenqualität bleiben erhalten. W2 ist auf allen vier Nodes übernommen.
+Das feste Ziel **mindestens 60 Token/s in diesem Test** bleibt offen.
+[W2-Vergleich und Abschlussprüfung](docs/2026-09-07-moe-w2-serial-model.md).
+
+Die angefragte [UCCL-Prüfung](docs/2026-09-07-uccl-review.md) findet einen konkreten
+Hinderungsgrund: Der Transport verlangt Shared Receive Queues, während alle vier
+vorhandenen HCAs `max_srq=0` melden. Zwei isolierte Verbindungsversuche scheitern
+vor der ersten Kollektivmessung. UCCL ist daher nicht im Modelldienst aktiv.
+
 Für die vorhandenen vier Fedora-45-Systeme gibt es jetzt einen separaten
 [nativen Startpfad](scripts/native/README.md) mit vLLM `mp`, TP4 und MTP3.
 Er verwendet die vorhandenen Container `ray-head`/`ray-worker` und prüft alle
@@ -85,7 +97,8 @@ als 1 Mikrosekunde; die CPU-Summierung bleibt ein messbarer weiterer Ansatz.
 
 Die [AVX-512-Prüfung](docs/2026-09-07-uma-avx512.md) senkt die isolierte
 GPU-/UMA-Kollektivzeit von 54,1 auf 48,0 Mikrosekunden bei bitgleichen Ergebnissen.
-Eine separate Bibliothek ist für den Modellvergleich vorbereitet, noch nicht aktiv.
+Im Modellvergleich bleiben gegenüber der stärkeren Kontrolle etwa 2 % schnellere
+Generierung. Die separate Bibliothek bleibt experimentell und ist nicht aktiv.
 
 ## Struktur
 

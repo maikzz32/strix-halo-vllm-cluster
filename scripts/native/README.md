@@ -125,3 +125,39 @@ Local lifecycle tests require no GPUs, SSH or containers:
 python3 -m unittest discover -s tests -p test_lifecycle.py -v
 python3 -m unittest discover -s scripts/native -p test_native_runtime.py -v
 ```
+
+## W2 serial canonical configuration
+
+The September 7 canonical service now enables `STRIX_MOE_W2_SERIAL=1` on all four
+nodes, with the original W1 and AVX2 UMA library. The bounded serial W2 kernel
+passes the complete model and post-promotion checks documented in
+[the W2 report](../../docs/2026-09-07-moe-w2-serial-model.md). The configuration
+is recorded in `bench/records/w2-serial-model-r1.json`; existing deployments
+preserve the canonical host configuration rather than replacing it with the
+repository default. Container overlays remain required: the earlier image
+snapshot predates the UMA and W2 additions.
+
+Every host retains `config/cluster.pre-w2-serial-20260907.json` under
+`/home/maik/strix-halo-next`, SHA-256
+`b7f78a76b557e81e86271027f4339a74c9759cb5b700faf3c2a35ee8df038546`.
+The W2 source backup is inside each container at
+`/opt/strix-halo-next/moe-w2-serial-20260907-r1/original.py`.
+Restoring W2 leaves the prior UMA optimization enabled.
+
+To roll back W2, run these commands sequentially from a repository checkout on
+the management host with SSH access. Check each command succeeds before continuing;
+the mutation tools reject unexpected source/configuration hashes and require a
+stopped service for source changes. Use a new output directory for each attempt.
+
+```bash
+ssh maik@192.168.1.15 'python3 /home/maik/strix-halo-next/tools/cluster.py stop --config /home/maik/strix-halo-next/config/cluster.json'
+python tools/deploy_moe_w2_serial.py restore --execute
+python tools/set_w2_canonical_config.py restore --config bench/records/w2-serial-model-r1.json --output results/w2-rollback-config --execute
+ssh maik@192.168.1.15 'python3 /home/maik/strix-halo-next/tools/cluster.py start --config /home/maik/strix-halo-next/config/cluster.json --tag w2-rollback --timeout 900'
+```
+
+For reactivation after that rollback, stop serving, run `deploy_moe_w2_serial.py
+activate --execute`, run the configuration tool with `promote` and a new output
+directory, then start with the canonical configuration and the 900-second timeout.
+These tools operate on the already staged, hash-checked additions on this cluster;
+they are not a clean-machine installer.

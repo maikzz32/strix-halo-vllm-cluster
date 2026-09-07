@@ -14,8 +14,20 @@ Six matched 512-token streams with `ignore_eos=true` provide an additional check
 
 All three ShareGPT runs complete 48 requests without failures. Independent server counters increase by exactly 48 and queues are idle before and after. There is no additional warmup request: the benchmark skips endpoint-ready checking. Runtime evidence on every candidate/restored rank records the source hash, W2 environment flag, actual mapped UMA library and fresh 32-bank active-PyNccl parity. Runtime source hashing verifies the installed file, not Python bytecode introspection.
 
-The candidate run `3e59a51755ce4688b1542eac7dd116a7` was stopped cleanly on all ranks. Original source `4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070` is restored on all four nodes. Canonical TP4/UMA is active as `8e0242c35b064a8baeb94f6debb4a088`, idle after the six concluding streams. The candidate is eligible for a controlled promotion with post-promotion checks, but has not been permanently enabled yet. AVX-512 and UCCL were not activated in these measurements.
+The candidate run `3e59a51755ce4688b1542eac7dd116a7` was stopped cleanly on all ranks, and the original source was restored for the after control. Subsequent promotion and verification are complete as described below. AVX-512 and UCCL were not activated in these model measurements.
 
-Two bounded UCCL CPU builds ran during the after-control model loading period and finished before its benchmark started. This detail is retained as context; it is not evidence that they caused any measured variation. UCCL was never loaded into a process or used for transport. See [the independent UCCL review/build evidence](2026-09-07-uccl-review.md).
+Two bounded UCCL CPU builds ran during the after-control model loading period and finished before its benchmark started. This detail is retained as context; it is not evidence that they caused any measured variation. UCCL was never loaded into the serving processes. Later isolated plugin tests failed before any collective completed; see [the independent UCCL review/build evidence](2026-09-07-uccl-review.md).
 
 [Full model/stream hashes, metrics checks and runtime evidence](../bench/records/2026-09-07-moe-w2-serial-model.json).
+
+## Promotion and final verification
+
+Canonical run `032b7174e0404a96926d8847bdc94ccf` uses the serial W2 source on all four nodes, the original W1 kernel and the existing AVX2 UMA library. The only semantic configuration change is `STRIX_MOE_W2_SERIAL=1`. Canonical configuration SHA-256 is `e516f0bf5eea420292d967795442261801741008bc759145e1d8e558d5307304`. All four ranks passed fresh 32-bank active-PyNccl startup parity, and read-only runtime evidence confirms the expected installed source, environment and mapped library.
+
+The post-promotion ShareGPT48 C1 run achieves **53.8508 output tokens/s**, **16.4336 ms mean TPOT** and **547.31 ms mean TTFT**. All 48 answers, input/output lengths and speculative decoding statistics match both the earlier serial candidate and original before control. Against the original before control, this run is 2.95% faster overall and 3.35% faster in decoding; this is one repeat, not a confidence interval. The bracketed trial above remains the main comparison for attributing the W2 effect.
+
+Six matched 512-token streams preserve request bodies, contents, reasoning, usage and finish reasons. Six additional C2 smoke requests each complete 512 tokens successfully; C1/C2 answer equivalence is not asserted. Independent service counters increase from 0 to 48 for ShareGPT and to 60 after the stream/smoke checks, with empty queues. The service remains running. [Final verification record](../bench/records/2026-09-07-moe-w2-production.json).
+
+The explicit success target is at least **60 output tokens/s in this ShareGPT48 C1 benchmark**, with unchanged weights and computational quality. It remains unmet: approximately 11.4% additional speed is needed. Short-prompt decode rates and reciprocal mean TPOT do not substitute for this target.
+
+For exact backup and rollback instructions, see the [native runbook](../scripts/native/README.md#w2-serial-canonical-configuration).
