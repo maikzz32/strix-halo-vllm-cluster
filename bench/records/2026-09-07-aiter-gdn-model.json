@@ -1,0 +1,102 @@
+{
+  "status": "after control pending; original GDN source restored, model restarting",
+  "runs": {
+    "before": {
+      "completed": 48,
+      "failed": 0,
+      "output_throughput": 53.91411422946584,
+      "mean_tpot_ms": 16.422785123615142,
+      "mean_ttft_ms": 539.4365570420329,
+      "total_output_tokens": 11839,
+      "counter_delta": 48
+    },
+    "candidate": {
+      "completed": 48,
+      "failed": 0,
+      "output_throughput": 54.4418111689019,
+      "mean_tpot_ms": 16.219521954932926,
+      "mean_ttft_ms": 547.144999562685,
+      "total_output_tokens": 11839,
+      "counter_delta": 48
+    }
+  },
+  "all_48_texts_and_lengths_exact": true,
+  "all_speculation_summary_fields_exact": true,
+  "candidate_stream_file": "results/gdn-candidate-stream-20260907.json",
+  "runtime": {
+    "15": {
+      "files": {
+        "qwen_gdn_linear_attn.py": "409969ebb81cc4b5adec548271fff60ecf6ead91adc0b7328f5450685c6646f5",
+        "_strix_gdn.py": "a064bdbab5d4e0022af40d7c09b86e3a0c4fd258befe31948f5e685f2395d2b2",
+        "_strix_gdn_kernel.py": "5c7ed927e90a5ac7014bc894f35bb3ddbdf619eee5cf2839f152e9c266c293dc"
+      },
+      "workers": [
+        {
+          "pid": 29115,
+          "environment": {
+            "STRIX_PACKED_GDN": "1",
+            "STRIX_HIP_RDMA_LIBRARY": "/opt/strix-halo-next/hip-uma-ring4-20260907-r1/libhip_rdma_backend.so",
+            "STRIX_MOE_W2_SERIAL": "1",
+            "STRIX_CLUSTER_RUN_ID": "996e206a8ef446928ae4bbfe587035ca"
+          }
+        }
+      ]
+    },
+    "16": {
+      "files": {
+        "qwen_gdn_linear_attn.py": "409969ebb81cc4b5adec548271fff60ecf6ead91adc0b7328f5450685c6646f5",
+        "_strix_gdn.py": "a064bdbab5d4e0022af40d7c09b86e3a0c4fd258befe31948f5e685f2395d2b2",
+        "_strix_gdn_kernel.py": "5c7ed927e90a5ac7014bc894f35bb3ddbdf619eee5cf2839f152e9c266c293dc"
+      },
+      "workers": [
+        {
+          "pid": 12368,
+          "environment": {
+            "STRIX_PACKED_GDN": "1",
+            "STRIX_HIP_RDMA_LIBRARY": "/opt/strix-halo-next/hip-uma-ring4-20260907-r1/libhip_rdma_backend.so",
+            "STRIX_MOE_W2_SERIAL": "1",
+            "STRIX_CLUSTER_RUN_ID": "996e206a8ef446928ae4bbfe587035ca"
+          }
+        }
+      ]
+    },
+    "17": {
+      "files": {
+        "qwen_gdn_linear_attn.py": "409969ebb81cc4b5adec548271fff60ecf6ead91adc0b7328f5450685c6646f5",
+        "_strix_gdn.py": "a064bdbab5d4e0022af40d7c09b86e3a0c4fd258befe31948f5e685f2395d2b2",
+        "_strix_gdn_kernel.py": "5c7ed927e90a5ac7014bc894f35bb3ddbdf619eee5cf2839f152e9c266c293dc"
+      },
+      "workers": [
+        {
+          "pid": 11955,
+          "environment": {
+            "STRIX_PACKED_GDN": "1",
+            "STRIX_HIP_RDMA_LIBRARY": "/opt/strix-halo-next/hip-uma-ring4-20260907-r1/libhip_rdma_backend.so",
+            "STRIX_MOE_W2_SERIAL": "1",
+            "STRIX_CLUSTER_RUN_ID": "996e206a8ef446928ae4bbfe587035ca"
+          }
+        }
+      ]
+    },
+    "18": {
+      "files": {
+        "qwen_gdn_linear_attn.py": "409969ebb81cc4b5adec548271fff60ecf6ead91adc0b7328f5450685c6646f5",
+        "_strix_gdn.py": "a064bdbab5d4e0022af40d7c09b86e3a0c4fd258befe31948f5e685f2395d2b2",
+        "_strix_gdn_kernel.py": "5c7ed927e90a5ac7014bc894f35bb3ddbdf619eee5cf2839f152e9c266c293dc"
+      },
+      "workers": [
+        {
+          "pid": 13805,
+          "environment": {
+            "STRIX_PACKED_GDN": "1",
+            "STRIX_HIP_RDMA_LIBRARY": "/opt/strix-halo-next/hip-uma-ring4-20260907-r1/libhip_rdma_backend.so",
+            "STRIX_MOE_W2_SERIAL": "1",
+            "STRIX_CLUSTER_RUN_ID": "996e206a8ef446928ae4bbfe587035ca"
+          }
+        }
+      ]
+    }
+  },
+  "kernel_dispatch_proof": "Not yet directly traced; default cache lookup found no matching files. Runtime source/env verification is not proof of executed branch.",
+  "decision": "No promotion before after control and dispatch verification."
+}
