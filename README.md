@@ -41,14 +41,19 @@ verkürzt den isolierten 20-KiB-All-reduce auf 56,42 µs gegenüber ungefähr
 85,3 µs mit RCCL. Im vollständigen Modelltest entsteht daraus jedoch kein
 Gewinn: **49,79 statt 50,49 Output-Token/s** im direkten ShareGPT-Kontrolllauf,
 bei 48 identischen Antworten und gleicher MTP-Akzeptanz. Der Versuch wurde
-zurückgebaut; der laufende Dienst verwendet die bewährte QSA/RCCL-Konfiguration.
+zurückgebaut; seine Ergebnisse bleiben als Vergleich erhalten.
 Die [GitHub-Recherche](docs/github-vllm-projects-20260907.md) bewertet acht
 Projekte und benennt konkrete nächste Kernel- und Kommunikationsansätze.
 Der daraus abgeleitete [AITER-HC-Test](docs/2026-09-07-aiter-hc.md) war bei
 allen drei Zielgrößen langsamer als die bereits vorhandenen BF16-Kernel.
 Ein weiterer [direkter GPU-/UMA-Prototyp](docs/2026-09-07-hip-uma.md) erreicht
 53,93 µs im isolierten Vier-Node-Austausch mit bitgleicher RCCL-Numerik.
-Ein Modellvergleich dieses neuen Pfads steht noch aus; er ist nicht aktiviert.
+Im Modellvergleich erreicht er **51,79 gegenüber 50,44 Output-Token/s** beim
+stärkeren RCCL-Kontrolllauf, mit 48 identischen Antworten. Die Generierung
+verbessert sich damit um **3,24 %**. Der geprüfte UMA-Pfad wurde als kanonische
+Konfiguration übernommen; der Rückbauweg ist dokumentiert. Das große
+Geschwindigkeitsziel bleibt offen. Der abschließende Neustarttest bestätigt
+**52,04 Output-Token/s**, erneut mit 48 identischen Antworten.
 
 ## Struktur
 

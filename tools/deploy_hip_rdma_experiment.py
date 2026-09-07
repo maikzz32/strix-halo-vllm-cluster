@@ -12,6 +12,7 @@ from patch_hip_rdma_communicator import patched
 
 ROOT = Path(__file__).resolve().parents[1]
 ADDON = '/opt/strix-halo-next/hip-rdma-ring4-20260907-r1'
+UMA_ADDON = '/opt/strix-halo-next/hip-uma-ring4-20260907-r1'
 BASE_SHA = '03ece681b0bef349cb78dabc74585efea2cc160ae28bd711c81dfd807ca8dff5'
 RELATIVE = 'usr/local/lib64/python3.12/site-packages/vllm/distributed/device_communicators/cuda_communicator.py'
 FILES = ['tools/cpu_rdma_transport.c', 'tools/cpu_rdma_transport.h', 'tools/cpu_rdma_reduce_avx2.h',
@@ -35,11 +36,15 @@ if cfg['action']=='stage':
  for path in root.glob('*.py'): compile(path.read_bytes(),str(path),'exec')
  commands=[['gcc','-std=c11','-O3','-fPIC','-Wall','-Wextra','-Werror','-I.','-c','cpu_rdma_transport.c','-o','transport.o'],
  ['g++','-std=c++17','-O2','-fPIC','-shared','-Wall','-Wextra','-Werror','-D__HIP_PLATFORM_AMD__','-I.','-I/opt/rocm/include','hip_rdma_backend.cpp','transport.o','-L/opt/rocm/lib','-Wl,-rpath,/opt/rocm/lib','-lamdhip64','-libverbs','-lpthread','-lm','-o','libhip_rdma_backend.so']]
+ if cfg['backend']=='uma':
+  commands=commands[:1]+[
+   ['/opt/rocm/bin/hipcc','-std=c++17','-O3','--offload-arch=gfx1151','-DSTRIX_UMA_THREADS=1024','-fPIC','-I.','-c','hip_uma_backend.hip','-o','uma.o'],
+   ['g++','-shared','uma.o','transport.o','-L/opt/rocm/lib','-Wl,-rpath,/opt/rocm/lib','-lamdhip64','-libverbs','-lpthread','-o','libhip_rdma_backend.so']]
  for command in commands:
   p=subprocess.run(command,cwd=root,capture_output=True,text=True,timeout=25)
   print(json.dumps({'command':command,'exit_code':p.returncode,'stderr':p.stderr}),flush=True)
   if p.returncode: raise RuntimeError('build failed')
- record={'base_sha256':current,'patched_sha256':hashlib.sha256(cfg['patched'].encode()).hexdigest(),
+ record={'backend':cfg['backend'],'base_sha256':current,'patched_sha256':hashlib.sha256(cfg['patched'].encode()).hexdigest(),
          'binary_sha256':hashlib.sha256(root.joinpath('libhip_rdma_backend.so').read_bytes()).hexdigest(),
          'sources_sha256':{name:hashlib.sha256(text.encode()).hexdigest() for name,text in cfg['sources'].items()}}
  root.joinpath('manifest.json').write_text(json.dumps(record,indent=2))
@@ -65,19 +70,22 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('action',choices=['stage','activate','restore'])
     p.add_argument('--execute',action='store_true')
+    p.add_argument('--backend',choices=['callback','uma'],default='callback')
     p.add_argument('--base-source',type=Path,
                    help='Reviewed original cuda_communicator.py; required for staging outside the research workspace')
     args=p.parse_args()
-    cfg={'action':args.action,'addon':ADDON,'relative':RELATIVE,'base_sha':BASE_SHA}
+    addon=UMA_ADDON if args.backend=='uma' else ADDON
+    cfg={'action':args.action,'addon':addon,'relative':RELATIVE,'base_sha':BASE_SHA,'backend':args.backend}
     if args.action=='stage':
         base_path=args.base_source or ROOT/'snapshots/runtime-source'/RELATIVE
         if not base_path.is_file():
             p.error('stage requires --base-source pointing to the reviewed original cuda_communicator.py')
         base=base_path.read_bytes()
-        cfg.update(sources={Path(path).name:(ROOT/path).read_text() for path in FILES},
+        files=[('tools/hip_uma_backend.hip' if args.backend=='uma' and path=='tools/hip_rdma_backend.cpp' else path) for path in FILES]
+        cfg.update(sources={Path(path).name:(ROOT/path).read_text() for path in files},
                    patched=patched(base,BASE_SHA).decode())
     if not args.execute:
-        print(json.dumps({'action':args.action,'addon':ADDON,'base_sha':BASE_SHA,'source_files':list(cfg.get('sources',{}))}));return 0
+        print(json.dumps({'action':args.action,'addon':addon,'base_sha':BASE_SHA,'source_files':list(cfg.get('sources',{}))}));return 0
     result_dir=ROOT/'results'/('hip-rdma-deploy-'+args.action+'-20260907-'+uuid.uuid4().hex[:8])
     result_dir.mkdir(parents=True,exist_ok=False)
     def run(node):

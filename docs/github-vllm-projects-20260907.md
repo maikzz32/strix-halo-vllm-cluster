@@ -10,6 +10,9 @@ Kernel. [Messung und unveränderte Produktionskonfiguration](2026-09-07-aiter-hc
 Auch der [kalibrierte RDMA-Backendversuch](2026-09-07-hip-rdma-ring4.md) brachte
 im direkten Modellvergleich keinen Gewinn. Die folgenden Bewertungen der
 übrigen Projekte sind weiterhin Quellenbefunde, keine lokalen Leistungsmessungen.
+Die UMA-Architekturidee aus ds4-vLLm wurde inzwischen eigenständig mit unserem
+TP4/RoCE-Transport umgesetzt: [Modellvergleich](2026-09-07-hip-uma.md) mit
+51,79 gegenüber 50,44 Output-Token/s und 48 identischen Antworten.
 
 Es gibt brauchbare Bausteine, aber in den geprüften Quellen keinen nachgewiesenen, direkt einsetzbaren Ersatz, der genau diesen Qwen-Checkpoint auf vier Strix Halo über Intel-RoCE schneller ausführt. Der aussichtsreichste neue Architekturhinweis ist ein GPU-Kernel, der direkt auf registrierte UMA-Puffer zugreift und einen CPU-verbs-Progress-Thread steuert. Die gefundenen fertigen Implementierungen schließen HIP-Graph-Capture allerdings aus. Sie ersetzen unseren bereits graphfähigen Versuchsaufbau daher nicht ohne erhebliche Anpassung.
 

@@ -36,7 +36,7 @@ node. `--force-stop` is an explicit recovery option for a broken or busy server.
 
 Model endpoint: `http://192.168.1.15:8000/v1`.
 
-The current normal config enables `VLLM_QSA_SKIP_INVISIBLE_TILES=1` and uses
+The QSA baseline config enables `VLLM_QSA_SKIP_INVISIBLE_TILES=1` and uses
 no profiler configuration or profiler environment overrides. Install the
 matching `patches/qsa_invisible_tiles.py` patch before using this setting on a
 restored runtime. The previous operator config is retained on all four hosts as
@@ -44,6 +44,18 @@ restored runtime. The previous operator config is retained on all four hosts as
 49.56–50.30 versus 48.60 output tokens/s (the final run also has lower TTFT);
 decode improvement remains about 2%. This is a modest gain, not the original
 goal of substantially faster single-answer generation.
+
+The current canonical host configuration additionally selects the validated
+[UMA/RDMA backend](../../docs/2026-09-07-hip-uma.md), with the complete
+[candidate configuration](../../bench/records/hip-uma-model-r1.json) archived.
+The preserved addon and opt-in communicator hook are required on every node;
+the September 6 runtime image snapshot predates this addon. The repository's
+baseline deployment does not install it or overwrite an existing operator
+configuration. Use the dedicated staging/activation procedure and preserve the
+original communicator before enabling it. The prior QSA/RCCL configuration is
+saved on all four hosts as `config/cluster.pre-uma-20260907.json`.
+Allow 900 seconds for model startup; the earlier 420-second deadline was too
+short for one observed load and caused deliberate worker cleanup.
 
 Startup is manual. The detached rank launchers survive SSH disconnection, but
 there is no configured boot startup, crash supervisor or automatic failover.
