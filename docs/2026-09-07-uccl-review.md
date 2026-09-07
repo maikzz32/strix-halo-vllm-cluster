@@ -1,6 +1,6 @@
 # UCCL review for the four Strix Halo nodes
 
-Inspected upstream commit `79b64ae7ca58ea78bb39c6275b0f91443e33a3f2` from a local shallow checkout, following the user's repository link. No UCCL build, installation or service switch has occurred.
+Inspected upstream commit `79b64ae7ca58ea78bb39c6275b0f91443e33a3f2` from a local shallow checkout, following the user's repository link. A separate plugin now builds successfully on Node18, as detailed below. No plugin loading, installation into serving, or service switch has occurred.
 
 UCCL is relevant as an alternative RCCL network transport. Its RDMA collective component supports AMD GPUs and RoCE, and the current code contains explicit Intel/irdma adaptations despite the top-level support summary mainly naming Nvidia and Broadcom NICs. That makes it a concrete test candidate; it does not prove gfx1151 compatibility or better single-answer throughput.
 
@@ -18,4 +18,12 @@ Keep the installed vLLM, checkpoint and weights. First build a separate plugin w
 
 Only after those pass should a full-model trial disable the direct UMA override for the UCCL arm. Identical weights alone do not guarantee bitwise equality if the collective algorithm changes; preserve and compare answer texts, token lengths and MTP statistics. EP and KV-cache-transfer features are separate from the current TP4 single-answer workload and are not evidence of faster decoding here.
 
-The W2 kernel trial remains a separate candidate. Its CPU dispatch checks now accept the intended shape and reject 24 alternatives, with two modified-source rejections. A fresh original-kernel ShareGPT48 run completed successfully while UCCL was inspected. The original TP4/UMA service remains active; W2 and UCCL have not been activated together or separately in this round.
+The W2 kernel trial remains a separate candidate. Its CPU dispatch checks now accept the intended shape and reject 24 alternatives, with two modified-source rejections. A fresh original-kernel ShareGPT48 run completed successfully while UCCL was inspected. The original TP4/UMA service remains active; UCCL has never been activated. The separate W2 trial is documented in the model comparison.
+
+## Isolated build completed
+
+`prepare_uccl_sources.py` packages pinned upstream sources plus the pinned RCCL submodule headers (`532f54c2444501b3655e65fbce6d00d4bfc19c0b`, version2.23.4). It generates the public header's version substitutions without compiling or replacing RCCL. `build_uccl_isolated.py` performs bounded CPU compilation in a new `/tmp` directory on Node18; it never loads the result. It enables `INTEL_RDMA_NIC` explicitly and retains debug assertions, including the host-only memory check.
+
+The first build compiled all five plugin translation units but failed to link absent `libz`/`libelf` development names. Inspection found no corresponding calls in these plugin sources. The second build drops those unused libraries, links HIP explicitly and uses `-Wl,-z,defs` to reject unresolved symbols. It succeeds and exports `ncclNetPlugin_v8`.
+
+The resulting file is `/tmp/strix-uccl-build-86ea2a5eebc8454b8f58084daa6dc5ae/build/librccl-net-uccl.so`, SHA256 `fbeaff859ba8322921b91de3d31ecada7852ec1280b264239f2eeb23a73b3c39`. Both build processes finished before the W2 after-control benchmark began. No system packages changed. This proves compilation/linking only, not usable non-GDR transport, installed-RCCL compatibility or performance. [Build manifests and logs](../bench/records/2026-09-07-uccl-build.json) retain both attempts.
