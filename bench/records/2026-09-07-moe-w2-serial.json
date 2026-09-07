@@ -1,0 +1,481 @@
+{
+  "scope": "Isolated W2 split-preserving fusion; model not yet tested",
+  "runs": [
+    {
+      "manifest": {
+        "run_id": "02f1c9caf5ac45f99977fb9d64c214a9",
+        "source_sha256": {
+          "bench_moe_w2_serial.py": "6864f8ae1f6622a9e084a2b337a221c187b36cc48c8e42399c52d916df4ca251",
+          "moe_w2_serial_kernel.py": "abc2c860d76f194e56726f62a4258d26429ca05479cbe803558b847ed3611936"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "result": {
+        "run_id": "02f1c9caf5ac45f99977fb9d64c214a9",
+        "root": "/tmp/strix-w2-serial-02f1c9caf5ac45f99977fb9d64c214a9",
+        "exit_code": 1,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "log": "WARNING 09-07 16:58:03 [rocm.py:42] Failed to import from amdsmi with ModuleNotFoundError(\"No module named 'amdsmi'\")\nIn file included from /usr/include/python3.12/pyconfig.h:6,\n                 from /usr/include/python3.12/Python.h:12,\n                 from /tmp/tmp3eiog7ws/hip_utils.c:5:\n/usr/include/python3.12/pyconfig-64.h:1878:9: warning: \u2018_POSIX_C_SOURCE\u2019 redefined\n 1878 | #define _POSIX_C_SOURCE 200809L\n      |         ^~~~~~~~~~~~~~~\nIn file included from /usr/include/bits/libc-header-start.h:33,\n                 from /usr/include/stdint.h:26,\n                 from /usr/lib/gcc/x86_64-redhat-linux/16/include/stdint.h:11,\n                 from /usr/local/lib64/python3.12/site-packages/triton/backends/amd/include/hip/hip_runtime.h:48,\n                 from /tmp/tmp3eiog7ws/hip_utils.c:2:\n/usr/include/features.h:319:10: note: this is the location of the previous definition\n  319 | # define _POSIX_C_SOURCE        202405L\n      |          ^~~~~~~~~~~~~~~\nTraceback (most recent call last):\n  File \"/tmp/strix-w2-serial-02f1c9caf5ac45f99977fb9d64c214a9/bench_moe_w2_serial.py\", line 70, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/tmp/strix-w2-serial-02f1c9caf5ac45f99977fb9d64c214a9/bench_moe_w2_serial.py\", line 44, in main\n    case['bit_mismatches']=mismatches;save();assert all(v==0 for v in mismatches.values())\n                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "report": {
+          "status": "running",
+          "source_sha256": "4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070",
+          "cases": [
+            {
+              "pattern": "reuse10",
+              "distinct_experts": 240,
+              "packed_working_set_bytes": 56832000,
+              "methods": [],
+              "bit_mismatches": {
+                "installed": 0,
+                "serial64w4": 210,
+                "serial32w2": 210,
+                "serial128w4": 210
+              }
+            }
+          ]
+        }
+      },
+      "service_check": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "manifest": {
+        "run_id": "5fb9c3b7190e471e9844661ca394d125",
+        "source_sha256": {
+          "bench_moe_w2_serial.py": "6864f8ae1f6622a9e084a2b337a221c187b36cc48c8e42399c52d916df4ca251",
+          "moe_w2_serial_kernel.py": "b170f05e08df619d435c5c5592573103c53b060b8bbb53aace6a50623610a1f1"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "result": {
+        "run_id": "5fb9c3b7190e471e9844661ca394d125",
+        "root": "/tmp/strix-w2-serial-5fb9c3b7190e471e9844661ca394d125",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "log": "WARNING 09-07 16:58:31 [rocm.py:42] Failed to import from amdsmi with ModuleNotFoundError(\"No module named 'amdsmi'\")\n{\"status\": \"passed\", \"source_sha256\": \"4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070\", \"cases\": [{\"pattern\": \"reuse10\", \"distinct_experts\": 240, \"packed_working_set_bytes\": 56832000, \"methods\": [{\"method\": \"installed\", \"samples_us\": [52.01129118601481, 32.76284138361613, 31.427629788716633, 32.81517227490743, 31.31296435991923], \"median_us\": 32.76284138361613}, {\"method\": \"serial64w4\", \"samples_us\": [28.70078484217326, 28.848363955815632, 28.667370478312176, 28.86228362719218, 28.592292467753094], \"median_us\": 28.70078484217326}, {\"method\": \"serial32w2\", \"samples_us\": [23.468265930811565, 23.420600096384685, 23.381932576497395, 23.416435718536377, 23.368604977925617], \"median_us\": 23.416435718536377}, {\"method\": \"serial128w4\", \"samples_us\": [31.290966272354126, 30.95947504043579, 31.315547227859497, 30.96747398376465, 31.351377566655476], \"median_us\": 31.290966272354126}], \"bit_mismatches\": {\"installed\": 0, \"serial64w4\": 0, \"serial32w2\": 0, \"serial128w4\": 0}, \"changed_input_graph_exact\": true}, {\"pattern\": \"overlap25\", \"distinct_experts\": 462, \"packed_working_set_bytes\": 109401600, \"methods\": [{\"method\": \"installed\", \"samples_us\": [62.77500788370768, 63.9941414197286, 62.28552659352621, 62.6731793085734, 63.12833229700724], \"median_us\": 62.77500788370768}, {\"method\": \"serial64w4\", \"samples_us\": [54.32298978169759, 54.3764074643453, 54.12174860636393, 53.78192663192749, 53.56184641520182], \"median_us\": 54.12174860636393}, {\"method\": \"serial32w2\", \"samples_us\": [41.85933669408163, 41.91367228825887, 41.827591260274254, 41.403516133626304, 41.59801801045736], \"median_us\": 41.827591260274254}, {\"method\": \"serial128w4\", \"samples_us\": [56.4789334932963, 55.78120152155558, 56.14819129308065, 55.27496735254923, 55.6747039159139], \"median_us\": 55.78120152155558}], \"bit_mismatches\": {\"installed\": 0, \"serial64w4\": 0, \"serial32w2\": 0, \"serial128w4\": 0}, \"changed_input_graph_exact\": true}, {\"pattern\": \"disjoint40\", \"distinct_experts\": 477, \"packed_working_set_bytes\": 112953600, \"methods\": [{\"method\": \"installed\", \"samples_us\": [82.5965404510498, 83.28877290089925, 82.39363034566243, 82.52254327138265, 81.30741914113362], \"median_us\": 82.52254327138265}, {\"method\": \"serial64w4\", \"samples_us\": [71.6948429743449, 71.93417549133301, 71.10111713409424, 71.39659722646077, 70.88495095570882], \"median_us\": 71.39659722646077}, {\"method\": \"serial32w2\", \"samples_us\": [59.723095099131264, 59.88050699234009, 59.16219154993693, 58.504295349121094, 58.57279300689697], \"median_us\": 59.16219154993693}, {\"method\": \"serial128w4\", \"samples_us\": [105.33093611399333, 76.53820514678955, 76.0027249654134, 75.44174194335938, 75.58298110961914], \"median_us\": 76.0027249654134}], \"bit_mismatches\": {\"installed\": 0, \"serial64w4\": 0, \"serial32w2\": 0, \"serial128w4\": 0}, \"changed_input_graph_exact\": true}]}\nIn file included from /usr/include/python3.12/pyconfig.h:6,\n                 from /usr/include/python3.12/Python.h:12,\n                 from /tmp/tmppbag1vuu/hip_utils.c:5:\n/usr/include/python3.12/pyconfig-64.h:1878:9: warning: \u2018_POSIX_C_SOURCE\u2019 redefined\n 1878 | #define _POSIX_C_SOURCE 200809L\n      |         ^~~~~~~~~~~~~~~\nIn file included from /usr/include/bits/libc-header-start.h:33,\n                 from /usr/include/stdint.h:26,\n                 from /usr/lib/gcc/x86_64-redhat-linux/16/include/stdint.h:11,\n                 from /usr/local/lib64/python3.12/site-packages/triton/backends/amd/include/hip/hip_runtime.h:48,\n                 from /tmp/tmppbag1vuu/hip_utils.c:2:\n/usr/include/features.h:319:10: note: this is the location of the previous definition\n  319 | # define _POSIX_C_SOURCE        202405L\n      |          ^~~~~~~~~~~~~~~\n",
+        "report": {
+          "status": "passed",
+          "source_sha256": "4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070",
+          "cases": [
+            {
+              "pattern": "reuse10",
+              "distinct_experts": 240,
+              "packed_working_set_bytes": 56832000,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    52.01129118601481,
+                    32.76284138361613,
+                    31.427629788716633,
+                    32.81517227490743,
+                    31.31296435991923
+                  ],
+                  "median_us": 32.76284138361613
+                },
+                {
+                  "method": "serial64w4",
+                  "samples_us": [
+                    28.70078484217326,
+                    28.848363955815632,
+                    28.667370478312176,
+                    28.86228362719218,
+                    28.592292467753094
+                  ],
+                  "median_us": 28.70078484217326
+                },
+                {
+                  "method": "serial32w2",
+                  "samples_us": [
+                    23.468265930811565,
+                    23.420600096384685,
+                    23.381932576497395,
+                    23.416435718536377,
+                    23.368604977925617
+                  ],
+                  "median_us": 23.416435718536377
+                },
+                {
+                  "method": "serial128w4",
+                  "samples_us": [
+                    31.290966272354126,
+                    30.95947504043579,
+                    31.315547227859497,
+                    30.96747398376465,
+                    31.351377566655476
+                  ],
+                  "median_us": 31.290966272354126
+                }
+              ],
+              "bit_mismatches": {
+                "installed": 0,
+                "serial64w4": 0,
+                "serial32w2": 0,
+                "serial128w4": 0
+              },
+              "changed_input_graph_exact": true
+            },
+            {
+              "pattern": "overlap25",
+              "distinct_experts": 462,
+              "packed_working_set_bytes": 109401600,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    62.77500788370768,
+                    63.9941414197286,
+                    62.28552659352621,
+                    62.6731793085734,
+                    63.12833229700724
+                  ],
+                  "median_us": 62.77500788370768
+                },
+                {
+                  "method": "serial64w4",
+                  "samples_us": [
+                    54.32298978169759,
+                    54.3764074643453,
+                    54.12174860636393,
+                    53.78192663192749,
+                    53.56184641520182
+                  ],
+                  "median_us": 54.12174860636393
+                },
+                {
+                  "method": "serial32w2",
+                  "samples_us": [
+                    41.85933669408163,
+                    41.91367228825887,
+                    41.827591260274254,
+                    41.403516133626304,
+                    41.59801801045736
+                  ],
+                  "median_us": 41.827591260274254
+                },
+                {
+                  "method": "serial128w4",
+                  "samples_us": [
+                    56.4789334932963,
+                    55.78120152155558,
+                    56.14819129308065,
+                    55.27496735254923,
+                    55.6747039159139
+                  ],
+                  "median_us": 55.78120152155558
+                }
+              ],
+              "bit_mismatches": {
+                "installed": 0,
+                "serial64w4": 0,
+                "serial32w2": 0,
+                "serial128w4": 0
+              },
+              "changed_input_graph_exact": true
+            },
+            {
+              "pattern": "disjoint40",
+              "distinct_experts": 477,
+              "packed_working_set_bytes": 112953600,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    82.5965404510498,
+                    83.28877290089925,
+                    82.39363034566243,
+                    82.52254327138265,
+                    81.30741914113362
+                  ],
+                  "median_us": 82.52254327138265
+                },
+                {
+                  "method": "serial64w4",
+                  "samples_us": [
+                    71.6948429743449,
+                    71.93417549133301,
+                    71.10111713409424,
+                    71.39659722646077,
+                    70.88495095570882
+                  ],
+                  "median_us": 71.39659722646077
+                },
+                {
+                  "method": "serial32w2",
+                  "samples_us": [
+                    59.723095099131264,
+                    59.88050699234009,
+                    59.16219154993693,
+                    58.504295349121094,
+                    58.57279300689697
+                  ],
+                  "median_us": 59.16219154993693
+                },
+                {
+                  "method": "serial128w4",
+                  "samples_us": [
+                    105.33093611399333,
+                    76.53820514678955,
+                    76.0027249654134,
+                    75.44174194335938,
+                    75.58298110961914
+                  ],
+                  "median_us": 76.0027249654134
+                }
+              ],
+              "bit_mismatches": {
+                "installed": 0,
+                "serial64w4": 0,
+                "serial32w2": 0,
+                "serial128w4": 0
+              },
+              "changed_input_graph_exact": true
+            }
+          ]
+        }
+      },
+      "service_check": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "manifest": {
+        "run_id": "681d1aa975904a62bd5d63868e0e4065",
+        "seed": 9341,
+        "source_sha256": {
+          "bench_moe_w2_serial.py": "9928f438a2b1c14311dec923dfea1e0362740489ee504eb2f6467c3748e411e1",
+          "moe_w2_serial_kernel.py": "b170f05e08df619d435c5c5592573103c53b060b8bbb53aace6a50623610a1f1"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "result": {
+        "run_id": "681d1aa975904a62bd5d63868e0e4065",
+        "root": "/tmp/strix-w2-serial-681d1aa975904a62bd5d63868e0e4065",
+        "exit_code": 0,
+        "previous_owned_processes": [],
+        "remaining_owned_processes": [],
+        "log": "WARNING 09-07 16:59:36 [rocm.py:42] Failed to import from amdsmi with ModuleNotFoundError(\"No module named 'amdsmi'\")\n{\"status\": \"passed\", \"source_sha256\": \"4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070\", \"seed\": 9341, \"cases\": [{\"pattern\": \"reuse10\", \"distinct_experts\": 240, \"packed_working_set_bytes\": 56832000, \"methods\": [{\"method\": \"installed\", \"samples_us\": [71.89304828643799, 32.68367648124695, 31.58620794614156, 32.77267416318258, 31.756786505381267], \"median_us\": 32.68367648124695}, {\"method\": \"serial64w4\", \"samples_us\": [28.988778591156006, 29.53084707260132, 29.240187009175617, 29.862918456395466, 29.40885027249654], \"median_us\": 29.40885027249654}, {\"method\": \"serial32w2\", \"samples_us\": [23.812756935755413, 23.478680849075317, 23.705758651097614, 23.631844917933147, 23.843836784362793], \"median_us\": 23.705758651097614}, {\"method\": \"serial128w4\", \"samples_us\": [31.602706511815388, 30.815976858139038, 31.84836705525716, 31.320714950561523, 31.94628159205119], \"median_us\": 31.602706511815388}], \"bit_mismatches\": {\"installed\": 0, \"serial64w4\": 0, \"serial32w2\": 0, \"serial128w4\": 0}, \"changed_input_graph_exact\": true}, {\"pattern\": \"overlap25\", \"distinct_experts\": 462, \"packed_working_set_bytes\": 109401600, \"methods\": [{\"method\": \"installed\", \"samples_us\": [64.01430765787761, 64.49729204177856, 64.54487641652425, 64.42904472351074, 64.49312766393025], \"median_us\": 64.49312766393025}, {\"method\": \"serial64w4\", \"samples_us\": [56.120359897613525, 56.039110819498696, 55.808115005493164, 55.84969917933146, 55.89303175608317], \"median_us\": 55.89303175608317}, {\"method\": \"serial32w2\", \"samples_us\": [43.6468760172526, 43.499958515167236, 43.77028147379557, 43.667288621266685, 43.652876218159996], \"median_us\": 43.652876218159996}, {\"method\": \"serial128w4\", \"samples_us\": [58.034304777781166, 57.52148628234863, 58.12089045842489, 57.499659061431885, 58.42705170313517], \"median_us\": 58.034304777781166}], \"bit_mismatches\": {\"installed\": 0, \"serial64w4\": 0, \"serial32w2\": 0, \"serial128w4\": 0}, \"changed_input_graph_exact\": true}, {\"pattern\": \"disjoint40\", \"distinct_experts\": 477, \"packed_working_set_bytes\": 112953600, \"methods\": [{\"method\": \"installed\", \"samples_us\": [84.45732593536377, 85.2418025334676, 85.48580010732015, 85.6176217397054, 85.66170533498128], \"median_us\": 85.48580010732015}, {\"method\": \"serial64w4\", \"samples_us\": [75.30024846394856, 75.04233519236247, 74.95560646057129, 74.82775847117107, 75.11733373006184], \"median_us\": 75.04233519236247}, {\"method\": \"serial32w2\", \"samples_us\": [63.100083669026695, 62.76592413584391, 62.874106566111244, 62.884342670440674, 62.83575693766276], \"median_us\": 62.874106566111244}, {\"method\": \"serial128w4\", \"samples_us\": [79.73095575968425, 79.46346600850423, 84.34443473815918, 79.46054935455322, 79.85270023345947], \"median_us\": 79.73095575968425}], \"bit_mismatches\": {\"installed\": 0, \"serial64w4\": 0, \"serial32w2\": 0, \"serial128w4\": 0}, \"changed_input_graph_exact\": true}]}\nIn file included from /usr/include/python3.12/pyconfig.h:6,\n                 from /usr/include/python3.12/Python.h:12,\n                 from /tmp/tmpgz9i0hvd/hip_utils.c:5:\n/usr/include/python3.12/pyconfig-64.h:1878:9: warning: \u2018_POSIX_C_SOURCE\u2019 redefined\n 1878 | #define _POSIX_C_SOURCE 200809L\n      |         ^~~~~~~~~~~~~~~\nIn file included from /usr/include/bits/libc-header-start.h:33,\n                 from /usr/include/stdint.h:26,\n                 from /usr/lib/gcc/x86_64-redhat-linux/16/include/stdint.h:11,\n                 from /usr/local/lib64/python3.12/site-packages/triton/backends/amd/include/hip/hip_runtime.h:48,\n                 from /tmp/tmpgz9i0hvd/hip_utils.c:2:\n/usr/include/features.h:319:10: note: this is the location of the previous definition\n  319 | # define _POSIX_C_SOURCE        202405L\n      |          ^~~~~~~~~~~~~~~\n",
+        "report": {
+          "status": "passed",
+          "source_sha256": "4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070",
+          "seed": 9341,
+          "cases": [
+            {
+              "pattern": "reuse10",
+              "distinct_experts": 240,
+              "packed_working_set_bytes": 56832000,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    71.89304828643799,
+                    32.68367648124695,
+                    31.58620794614156,
+                    32.77267416318258,
+                    31.756786505381267
+                  ],
+                  "median_us": 32.68367648124695
+                },
+                {
+                  "method": "serial64w4",
+                  "samples_us": [
+                    28.988778591156006,
+                    29.53084707260132,
+                    29.240187009175617,
+                    29.862918456395466,
+                    29.40885027249654
+                  ],
+                  "median_us": 29.40885027249654
+                },
+                {
+                  "method": "serial32w2",
+                  "samples_us": [
+                    23.812756935755413,
+                    23.478680849075317,
+                    23.705758651097614,
+                    23.631844917933147,
+                    23.843836784362793
+                  ],
+                  "median_us": 23.705758651097614
+                },
+                {
+                  "method": "serial128w4",
+                  "samples_us": [
+                    31.602706511815388,
+                    30.815976858139038,
+                    31.84836705525716,
+                    31.320714950561523,
+                    31.94628159205119
+                  ],
+                  "median_us": 31.602706511815388
+                }
+              ],
+              "bit_mismatches": {
+                "installed": 0,
+                "serial64w4": 0,
+                "serial32w2": 0,
+                "serial128w4": 0
+              },
+              "changed_input_graph_exact": true
+            },
+            {
+              "pattern": "overlap25",
+              "distinct_experts": 462,
+              "packed_working_set_bytes": 109401600,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    64.01430765787761,
+                    64.49729204177856,
+                    64.54487641652425,
+                    64.42904472351074,
+                    64.49312766393025
+                  ],
+                  "median_us": 64.49312766393025
+                },
+                {
+                  "method": "serial64w4",
+                  "samples_us": [
+                    56.120359897613525,
+                    56.039110819498696,
+                    55.808115005493164,
+                    55.84969917933146,
+                    55.89303175608317
+                  ],
+                  "median_us": 55.89303175608317
+                },
+                {
+                  "method": "serial32w2",
+                  "samples_us": [
+                    43.6468760172526,
+                    43.499958515167236,
+                    43.77028147379557,
+                    43.667288621266685,
+                    43.652876218159996
+                  ],
+                  "median_us": 43.652876218159996
+                },
+                {
+                  "method": "serial128w4",
+                  "samples_us": [
+                    58.034304777781166,
+                    57.52148628234863,
+                    58.12089045842489,
+                    57.499659061431885,
+                    58.42705170313517
+                  ],
+                  "median_us": 58.034304777781166
+                }
+              ],
+              "bit_mismatches": {
+                "installed": 0,
+                "serial64w4": 0,
+                "serial32w2": 0,
+                "serial128w4": 0
+              },
+              "changed_input_graph_exact": true
+            },
+            {
+              "pattern": "disjoint40",
+              "distinct_experts": 477,
+              "packed_working_set_bytes": 112953600,
+              "methods": [
+                {
+                  "method": "installed",
+                  "samples_us": [
+                    84.45732593536377,
+                    85.2418025334676,
+                    85.48580010732015,
+                    85.6176217397054,
+                    85.66170533498128
+                  ],
+                  "median_us": 85.48580010732015
+                },
+                {
+                  "method": "serial64w4",
+                  "samples_us": [
+                    75.30024846394856,
+                    75.04233519236247,
+                    74.95560646057129,
+                    74.82775847117107,
+                    75.11733373006184
+                  ],
+                  "median_us": 75.04233519236247
+                },
+                {
+                  "method": "serial32w2",
+                  "samples_us": [
+                    63.100083669026695,
+                    62.76592413584391,
+                    62.874106566111244,
+                    62.884342670440674,
+                    62.83575693766276
+                  ],
+                  "median_us": 62.874106566111244
+                },
+                {
+                  "method": "serial128w4",
+                  "samples_us": [
+                    79.73095575968425,
+                    79.46346600850423,
+                    84.34443473815918,
+                    79.46054935455322,
+                    79.85270023345947
+                  ],
+                  "median_us": 79.73095575968425
+                }
+              ],
+              "bit_mismatches": {
+                "installed": 0,
+                "serial64w4": 0,
+                "serial32w2": 0,
+                "serial128w4": 0
+              },
+              "changed_input_graph_exact": true
+            }
+          ]
+        }
+      },
+      "service_check": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    }
+  ],
+  "candidate_source_sha256": "25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7",
+  "serving_source_unchanged": "4f460bcc4c6c074dc8c08c3881bccdbdbd941490821bac458c9782c1404a0070",
+  "staged_all_four": true
+}
