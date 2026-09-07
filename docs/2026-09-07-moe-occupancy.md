@@ -36,4 +36,4 @@ The drivers `tools/run_moe_w1_occupancy.py`, `tools/run_moe_w1_rotating.py` and 
 
 A subsequent W1 model trial should limit the change to the verified M4/top10/N320/K2560/GS32 path, preserve the original default, and compare identical requests, outputs and MTP acceptance against the canonical UMA baseline. The small W1 gain alone does not establish that the single-answer throughput target has been reached.
 
-The subsequent [bracketed model trial](2026-09-07-moe-w1-model.md) preserved all outputs but showed only0.57% generation gain against the stronger control. The candidate was not promoted.
+The subsequent [bracketed model trial](2026-09-07-moe-w1-model.md) preserved all outputs but showed only 0.57% generation gain against the stronger control. The candidate was not promoted.
