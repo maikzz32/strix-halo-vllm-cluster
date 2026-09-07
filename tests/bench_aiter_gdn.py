@@ -2,13 +2,25 @@
 import argparse,hashlib,json,statistics
 from pathlib import Path
 def main():
- p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--seed',type=int,default=9340);args=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--seed',type=int,default=9340);p.add_argument('--staged-wrapper',action='store_true');args=p.parse_args()
  import torch,importlib
  import vllm.third_party.flash_linear_attention.ops.fused_sigmoid_gating as stock
  from aiter.ops.triton.gated_delta_net.fused_rearrange_sigmoid_gdr import fused_rearrange_sigmoid_gated_delta_rule as candidate
  mod=importlib.import_module('aiter.ops.triton.gated_delta_net.fused_rearrange_sigmoid_gdr')
  from aiter_gdn_null_guard import fused_rearrange_sigmoid_gated_delta_rule_update_kernel
  mod.fused_rearrange_sigmoid_gated_delta_rule_update_kernel=fused_rearrange_sigmoid_gated_delta_rule_update_kernel
+ if args.staged_wrapper:
+  import importlib.util,sys
+  root=Path('/opt/strix-halo-next/aiter-gdn-20260907-r1')
+  manifest=json.loads(root.joinpath('manifest.json').read_text())
+  for name in ('_strix_gdn_kernel','_strix_gdn'):
+   path=root/(name+'.py')
+   assert hashlib.sha256(path.read_bytes()).hexdigest()==manifest['files'][path.name]
+   qualified='vllm.model_executor.layers.mamba.gdn.'+name
+   spec=importlib.util.spec_from_file_location(qualified,path)
+   module=importlib.util.module_from_spec(spec);sys.modules[qualified]=module;spec.loader.exec_module(module)
+  candidate=module.fused_rearrange_sigmoid_gated_delta_rule
+
  torch.set_num_threads(1);torch.set_num_interop_threads(1);torch.manual_seed(args.seed)
  sha=hashlib.sha256(Path(stock.__file__).read_bytes()).hexdigest();assert sha=='000ab8996af9788fdb8843a6a3b91833e7a14c8acc0e1ea073a536330f64cb6f'
  H,HV,K,V=4,12,128,128
@@ -18,7 +30,7 @@ def main():
   flat=torch.cat([q.reshape(-1),k.reshape(-1),v.reshape(-1)])
   t=x.shape[0];n=t*H*K
   return flat[:n].view(1,t,H,K),flat[n:2*n].view(1,t,H,K),flat[2*n:].view(1,t,HV,V)
- report={'status':'running','seed':args.seed,'source_sha256':sha,'scope':'Post-convolution MTP recurrence, packed QKV including torch.compile fused reference split; zero sentinel adapted; excludes conv/norm','cases':[]}
+ report={'staged_wrapper':args.staged_wrapper,'status':'running','seed':args.seed,'source_sha256':sha,'scope':'Post-convolution MTP recurrence, packed QKV including torch.compile fused reference split; zero sentinel adapted; excludes conv/norm','cases':[]}
  def save():args.output.write_text(json.dumps(report,indent=2))
  for batch in (1,2,4,8):
   for dtype in (torch.float32,torch.bfloat16):

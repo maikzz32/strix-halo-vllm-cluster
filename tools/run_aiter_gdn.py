@@ -32,7 +32,7 @@ dependency_root=pathlib.Path('/tmp/strix-aiter-probe-6a4606453d654e1ca6916552f49
 for name,sha in {'aiter/ops/triton/gated_delta_net/fused_rearrange_sigmoid_gdr.py':'383c69b54c7e9be418c8fd7e26d457ae84545166748e705670972206a6a7840a','aiter/ops/triton/_triton_kernels/gated_delta_rule/decode/fused_rearrange_sigmoid_gdr.py':'0ebfbaf88cd6201ad2899f3e38689a3b971c509d89ace544a695bc40c365c6d0'}.items():
  assert hashlib.sha256(dependency_root.joinpath(name).read_bytes()).hexdigest()==sha
 env=dict(os.environ);env['AITER_TRITON_ONLY']='1';env['PYTHONPATH']='/tmp/strix-aiter-probe-6a4606453d654e1ca6916552f49bfcaf';env['STRIX_AITER_GDN_RUN_ID']=cfg['run_id'];env['TRITON_CACHE_DIR']=str(root/'triton-cache')
-p=subprocess.run(['timeout','--signal=TERM','--kill-after=5s','150s','python3',str(root/'bench_aiter_gdn.py'),'--output',str(root/'result.json'),'--seed',str(cfg['seed'])],env=env,capture_output=True,timeout=160)
+p=subprocess.run(['timeout','--signal=TERM','--kill-after=5s','150s','python3',str(root/'bench_aiter_gdn.py'),'--output',str(root/'result.json'),'--seed',str(cfg['seed'])]+(['--staged-wrapper'] if cfg['staged_wrapper'] else []),env=env,capture_output=True,timeout=160)
 root.joinpath('benchmark.log').write_bytes(p.stdout+p.stderr)
 remaining=owned(cfg['run_id'])
 record={'run_id':cfg['run_id'],'root':str(root),'exit_code':p.returncode,'previous_owned_processes':old,
@@ -46,6 +46,7 @@ raise SystemExit(p.returncode or bool(remaining))
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--staged-wrapper', action='store_true')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--seed', type=int, default=9340)
     parser.add_argument('--prior-run-id', help='Optionally verify cleanup of a previous owned test')
@@ -54,8 +55,8 @@ def main():
         parser.error('--prior-run-id must be 32 lowercase hexadecimal characters')
     paths = [ROOT/'tests'/name for name in ('bench_aiter_gdn.py','aiter_gdn_null_guard.py')]
     files = {p.name:p.read_text(encoding='utf-8') for p in paths}
-    cfg = {'run_id':uuid.uuid4().hex, 'files':files, 'prior_run_id':args.prior_run_id, 'seed':args.seed}
-    manifest = {'run_id':cfg['run_id'], 'seed':args.seed, 'source_sha256':{k:hashlib.sha256(v.encode()).hexdigest() for k,v in files.items()}}
+    cfg = {'run_id':uuid.uuid4().hex, 'files':files, 'staged_wrapper':args.staged_wrapper, 'prior_run_id':args.prior_run_id, 'seed':args.seed}
+    manifest = {'run_id':cfg['run_id'], 'staged_wrapper':args.staged_wrapper, 'seed':args.seed, 'source_sha256':{k:hashlib.sha256(v.encode()).hexdigest() for k,v in files.items()}}
     if not args.execute:
         print(json.dumps(manifest, indent=2));return 0
     controller=ROOT/'tools/cluster.py'

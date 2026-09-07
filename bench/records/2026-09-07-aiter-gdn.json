@@ -7437,6 +7437,2203 @@
         }
       },
       "remaining_owned_processes": []
+    },
+    {
+      "manifest": {
+        "run_id": "5240d618659c472fa80ad81cc37d106f",
+        "staged_wrapper": true,
+        "seed": 9344,
+        "source_sha256": {
+          "bench_aiter_gdn.py": "adda004cd25f3b488773d724bffa36e03af66804d0b1dccf116f12affe5cb4bc",
+          "aiter_gdn_null_guard.py": "5c7ed927e90a5ac7014bc894f35bb3ddbdf619eee5cf2839f152e9c266c293dc"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "run_id": "5240d618659c472fa80ad81cc37d106f",
+      "exit_code": 0,
+      "report": {
+        "staged_wrapper": true,
+        "status": "passed",
+        "seed": 9344,
+        "source_sha256": "000ab8996af9788fdb8843a6a3b91833e7a14c8acc0e1ea073a536330f64cb6f",
+        "scope": "Post-convolution MTP recurrence, packed QKV including torch.compile fused reference split; zero sentinel adapted; excludes conv/norm",
+        "cases": [
+          {
+            "batch": 1,
+            "state_dtype": "torch.float32",
+            "qkv_stride": [
+              1,
+              4
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 0,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  13.300429582595825,
+                  13.072439432144165,
+                  13.026440143585205,
+                  13.030840158462524,
+                  13.038840293884277
+                ],
+                "median": 13.038840293884277
+              },
+              "aiter": {
+                "samples": [
+                  10.568909645080566,
+                  10.648109912872314,
+                  10.58169960975647,
+                  10.654510259628296,
+                  10.559309720993042
+                ],
+                "median": 10.58169960975647
+              }
+            }
+          },
+          {
+            "batch": 1,
+            "state_dtype": "torch.bfloat16",
+            "qkv_stride": [
+              1,
+              4
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 0,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  10.425699949264526,
+                  10.419310331344604,
+                  10.376509428024292,
+                  10.34970998764038,
+                  10.376110076904297
+                ],
+                "median": 10.376509428024292
+              },
+              "aiter": {
+                "samples": [
+                  8.249769806861877,
+                  8.238970041275024,
+                  8.253369927406311,
+                  8.218969702720642,
+                  8.25177013874054
+                ],
+                "median": 8.249769806861877
+              }
+            }
+          },
+          {
+            "batch": 2,
+            "state_dtype": "torch.float32",
+            "qkv_stride": [
+              1,
+              8
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 1,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  18.28788995742798,
+                  18.081090450286865,
+                  18.09069037437439,
+                  17.67951011657715,
+                  16.95510983467102
+                ],
+                "median": 18.081090450286865
+              },
+              "aiter": {
+                "samples": [
+                  14.57798957824707,
+                  14.574389457702637,
+                  14.575589895248413,
+                  14.537999629974365,
+                  13.82761001586914
+                ],
+                "median": 14.574389457702637
+              }
+            }
+          },
+          {
+            "batch": 2,
+            "state_dtype": "torch.bfloat16",
+            "qkv_stride": [
+              1,
+              8
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 1,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  13.932410478591919,
+                  13.785220384597778,
+                  13.777220249176025,
+                  13.746819496154785,
+                  13.800410032272339
+                ],
+                "median": 13.785220384597778
+              },
+              "aiter": {
+                "samples": [
+                  10.806100368499756,
+                  10.842499732971191,
+                  10.792100429534912,
+                  10.815290212631226,
+                  10.793299674987793
+                ],
+                "median": 10.806100368499756
+              }
+            }
+          },
+          {
+            "batch": 4,
+            "state_dtype": "torch.float32",
+            "qkv_stride": [
+              1,
+              16
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 1,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  30.44874906539917,
+                  27.592430114746094,
+                  27.57962942123413,
+                  28.05440902709961,
+                  27.496039867401123
+                ],
+                "median": 27.592430114746094
+              },
+              "aiter": {
+                "samples": [
+                  26.85884952545166,
+                  26.80445909500122,
+                  24.427709579467773,
+                  24.685308933258057,
+                  24.702110290527344
+                ],
+                "median": 24.702110290527344
+              }
+            }
+          },
+          {
+            "batch": 4,
+            "state_dtype": "torch.bfloat16",
+            "qkv_stride": [
+              1,
+              16
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 1,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  19.64264988899231,
+                  19.20667052268982,
+                  19.159469604492188,
+                  19.320260286331177,
+                  18.758679628372192
+                ],
+                "median": 19.20667052268982
+              },
+              "aiter": {
+                "samples": [
+                  16.68313980102539,
+                  16.53473973274231,
+                  16.495139598846436,
+                  16.619930267333984,
+                  16.227550506591797
+                ],
+                "median": 16.53473973274231
+              }
+            }
+          },
+          {
+            "batch": 8,
+            "state_dtype": "torch.float32",
+            "qkv_stride": [
+              1,
+              32
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 1,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  59.391140937805176,
+                  53.910088539123535,
+                  53.594908714294434,
+                  53.497300148010254,
+                  53.326897621154785
+                ],
+                "median": 53.594908714294434
+              },
+              "aiter": {
+                "samples": [
+                  54.28408145904541,
+                  52.36934185028076,
+                  52.048940658569336,
+                  52.450528144836426,
+                  52.56493091583252
+                ],
+                "median": 52.450528144836426
+              }
+            }
+          },
+          {
+            "batch": 8,
+            "state_dtype": "torch.bfloat16",
+            "qkv_stride": [
+              1,
+              32
+            ],
+            "index_stride": [
+              8,
+              1
+            ],
+            "state_stride": [
+              393216,
+              16384,
+              128,
+              1
+            ],
+            "checks": [
+              {
+                "bank": 0,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 0,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 1,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 2,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 3,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 4,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 5,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 3,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 6,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 1,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 2,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 3,
+                "output_defined": false,
+                "output_exact": true,
+                "state_exact": true
+              },
+              {
+                "bank": 7,
+                "accepted": 4,
+                "output_defined": true,
+                "output_exact": true,
+                "state_exact": true
+              }
+            ],
+            "changed_input_acceptance_graph_exact": true,
+            "mixed_acceptance_padded_graph_exact": true,
+            "padded_requests": 1,
+            "timing_all_state_slots_valid": true,
+            "timing_us": {
+              "stock": {
+                "samples": [
+                  39.02530908584595,
+                  37.32775926589966,
+                  37.47974872589111,
+                  37.932140827178955,
+                  37.624149322509766
+                ],
+                "median": 37.624149322509766
+              },
+              "aiter": {
+                "samples": [
+                  36.151790618896484,
+                  35.31260967254639,
+                  34.697840213775635,
+                  34.91903066635132,
+                  34.55703020095825
+                ],
+                "median": 34.91903066635132
+              }
+            }
+          }
+        ]
+      },
+      "service": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "remaining_owned_processes": []
     }
   ],
   "decision": "Null-state sentinel mismatch in upstream requires <=0/>0 guards. Adapted candidate passes bounded state/output tests and improves the compiled-split operator comparison. Full-model integration and actual model gain remain unproven."
