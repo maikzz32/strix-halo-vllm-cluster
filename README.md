@@ -55,6 +55,12 @@ Konfiguration übernommen; der Rückbauweg ist dokumentiert. Das große
 Geschwindigkeitsziel bleibt offen. Der abschließende Neustarttest bestätigt
 **52,04 Output-Token/s**, erneut mit 48 identischen Antworten.
 
+Der anschließende [TP2-Vergleich](docs/2026-09-07-tp2-comparison.md) erreicht
+**39,82 Output-Token/s** mit unverändertem Checkpoint, MTP3 und Kontextlimit.
+TP4/UMA ist damit rund **31 % schneller insgesamt und 29 % beim Generieren**.
+Alle 48 Anfragen liefen durch; die Antworttexte zwischen TP2 und TP4 sind
+teilweise unterschiedlich. Die TP2-Konfiguration bleibt separat erhalten.
+
 Die [weitere Kernelprüfung](docs/2026-09-07-next-kernel-budget.md) misst rund
 9 Mikrosekunden verbleibende CPU-Summierung pro All-reduce. Ein separater
 verlustfreier BF16-Speicherversuch spart rechnerisch 23,5 % der HC-Gewichtsbytes
