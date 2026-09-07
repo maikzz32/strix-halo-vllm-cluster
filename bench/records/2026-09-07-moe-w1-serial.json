@@ -1,0 +1,368 @@
+{
+  "scope": "Isolated W1 serial fusion, no serving patch",
+  "runs": [
+    {
+      "manifest": {
+        "run_id": "6176b394493549c6b97ba7f8a55c079c",
+        "seed": 9340,
+        "source_sha256": {
+          "bench_moe_w1_serial.py": "019c8b20cbdfcb86eae1bb4d9bb016cc47b0e7d8e81285f0d97aaa38ad1a47ca",
+          "moe_w1_serial_kernel.py": "80ff66e580ae2dc645983051ea237a812e5997edee30c9666640447ee3a11e8c"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 60.0
+      },
+      "run_id": "6176b394493549c6b97ba7f8a55c079c",
+      "report": {
+        "status": "passed",
+        "source_sha256": "25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7",
+        "seed": 9340,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  40.041049321492515,
+                  40.074050426483154,
+                  40.3621236483256,
+                  39.99188343683878,
+                  40.04155000050863
+                ],
+                "median_us": 40.04155000050863,
+                "time_change_pct": 0.0
+              },
+              {
+                "method": "serial64w4",
+                "samples_us": [
+                  69.25640106201172,
+                  68.79982948303223,
+                  69.12482579549153,
+                  69.1209077835083,
+                  69.09298896789551
+                ],
+                "median_us": 69.1209077835083,
+                "time_change_pct": 72.62295735961844
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  112.70427703857422,
+                  112.72801558176677,
+                  113.01218668619792,
+                  112.9552682240804,
+                  112.93143431345622
+                ],
+                "median_us": 112.93143431345622,
+                "time_change_pct": 182.0356212784513
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial64w4": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap25",
+            "distinct_experts": 462,
+            "packed_working_set_bytes": 218803200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  79.6424388885498,
+                  79.10962104797363,
+                  79.56778208414714,
+                  79.01438077290852,
+                  79.58853244781494
+                ],
+                "median_us": 79.56778208414714,
+                "time_change_pct": 0.0
+              },
+              {
+                "method": "serial64w4",
+                "samples_us": [
+                  134.60458119710287,
+                  132.87595907847086,
+                  133.1378698348999,
+                  133.26661586761475,
+                  133.61477851867676
+                ],
+                "median_us": 133.26661586761475,
+                "time_change_pct": 67.488162139141
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  127.21045017242432,
+                  126.60313447316487,
+                  125.48949718475342,
+                  125.73624451955159,
+                  125.54441293080647
+                ],
+                "median_us": 125.73624451955159,
+                "time_change_pct": 58.0240660555033
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial64w4": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint40",
+            "distinct_experts": 477,
+            "packed_working_set_bytes": 225907200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  112.3043696085612,
+                  112.20169862111409,
+                  112.68577575683594,
+                  112.84701824188232,
+                  112.61377334594727
+                ],
+                "median_us": 112.61377334594727,
+                "time_change_pct": 0.0
+              },
+              {
+                "method": "serial64w4",
+                "samples_us": [
+                  161.79939905802408,
+                  160.1562817891439,
+                  160.95360120137533,
+                  160.0973606109619,
+                  160.92201868693033
+                ],
+                "median_us": 160.92201868693033,
+                "time_change_pct": 42.897279707146566
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  198.4665552775065,
+                  197.48449325561523,
+                  196.9545046488444,
+                  196.7771053314209,
+                  196.7075983683268
+                ],
+                "median_us": 196.9545046488444,
+                "time_change_pct": 74.89379744323466
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial64w4": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "service": {
+        "before_success_total": 60.0,
+        "after_success_total": 60.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "exit_code": 0,
+      "remaining_owned_processes": []
+    },
+    {
+      "manifest": {
+        "run_id": "96625eecc0df4cc5b313938aef1c691d",
+        "seed": 9341,
+        "source_sha256": {
+          "bench_moe_w1_serial.py": "f4c2427dfc9120c0d37760a71b80808a7e18809ef6cd4220cb3d8a72d130d883",
+          "moe_w1_serial_kernel.py": "80ff66e580ae2dc645983051ea237a812e5997edee30c9666640447ee3a11e8c"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 60.0
+      },
+      "run_id": "96625eecc0df4cc5b313938aef1c691d",
+      "report": {
+        "status": "passed",
+        "source_sha256": "25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7",
+        "seed": 9341,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  37.968858083089195,
+                  38.23860088984171,
+                  38.83658250172933,
+                  38.25685183207194,
+                  39.0073299407959
+                ],
+                "median_us": 38.25685183207194,
+                "time_change_pct": 0.0
+              },
+              {
+                "method": "serial64w4s2",
+                "samples_us": [
+                  55.40445248285929,
+                  54.88038857777914,
+                  55.40529092152914,
+                  54.830642541249595,
+                  55.82844018936157
+                ],
+                "median_us": 55.40445248285929,
+                "time_change_pct": 44.82229935190845
+              },
+              {
+                "method": "serial32w2s2",
+                "samples_us": [
+                  55.09321689605713,
+                  55.06246487299601,
+                  55.17995754877726,
+                  55.13254006703695,
+                  55.15737533569336
+                ],
+                "median_us": 55.13254006703695,
+                "time_change_pct": 44.11154453858532
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial64w4s2": 0,
+              "serial32w2s2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap25",
+            "distinct_experts": 462,
+            "packed_working_set_bytes": 218803200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  83.02652041117351,
+                  83.5438330968221,
+                  84.121568997701,
+                  83.54733784993489,
+                  84.121568997701
+                ],
+                "median_us": 83.54733784993489,
+                "time_change_pct": 0.0
+              },
+              {
+                "method": "serial64w4s2",
+                "samples_us": [
+                  120.1601505279541,
+                  119.37100092569987,
+                  120.04389762878418,
+                  119.7380781173706,
+                  119.84949111938477
+                ],
+                "median_us": 119.84949111938477,
+                "time_change_pct": 43.45099940186563
+              },
+              {
+                "method": "serial32w2s2",
+                "samples_us": [
+                  122.73573875427246,
+                  122.89841175079346,
+                  123.00264835357666,
+                  122.79707590738933,
+                  123.3185609181722
+                ],
+                "median_us": 122.89841175079346,
+                "time_change_pct": 47.1003324744347
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial64w4s2": 0,
+              "serial32w2s2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint40",
+            "distinct_experts": 477,
+            "packed_working_set_bytes": 225907200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  120.9429661432902,
+                  121.34303251902263,
+                  121.9762643178304,
+                  121.28544648488362,
+                  121.85935179392497
+                ],
+                "median_us": 121.34303251902263,
+                "time_change_pct": 0.0
+              },
+              {
+                "method": "serial64w4s2",
+                "samples_us": [
+                  142.3678716023763,
+                  142.08003679911295,
+                  142.2842820485433,
+                  142.1391169230143,
+                  142.1220302581787
+                ],
+                "median_us": 142.1391169230143,
+                "time_change_pct": 17.138259999173442
+              },
+              {
+                "method": "serial32w2s2",
+                "samples_us": [
+                  145.07211049397787,
+                  144.29663022359213,
+                  144.62455113728842,
+                  143.87564659118652,
+                  144.67129707336426
+                ],
+                "median_us": 144.62455113728842,
+                "time_change_pct": 19.186531055762114
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial64w4s2": 0,
+              "serial32w2s2": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "service": {
+        "before_success_total": 60.0,
+        "after_success_total": 60.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "exit_code": 0,
+      "remaining_owned_processes": []
+    }
+  ],
+  "decision": "Reject both tested tile sizes at stages1 and stages2: bit-exact tested outputs but slower than original. No full-model trial justified."
+}
