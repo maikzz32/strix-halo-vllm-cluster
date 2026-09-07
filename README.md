@@ -55,6 +55,12 @@ Konfiguration übernommen; der Rückbauweg ist dokumentiert. Das große
 Geschwindigkeitsziel bleibt offen. Der abschließende Neustarttest bestätigt
 **52,04 Output-Token/s**, erneut mit 48 identischen Antworten.
 
+Die [weitere Kernelprüfung](docs/2026-09-07-next-kernel-budget.md) misst rund
+9 Mikrosekunden verbleibende CPU-Summierung pro All-reduce. Ein separater
+verlustfreier BF16-Speicherversuch spart rechnerisch 23,5 % der HC-Gewichtsbytes
+und stellt alle ursprünglichen Bits wieder her. Ein GPU-Geschwindigkeitsgewinn
+ist dafür noch nicht gemessen; der laufende Modelldienst bleibt unverändert.
+
 ## Struktur
 
 - `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)
