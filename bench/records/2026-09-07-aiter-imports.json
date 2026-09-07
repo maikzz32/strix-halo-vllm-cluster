@@ -1,0 +1,78 @@
+{
+  "upstream_commit": "e8eac17259db6efcb48eba2aa0d9a3bf422e7b35",
+  "source_archive_sha256": "cc18b515133748b14f9aa10e445fd74e9e01c30cd5f56db5d356296462b81a45",
+  "attempts": [
+    {
+      "attempt": 1,
+      "record": {
+        "run_id": "6a4606453d654e1ca6916552f49bfcaf",
+        "root": "/tmp/strix-aiter-probe-6a4606453d654e1ca6916552f49bfcaf",
+        "exit_code": 1,
+        "remaining_owned_processes": [],
+        "log": "IMPORTS={\"aiter_path\": \"/tmp/strix-aiter-probe-6a4606453d654e1ca6916552f49bfcaf/aiter/__init__.py\", \"rows\": [{\"module\": \"aiter.ops.triton.causal_conv1d_update_single_token\", \"path\": \"/tmp/strix-aiter-probe-6a4606453d654e1ca6916552f49bfcaf/aiter/ops/triton/conv/causal_conv1d_update_single_token.py\", \"ok\": true}, {\"module\": \"aiter.ops.triton.gated_delta_net.fused_rearrange_sigmoid_gdr\", \"path\": \"/tmp/strix-aiter-probe-6a4606453d654e1ca6916552f49bfcaf/aiter/ops/triton/gated_delta_net/fused_rearrange_sigmoid_gdr.py\", \"ok\": true}, {\"module\": \"aiter.ops.triton.quant\", \"ok\": false, \"error\": \"AttributeError(\\\"module 'aiter' has no attribute 'dtypes'\\\")\"}]}\n[aiter] Triton ops only: CK and HIP ops (and their JIT build) are skipped.\nIn file included from /usr/include/python3.12/pyconfig.h:6,\n                 from /usr/include/python3.12/Python.h:12,\n                 from /tmp/tmp3c3ktpkc/hip_utils.c:5:\n/usr/include/python3.12/pyconfig-64.h:1878:9: warning: \u2018_POSIX_C_SOURCE\u2019 redefined\n 1878 | #define _POSIX_C_SOURCE 200809L\n      |         ^~~~~~~~~~~~~~~\nIn file included from /usr/include/bits/libc-header-start.h:33,\n                 from /usr/include/stdint.h:26,\n                 from /usr/lib/gcc/x86_64-redhat-linux/16/include/stdint.h:11,\n                 from /usr/local/lib64/python3.12/site-packages/triton/backends/amd/include/hip/hip_runtime.h:48,\n                 from /tmp/tmp3c3ktpkc/hip_utils.c:2:\n/usr/include/features.h:319:10: note: this is the location of the previous definition\n  319 | # define _POSIX_C_SOURCE        202405L\n      |          ^~~~~~~~~~~~~~~\n",
+        "service": {
+          "before": 54.0,
+          "after": 54.0,
+          "counts": {
+            "running": 0.0,
+            "waiting": 0.0
+          }
+        }
+      },
+      "raw_sha256": "b1086faca2fbb4c6e1501a3bdb6bf0609261dbe8124c8304a9d0ad4df5965a6d"
+    },
+    {
+      "attempt": 2,
+      "record": {
+        "run_id": "2e7c01f0c3ad4b389dd1a046403acc12",
+        "root": "/tmp/strix-aiter-probe-2e7c01f0c3ad4b389dd1a046403acc12",
+        "exit_code": 1,
+        "remaining_owned_processes": [],
+        "log": "[aiter] Triton ops only: CK and HIP ops (and their JIT build) are skipped.\nIn file included from /usr/include/python3.12/pyconfig.h:6,\n                 from /usr/include/python3.12/Python.h:12,\n                 from /tmp/tmp5_b84l0a/hip_utils.c:5:\n/usr/include/python3.12/pyconfig-64.h:1878:9: warning: \u2018_POSIX_C_SOURCE\u2019 redefined\n 1878 | #define _POSIX_C_SOURCE 200809L\n      |         ^~~~~~~~~~~~~~~\nIn file included from /usr/include/bits/libc-header-start.h:33,\n                 from /usr/include/stdint.h:26,\n                 from /usr/lib/gcc/x86_64-redhat-linux/16/include/stdint.h:11,\n                 from /usr/local/lib64/python3.12/site-packages/triton/backends/amd/include/hip/hip_runtime.h:48,\n                 from /tmp/tmp5_b84l0a/hip_utils.c:2:\n/usr/include/features.h:319:10: note: this is the location of the previous definition\n  319 | # define _POSIX_C_SOURCE        202405L\n      |          ^~~~~~~~~~~~~~~\nTraceback (most recent call last):\n  File \"<string>\", line 3, in <module>\n  File \"/tmp/strix-aiter-probe-2e7c01f0c3ad4b389dd1a046403acc12/aiter/utility/dtypes.py\", line 7, in <module>\n    from ..jit.utils.chip_info import get_gfx_runtime\n  File \"/tmp/strix-aiter-probe-2e7c01f0c3ad4b389dd1a046403acc12/aiter/jit/utils/chip_info.py\", line 9, in <module>\n    from build_targets import (\nModuleNotFoundError: No module named 'build_targets'\n",
+        "configuration": {
+          "run_id": "2e7c01f0c3ad4b389dd1a046403acc12",
+          "sha": "cc18b515133748b14f9aa10e445fd74e9e01c30cd5f56db5d356296462b81a45",
+          "archive": "/home/maik/strix-halo-next/aiter-probe-2e7c01f0c3ad4b389dd1a046403acc12.tar.gz",
+          "export_dtypes": true
+        },
+        "upstream_commit": "e8eac17259db6efcb48eba2aa0d9a3bf422e7b35",
+        "service": {
+          "before": 54.0,
+          "after": 54.0,
+          "counts": {
+            "running": 0.0,
+            "waiting": 0.0
+          }
+        }
+      },
+      "raw_sha256": "c98f5ecbefe44416648f8d97646550883e8b1fe83e250eb79dfb4ab531b7ac34"
+    },
+    {
+      "attempt": 3,
+      "record": {
+        "run_id": "974e1890d47e4e578564b75a556d7afe",
+        "root": "/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe",
+        "exit_code": 1,
+        "remaining_owned_processes": [],
+        "log": "[aiter] Triton ops only: CK and HIP ops (and their JIT build) are skipped.\nIn file included from /usr/include/python3.12/pyconfig.h:6,\n                 from /usr/include/python3.12/Python.h:12,\n                 from /tmp/tmpqdzorffw/hip_utils.c:5:\n/usr/include/python3.12/pyconfig-64.h:1878:9: warning: \u2018_POSIX_C_SOURCE\u2019 redefined\n 1878 | #define _POSIX_C_SOURCE 200809L\n      |         ^~~~~~~~~~~~~~~\nIn file included from /usr/include/bits/libc-header-start.h:33,\n                 from /usr/include/stdint.h:26,\n                 from /usr/lib/gcc/x86_64-redhat-linux/16/include/stdint.h:11,\n                 from /usr/local/lib64/python3.12/site-packages/triton/backends/amd/include/hip/hip_runtime.h:48,\n                 from /tmp/tmpqdzorffw/hip_utils.c:2:\n/usr/include/features.h:319:10: note: this is the location of the previous definition\n  319 | # define _POSIX_C_SOURCE        202405L\n      |          ^~~~~~~~~~~~~~~\n[aiter] [pid=12709 pname=MainProcess] start build [module_aiter_core] under /tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/build/module_aiter_core\n[aiter] ---> /tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/csrc/pybind/aiter_core_pybind.cu not exists!!!!!!\n[aiter] Current hipcc not support: -mllvm -amdgpu-coerce-illegal-types=1, skip it.\n[aiter] \u001b[31mfailed jit build [module_aiter_core]\u001b[0m\u2193\u2193\u2193\u2193\u2193\u2193\u2193\u2193\u2193\u2193\n-->[History]: Traceback (most recent call last):\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 1755, in wrapper\n    module = get_module(md)\n             ^^^^^^^^^^^^^^\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 760, in get_module\n    get_module_custom_op(md_name)\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/torch_guard.py\", line 296, in wrapper_custom\n    else getattr(torch.ops.aiter, f\"{loadName}\")(\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n-->  File \"/usr/local/lib64/python3.12/site-packages/torch/_ops.py\", line 1279, in __call__\n    return self._op(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/torch_guard.py\", line 334, in outer_wrapper_dummy\n    wrapper(*args, **kwargs)\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/torch_guard.py\", line 211, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 711, in get_module_custom_op\n    __mds[md_name] = importlib.import_module(f\"{__package__}.{md_name}\")\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n-->  File \"/usr/lib64/python3.12/importlib/__init__.py\", line 90, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n-->  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n-->  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n-->  File \"<frozen importlib._bootstrap>\", line 1324, in _find_and_load_unlocked\n-->ModuleNotFound\u001b[31merror:\u001b[0m No module named 'aiter.jit.module_aiter_core'\n-->\nDuring handling of the above exception, another exception occurred:\n\n-->Traceback (most recent call last):\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 1100, in MainFunc\n    _jit_compile(\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/cpp_extension.py\", line 1324, in _jit_compile\n    _write_ninja_file_and_build_library(\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/cpp_extension.py\", line 1434, in _write_ninja_file_and_build_library\n    _write_ninja_file_to_build_library(\n-->  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/cpp_extension.py\", line 1657, in _write_ninja_file_to_build_library\n    import pybind11\n-->ModuleNotFound\u001b[31merror:\u001b[0m No module named 'pybind11'\n\u001b[31mfailed jit build [module_aiter_core]\u001b[0m\u2191\u2191\u2191\u2191\u2191\u2191\u2191\u2191\u2191\u2191\n[aiter] [pid=12709 pname=MainProcess] \u001b[32mfinish build [module_aiter_core], cost 4.4s \u001b[0m\nTraceback (most recent call last):\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 1755, in wrapper\n    module = get_module(md)\n             ^^^^^^^^^^^^^^\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 760, in get_module\n    get_module_custom_op(md_name)\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/torch_guard.py\", line 296, in wrapper_custom\n    else getattr(torch.ops.aiter, f\"{loadName}\")(\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib64/python3.12/site-packages/torch/_ops.py\", line 1279, in __call__\n    return self._op(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/torch_guard.py\", line 334, in outer_wrapper_dummy\n    wrapper(*args, **kwargs)\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/torch_guard.py\", line 211, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 711, in get_module_custom_op\n    __mds[md_name] = importlib.import_module(f\"{__package__}.{md_name}\")\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib64/python3.12/importlib/__init__.py\", line 90, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1324, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'aiter.jit.module_aiter_core'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 1100, in MainFunc\n    _jit_compile(\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/cpp_extension.py\", line 1324, in _jit_compile\n    _write_ninja_file_and_build_library(\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/cpp_extension.py\", line 1434, in _write_ninja_file_and_build_library\n    _write_ninja_file_to_build_library(\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/cpp_extension.py\", line 1657, in _write_ninja_file_to_build_library\n    import pybind11\nModuleNotFoundError: No module named 'pybind11'\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"<string>\", line 5, in <module>\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/utility/dtypes.py\", line 8, in <module>\n    from ..ops.enum import ActivationType, QuantType\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/ops/enum.py\", line 19, in <module>\n    ActivationType = type(_ActivationType(0))\n                          ^^^^^^^^^^^^^^^^^^\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/utils/torch_guard.py\", line 211, in wrapper\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 2015, in custom_wrapper\n    return wrapper(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 1783, in wrapper\n    build_module(\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 1144, in build_module\n    mp_lock(lockPath=lock_path, MainFunc=MainFunc, FinalFunc=FinalFunc)\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 64, in mp_lock\n    ret = MainFunc()\n          ^^^^^^^^^^\n  File \"/tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/core.py\", line 1134, in MainFunc\n    raise RuntimeError(\nRuntimeError: [aiter] build [module_aiter_core] under /tmp/strix-aiter-probe-974e1890d47e4e578564b75a556d7afe/aiter/jit/build/module_aiter_core/build failed !!!!!!\n",
+        "configuration": {
+          "run_id": "974e1890d47e4e578564b75a556d7afe",
+          "sha": "cc18b515133748b14f9aa10e445fd74e9e01c30cd5f56db5d356296462b81a45",
+          "archive": "/home/maik/strix-halo-next/aiter-probe-974e1890d47e4e578564b75a556d7afe.tar.gz",
+          "export_dtypes": true
+        },
+        "upstream_commit": "e8eac17259db6efcb48eba2aa0d9a3bf422e7b35",
+        "service": {
+          "before": 54.0,
+          "after": 54.0,
+          "counts": {
+            "running": 0.0,
+            "waiting": 0.0
+          }
+        }
+      },
+      "raw_sha256": "eebb2613467a207d3b32a26f3f53e06f79a7599ac8465c84e280f1dd056d80c3"
+    }
+  ],
+  "decision": "Direct conv/GDN imports pass without shim in r1. Quant import fails missing dtypes; exporting utility dtypes in r2 needs jit/utils import path; adding path in r3 triggers native aiter_core build that fails with Python/config-only archive. No operator benchmark or serving activation. Next: direct GDN kernel parity/performance, avoid global AITER flag."
+}

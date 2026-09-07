@@ -35,6 +35,16 @@ the implementation explicitly includes gfx1151. Simply assuming that method
 excludes this GPU would be incorrect. Before enabling it, recheck the installed
 file and all paths it affects; a global enable could change more than GDN.
 
+Further tracing finds a material limitation: `_forward_core_with_packed_inputs`
+dispatches to `_forward_core_decode_aiter` only with interleaved GQA layout,
+`spec_sequence_masks is None`, no prefills and at least one decode. Otherwise
+it unpacks inputs and calls the existing core. The currently exposed fast path
+therefore does not accelerate the speculative verification step simply by
+turning on the flag. AITER's accepted-token-capable recurrence wrapper is a
+candidate for an explicit integration, not evidence that this integration
+already exists. Its single-token conv wrapper also rejects accepted-token
+arguments, so it cannot be substituted for MTP convolution unchanged.
+
 Upstream supports `AITER_TRITON_ONLY=1`, which skips top-level CK/HIP imports and
 their JIT build. Its compatibility map also retains the old conv1d module name
 used by this vLLM snapshot, despite the file moving into `conv/`. Neither a
@@ -47,3 +57,26 @@ No activation quantization, weight conversion or serving switch is authorized
 by a module name alone. The existing unchanged-quality requirement still
 governs the tests. The separate W2/AVX-512 model trial continues independently;
 no AITER GPU work ran concurrently with its throughput measurement.
+
+## Bounded import results
+
+After all model measurements completed, three isolated Node18 probes used a
+hash-checked archive of 1,277 pinned Python/config files, without installing a
+package. With `AITER_TRITON_ONLY=1`, the old conv module alias and packed GDN
+recurrence wrapper both import successfully. Importing `aiter.ops.triton.quant`
+fails because the top-level package lacks `dtypes` in this mode.
+
+An isolated attempt to export upstream `utility.dtypes` first failed on its
+absolute `build_targets` import. Adding the upstream `jit/utils` path advanced
+further but triggered the native `module_aiter_core` build through enum setup;
+that failed because the deliberately Python/config-only archive lacks its C++
+sources. Thus Triton-only top-level initialization does not guarantee that
+arbitrary additional imports avoid native JIT work. No successful full AITER
+integration is claimed. Triton's own HIP utility helper also compiled during
+import; no explicit model or operator benchmark was launched by these probes.
+
+All three probes terminated and left no owned processes. The serving counter
+stayed at 54 with empty queues. Direct GDN import is sufficient to pursue a
+bounded operator/state-parity test; making the unrelated quant availability
+check pass is not a prerequisite for that experiment.
+[Import records](../bench/records/2026-09-07-aiter-imports.json).
