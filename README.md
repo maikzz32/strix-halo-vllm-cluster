@@ -46,6 +46,9 @@ Die [GitHub-Recherche](docs/github-vllm-projects-20260907.md) bewertet acht
 Projekte und benennt konkrete nächste Kernel- und Kommunikationsansätze.
 Der daraus abgeleitete [AITER-HC-Test](docs/2026-09-07-aiter-hc.md) war bei
 allen drei Zielgrößen langsamer als die bereits vorhandenen BF16-Kernel.
+Ein weiterer [direkter GPU-/UMA-Prototyp](docs/2026-09-07-hip-uma.md) erreicht
+53,93 µs im isolierten Vier-Node-Austausch mit bitgleicher RCCL-Numerik.
+Ein Modellvergleich dieses neuen Pfads steht noch aus; er ist nicht aktiviert.
 
 ## Struktur
 

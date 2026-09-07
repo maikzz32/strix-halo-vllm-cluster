@@ -164,7 +164,15 @@ try:
             (stage / name).write_bytes(data)
         command(['gcc', '-std=c11', '-O3', '-fPIC', '-Wall', '-Wextra', '-Werror',
                  '-I.', '-c', 'cpu_rdma_transport.c', '-o', 'transport.o'], 25, stage)
-        command(['g++', '-std=c++17', '-O2', '-fPIC', '-shared', '-D__HIP_PLATFORM_AMD__',
+        if cfg.get('uma_backend'):
+            command(['/opt/rocm/bin/hipcc','-std=c++17','-O3','--offload-arch=gfx1151',
+                     '-DSTRIX_UMA_THREADS='+str(cfg['uma_threads']),
+                     '-fPIC','-I.','-c','hip_uma_backend.hip','-o','uma.o'],25,stage)
+            command(['g++','-shared','uma.o','transport.o','-L/opt/rocm/lib',
+                     '-Wl,-rpath,/opt/rocm/lib','-lamdhip64','-libverbs','-lpthread',
+                     '-o','libhip_rdma_graph.so'],25,stage)
+        else:
+            command(['g++', '-std=c++17', '-O2', '-fPIC', '-shared', '-D__HIP_PLATFORM_AMD__',
                  '-I.', '-I/opt/rocm/include', cfg.get('cpp_source', 'hip_rdma_graph.cpp'), 'transport.o',
                  '-L/opt/rocm/lib', '-Wl,-rpath,/opt/rocm/lib', '-lamdhip64',
                  '-libverbs', '-lpthread', '-lm', '-o', 'libhip_rdma_graph.so'], 25, stage)
@@ -288,6 +296,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--backend-test', action='store_true', help='Test isolated descriptor backend, including active PyNccl parity; no serving hook')
+    parser.add_argument('--uma-backend',action='store_true',help='Use the isolated one-kernel UMA backend with --backend-test')
+    parser.add_argument('--uma-threads',type=int,choices=[256,512,1024],default=256)
     parser.add_argument('--output', type=Path)
     parser.add_argument('--port', type=int, default=29881)
     parser.add_argument('--deadline', type=int, default=45)
@@ -302,7 +312,12 @@ def main():
         parser.error('replays 1–128 and samples 1–5 required')
     if args.backend_test != (args.mode == 'ring4'):
         parser.error('--backend-test requires --mode ring4, and ring4 requires --backend-test')
-    source_paths = BACKEND_SOURCES if args.backend_test else SOURCES
+    if args.uma_backend and not args.backend_test:
+        parser.error('--uma-backend requires --backend-test --mode ring4')
+    source_paths = dict(BACKEND_SOURCES if args.backend_test else SOURCES)
+    if args.uma_backend:
+        source_paths.pop('hip_rdma_backend.cpp')
+        source_paths['hip_uma_backend.hip']='tools/hip_uma_backend.hip'
     sources = {name: (ROOT / path).read_text(encoding='utf-8') for name, path in source_paths.items()}
     hashes = {name: hashlib.sha256(text.encode('utf-8')).hexdigest() for name, text in sources.items()}
     run_id = uuid.uuid4().hex
@@ -317,7 +332,7 @@ def main():
         configs.append({'rank':rank, 'node':node, 'container':container, 'run_id':run_id,
                         'arguments':arguments, 'deadline':args.deadline, 'source_sha256':hashes})
         if args.backend_test:
-            configs[-1].update(cpp_source='hip_rdma_backend.cpp',
+            configs[-1].update(cpp_source='hip_rdma_backend.cpp',uma_backend=args.uma_backend,uma_threads=args.uma_threads,
                                rank_script='bench_hip_rdma_backend.py', use_site=True,
                                environment={'NCCL_IB_GID_INDEX':'1','NCCL_NET_GDR_LEVEL':'0',
                                             'NCCL_MIN_NCHANNELS':'4','NCCL_MAX_NCHANNELS':'4',
@@ -328,7 +343,7 @@ def main():
     manifest = {'run_id':run_id, 'source_sha256':hashes, 'configs':configs,
                 'payload_bytes':20480, 'gpu_dependency':True,
                 'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                'backend_test':args.backend_test}
+                'backend_test':args.backend_test,'uma_backend':args.uma_backend}
     if not args.execute:
         print(json.dumps(manifest, indent=2)); return 0
     before = serving_snapshot(args.url)
