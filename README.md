@@ -79,6 +79,10 @@ und bitgleichen Testergebnissen. Im [vollständigen Modellvergleich](docs/2026-0
 bleiben gegenüber der stärkeren Kontrolle nur 0,57 % schnellere Generierung;
 alle Antworten stimmen überein. Der ursprüngliche Kernel bleibt aktiv.
 
+Die [Transport-Zeitmessung](docs/2026-09-07-rdma-phases.md) bestätigt den bereits
+direkten Austausch mit allen Peers. Das Einstellen der Sendungen kostet weniger
+als 1 Mikrosekunde; die CPU-Summierung bleibt ein messbarer weiterer Ansatz.
+
 ## Struktur
 
 - `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)
