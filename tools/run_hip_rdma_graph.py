@@ -52,7 +52,7 @@ BACKEND_SOURCES = {
 }
 
 REMOTE = r'''
-import hashlib, json, os, pathlib, signal, subprocess, sys, tempfile, time
+import base64, hashlib, json, os, pathlib, signal, subprocess, sys, tempfile, time
 cfg = CONFIG
 proc = None
 marker_name = 'STRIX_HIP_RDMA_RUN_ID'
@@ -157,6 +157,9 @@ try:
         raise RuntimeError('pidfd ownership-safe cleanup requires Linux/Python pidfd support')
     with tempfile.TemporaryDirectory(prefix='strix-hip-rdma-' + cfg['run_id'] + '-') as directory:
         stage = pathlib.Path(directory)
+        if cfg.get('trace_count') is not None:
+            cfg.setdefault('environment', {}).update(STRIX_RDMA_TRACE_DIR=str(stage),
+                STRIX_RDMA_TRACE_AUTOSTART=str(cfg['trace_count']))
         for name, text in cfg['sources'].items():
             data = text.encode('utf-8')
             if pathlib.Path(name).name != name or hashlib.sha256(data).hexdigest() != cfg['source_sha256'][name]:
@@ -190,6 +193,12 @@ try:
             if output.exists():
                 print(json.dumps({'event':'rank_artifact', 'rank':cfg['rank'],
                                   'run_id':cfg['run_id'], 'artifact':json.loads(output.read_text())}), flush=True)
+            for trace in stage.glob('rdma-r*-p*.bin'):
+                data = trace.read_bytes()
+                print(json.dumps({'event':'transport_trace', 'rank':cfg['rank'],
+                    'run_id':cfg['run_id'], 'name':trace.name,
+                    'sha256':hashlib.sha256(data).hexdigest(),
+                    'base64':base64.b64encode(data).decode('ascii')}), flush=True)
     print(json.dumps({'event':'launcher_complete', 'rank':cfg['rank'], 'run_id':cfg['run_id'],
                       'child_exit_code':0, 'temporary_files_removed':True,
                       'owned_processes_gone':True}), flush=True)
@@ -299,6 +308,10 @@ def main():
     parser.add_argument('--uma-backend',action='store_true',help='Use the isolated one-kernel UMA backend with --backend-test')
     parser.add_argument('--avx512-reduce',action='store_true',help='Isolated exact AVX512 CPU reduction; requires UMA backend')
     parser.add_argument('--uma-threads',type=int,choices=[256,512,1024],default=256)
+    parser.add_argument('--containers', nargs=4, help='Preserved container names in rank order')
+    parser.add_argument('--trace-count', type=int, help='Opt-in bounded diagnostic records, 0 disables capture')
+    parser.add_argument('--cyclic-send-order', action='store_true', help='Isolated peer-posting experiment; reduction order unchanged')
+    parser.add_argument('--early-reduce', action='store_true', help='Overlap reduction with send completions; isolated UMA only')
     parser.add_argument('--output', type=Path)
     parser.add_argument('--port', type=int, default=29881)
     parser.add_argument('--deadline', type=int, default=45)
@@ -317,6 +330,12 @@ def main():
         parser.error('--uma-backend requires --backend-test --mode ring4')
     if args.avx512_reduce and not args.uma_backend:
         parser.error('--avx512-reduce requires --uma-backend')
+    if args.trace_count is not None and (not args.uma_backend or not 0 <= args.trace_count <= 2048):
+        parser.error('--trace-count requires UMA and must be 0..2048')
+    if args.cyclic_send_order and not args.uma_backend:
+        parser.error('--cyclic-send-order requires UMA')
+    if args.early_reduce and (not args.uma_backend or args.trace_count is not None):
+        parser.error('--early-reduce requires UMA without the current timing-insertion generator')
     source_paths = dict(BACKEND_SOURCES if args.backend_test else SOURCES)
     if args.uma_backend:
         source_paths.pop('hip_rdma_backend.cpp')
@@ -326,18 +345,28 @@ def main():
         from build_cpu_rdma_wide import generate
         sources['cpu_rdma_transport.c']=generate(sources['cpu_rdma_transport.c'])
         sources['cpu_rdma_reduce_avx512.h']=(ROOT/'tests/cpu_rdma_reduce_avx512.h').read_text(encoding='utf-8')
+    if args.trace_count is not None:
+        from build_rdma_trace import generate as add_trace
+        sources['cpu_rdma_transport.c'] = add_trace(sources['cpu_rdma_transport.c'])
+    if args.cyclic_send_order:
+        from build_rdma_send_order import generate as reorder_sends
+        sources['cpu_rdma_transport.c'] = reorder_sends(sources['cpu_rdma_transport.c'])
+    if args.early_reduce:
+        from build_rdma_early_reduce import generate as overlap_reduction
+        sources['cpu_rdma_transport.c'] = overlap_reduction(sources['cpu_rdma_transport.c'])
     hashes = {name: hashlib.sha256(text.encode('utf-8')).hexdigest() for name, text in sources.items()}
     run_id = uuid.uuid4().hex
     configs = []
     for rank, node in enumerate((15, 16, 17, 18)):
-        container = 'ray-head' if node == 15 else 'ray-worker'
+        container = args.containers[rank] if args.containers else ('ray-head' if node == 15 else 'ray-worker')
         arguments = ['--rank', str(rank), '--run-id', run_id,
                      '--device', 'rocep197s0f1' if node == 18 else 'rocep197s0f3',
                      '--master', '192.168.100.1', '--port', str(args.port), '--gid-index', '1',
                      '--deadline', '40' if args.backend_test else '10', '--iterations', str(args.replays), '--warmup', '4',
                      '--samples', str(args.samples), '--mode', args.mode]
         configs.append({'rank':rank, 'node':node, 'container':container, 'run_id':run_id,
-                        'arguments':arguments, 'deadline':args.deadline, 'source_sha256':hashes})
+                        'arguments':arguments, 'deadline':args.deadline, 'source_sha256':hashes,
+                        'trace_count':args.trace_count})
         if args.backend_test:
             configs[-1].update(cpp_source='hip_rdma_backend.cpp',uma_backend=args.uma_backend,uma_threads=args.uma_threads,
                                rank_script='bench_hip_rdma_backend.py', use_site=True,
@@ -349,6 +378,8 @@ def main():
                                             'GLOO_SOCKET_IFNAME':'enp197s0f1np1' if node == 18 else 'enp197s0f3np3'})
     manifest = {'run_id':run_id, 'source_sha256':hashes, 'configs':configs,
                 'payload_bytes':20480, 'gpu_dependency':True,
+                'trace_count':args.trace_count, 'cyclic_send_order':args.cyclic_send_order,
+                'early_reduce':args.early_reduce,
                 'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
                 'backend_test':args.backend_test,'uma_backend':args.uma_backend,'avx512_reduce':args.avx512_reduce}
     if not args.execute:
