@@ -34,6 +34,29 @@ The next candidate should be restricted to the validated tensor shapes and
 row range, preserve BK32, and undergo before/candidate/after serving trials
 with output comparisons, TTFT, ShareGPT C1 throughput and tool-call checks.
 
+### Concrete candidate validation
+
+`patches/moe_prefill_tiles.py` now implements that bounded, default-off override
+under `STRIX_MOE_PREFILL_TILES=1`. It preserves explicit configuration overrides
+and requires ROCm, the exact TP4 weight shapes, top-10 routing and INT4 GS32.
+It pins the installed source SHA256 to
+`8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493`;
+the resulting candidate SHA256 is
+`66b775e00ecbb5d2f320dda82d3cd93f7baa607bb77f0a39c248bcb64d4c01a8`.
+
+`tests/bench_moe_prefill_candidate.py` evaluates the actual transformed
+configuration function inside an isolated process without editing installed
+files. With seed 9403, all ten cases (4, 32, 63, 64, 65, 128, 512, 1024,
+1025 and 2048 rows) passed eager and changed-input graph bitwise comparisons.
+At 64 rows operator time fell from 3809.60 to 3144.13 microseconds; at 1024
+rows from 6309.02 to 5835.78 microseconds. Cases outside the selected range
+retain their original configuration. Timing variation on those unchanged
+paths illustrates why full-model bracketed trials remain necessary.
+
+The source patch is **not installed** in any serving container. Candidate
+results are in `bench/records/2026-09-09-prefill-candidate.json`. The test
+requires the repository's `patches` directory on its Python import path.
+
 An earlier isolated larger-K experiment (BM32/BN64, BK64 or BK128) terminated
 with `HSA_STATUS_ERROR_MEMORY_FAULT` before producing its first case result.
 The precise cause and failing variant remain unproven. No installed source
