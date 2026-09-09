@@ -91,8 +91,14 @@ No acceptance gain or 3% saving is assumed from either idea.
    the former needs a different memory plan/model artifact and the latter
    changes weights. Discuss any new checkpoint with Maik first.
 
-The latest restored ShareGPT48/C1 control is 55.422 tokens/s with mean TTFT
-545.072 ms. Reaching 60 at the same output count requires about 7.63% less
-benchmark elapsed time (8.26% more throughput). This is a measured gap, not
-evidence that any individual proposal will close it. Fixed-prompt decode
-rates must not replace the ShareGPT metric when reporting goal completion.
+The latest restored ShareGPT48/C1 control is 56.272 tokens/s with mean TTFT
+565.697 ms, using GPU high mode. Reaching 60 at the same output count requires
+about 6.21% less benchmark elapsed time (6.62% more throughput). Fixed-prompt
+decode rates must not replace the ShareGPT metric when reporting completion.
+
+The [early RDMA reduction trial](2026-09-10-rdma-overlap.md) improved isolated
+collective latency by about 4.7%, but serving reached only 56.446 tokens/s,
+0.31% above the fresh restored control. It was not promoted. The existing
+[dynamic speculation implementation](2026-09-10-dynamic-speculation-review.md)
+also is not an acceptance-adaptive MTP switch: its batch-size policy is constant
+at C1, and enabling it on the current runner downgrades full graph execution.

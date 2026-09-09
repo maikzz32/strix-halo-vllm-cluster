@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "raw_sha256": "91ca34d93891706495c991b4f8f7f8a9af5b7dcebad54d5ebe9e53598f74dfc3",
+    "passed": [
+      "auto tool selection",
+      "result roundtrip",
+      "streamed tool call",
+      "default thinking"
+    ]
+  },
+  "control": {
+    "raw_sha256": "b4b5bd65ac0ddfd801ec176361b8f8e91471b5ba8d08191ad98159f7a5b41d5f",
+    "passed": [
+      "auto tool selection",
+      "result roundtrip",
+      "streamed tool call",
+      "default thinking"
+    ]
+  }
+}

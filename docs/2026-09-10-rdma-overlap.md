@@ -32,8 +32,7 @@ per graph. This roughly 4.7% isolated improvement is not a serving TPS claim.
 The diagnostic model benchmark completed separately at 54.82 tokens/s; it
 includes the trace library and is not a matched uninstrumented control.
 The candidate uses the original uninstrumented source plus early reduction.
-Compare it with the original high-mode serving record and a fresh restored
-original-library control before deciding whether to promote it.
+The full serving comparison below is complete; the original transport remains active.
 
 `tools/build_rdma_early_reduce.py` generates the candidate in a separate source;
 `--early-reduce` enables it only in the isolated UMA driver. It is deliberately
@@ -44,5 +43,30 @@ are in `bench/records/2026-09-10-rdma-early-reduce.json`.
 The validated candidate was staged at
 `/opt/strix-halo-next/rdma-early-reduce-20260910-r1`, identical SHA256 on all
 four nodes: `f8e3fddbdad358892e3e90ffed8f1cda00fce8cc0f1a699450191079e744079b`.
-Run `4960cc5a07094fa18bd949bb58484670` is loading the model for the serving
-trial. No serving performance gain is claimed yet.
+## Serving result: not promoted
+
+ShareGPT48/C1, unchanged checkpoint, MTP3 and GPU high mode:
+
+| Configuration | Output tokens/s | Mean TTFT (ms) | Mean TPOT (ms) |
+| --- | ---: | ---: | ---: |
+| Earlier original transport control | 56.364 | 545.612 | 15.414 |
+| Early reduction candidate | 56.446 | 562.404 | 15.343 |
+| Fresh restored original transport | 56.272 | 565.697 | 15.382 |
+
+The candidate is 0.15% above the earlier control and 0.31% above the fresh
+restored control. These single runs do not establish a repeatable improvement;
+the approximately 4.7% isolated collective gain did not translate into a
+comparable serving gain. TTFT is worse than the earlier control and slightly
+better than the restored control. No latency improvement is established.
+
+All 48 texts, output lengths and speculative statistics match both controls:
+11,839 output tokens and 14,767 input tokens. Auto tool choice, tool-result
+roundtrip, streaming tool calls and default thinking passed for both runs.
+The benchmark metric includes prefill and is not pure decode speed.
+
+Candidate run `4960cc5a07094fa18bd949bb58484670` was stopped. Restored run
+`845e5a91e47946948f446cc13b03f9e2` is ready on all four nodes with the original
+uninstrumented UMA transport, GPU high mode and unchanged model weights.
+No RDMA trace library is active. The graph inventory preload remains common
+to these comparisons. Exported serving records, comparisons and hashed tool
+check evidence are in `bench/records/2026-09-10-rdma-early-*.json`.
