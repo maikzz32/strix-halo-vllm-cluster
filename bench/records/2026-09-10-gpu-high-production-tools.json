@@ -1,0 +1,9 @@
+{
+  "raw_sha256": "b51617b1ee0de7e0d196748975d8b587a1dc0d43074cf2abd2acea15ed90826f",
+  "checks": {
+    "nonstream": true,
+    "default_thinking": true,
+    "roundtrip": true,
+    "stream_calls": true
+  }
+}

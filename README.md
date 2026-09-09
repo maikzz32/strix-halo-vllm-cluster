@@ -18,6 +18,7 @@ That target is still open.
 | TP4 + W2 serial production checkpoint | 53.85 | See report | 16.43 ms | [W2](docs/2026-09-07-moe-w2-serial-model.md) |
 | TP4 + AVX512 + W1 expert order | 56.04 | See report | See report | [Bracketed W1 comparison](docs/2026-09-07-moe-w1-order.md) |
 | vLLM 0.29 custom TP4, September 9 baseline | **55.74** | **541.77 ms** | **15.63 ms** | [Record](bench/records/2026-09-09-qwen029-tp4-baseline.json) |
+| vLLM 0.29 TP4, GPU high mode, September 10 | **56.36** | **545.61 ms** | **15.41 ms** | [Auto/high/auto comparison](docs/2026-09-10-gpu-performance-profile.md) |
 
 These are historical milestones, **not a controlled comparison between every
 row**. Individual reports contain matched controls, output parity and known
@@ -45,6 +46,7 @@ See [benchmark methodology](bench/README.md).
 | Context limit | 262,144 tokens |
 | Communication | Validated UMA/RDMA backend, AVX512 BF16 reduction |
 | Tool calls | Automatic tool selection with `qwen3_xml` parser |
+| GPU power mode | `high` on all four nodes; live sysfs setting, recheck after reboot |
 
 The custom release installation applies the complete upstream runtime delta
 while preserving the working Strix stack. It is not the stock ROCm wheel.
