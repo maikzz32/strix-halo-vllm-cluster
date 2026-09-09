@@ -1,0 +1,74 @@
+{
+  "model": "/home/maik/qwen38_rest",
+  "master_addr": "192.168.100.1",
+  "master_port": 50001,
+  "api_port": 8000,
+  "max_model_len": 262144,
+  "max_num_seqs": 8,
+  "max_num_batched_tokens": 8192,
+  "gpu_memory_utilization": 0.85,
+  "speculative_config": {
+    "method": "mtp",
+    "num_speculative_tokens": 3
+  },
+  "compilation_config": {
+    "cudagraph_mode": "FULL_DECODE_ONLY"
+  },
+  "environment": {
+    "VLLM_PLUGINS": "lora_filesystem_resolver,lora_hf_hub_resolver",
+    "VLLM_GFX1X_HC_QUANT": "0",
+    "VLLM_GFX1X_GATE_QUANT": "1",
+    "VLLM_GFX1X_SPEC_CUDAGRAPH": "prefill",
+    "VLLM_GFX1X_MOE_INT4_GEMV": "1",
+    "VLLM_ROCM_USE_AITER": "0",
+    "VLLM_GFX1X_MOE_TUNE": "1",
+    "VLLM_GFX1X_FAST_PLATFORM": "1",
+    "NCCL_GRAPH_MIXING_SUPPORT": "1",
+    "NCCL_LAUNCH_MODE": "GROUP",
+    "NCCL_MAX_NCHANNELS": "4",
+    "NCCL_MIN_NCHANNELS": "4",
+    "NCCL_IB_GID_INDEX": "1",
+    "NCCL_NET_GDR_LEVEL": "0",
+    "PYTORCH_HIP_ALLOC_CONF": "expandable_segments:True,garbage_collection_threshold:0.85",
+    "VLLM_QSA_SKIP_INVISIBLE_TILES": "1",
+    "STRIX_HIP_RDMA_ENABLE": "1",
+    "STRIX_HIP_RDMA_LIBRARY": "/opt/strix-halo-next/hip-uma-avx512-20260907-r1/libhip_rdma_backend.so",
+    "STRIX_HIP_RDMA_MASTER": "192.168.100.1",
+    "STRIX_HIP_RDMA_MODE": "ring4",
+    "STRIX_HIP_RDMA_PORT": "29921",
+    "STRIX_HIP_RDMA_TIMEOUT_MS": "5000",
+    "STRIX_HIP_RDMA_DESCRIPTORS": "2048",
+    "PYTHONPATH": "/opt/strix-halo-next/hip-uma-ring4-20260907-r1",
+    "STRIX_MOE_W2_SERIAL": "1",
+    "STRIX_MOE_W1_EXPERT_ORDER": "1",
+    "STRIX_MOE_OUTPUT_ALIAS": "1"
+  },
+  "nodes": [
+    {
+      "host": "192.168.1.15",
+      "rdma_ip": "192.168.100.1",
+      "container": "qwen029-tp2",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.16",
+      "rdma_ip": "192.168.100.2",
+      "container": "qwen029-tp2",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.17",
+      "rdma_ip": "192.168.100.3",
+      "container": "qwen029-tp4",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.18",
+      "rdma_ip": "192.168.100.4",
+      "container": "qwen029-tp4",
+      "iface": "enp197s0f1np1"
+    }
+  ],
+  "enable_auto_tool_choice": true,
+  "tool_call_parser": "qwen3_xml"
+}

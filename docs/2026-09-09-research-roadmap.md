@@ -51,8 +51,10 @@ the current deployment.
    final expert sum directly into the caller's output. The installed ROCm
    guard otherwise permits this only for AITER. The candidate is restricted
    to the actual WNA16 TP4 shapes, BF16, small batches, no LoRA and NoDPEP
-   finalize. Eager and changed-input graph tests pass; full-model comparison
-   is pending. This targets dispatch/copy overhead, not memory capacity.
+   finalize. Eager and changed-input graph tests pass, but the first model
+   comparison shows only +0.064% throughput and no decode improvement.
+   [Experiment report](2026-09-09-moe-output-alias.md). This targets dispatch
+   overhead, not memory capacity, and is not promoted.
 2. **Lossless W1 tile packing:** earlier isolated tests showed only a small
    advantage and require extra resident weights for fallback. Do not claim
    a model gain before load-time integration and bracketed measurements.
@@ -60,6 +62,12 @@ the current deployment.
    hyper-connections and collective waits, but predates the latest UMA/W1/W2
    improvements. Use the current runtime for the next substantial kernel
    decision. Profiled timings must not be presented as unprofiled throughput.
+4. **Prefill and context depth:** measure first-use and reused 2K/8K/32K
+   prefixes using exact token IDs and cache counters. The current runtime
+   already enables prefix caching. Use the observed prefill shapes to decide
+   whether its WNA16 fallback needs separate tuning; the small-batch decode
+   kernel is not the prefill path. A faster cached request alone does not
+   prove a kernel improvement or cache correctness.
 
 Known negative results, including TP2, EP4, several W1/W2 tile variants,
 HC packing and CPU thread placement, remain in the individual experiment

@@ -1,0 +1,38 @@
+[
+  {
+    "rank": 0,
+    "run_id": "4152f0b14aff44f2aed17ca8f6493c1a",
+    "worker_pid": 2333,
+    "source_sha256": "319e15663934b826f72695554af4643695fccde94c8d57c34534c6980577477a",
+    "activation_log": [
+      "Capturing CUDA graphs (FULL):  60%|\u2588\u2588\u2588\u2588\u2588\u2588    | 3/5 [00:01<00:00,  2.79it/s](Worker_TP0 pid=2333) INFO 09-09 19:10:03 [modular_kernel.py:1366] STRIX_MOE_OUTPUT_ALIAS active: WNA16 TP4 small batch"
+    ]
+  },
+  {
+    "rank": 1,
+    "run_id": "4152f0b14aff44f2aed17ca8f6493c1a",
+    "worker_pid": 1478,
+    "source_sha256": "319e15663934b826f72695554af4643695fccde94c8d57c34534c6980577477a",
+    "activation_log": [
+      "(Worker_TP1 pid=1478) INFO 09-09 19:10:03 [modular_kernel.py:1366] STRIX_MOE_OUTPUT_ALIAS active: WNA16 TP4 small batch"
+    ]
+  },
+  {
+    "rank": 2,
+    "run_id": "4152f0b14aff44f2aed17ca8f6493c1a",
+    "worker_pid": 600,
+    "source_sha256": "319e15663934b826f72695554af4643695fccde94c8d57c34534c6980577477a",
+    "activation_log": [
+      "(Worker_TP2 pid=600) INFO 09-09 19:10:03 [modular_kernel.py:1366] STRIX_MOE_OUTPUT_ALIAS active: WNA16 TP4 small batch"
+    ]
+  },
+  {
+    "rank": 3,
+    "run_id": "4152f0b14aff44f2aed17ca8f6493c1a",
+    "worker_pid": 636,
+    "source_sha256": "319e15663934b826f72695554af4643695fccde94c8d57c34534c6980577477a",
+    "activation_log": [
+      "(Worker_TP3 pid=636) INFO 09-09 19:10:03 [modular_kernel.py:1366] STRIX_MOE_OUTPUT_ALIAS active: WNA16 TP4 small batch"
+    ]
+  }
+]
