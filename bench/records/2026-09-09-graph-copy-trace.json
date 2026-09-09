@@ -1,0 +1,974 @@
+[
+  {
+    "trace": "dp0_pp0_tp0_dcp0_ep0_rank0.1788985606200444845.pt.trace.json.gz",
+    "sha256": "f713be5ab388108b174dc4dd859d7c4c826aaa167067a895bbb3e31cfff93b4f",
+    "all_categories": {
+      "user_annotation": 192,
+      "cpu_op": 38144,
+      "cuda_runtime": 19080,
+      "kernel": 52054,
+      "gpu_user_annotation": 208,
+      "Trace": 1
+    },
+    "graph_launches": 32,
+    "graphs": [
+      {
+        "launch_ts": 6017817305689.105,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817316247.076,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817349278.574,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817356872.287,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817392708.568,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817400177.944,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817436693.287,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817444153.743,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817480803.932,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817488365.595,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817524076.89,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817531884.187,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817589212.601,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817596572.07,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817632235.606,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817639899.287,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817675319.059,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817682758.046,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817717896.266,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817725458.46,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817760548.331,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817768144.234,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817803719.882,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817811087.721,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817845658.217,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817853215.381,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817889035.722,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817896472.479,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817931787.375,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817939299.019,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817974940.906,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817982561.148,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      }
+    ],
+    "gpu_memory_events": 0,
+    "gpu_memory_names": {},
+    "memory_correlated_to_graph": 0,
+    "note": "Profiler event counts, not HIP graph node inventory. Missing events cannot establish absent nodes."
+  },
+  {
+    "trace": "dp0_pp0_tp1_dcp0_ep1_rank1.1788985606175283932.pt.trace.json.gz",
+    "sha256": "aad7e865018c2c92e53edcccb28ed4c20e94b1d0da2983f737b9e41494dbfe46",
+    "all_categories": {
+      "user_annotation": 192,
+      "cpu_op": 38144,
+      "cuda_runtime": 19094,
+      "kernel": 51462,
+      "gpu_user_annotation": 208,
+      "Trace": 1
+    },
+    "graph_launches": 32,
+    "graphs": [
+      {
+        "launch_ts": 6017817300809.793,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817309292.797,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817344380.216,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817351227.841,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817387821.003,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817394568.301,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817431777.384,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817438614.369,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817475897.149,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817482798.423,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817519190.761,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817526342.827,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817584338.477,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817590996.818,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817627337.688,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817634201.623,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817670440.816,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817677377.098,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817713001.99,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817719817.826,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817755641.152,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817762543.336,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817798876.686,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817805653.723,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817840797.84,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817847762.772,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817884182.179,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817891059.044,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817926912.299,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817933789.403,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817970074.794,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817977124.393,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      }
+    ],
+    "gpu_memory_events": 0,
+    "gpu_memory_names": {},
+    "memory_correlated_to_graph": 0,
+    "note": "Profiler event counts, not HIP graph node inventory. Missing events cannot establish absent nodes."
+  },
+  {
+    "trace": "dp0_pp0_tp2_dcp0_ep2_rank2.1788985606170286047.pt.trace.json.gz",
+    "sha256": "a85cf2376d32818dd9d5c3987c964582b9592d140ec626e7ff404c4a8c74f4b8",
+    "all_categories": {
+      "user_annotation": 192,
+      "cpu_op": 38144,
+      "cuda_runtime": 19106,
+      "kernel": 52237,
+      "gpu_user_annotation": 208,
+      "Trace": 1
+    },
+    "graph_launches": 32,
+    "graphs": [
+      {
+        "launch_ts": 6017817301439.066,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817308874.787,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817344991.829,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817351720.849,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817388462.014,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817395192.043,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817432405.586,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817439285.181,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817476554.312,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817483406.639,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817519838.542,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817527436.138,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817585147.402,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817592645.331,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817627985.393,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817634945.017,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817671047.859,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817677875.186,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817713633.907,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817720562.292,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817756291.464,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817763034.623,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817799486.186,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817806285.844,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817841407.663,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817848289.438,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817884788.47,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817891652.946,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817927538.504,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817935334.035,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817970674.128,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817977615.331,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      }
+    ],
+    "gpu_memory_events": 0,
+    "gpu_memory_names": {},
+    "memory_correlated_to_graph": 0,
+    "note": "Profiler event counts, not HIP graph node inventory. Missing events cannot establish absent nodes."
+  },
+  {
+    "trace": "dp0_pp0_tp3_dcp0_ep3_rank3.1788985606177703831.pt.trace.json.gz",
+    "sha256": "4bff87bfda8e0695879a8b0c246190e18c36a0c412ebfcb06358dc47a617a197",
+    "all_categories": {
+      "user_annotation": 192,
+      "cpu_op": 38144,
+      "cuda_runtime": 19009,
+      "kernel": 52228,
+      "gpu_user_annotation": 208,
+      "Trace": 1
+    },
+    "graph_launches": 32,
+    "graphs": [
+      {
+        "launch_ts": 6017817301758.824,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817309592.851,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817345336.913,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817352431.751,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817388767.337,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817395811.076,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817432772.755,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817439962.17,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817476862.99,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817484078.745,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817520157.058,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817527527.258,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817585255.744,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817592039.721,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817628271.909,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817635308.448,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817671368.502,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817678251.885,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817713974.178,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817720990.358,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817756584.933,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817763534.305,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817799789.073,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817806656.257,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817841709.957,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817848753.427,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817885109.702,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817892132.072,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817927837.544,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817934920.243,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817971016.495,
+        "categories": {
+          "kernel": 2646
+        },
+        "memory_names": {}
+      },
+      {
+        "launch_ts": 6017817978127.792,
+        "categories": {
+          "kernel": 112
+        },
+        "memory_names": {}
+      }
+    ],
+    "gpu_memory_events": 0,
+    "gpu_memory_names": {},
+    "memory_correlated_to_graph": 0,
+    "note": "Profiler event counts, not HIP graph node inventory. Missing events cannot establish absent nodes."
+  }
+]
