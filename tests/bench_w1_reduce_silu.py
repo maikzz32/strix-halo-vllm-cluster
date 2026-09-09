@@ -20,7 +20,7 @@ def main():
     tmp=torch.empty(r,n,device='cuda',dtype=torch.bfloat16)
     out=torch.empty(r,n//2,device='cuda',dtype=torch.bfloat16);candidate=torch.empty_like(out)
     def original():
-        base._glm53_moe_int4_gemv_reduce[(r*triton.cdiv(n,128),)](p,tmp,p,r,n,s,False,128)
+        base._glm53_moe_int4_gemv_reduce[(r*triton.cdiv(n,512),)](p,tmp,p,r,n,s,False,512)
         torch.ops._C.silu_and_mul(out,tmp)
     def trial():fused[(r,triton.cdiv(n//2,128))](p,candidate,r,n,s,128,enable_fp_fusion=False)
     mismatches=0;max_abs=0.

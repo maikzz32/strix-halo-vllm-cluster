@@ -37,5 +37,45 @@
     "mismatches": 73847,
     "max_abs": 4.0
   },
-  "scope": "Isolated synthetic reduction and activation; no model integration or serving gain proven."
+  "scope": "Isolated synthetic reduction and activation; no model integration or serving gain proven.",
+  "initial_reference_block": 128,
+  "production_block_check": {
+    "reference_block": 512,
+    "candidate_block": 128,
+    "mismatches": 0,
+    "changed_graph_mismatches": 0,
+    "median_us": [
+      5.771703086793423,
+      3.821156220510602
+    ],
+    "samples_us": [
+      [
+        5.896093789488077,
+        5.781093612313271,
+        5.766093730926514,
+        5.777312442660332,
+        5.7610939256846905,
+        5.7610939256846905
+      ],
+      [
+        3.8199061527848244,
+        3.829906228929758,
+        3.818624885752797,
+        3.8023749366402626,
+        3.8224062882363796,
+        3.8248749915510416
+      ]
+    ]
+  },
+  "finite_gate_sweep": {
+    "checked": 261120,
+    "finite_gate_values": 65280,
+    "multipliers": [
+      1.0,
+      -1.0,
+      0.125,
+      3.25
+    ],
+    "mismatches": 0
+  }
 }

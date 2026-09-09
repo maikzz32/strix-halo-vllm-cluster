@@ -16,6 +16,19 @@ Adding that intermediate rounding made this test exact. This is evidence
 for these inputs, not a proof for all possible activation values; native
 activation source and broader numerical cases still need checking.
 
+The subsequent finite-gate sweep checked all 65280 finite BF16 gate values
+with four multipliers (261120 outputs), including exact signed output bits:
+zero mismatches. This does not exhaust all four-part FP32 reduction inputs.
+See `tests/check_w1_reduce_silu_edges.py`.
+
+Call-site inspection found that production uses reduction BLOCK512, whereas
+the initial benchmark used BLOCK128. The corrected benchmark uses BLOCK512
+for the reference and retains BLOCK128 for the fused candidate. It again
+passes all 307200 random values and changed-input graph checks; medians are
+5.772 versus 3.821 microseconds. Both runs are preserved in the record.
+Integration must target the WNA16 expert's invocation followed by
+`self.activation`, rather than assuming the legacy `fused_experts_impl` path.
+
 The isolated saving is about 1.93 microseconds per pair. Across 48 target-layer
 pairs that suggests only about 0.093 ms before integration overhead, not a
 prediction of serving TPS and not enough alone to reach 60 tokens/s.
