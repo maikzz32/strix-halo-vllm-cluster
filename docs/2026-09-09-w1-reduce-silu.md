@@ -36,3 +36,28 @@ Full-model integration and unchanged-output serving validation remain pending.
 
 Test: `tests/bench_w1_reduce_silu.py`. Evidence:
 `bench/records/2026-09-09-w1-reduce-silu.json`.
+
+## Full-model trial
+
+The guarded WNA16 caller and reduction changes were installed on all four
+ranks after isolated full-GEMM routing, disabled-fallback and changed-graph
+checks passed. Both serving runs retained the same graph-inventory preload.
+
+| ShareGPT48/C1 | Before | Candidate |
+|---|---:|---:|
+| Output tokens/s | 55.5789 | 55.1607 |
+| Mean TTFT, ms | 537.933 | 549.037 |
+| Mean TPOT, ms | 15.737 | 16.059 |
+
+All 48 texts, output lengths and speculation counts match. Hermes tool checks
+passed. Each rank's target-sized graph has 2598 nodes (2510 kernels and 88
+copies), versus 2646 before: the expected 48 kernel removals are present.
+This validates integration but does not demonstrate a serving speedup.
+
+The candidate is not promoted. Original source hashes were restored on all
+four ranks. Control run `f16d955b6e024c02be9a76c92cc787d7` is starting with
+the same diagnostic configuration as the before run; its benchmark is pending.
+The 0.75% throughput difference alone does not establish a regression beyond
+run-to-run variation. Records: `2026-09-09-w1-activation-before.json`,
+`2026-09-09-w1-activation-candidate.json` and `2026-09-09-w1-activation-graphs.json`
+under `bench/records/`.
