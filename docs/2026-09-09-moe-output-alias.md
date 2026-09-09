@@ -8,7 +8,13 @@ quantization, BF16 rounding or reduction order. It does not enable AITER.
 does not translate into a measurable gain in the complete model. The original
 source has been restored on all four nodes. Run
 `4ee5203a4a8e40dbb98c282e4a8cbd92` reached READY with all-rank UMA/PyNccl parity.
-Its post-restoration ShareGPT control is running at the time of this report.
+Its post-restoration ShareGPT control completed all 48 requests at 55.6666
+tokens/s, 548.28 ms mean TTFT and 15.6497 ms mean TPOT. All answers, output
+lengths and speculation statistics match the first control. Control drift is
+-0.140% in throughput. The candidate's +0.064% against the stronger control
+and negative fixed-stream result do not justify promotion.
+[Final control](../bench/records/2026-09-09-alias-control.json),
+[control comparison](../bench/records/2026-09-09-alias-controls.json).
 
 ## Isolated test
 
@@ -47,7 +53,7 @@ Six fixed 512-token streams also match exactly, with a median paired decode
 change of -0.183%. This does not establish a usable performance improvement.
 The before run precedes the candidate by approximately 36 minutes, including
 an operator interruption and model reload; a following control is needed to
-quantify drift. No claim of statistical significance is made.
+quantify drift; its result is reported above. No statistical significance is claimed.
 
 [ShareGPT comparison](../bench/records/2026-09-09-alias-vs-before.json),
 [fixed-stream comparison](../bench/records/2026-09-09-alias-stream-compare.json),

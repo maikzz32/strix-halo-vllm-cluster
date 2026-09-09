@@ -1,0 +1,180 @@
+{
+  "created_utc": "2026-09-09T19:28:33.952217+00:00",
+  "model": "/home/maik/qwen38_rest",
+  "arguments": {
+    "url": "http://192.168.1.15:8000",
+    "lengths": [
+      2048,
+      8192,
+      32768
+    ],
+    "tokens": 32,
+    "repeats": 3,
+    "output": "results\\qwen029-tp4-context-baseline-20260909.json"
+  },
+  "cases": [
+    {
+      "prompt_tokens": 2048,
+      "prompt_ids_sha256": "61af8633f3a2b5cb8ac29bd9f30e88c7dfdd5307ce6134379b4ccb09ebdc08bf",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 2020.1584000024013,
+          "wall_s": 2.4788157000002684,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "27d7e9ce416f4fabab79fb30a41f8496e3f60254ea22b1c85511ed6fb129c654",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 2038.6528999952134,
+          "wall_s": 2.5384276999975555,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "27d7e9ce416f4fabab79fb30a41f8496e3f60254ea22b1c85511ed6fb129c654",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 1245.8971999949426,
+          "wall_s": 1.7858377999946242,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "e9b4f28427b07a83b22de946c1e91bb7fc6e81d98832d44d1f3554ac770168cc",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 800.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 8192,
+      "prompt_ids_sha256": "d47e06a41f3796268743c7ebd8935425ba373928cdd67bf72333b4849ee5897f",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 10453.418000004604,
+          "wall_s": 10.999382699999842,
+          "usage": {
+            "prompt_tokens": 8192,
+            "total_tokens": 8224,
+            "completion_tokens": 32
+          },
+          "text_sha256": "ae85fc8ac8418e2eb2ad5c4faaaef7db32c49be6ae97177876c12e9240406d67",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 8192.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 9196.9362000018,
+          "wall_s": 9.744365699996706,
+          "usage": {
+            "prompt_tokens": 8192,
+            "total_tokens": 8224,
+            "completion_tokens": 32
+          },
+          "text_sha256": "ae85fc8ac8418e2eb2ad5c4faaaef7db32c49be6ae97177876c12e9240406d67",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 8192.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 1098.3414000002085,
+          "wall_s": 1.6873534999976982,
+          "usage": {
+            "prompt_tokens": 8192,
+            "total_tokens": 8224,
+            "completion_tokens": 32
+          },
+          "text_sha256": "ae85fc8ac8418e2eb2ad5c4faaaef7db32c49be6ae97177876c12e9240406d67",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 8192.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 7200.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 32768,
+      "prompt_ids_sha256": "464a2d7d278a3cc04890e96de7aa1d44a65250c4bb6b33214b6163f576125bc4",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 38262.1427999984,
+          "wall_s": 38.80560040000273,
+          "usage": {
+            "prompt_tokens": 32768,
+            "total_tokens": 32800,
+            "completion_tokens": 32
+          },
+          "text_sha256": "031e3e55002d7b205cf242fd371eb6861525c55fd1f06ff7a3e50ccca107f3df",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 32768.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 9025.575400002708,
+          "wall_s": 9.440562199997657,
+          "usage": {
+            "prompt_tokens": 32768,
+            "total_tokens": 32800,
+            "completion_tokens": 32
+          },
+          "text_sha256": "64ef6ec3add0fff8d6ae40a489ed1b9d032986665ee555128cabdba8da4deb6a",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 32768.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 24800.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 1723.182400004589,
+          "wall_s": 2.225453099999868,
+          "usage": {
+            "prompt_tokens": 32768,
+            "total_tokens": 32800,
+            "completion_tokens": 32
+          },
+          "text_sha256": "031e3e55002d7b205cf242fd371eb6861525c55fd1f06ff7a3e50ccca107f3df",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 32768.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 31200.0
+          }
+        }
+      ]
+    }
+  ],
+  "note": "First use of a unique prefix versus exact reuse; speed alone does not prove cache hits."
+}
