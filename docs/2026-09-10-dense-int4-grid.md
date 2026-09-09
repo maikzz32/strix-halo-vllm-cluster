@@ -42,3 +42,28 @@ shape-restricted wrapper, then compare the candidate against restored original
 ShareGPT48/C1 runs with output and Hermes parity. Do not promote from these
 kernel timings. Original TP4/MTP3 serving remains active at the previous
 approximately 56.3 tokens/s baseline.
+
+
+## Actual dispatch integration
+
+`patches/dense_int4_grid.py` generates a source-hash-guarded candidate with
+`STRIX_DENSE_INT4_GRID=1`. It changes only the two selected shapes, only on
+gfx1151 with the original grid20, asymmetric group32, BF16 activations/scales/
+zero points, INT8 packed weights and no bias. All other dispatch remains original.
+
+`tests/check_dense_int4_dispatch.py` extracts and executes the actual generated
+function with the installed module dependencies. On node4, all six forms passed
+flag-off and flag-on output parity. Observed native-call arguments prove the
+selected grids. HIP graph replay with three input changes passed exact parity;
+adding bias selected the original grid and passed parity. The test does not
+change installed source. See `2026-09-10-dense-int4-dispatch.json` in the records.
+
+The source candidate has SHA256
+`bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2`.
+Original and candidate source are staged separately under
+`/opt/strix-halo-next/dense-grid-20260910-r1` on each node. After stopping all
+original workers, the same candidate hash was activated on all four nodes.
+Run `183be1d308ae4636a16bdea946a6b1d6` is loading with the option enabled,
+original UMA transport and GPU high mode. Serving performance is pending;
+this remains an experiment, not a promoted configuration. The original source
+must be restored with workers stopped for the matched control run.

@@ -1,0 +1,83 @@
+{
+  "status": "passed",
+  "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2",
+  "base_sha256": "a136168a08484c2b3e9d18ba2fcfbd9c067a5a70dc1ebb9e319b89ddb1e5a48e",
+  "cases": [
+    {
+      "shape": [
+        1,
+        512,
+        2560
+      ],
+      "selected_grid": 40,
+      "flag_off_exact": true,
+      "eager_exact": true,
+      "changed_graph_exact": true,
+      "bias_fallback_exact": true
+    },
+    {
+      "shape": [
+        4,
+        2560,
+        160
+      ],
+      "selected_grid": 40,
+      "flag_off_exact": true,
+      "eager_exact": true,
+      "changed_graph_exact": true,
+      "bias_fallback_exact": true
+    },
+    {
+      "shape": [
+        4,
+        512,
+        2560
+      ],
+      "selected_grid": 20,
+      "flag_off_exact": true,
+      "eager_exact": true,
+      "changed_graph_exact": true,
+      "bias_fallback_exact": true
+    },
+    {
+      "shape": [
+        1,
+        320,
+        2560
+      ],
+      "selected_grid": 20,
+      "flag_off_exact": true,
+      "eager_exact": true,
+      "changed_graph_exact": true,
+      "bias_fallback_exact": true
+    },
+    {
+      "shape": [
+        4,
+        320,
+        2560
+      ],
+      "selected_grid": 20,
+      "flag_off_exact": true,
+      "eager_exact": true,
+      "changed_graph_exact": true,
+      "bias_fallback_exact": true
+    },
+    {
+      "shape": [
+        1,
+        2560,
+        160
+      ],
+      "selected_grid": 20,
+      "flag_off_exact": true,
+      "eager_exact": true,
+      "changed_graph_exact": true,
+      "bias_fallback_exact": true
+    }
+  ],
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "source_sha256": "0b22b3901a5a741e80f5851d513310c346d2332c580cc6c98fc6a6941b946fe2",
+  "service_counters_unchanged": true
+}
