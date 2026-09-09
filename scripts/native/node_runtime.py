@@ -147,6 +147,11 @@ def command(config, rank, run_id=None):
         cmd += ["--enable-expert-parallel"]
     if config.get("profiler_config"):
         cmd += ["--profiler-config", json.dumps(config["profiler_config"])]
+    if rank == 0 and config.get("enable_auto_tool_choice", False):
+        parser = config.get("tool_call_parser")
+        if not parser:
+            raise ValueError("Auto tool choice requires tool_call_parser")
+        cmd += ["--enable-auto-tool-choice", "--tool-call-parser", parser]
     if rank:
         cmd += ["--headless"]
     return cmd
