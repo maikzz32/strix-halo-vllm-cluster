@@ -16,7 +16,7 @@ The proposed 66 tokens/s is therefore not a prediction for the current runtime.
 communication primitives, but does not establish a drop-in gfx1151/Intel-RoCE
 speedup here.
 
-## Graph nodes and fusion: next diagnostic priority
+## Graph nodes and fusion: measured follow-up
 
 The older observation of 630 CPU-side copy operations does not establish
 630 captured HIP memcpy nodes. Conversely, small payloads alone do not prove
@@ -28,12 +28,27 @@ HIP graph introspection. Separate copies outside capture from graph nodes.
 Then measure bounded replay controls preserving copy sizes, memory types and
 dependencies; do not assume a universal 10–20 microseconds per node. A synthetic
 copy-only graph is diagnostic, not an additive estimate of model savings.
-The current target has 2646 kernels and roughly 6–7 ms without a traced kernel;
-those intervals are not yet attributed to dispatch or copies.
+The current target-sized graph has 2646 nodes: 2558 kernels and 88 D2D copies.
+The earlier profiler's 2646 kernel events included copy kernels. Roughly 6–7 ms
+without a traced kernel remain unattributed; these intervals cannot all be
+assigned to dispatch or copies.
+
+The [direct graph inventory and replay control](2026-09-09-graph-inventory.md)
+completed on all four ranks. A serial synthetic graph with the same 88 copy
+sizes measured 0.179 ms in total. Its memory/cache behavior differs from the
+model, so this is not an additive model-time estimate, but the proposed
+630-copy, 6–13 ms calculation is not supported by the actual captured graph.
 
 Use this evidence to choose a small adjacent operator fusion. Preserve BF16
 rounding boundaries, reduction order and FP32 recurrent state. Kernel-count
 reduction alone cannot justify the suggested 13.5-to-4 ms extrapolation.
+
+The [W1 reduction/SiLU fusion](2026-09-09-w1-reduce-silu.md) subsequently
+removed 48 kernel nodes with unchanged tested outputs. ShareGPT48/C1 measured
+55.579 / 55.161 / 55.422 tokens/s before / candidate / restored control.
+There was no demonstrated serving benefit; the candidate was reverted.
+The current trace already contains a fused GDN gating/recurrent-update kernel,
+so a new proposal must identify the remaining unfused boundaries explicitly.
 
 ## Distributed speculation and changed model assumptions
 
@@ -55,3 +70,29 @@ MTP retraining changes weights and is outside the current experiment constraint.
 Tree verification needs branch-specific recurrent state and correct attention;
 vocabulary pruning needs a mathematically correct verifier and measured overhead.
 No acceptance gain or 3% saving is assumed from either idea.
+
+## Priorities after the measured follow-up
+
+1. Attribute collective time to local GPU work, CPU progress and waiting for
+   other ranks. The current profile's approximately 5.7–7.5 ms per-rank UMA
+   category includes waiting, not just transport. Do not subtract a CPU-only
+   probe from this total or compare unsynchronized timestamps across hosts.
+   Optimize the work delaying arrival if rank imbalance dominates.
+2. Continue source-guided HC and dense INT4 kernel work with matched controls.
+   Smaller LDS allocation and cached-load variants have already failed to
+   improve their matched native controls; do not repeat them as new gains.
+   Require a serving comparison before promotion, even for exact microkernel
+   improvements.
+3. Investigate draft/verification overlap as runner design work. Check MTP
+   hidden-state dependencies, recurrent-state snapshots, rollback correctness
+   and contention on the same four APUs before implementing concurrency.
+   PEARL is motivation, not evidence that its reported gains apply to TP4/MTP.
+4. Keep four-replica DSI and MTP retraining outside the current deployment:
+   the former needs a different memory plan/model artifact and the latter
+   changes weights. Discuss any new checkpoint with Maik first.
+
+The latest restored ShareGPT48/C1 control is 55.422 tokens/s with mean TTFT
+545.072 ms. Reaching 60 at the same output count requires about 7.63% less
+benchmark elapsed time (8.26% more throughput). This is a measured gap, not
+evidence that any individual proposal will close it. Fixed-prompt decode
+rates must not replace the ShareGPT metric when reporting goal completion.
