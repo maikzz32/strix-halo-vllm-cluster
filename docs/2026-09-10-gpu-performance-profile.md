@@ -38,6 +38,9 @@ The kernel documentation defines `auto` as dynamic power-profile selection
 and `high` as the highest clock power state. It also distinguishes this from
 `profile_peak`, which was not tested here. [Linux amdgpu documentation](https://docs.kernel.org/gpu/amdgpu/thermal.html).
 
+A [subsequent profile_peak comparison](2026-09-10-gpu-peak.md) regressed
+fixed-prompt decode by 8.47% and was reverted. Keep high mode.
+
 A single high-mode sensor snapshot confirmed 2.897–2.900 GHz on all ranks.
 It is not a frequency-residency or power-efficiency study. Reported APU power
 includes CPU/SoC power, and the sampled temperatures were 68–77 C.
