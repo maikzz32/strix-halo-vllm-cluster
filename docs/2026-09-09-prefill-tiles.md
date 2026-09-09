@@ -1,6 +1,6 @@
-# Prefill tile investigation — full-model trial in progress
+# Prefill tile investigation — not promoted
 
-The TP4 service is restarting with its original kernels and weights after a temporary trial. A narrower
+The TP4 service is running its original kernels and weights after a temporary trial. A narrower
 WNA16 prefill tile is promising in isolated short-prefill tests, but the first
 full-model trial does not show a clear latency gain. The table below contains
 operator timings, not output tokens/second.
@@ -72,7 +72,23 @@ completed 48/48 requests at 55.7491 tokens/s, 544.50 ms mean TTFT and
 are identical to the fresh before run. The 2.39% throughput increase is close
 to the preceding 2.19% baseline drift, while mean TTFT is 0.85% worse.
 The original source has been restored for post-trial run
-`d1b552ae062b402c9d4fbaa6c546a362`, which is still starting.
+`d1b552ae062b402c9d4fbaa6c546a362`, which completed its control measurement.
+
+| ShareGPT48/C1 run | Output tokens/s | Mean TTFT (ms) | Mean TPOT (ms) |
+|---|---:|---:|---:|
+| Original before | 54.4469 | 539.91 | 16.0828 |
+| Candidate | 55.7491 | 544.50 | 15.6488 |
+| Original after | 55.4101 | 550.75 | 15.7331 |
+
+All three runs generated identical texts, output lengths and speculation
+statistics. The original controls differ by 1.77%; the candidate exceeds the
+after control by only 0.61%. Exact-context TTFT does not improve consistently:
+all 18 probes across the three runs have matching prompt/output hashes and
+zero cache hits. This is insufficient evidence to promote the candidate.
+The original source and UMA parity are verified on all four live workers.
+The 60 tokens/s objective remains unmet. The next investigation should use
+a fresh kernel trace of the current decode path before choosing another
+optimization; the older trace predates several promoted changes.
 
 Exact-prefix latency probes at 256, 512 and 1024 input tokens use
 `--prefix-id prefill-bracket-20260909-r1`, 32 output tokens and two repetitions
