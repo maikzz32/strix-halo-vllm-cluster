@@ -56,7 +56,10 @@ This validates integration but does not demonstrate a serving speedup.
 
 The candidate is not promoted. Original source hashes were restored on all
 four ranks. Control run `f16d955b6e024c02be9a76c92cc787d7` is starting with
-the same diagnostic configuration as the before run; its benchmark is pending.
+the same diagnostic configuration as the before run. The control completed
+at 55.4224 tokens/s, 545.072 ms mean TTFT and 15.731 ms mean TPOT. All
+48 texts, lengths and speculation counts matched; Hermes checks passed.
+The original runtime remains active. See `2026-09-09-w1-activation-control.json`.
 The 0.75% throughput difference alone does not establish a regression beyond
 run-to-run variation. Records: `2026-09-09-w1-activation-before.json`,
 `2026-09-09-w1-activation-candidate.json` and `2026-09-09-w1-activation-graphs.json`
