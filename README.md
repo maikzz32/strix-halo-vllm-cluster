@@ -1,151 +1,128 @@
-# vLLM-Cluster für 4× AMD Strix Halo (gfx1151) über 25 GbE RoCE
+# Four-node Strix Halo vLLM cluster
 
-Eigene Build-Pipeline + Cluster-Orchestrierung für vLLM auf 4 Strix-Halo-Nodes
-(Ryzen AI Max+ 395, iGPU gfx1151 / RDNA 3.5, je 128 GB Unified Memory),
-verbunden über 25 GbE RDMA (RoCEv2). Ziel: immer aktuelle, lauffähige Images
-(Stable-Kanal: letztes vLLM-Release, Dev-Kanal: vLLM main für Day-0-Modelle)
-und maximaler Durchsatz, entschieden durch eigene Benchmarks.
+Low-latency Qwen3.8 Flash Next inference across **4 × AMD Ryzen AI Max+ 395**,
+each with **128 GB unified memory**, connected through **25 GbE RoCEv2**.
+All four gfx1151 GPUs cooperate using tensor parallelism.
 
-## Aktueller Versuch: Qwen3.8 Flash Next, eine laufende Antwort
+The focus is a faster **single answer**, with the existing INT4 weights and
+computation preserved. The acceptance target is **at least 60 output tokens/s
+on ShareGPT48 at concurrency 1**, together with improved response latency.
+That target is still open.
 
-Der aktuelle geprüfte TP4-Stand mit QSA, UMA/RDMA und serieller W2-Fusion erreicht
-**53,85 Output-Token/s** im ShareGPT-Test mit 48 Anfragen und Parallelität eins.
-Alle 48 Antworten stimmen exakt mit der vorherigen Kontrolle überein; Gewichte
-und Rechenqualität bleiben erhalten. W2 ist auf allen vier Nodes übernommen.
-Das feste Ziel **mindestens 60 Token/s in diesem Test** bleibt offen.
-[W2-Vergleich und Abschlussprüfung](docs/2026-09-07-moe-w2-serial-model.md).
+## Measured performance
 
-Die angefragte [UCCL-Prüfung](docs/2026-09-07-uccl-review.md) findet einen konkreten
-Hinderungsgrund: Der Transport verlangt Shared Receive Queues, während alle vier
-vorhandenen HCAs `max_srq=0` melden. Zwei isolierte Verbindungsversuche scheitern
-vor der ersten Kollektivmessung. UCCL ist daher nicht im Modelldienst aktiv.
+| Configuration / milestone | ShareGPT output tokens/s | Mean TTFT | Mean TPOT | Evidence |
+|---|---:|---:|---:|---|
+| Original TP4 baseline | 48.60 | See report | See report | [Baseline](docs/2026-09-06-single-stream.md) |
+| TP4 + UMA production checkpoint | 52.04 | See report | See report | [UMA](docs/2026-09-07-hip-uma.md) |
+| TP4 + W2 serial production checkpoint | 53.85 | See report | 16.43 ms | [W2](docs/2026-09-07-moe-w2-serial-model.md) |
+| TP4 + AVX512 + W1 expert order | 56.04 | See report | See report | [Bracketed W1 comparison](docs/2026-09-07-moe-w1-order.md) |
+| vLLM 0.29 custom TP4, September 9 baseline | **55.74** | **541.77 ms** | **15.63 ms** | [Record](bench/records/2026-09-09-qwen029-tp4-baseline.json) |
 
-Für die vorhandenen vier Fedora-45-Systeme gibt es jetzt einen separaten
-[nativen Startpfad](scripts/native/README.md) mit vLLM `mp`, TP4 und MTP3.
-Er verwendet die vorhandenen Container `ray-head`/`ray-worker` und prüft alle
-Ranks vor dem Start. Die Modellgewichte liegen auf jedem Node unter
-`/home/maik/qwen38_rest`. Der Image-Tag allein enthält nicht alle Änderungen
-der bereits installierten Laufzeit; die Voraussetzungen im Runbook beachten.
+These are historical milestones, **not a controlled comparison between every
+row**. Individual reports contain matched controls, output parity and known
+confounders. The September 9 baseline completed 48/48 requests, generated
+11,839 tokens and took 212.38 seconds. No version-only speedup is claimed.
 
-Dieser Pfad wurde mit `FULL_DECODE_ONLY` getestet. Die ältere allgemeine
-Graph-Einschränkung weiter unten gilt daher nicht für diese konkrete Kombination
-aus Runtime, Patches und Modell. Für andere Kombinationen bleiben eigene Tests
-erforderlich.
+Output throughput includes prefill and request overhead. It is not pure
+decode speed or aggregate throughput at high concurrency. MTP emits token
+bursts, so stream event intervals must not be confused with per-token time.
+See [benchmark methodology](bench/README.md).
 
-Die QSA-Läufe erreichen **49,56–50,30 statt 48,60 Output-Token/s** bei ShareGPT,
-48 Anfragen, jeweils einer gleichzeitig. Die reine Generierung verbessert sich
-um etwa 2 % durch das Überspringen unsichtbarer QSA-Score-Tiles bei unveränderten Gewichten.
-Die 50,30 im abschließenden Neustarttest enthalten zusätzlich kürzere Anlaufzeiten.
-Das Ziel einer deutlich schnelleren einzelnen Antwort ist noch nicht erreicht.
-[Messungen und verworfene Varianten](docs/2026-09-06-single-stream.md).
-Separate kurze Coding-Antworten
-erreichten schon vor den neuen Änderungen etwa 67 Decode-Token/s. Diese
-unterschiedlichen Workloads dürfen nicht als Vorher/Nachher-Gewinn verglichen
-werden. [DGX-Spark-Vergleich](docs/2026-09-06-spark-comparison.md).
+## Current runtime
 
-`bench/bench_stream.py` speichert vollständige Requests, Antworten und
-Streaming-Zeitpunkte; `bench/compare_streams.py` vergleicht passende Läufe
-und prüft identische Ausgaben. `bench/bench_sharegpt.sh` wiederholt den
-bisherigen C1-Benchmark. Die Optimierungsversuche sind noch nicht abgeschlossen.
+| Component | Configuration |
+|---|---|
+| Hosts | Fedora 45, `192.168.1.15`–`192.168.1.18` |
+| GPU | Radeon 8060S, gfx1151 / RDNA 3.5 |
+| Network | Intel 25 GbE RDMA NICs through a switch |
+| Model | Qwen3.8 Flash Next, `/home/maik/qwen38_rest` |
+| Quantization | Existing asymmetric INT4, group size 32 |
+| Runtime | Custom `0.29.0+strix.rocm100`, preserved gfx1151 patches |
+| Parallelism | TP4, native vLLM `mp` executor |
+| Speculation | Native MTP, 3 draft tokens |
+| Graphs | `FULL_DECODE_ONLY`, draft prefill graph |
+| Context limit | 262,144 tokens |
+| Communication | Validated UMA/RDMA backend, AVX512 BF16 reduction |
+| Tool calls | Automatic tool selection with `qwen3_xml` parser |
 
-Der [kalibrierte HIP/RDMA-Versuch](docs/2026-09-07-hip-rdma-ring4.md)
-verkürzt den isolierten 20-KiB-All-reduce auf 56,42 µs gegenüber ungefähr
-85,3 µs mit RCCL. Im vollständigen Modelltest entsteht daraus jedoch kein
-Gewinn: **49,79 statt 50,49 Output-Token/s** im direkten ShareGPT-Kontrolllauf,
-bei 48 identischen Antworten und gleicher MTP-Akzeptanz. Der Versuch wurde
-zurückgebaut; seine Ergebnisse bleiben als Vergleich erhalten.
-Die [GitHub-Recherche](docs/github-vllm-projects-20260907.md) bewertet acht
-Projekte und benennt konkrete nächste Kernel- und Kommunikationsansätze.
-Der daraus abgeleitete [AITER-HC-Test](docs/2026-09-07-aiter-hc.md) war bei
-allen drei Zielgrößen langsamer als die bereits vorhandenen BF16-Kernel.
-Ein weiterer [direkter GPU-/UMA-Prototyp](docs/2026-09-07-hip-uma.md) erreicht
-53,93 µs im isolierten Vier-Node-Austausch mit bitgleicher RCCL-Numerik.
-Im Modellvergleich erreicht er **51,79 gegenüber 50,44 Output-Token/s** beim
-stärkeren RCCL-Kontrolllauf, mit 48 identischen Antworten. Die Generierung
-verbessert sich damit um **3,24 %**. Der geprüfte UMA-Pfad wurde als kanonische
-Konfiguration übernommen; der Rückbauweg ist dokumentiert. Das große
-Geschwindigkeitsziel bleibt offen. Der abschließende Neustarttest bestätigt
-**52,04 Output-Token/s**, erneut mit 48 identischen Antworten.
+The custom release installation applies the complete upstream runtime delta
+while preserving the working Strix stack. It is not the stock ROCm wheel.
+The live container overlays and saved node images contain additional patches;
+building the generic base image does not reproduce this deployment.
+[Deployment details](docs/2026-09-09-qwen029-tp4.md).
 
-Der anschließende [TP2-Vergleich](docs/2026-09-07-tp2-comparison.md) erreicht
-**39,82 Output-Token/s** mit unverändertem Checkpoint, MTP3 und Kontextlimit.
-TP4/UMA ist damit rund **31 % schneller insgesamt und 29 % beim Generieren**.
-Alle 48 Anfragen liefen durch; die Antworttexte zwischen TP2 und TP4 sind
-teilweise unterschiedlich. Die TP2-Konfiguration bleibt separat erhalten.
+## Connect an OpenAI-compatible client
 
-Die [weitere Kernelprüfung](docs/2026-09-07-next-kernel-budget.md) misst rund
-9 Mikrosekunden verbleibende CPU-Summierung pro All-reduce. Ein separater
-verlustfreier BF16-Speicherversuch spart rechnerisch 23,5 % der HC-Gewichtsbytes
-und stellt alle ursprünglichen Bits wieder her. Der [native GPU-Test](docs/2026-09-07-hc-native.md) zeigt jedoch langsamere
-häufige HC-Operatoren mit diesem Format. Eine unkomprimierte Kernelvariante
-spart isoliert 8 % beim Up-Operator; ein Modellgewinn ist nicht nachgewiesen.
-Der laufende Modelldienst bleibt unverändert.
+```text
+Base URL: http://192.168.1.15:8000/v1
+Model:    /home/maik/qwen38_rest
+API key:  local (placeholder if the client requires one)
+```
 
-Der isolierte [W2-Abschlusstest](docs/2026-09-07-moe-w2-epilogue.md) verbindet
-Teilprodukt-Reduktion und Expertensumme bei erhaltener BF16-Zwischenrundung.
-Er spart dort rund 3 Mikrosekunden; ein Modellgewinn ist noch nicht gemessen.
+Hermes Agent can use this custom endpoint. Automatic and streamed tool calls
+have been checked, including a tool-result roundtrip. The model uses the Qwen
+XML parser; the agent's name does not determine the server parser.
 
-Die [MoE-Kachelprüfung](docs/2026-09-07-moe-occupancy.md) findet einen
-W1-Kandidaten mit 3–6 % weniger isolierter Operatorzeit bei wechselnden Experten
-und bitgleichen Testergebnissen. Im [vollständigen Modellvergleich](docs/2026-09-07-moe-w1-model.md)
-bleiben gegenüber der stärkeren Kontrolle nur 0,57 % schnellere Generierung;
-alle Antworten stimmen überein. Der ursprüngliche Kernel bleibt aktiv.
+## Operate the existing cluster
 
-Die [Transport-Zeitmessung](docs/2026-09-07-rdma-phases.md) bestätigt den bereits
-direkten Austausch mit allen Peers. Das Einstellen der Sendungen kostet weniger
-als 1 Mikrosekunde; die CPU-Summierung bleibt ein messbarer weiterer Ansatz.
+Run on node 1:
 
-Die [AVX-512-Prüfung](docs/2026-09-07-uma-avx512.md) senkt die isolierte
-GPU-/UMA-Kollektivzeit von 54,1 auf 48,0 Mikrosekunden bei bitgleichen Ergebnissen.
-Im Modellvergleich bleiben gegenüber der stärkeren Kontrolle etwa 2 % schnellere
-Generierung. Die separate Bibliothek bleibt experimentell und ist nicht aktiv.
+```bash
+python3 /home/maik/strix-halo-next/tools/cluster.py status \
+  --config /home/maik/strix-halo-next/config/cluster.json
 
-## Struktur
+python3 /home/maik/strix-halo-next/tools/cluster.py start \
+  --config /home/maik/strix-halo-next/config/cluster.json \
+  --tag production --timeout 900
+```
 
-- `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)
-- `patches/` — idempotente gfx1151-Patch-Schicht + fail-closed Kompatibilitätsprüfung
-- `.github/workflows/` — Build-Pipeline (stable / dev / model-watch / rccl)
-- `ansible/` — Provisionierung der 4 Fedora-Nodes (Base, RDMA, Runtime, Ray)
-- `scripts/` — Cluster-Start (`cluster_up.sh`) und Serven (`serve.sh <modell> <profil>`)
-- `bench/` — Benchmark-Harness (Single-Stream tok/s + Aggregat-Durchsatz, TP/PP/EP-Matrix)
-- `models/registry.yaml` — zentrale Modell-Registry (Status, Parser, Profile, Blocker)
-- `docs/` — Runbook und Hintergrunddokumente
+The controller checks all ranks and records run IDs, commands and logs.
+Normal stop/restart requires idle request queues. Startup and crash recovery
+are manual. Experiments use separate configuration files and may temporarily
+replace the canonical run; inspect the controller status before operating it.
+[Native controller guide](scripts/native/README.md).
 
-## Parallel-Profile
+## Reproduce the serving benchmark
 
-`tp2`/`tp4` (Tensor-Parallel über Ray/RCCL), `pp4` (Pipeline-Parallel), `tp2pp2`,
-`ep` (Expert-Parallel für MoE), `solo` (1 Node, Baseline). Welches Profil pro
-Modell gewinnt, entscheidet `bench/run_matrix.py` — auf 25 GbE ist das
-empirisch offen (Referenzdaten existieren nur für 100/200 GbE).
+On node 1, with the September 9 containers running:
 
-## Quickstart (Überblick)
+```bash
+bash /home/maik/strix-halo-next/tools/bench_sharegpt_qwen029.sh my-unique-run
+```
 
-1. Image bauen lassen (GitHub Actions, ghcr.io) oder lokal: `docker/`
-2. Nodes provisionieren: `ansible-playbook -i ansible/inventory.yaml ansible/playbooks/site.yml`
-3. Cluster hochfahren: `scripts/cluster_up.sh`
-4. Modell serven: `scripts/serve.sh qwen36-35b-a3b tp4`
-5. Benchmarks: `python3 bench/run_matrix.py --model qwen36-35b-a3b`
+This uses 48 ShareGPT prompts, seed 42, temperature 0, concurrency 1 and
+streamed chat completions. The script and dataset requirements are in
+[bench/README.md](bench/README.md). Results are collected outside the model
+container. Public records retain timings and response hashes; weights and
+generated text are not committed.
 
-Details: `docs/RUNBOOK.md`.
+## Research and experiments
 
-## Bekannte Einschränkungen
+- [September 9 GitHub and paper review](docs/2026-09-09-research-roadmap.md)
+- [Hardware strengths and kernel hypotheses](docs/2026-09-07-strix-hardware-strengths.md)
+- [Measured GPU critical-path budget](docs/2026-09-06-gpu-budget.md)
+- [DGX Spark comparison and workload differences](docs/2026-09-06-spark-comparison.md)
+- [UCCL investigation and the NIC SRQ limitation](docs/2026-09-07-uccl-review.md)
+- [TP2 versus TP4 comparison](docs/2026-09-07-tp2-comparison.md)
+- [AITER module review](docs/2026-09-07-aiter-modules.md)
 
-- GLM-5.3-Flash **läuft** (2026-09-01, tp4, Dev-Image `dev-glm53-flash`):
-  upstream gfx950-gated, bei uns via Patch 58 + 61 + Torch-Kpool-Lane
-  (Details: `models/registry.yaml`, `docs/PERFORMANCE.md` §e). Bring-up-
-  Qualitätscaveat beachten (G1-Repetition auf Kurz-Prompts).
-- Graph-**Capture** deadlocked auf gfx1151 (HIP, vllm#32180) — Default ist daher
-  `cudagraph_mode NONE` (Inductor-Fusion bleibt aktiv; gemessen +7–9 % vs.
-  `--enforce-eager`, 600-s-Soak hang-frei, Stand 2026-08-31).
-- `amd_iommu=off` vs. RDMA: ungelöster Trade-off, per `iommu_mode` parametrierbar,
-  A/B-Test über `bench/iommu_ab.sh`.
+Negative experiments remain documented. Isolated kernel improvements are not
+advertised as model-level gains. Candidate changes require numerical checks,
+full-model measurements and controls before promotion.
 
-## Performance-Programm (Ziel: schneller als DGX Spark)
+## Repository layout
 
-Dev-Builds basieren auf dem jeweils frischesten vLLM-Dev/PR-Stand (Registry-Feld
-`vllm_ref` pinnt PR-Heads per SHA; `model-watch` triggert Rebuilds, wenn Heads
-sich bewegen). Die gfx1151-Performance-Patches liegen in `patches/` (Serie 50–58,
-Doku: `patches/manifest.d/`): MXFP4-MoE-Tuning, Radix-Top-k, TileLang-Sparse-Indexer,
-W8A8-Skinny-GEMM, AITER-Triton-Enablement, APU-Memory-Reporting, PLE-Offload
-(Zero-Copy auf Unified Memory), GLM-MTP-Dispatch. Strategie, Messwerte,
-Spark-Referenzziele und Messplan: **`docs/PERFORMANCE.md`**.
+| Directory | Purpose |
+|---|---|
+| `scripts/native/` | Run-scoped lifecycle and deployment for the existing cluster |
+| `bench/` | Benchmark clients, exporters and public measurement records |
+| `patches/` | Version-specific runtime and kernel patches |
+| `tests/` | Numerical, graph and lifecycle checks |
+| `tools/` | Runtime evidence collection and bounded experiments |
+| `docs/` | Deployment, research and experiment reports |
+| `docker/`, `ansible/`, `models/` | General build/provisioning framework and model registry |
+
+The older general build/provisioning path covers additional models and is
+separate from the measured Qwen Flash Next runtime. See the historical
+[runbook](docs/RUNBOOK.md) and [performance log](docs/PERFORMANCE.md) for that work.

@@ -33,13 +33,15 @@ assert any('STRIX_HIP_RDMA_ENABLED rank='+str(cfg['rank']) in x for x in lines)
 print(json.dumps({'rank':cfg['rank'],'run_id':cfg['run_id'],'workers':workers,'installed_moe_source_sha256':moe_sha,'library_sha256':sha,'startup_log_snapshot_sha256':hashlib.sha256(raw).hexdigest(),'parity_proof':proof}))
 """
 def main():
- p=argparse.ArgumentParser();p.add_argument('--run-id',required=True);p.add_argument('--library',required=True);p.add_argument('--sha256',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--moe-source-sha');p.add_argument('--w2-flag',choices=['0','1']);p.add_argument('--w1-order-flag',choices=['0','1']);a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--run-id',required=True);p.add_argument('--library',required=True);p.add_argument('--sha256',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--moe-source-sha');p.add_argument('--w2-flag',choices=['0','1']);p.add_argument('--w1-order-flag',choices=['0','1']);p.add_argument('--config',type=Path);a=p.parse_args()
  assert re.fullmatch('[0-9a-f]{32}',a.run_id) and re.fullmatch('[0-9a-f]{64}',a.sha256)
  assert a.moe_source_sha is None or re.fullmatch('[0-9a-f]{64}',a.moe_source_sha)
+ nodes=json.loads(a.config.read_text())['nodes'] if a.config else [{'host':f'192.168.1.{15+r}','container':'ray-head' if r==0 else 'ray-worker'} for r in range(4)]
+ assert len(nodes)==4
  a.output.mkdir(parents=True,exist_ok=False)
  def one(rank):
-  node=rank+15;c='ray-head' if rank==0 else 'ray-worker';cfg={'rank':rank,'run_id':a.run_id,'library':a.library,'sha':a.sha256,'moe_sha':a.moe_source_sha,'w2_flag':a.w2_flag,'w1_order_flag':a.w1_order_flag}
-  r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}',f'podman exec -i {c} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=20)
+  node=nodes[rank]['host'];c=nodes[rank]['container'];cfg={'rank':rank,'run_id':a.run_id,'library':a.library,'sha':a.sha256,'moe_sha':a.moe_source_sha,'w2_flag':a.w2_flag,'w1_order_flag':a.w1_order_flag}
+  r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@{node}',f'podman exec -i {c} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=20)
   a.output.joinpath(f'rank{rank}.log').write_bytes(r.stdout+r.stderr)
   if r.returncode:raise RuntimeError(f'Rank{rank} evidence failed; inspect log')
   row=json.loads(r.stdout);print(rank,row['workers'][0]['pid'],'mapped and parity verified',flush=True);return row

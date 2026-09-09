@@ -1,5 +1,21 @@
 # Native TP4 runtime, September 2026
 
+## Current vLLM 0.29 deployment
+
+The current four-node configuration is documented in
+[the September 9 TP4 report](../../docs/2026-09-09-qwen029-tp4.md).
+Nodes 1/2 use containers `qwen029-tp2` and nodes 3/4 use `qwen029-tp4`;
+all four run TP4. Their PID 1 is `sleep infinity`, with inference launched by
+this controller. After reboot, start these four preserved containers and
+use `start --config /home/maik/strix-halo-next/config/cluster.json --timeout 900`
+on node 1. No Ray service is required by this newer deployment.
+
+The controller behavior below still applies. The `ray-head`/`ray-worker`
+image, boot sequence and QSA-only measurements below describe the earlier
+deployment and are retained as historical recovery context.
+
+## Original September 6 deployment
+
 This controller operates the four existing patched containers (`ray-head` and
 `ray-worker`) using vLLM's native `mp` executor. Its configuration reproduces the
 measured `/home/maik/qwen38_rest` production setup: TP4, MTP3, 262144 context,

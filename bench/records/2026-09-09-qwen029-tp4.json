@@ -1,0 +1,397 @@
+{
+  "run_id": "a19e8f8dc60a48aeab3fdbe8e35d71e0",
+  "status": "ready_verified",
+  "version": "0.29.0+strix.rocm100",
+  "llama_node3_stopped": true,
+  "tp": 4,
+  "api": "http://192.168.1.15:8000/v1",
+  "model": "/home/maik/qwen38_rest",
+  "config_sha256": "0e617e5ac6d2365ed7f6eba123d3d0aa77eaffbb88239be7507b8966ad29e369",
+  "runtime": {
+    "ranks": [
+      {
+        "rank": 0,
+        "run_id": "a19e8f8dc60a48aeab3fdbe8e35d71e0",
+        "workers": [
+          {
+            "pid": 1540,
+            "library_mapped": "/opt/strix-halo-next/hip-uma-avx512-20260907-r1/libhip_rdma_backend.so",
+            "w1_flag": "0",
+            "w2_flag": "1",
+            "w1_order_flag": "1"
+          }
+        ],
+        "installed_moe_source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+        "startup_log_snapshot_sha256": "0ba846a4eb8c3b9dc33e17a76ade7a800ad74a1892f14b01e5a3c8e4e27529a6",
+        "parity_proof": {
+          "banks": 32,
+          "elements_per_rank": 10240,
+          "exact_eager": true,
+          "exact_graph": true,
+          "validated_against_active_pynccl": true,
+          "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+          "input_bank_sha256": [
+            "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+            "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+            "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+            "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+            "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+            "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+            "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+            "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+            "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+            "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+            "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+            "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+            "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+            "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+            "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+            "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+            "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+            "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+            "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+            "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+            "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+            "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+            "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+            "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+            "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+            "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+            "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+            "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+            "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+            "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+            "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+            "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+          ],
+          "repeat_bank0": true,
+          "graph_destroyed": true,
+          "rank_results": [
+            {
+              "rank": 0,
+              "errors": []
+            },
+            {
+              "rank": 1,
+              "errors": []
+            },
+            {
+              "rank": 2,
+              "errors": []
+            },
+            {
+              "rank": 3,
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "rank": 1,
+        "run_id": "a19e8f8dc60a48aeab3fdbe8e35d71e0",
+        "workers": [
+          {
+            "pid": 1030,
+            "library_mapped": "/opt/strix-halo-next/hip-uma-avx512-20260907-r1/libhip_rdma_backend.so",
+            "w1_flag": "0",
+            "w2_flag": "1",
+            "w1_order_flag": "1"
+          }
+        ],
+        "installed_moe_source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+        "startup_log_snapshot_sha256": "68b5194cb3072a6e745de31e78355d3157280f91e4a00306ba422d03d90a5476",
+        "parity_proof": {
+          "banks": 32,
+          "elements_per_rank": 10240,
+          "exact_eager": true,
+          "exact_graph": true,
+          "validated_against_active_pynccl": true,
+          "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+          "input_bank_sha256": [
+            "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+            "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+            "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+            "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+            "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+            "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+            "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+            "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+            "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+            "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+            "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+            "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+            "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+            "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+            "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+            "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+            "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+            "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+            "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+            "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+            "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+            "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+            "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+            "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+            "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+            "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+            "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+            "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+            "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+            "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+            "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+            "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+          ],
+          "repeat_bank0": true,
+          "graph_destroyed": true,
+          "rank_results": [
+            {
+              "rank": 0,
+              "errors": []
+            },
+            {
+              "rank": 1,
+              "errors": []
+            },
+            {
+              "rank": 2,
+              "errors": []
+            },
+            {
+              "rank": 3,
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "rank": 2,
+        "run_id": "a19e8f8dc60a48aeab3fdbe8e35d71e0",
+        "workers": [
+          {
+            "pid": 152,
+            "library_mapped": "/opt/strix-halo-next/hip-uma-avx512-20260907-r1/libhip_rdma_backend.so",
+            "w1_flag": "0",
+            "w2_flag": "1",
+            "w1_order_flag": "1"
+          }
+        ],
+        "installed_moe_source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+        "startup_log_snapshot_sha256": "64047ceed451ecb014e6fbd40b6bb71f8f98d0298bbddf6a7a0bf6f1c2b84ba7",
+        "parity_proof": {
+          "banks": 32,
+          "elements_per_rank": 10240,
+          "exact_eager": true,
+          "exact_graph": true,
+          "validated_against_active_pynccl": true,
+          "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+          "input_bank_sha256": [
+            "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+            "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+            "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+            "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+            "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+            "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+            "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+            "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+            "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+            "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+            "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+            "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+            "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+            "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+            "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+            "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+            "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+            "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+            "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+            "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+            "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+            "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+            "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+            "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+            "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+            "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+            "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+            "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+            "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+            "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+            "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+            "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+          ],
+          "repeat_bank0": true,
+          "graph_destroyed": true,
+          "rank_results": [
+            {
+              "rank": 0,
+              "errors": []
+            },
+            {
+              "rank": 1,
+              "errors": []
+            },
+            {
+              "rank": 2,
+              "errors": []
+            },
+            {
+              "rank": 3,
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "rank": 3,
+        "run_id": "a19e8f8dc60a48aeab3fdbe8e35d71e0",
+        "workers": [
+          {
+            "pid": 152,
+            "library_mapped": "/opt/strix-halo-next/hip-uma-avx512-20260907-r1/libhip_rdma_backend.so",
+            "w1_flag": "0",
+            "w2_flag": "1",
+            "w1_order_flag": "1"
+          }
+        ],
+        "installed_moe_source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+        "startup_log_snapshot_sha256": "3b6d3b78a429e7a29dd056c6285e0214550d9c2bacece9c990ba0f7ff2778996",
+        "parity_proof": {
+          "banks": 32,
+          "elements_per_rank": 10240,
+          "exact_eager": true,
+          "exact_graph": true,
+          "validated_against_active_pynccl": true,
+          "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+          "input_bank_sha256": [
+            "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+            "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+            "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+            "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+            "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+            "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+            "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+            "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+            "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+            "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+            "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+            "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+            "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+            "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+            "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+            "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+            "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+            "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+            "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+            "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+            "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+            "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+            "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+            "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+            "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+            "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+            "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+            "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+            "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+            "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+            "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+            "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+          ],
+          "repeat_bank0": true,
+          "graph_destroyed": true,
+          "rank_results": [
+            {
+              "rank": 0,
+              "errors": []
+            },
+            {
+              "rank": 1,
+              "errors": []
+            },
+            {
+              "rank": 2,
+              "errors": []
+            },
+            {
+              "rank": 3,
+              "errors": []
+            }
+          ]
+        }
+      }
+    ],
+    "errors": []
+  },
+  "release": {
+    "15": {
+      "version": "0.29.0+strix.rocm100",
+      "upstream_commit": "98dff2a81d74",
+      "files": {
+        "vllm/engine/arg_utils.py": "950cb3b650c081d6d36d43d73e3ecd669b44eabd4fe8395b92e399c7a89b8011",
+        "vllm/model_executor/layers/attention/mla_attention.py": "c399207606bdd1558ff6682ea3abce5712652ba1a7fcc2525727eef241aa3f5f",
+        "vllm/multimodal/cache.py": "4e115f755e8b90817e8d5b94d729daf32acd6c13ce06db7590bc42f191c4b7ea",
+        "vllm/multimodal/utils.py": "f0793c9f46490964848acbc1916c0cf6daf9d84ad9c8b48c0598cdddd94ba6d3",
+        "vllm/platforms/__init__.py": "b8d20c31f402b8fc70880b294509d6ca24e69ec5e349c93b4e67139629271ff6",
+        "vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py": "13f1969a3c0b89576ccbb8cd47b5207d71fc4b1154c41a55dfea97518b35cae6",
+        "vllm/v1/core/kv_cache_utils.py": "5294bef00c2f127f672a37eda9acbe440418f01622ef49b9be57761c54ebd7f6",
+        "vllm/v1/worker/gpu_worker.py": "b0f39124f31ead3d2d20f1c6ac8696393c0ed6fed585ba8d31a4f7673e390407"
+      }
+    },
+    "16": {
+      "version": "0.29.0+strix.rocm100",
+      "upstream_commit": "98dff2a81d74",
+      "files": {
+        "vllm/engine/arg_utils.py": "950cb3b650c081d6d36d43d73e3ecd669b44eabd4fe8395b92e399c7a89b8011",
+        "vllm/model_executor/layers/attention/mla_attention.py": "c399207606bdd1558ff6682ea3abce5712652ba1a7fcc2525727eef241aa3f5f",
+        "vllm/multimodal/cache.py": "4e115f755e8b90817e8d5b94d729daf32acd6c13ce06db7590bc42f191c4b7ea",
+        "vllm/multimodal/utils.py": "f0793c9f46490964848acbc1916c0cf6daf9d84ad9c8b48c0598cdddd94ba6d3",
+        "vllm/platforms/__init__.py": "b8d20c31f402b8fc70880b294509d6ca24e69ec5e349c93b4e67139629271ff6",
+        "vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py": "13f1969a3c0b89576ccbb8cd47b5207d71fc4b1154c41a55dfea97518b35cae6",
+        "vllm/v1/core/kv_cache_utils.py": "5294bef00c2f127f672a37eda9acbe440418f01622ef49b9be57761c54ebd7f6",
+        "vllm/v1/worker/gpu_worker.py": "b0f39124f31ead3d2d20f1c6ac8696393c0ed6fed585ba8d31a4f7673e390407"
+      }
+    },
+    "17": {
+      "version": "0.29.0+strix.rocm100",
+      "upstream_commit": "98dff2a81d74",
+      "files": {
+        "vllm/engine/arg_utils.py": "950cb3b650c081d6d36d43d73e3ecd669b44eabd4fe8395b92e399c7a89b8011",
+        "vllm/model_executor/layers/attention/mla_attention.py": "c399207606bdd1558ff6682ea3abce5712652ba1a7fcc2525727eef241aa3f5f",
+        "vllm/multimodal/cache.py": "4e115f755e8b90817e8d5b94d729daf32acd6c13ce06db7590bc42f191c4b7ea",
+        "vllm/multimodal/utils.py": "f0793c9f46490964848acbc1916c0cf6daf9d84ad9c8b48c0598cdddd94ba6d3",
+        "vllm/platforms/__init__.py": "b8d20c31f402b8fc70880b294509d6ca24e69ec5e349c93b4e67139629271ff6",
+        "vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py": "13f1969a3c0b89576ccbb8cd47b5207d71fc4b1154c41a55dfea97518b35cae6",
+        "vllm/v1/core/kv_cache_utils.py": "5294bef00c2f127f672a37eda9acbe440418f01622ef49b9be57761c54ebd7f6",
+        "vllm/v1/worker/gpu_worker.py": "b0f39124f31ead3d2d20f1c6ac8696393c0ed6fed585ba8d31a4f7673e390407"
+      }
+    },
+    "18": {
+      "version": "0.29.0+strix.rocm100",
+      "upstream_commit": "98dff2a81d74",
+      "files": {
+        "vllm/engine/arg_utils.py": "950cb3b650c081d6d36d43d73e3ecd669b44eabd4fe8395b92e399c7a89b8011",
+        "vllm/model_executor/layers/attention/mla_attention.py": "c399207606bdd1558ff6682ea3abce5712652ba1a7fcc2525727eef241aa3f5f",
+        "vllm/multimodal/cache.py": "4e115f755e8b90817e8d5b94d729daf32acd6c13ce06db7590bc42f191c4b7ea",
+        "vllm/multimodal/utils.py": "f0793c9f46490964848acbc1916c0cf6daf9d84ad9c8b48c0598cdddd94ba6d3",
+        "vllm/platforms/__init__.py": "b8d20c31f402b8fc70880b294509d6ca24e69ec5e349c93b4e67139629271ff6",
+        "vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py": "13f1969a3c0b89576ccbb8cd47b5207d71fc4b1154c41a55dfea97518b35cae6",
+        "vllm/v1/core/kv_cache_utils.py": "5294bef00c2f127f672a37eda9acbe440418f01622ef49b9be57761c54ebd7f6",
+        "vllm/v1/worker/gpu_worker.py": "b0f39124f31ead3d2d20f1c6ac8696393c0ed6fed585ba8d31a4f7673e390407"
+      }
+    }
+  },
+  "tool_tests": [
+    "nonstream_auto",
+    "tool_result_roundtrip",
+    "stream_auto",
+    "default_thinking"
+  ],
+  "c2_requests_passed": 6,
+  "c2_tokens_each": 128,
+  "final_queues": {
+    "running": 0.0,
+    "waiting": 0.0
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "retrieved_utc": "2026-09-09T19:08:48.686608+00:00",
+  "sources": [
+    {
+      "repository": "kyuz0/amd-strix-halo-vllm-toolboxes",
+      "commit": "63afa25d59b70b994232c2ef01c3547fe7cdf788",
+      "url": "https://github.com/kyuz0/amd-strix-halo-vllm-toolboxes/commit/63afa25d59b70b994232c2ef01c3547fe7cdf788",
+      "commit_date": "2026-09-02T14:15:34Z"
+    },
+    {
+      "repository": "ayysasha/Strix-halo-dual-optimized",
+      "commit": "0bacd1fccaf34529ea5191c6dd27bd1c107738cf",
+      "url": "https://github.com/ayysasha/Strix-halo-dual-optimized/commit/0bacd1fccaf34529ea5191c6dd27bd1c107738cf",
+      "commit_date": "2026-07-05T18:34:59Z"
+    },
+    {
+      "repository": "leonyurko/vllm-fp8-strix-halo-kernel-support",
+      "commit": "50424f5525b8382353551e3301d0da56eca0be2b",
+      "url": "https://github.com/leonyurko/vllm-fp8-strix-halo-kernel-support/commit/50424f5525b8382353551e3301d0da56eca0be2b",
+      "commit_date": "2026-06-11T12:06:49Z"
+    },
+    {
+      "repository": "MiaAI-Lab/Qwen3.8-Flash-Next-Dual-DGX-Sparks",
+      "commit": "d2ae28a9bedd6f063ee230d616bb320bd54a8f50",
+      "url": "https://github.com/MiaAI-Lab/Qwen3.8-Flash-Next-Dual-DGX-Sparks/commit/d2ae28a9bedd6f063ee230d616bb320bd54a8f50",
+      "commit_date": "2026-09-09T13:46:40Z"
+    },
+    {
+      "repository": "YanissAmz/strix-halo-llm-serving",
+      "commit": "cb48834a6b02fc65b37253c866d39188d7285048",
+      "url": "https://github.com/YanissAmz/strix-halo-llm-serving/commit/cb48834a6b02fc65b37253c866d39188d7285048",
+      "commit_date": "2026-09-04T18:50:45Z"
+    },
+    {
+      "repository": "bitserv-ai/_gfx115x_",
+      "commit": "18c57258ea5d1578e5b2551828d061d67bac4243",
+      "url": "https://github.com/bitserv-ai/_gfx115x_/commit/18c57258ea5d1578e5b2551828d061d67bac4243",
+      "commit_date": "2026-08-17T08:05:02Z"
+    },
+    {
+      "repository": "ByteDance-Seed/SwiftSpec",
+      "commit": "d1697270050fb184d0b270f83592d30523ae64a0",
+      "url": "https://github.com/ByteDance-Seed/SwiftSpec/commit/d1697270050fb184d0b270f83592d30523ae64a0",
+      "commit_date": "2026-03-24T07:18:47Z"
+    }
+  ]
+}
