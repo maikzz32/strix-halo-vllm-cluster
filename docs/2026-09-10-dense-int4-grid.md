@@ -63,7 +63,25 @@ The source candidate has SHA256
 Original and candidate source are staged separately under
 `/opt/strix-halo-next/dense-grid-20260910-r1` on each node. After stopping all
 original workers, the same candidate hash was activated on all four nodes.
-Run `183be1d308ae4636a16bdea946a6b1d6` is loading with the option enabled,
-original UMA transport and GPU high mode. Serving performance is pending;
-this remains an experiment, not a promoted configuration. The original source
-must be restored with workers stopped for the matched control run.
+Run `183be1d308ae4636a16bdea946a6b1d6` completed the serving trial with the
+option enabled, original UMA transport and GPU high mode.
+
+## Serving trial: no gain over the prior control
+
+| Configuration | Output tokens/s | Mean TTFT (ms) | Mean TPOT (ms) |
+| --- | ---: | ---: | ---: |
+| Prior original control | 56.272 | 565.697 | 15.382 |
+| Restricted dense INT4 candidate | 55.599 | 580.107 | 15.509 |
+
+The candidate is 1.20% slower in this comparison. All 48 texts, output lengths
+and speculation statistics are identical (11,839 output tokens, 14,767 input
+tokens). Hermes auto tools, tool roundtrip, streaming and default thinking pass.
+The isolated speedups did not establish a serving gain. No cause for the
+regression is established; do not attribute it to a particular kernel or cache
+mechanism without further evidence.
+
+All candidate workers were stopped, and the original source SHA256 was restored
+on all four nodes. Run `594dd64087594e7eb373d1bf6bdc6593` is loading the original
+configuration for the fresh restored control. The candidate is not promoted.
+The restored control result is still pending.
+
