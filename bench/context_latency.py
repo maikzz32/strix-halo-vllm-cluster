@@ -28,7 +28,8 @@ def run(args):
             'model':model,'arguments':vars(args).copy(),'cases':[],
             'note':'First use of a unique prefix versus exact reuse; speed alone does not prove cache hits.'}
     record['arguments']['output']=str(args.output)
-    salt=uuid.uuid4().hex
+    salt=args.prefix_id or uuid.uuid4().hex
+    record['prefix_id']=salt
     for length in args.lengths:
         # Unique tokens near the beginning prevent reuse of an earlier probe.
         text='Experiment '+salt+' context '+str(length)+'.\n'
@@ -78,6 +79,7 @@ if __name__=='__main__':
     p.add_argument('--tokens',type=int,default=32)
     p.add_argument('--repeats',type=int,default=3)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--prefix-id',help='Reuse this identifier across restarted before/candidate/after runs for identical inputs.')
     a=p.parse_args()
     if min(a.lengths)<256 or a.repeats<2:p.error('Lengths >=256 and at least two repeats required')
     run(a)

@@ -1,8 +1,9 @@
-# Prefill tile investigation — not deployed
+# Prefill tile investigation — full-model trial in progress
 
-The installed TP4 service remains on its original kernels and weights. A narrower
-WNA16 prefill tile is promising for short prefills, but has not yet been tested
-in full-model serving. These are operator timings, not output tokens/second.
+The TP4 service is restarting with its original kernels and weights after a temporary trial. A narrower
+WNA16 prefill tile is promising in isolated short-prefill tests, but the first
+full-model trial does not show a clear latency gain. The table below contains
+operator timings, not output tokens/second.
 
 The isolated node 4 process exercises the actual modular MoE apply path with
 512 experts, top-10 routing, TP4 local W1/W2 shapes, asymmetric INT4 group size
@@ -53,9 +54,38 @@ rows from 6309.02 to 5835.78 microseconds. Cases outside the selected range
 retain their original configuration. Timing variation on those unchanged
 paths illustrates why full-model bracketed trials remain necessary.
 
-The source patch is **not installed** in any serving container. Candidate
+The source patch was tested in all four serving containers for
+run `d0b6039f83f04ca3a84f05f2b83b524c` and has been restored to the original
+source on all four nodes. It has not been promoted. Candidate
 results are in `bench/records/2026-09-09-prefill-candidate.json`. The test
 requires the repository's `patches` directory on its Python import path.
+
+The fresh pre-trial ShareGPT48/C1 measurement completed 48 requests at
+54.4469 output tokens/s, 539.91 ms mean TTFT and 16.0828 ms mean TPOT.
+All 48 texts, output lengths and speculation statistics match the preceding
+control, but throughput is 2.19% lower. A post-trial control is therefore
+required before assigning small throughput changes to this patch.
+The candidate configuration is separate from the canonical configuration;
+all four original source copies were verified before activation. The candidate
+completed 48/48 requests at 55.7491 tokens/s, 544.50 ms mean TTFT and
+15.6488 ms mean TPOT. All 48 texts, output lengths and speculation statistics
+are identical to the fresh before run. The 2.39% throughput increase is close
+to the preceding 2.19% baseline drift, while mean TTFT is 0.85% worse.
+The original source has been restored for post-trial run
+`d1b552ae062b402c9d4fbaa6c546a362`, which is still starting.
+
+Exact-prefix latency probes at 256, 512 and 1024 input tokens use
+`--prefix-id prefill-bracket-20260909-r1`, 32 output tokens and two repetitions
+to reproduce inputs across restarts. Before-trial cache hit deltas were zero
+for every probe. Raw records are under `bench/records/2026-09-09-prefill-*`.
+
+The candidate's six matching latency probes also have zero cache hits and
+identical output hashes. TTFT changes range from -0.42% to +4.52%, providing
+no clear reduction. Automatic tool choice, result roundtrip, streamed tool
+calls and default-thinking tool selection passed. Six C2 requests completed
+with 128 output tokens each. Worker environment flags and installed source
+hashes were checked on every rank; no kernel trace was collected to prove
+per-call tile selection in the full-model workload.
 
 An earlier isolated larger-K experiment (BM32/BN64, BK64 or BK128) terminated
 with `HSA_STATUS_ERROR_MEMORY_FAULT` before producing its first case result.

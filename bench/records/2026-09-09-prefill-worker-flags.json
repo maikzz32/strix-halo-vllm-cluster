@@ -1,0 +1,38 @@
+[
+  {
+    "host": "192.168.1.15",
+    "workers": [
+      {
+        "pid": 4023,
+        "prefill_flag": "1"
+      }
+    ]
+  },
+  {
+    "host": "192.168.1.16",
+    "workers": [
+      {
+        "pid": 2358,
+        "prefill_flag": "1"
+      }
+    ]
+  },
+  {
+    "host": "192.168.1.17",
+    "workers": [
+      {
+        "pid": 1481,
+        "prefill_flag": "1"
+      }
+    ]
+  },
+  {
+    "host": "192.168.1.18",
+    "workers": [
+      {
+        "pid": 1607,
+        "prefill_flag": "1"
+      }
+    ]
+  }
+]
