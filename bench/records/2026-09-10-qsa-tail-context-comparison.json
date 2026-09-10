@@ -1,0 +1,405 @@
+{
+  "before_sha256": "919b4800add3368c5b053d4018d4b7204d4c10a5003010f7c19b5aa1a1a7c870",
+  "after_sha256": "0860e54d06ac2f2d3fa357e64b6a0cdb45218463da2547a04cb069464db93fc0",
+  "rows": [
+    {
+      "prompt_tokens": 256,
+      "repeat": 0,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          256.0,
+          256.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          256.0,
+          256.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        422.1423999988474,
+        375.8596999978181
+      ],
+      "prefill_ms": [
+        393.1799639976816,
+        360.1483999955235
+      ],
+      "wall_s": [
+        0.9321601999981795,
+        0.8665964999963762
+      ]
+    },
+    {
+      "prompt_tokens": 256,
+      "repeat": 1,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          256.0,
+          256.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          256.0,
+          256.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        478.6443000048166,
+        418.3967999997549
+      ],
+      "prefill_ms": [
+        452.74707800126635,
+        405.687020989717
+      ],
+      "wall_s": [
+        0.9832528999977512,
+        0.9167261999973562
+      ]
+    },
+    {
+      "prompt_tokens": 256,
+      "repeat": 2,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          256.0,
+          256.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          256.0,
+          256.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        468.7134999985574,
+        440.8582000032766
+      ],
+      "prefill_ms": [
+        448.5316659993259,
+        437.0119800005341
+      ],
+      "wall_s": [
+        0.9779865000018617,
+        0.9294273999985307
+      ]
+    },
+    {
+      "prompt_tokens": 512,
+      "repeat": 0,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          512.0,
+          512.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          512.0,
+          512.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        617.2205000038957,
+        557.9261999955634
+      ],
+      "prefill_ms": [
+        604.0801890048897,
+        554.5548079971923
+      ],
+      "wall_s": [
+        1.0030916999967303,
+        0.9291502999985823
+      ]
+    },
+    {
+      "prompt_tokens": 512,
+      "repeat": 1,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          512.0,
+          512.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          512.0,
+          512.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        615.1683000061894,
+        580.5207999947015
+      ],
+      "prefill_ms": [
+        610.3535420115804,
+        551.998338996782
+      ],
+      "wall_s": [
+        1.0014945000002626,
+        0.9512990999937756
+      ]
+    },
+    {
+      "prompt_tokens": 512,
+      "repeat": 2,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          512.0,
+          512.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          512.0,
+          512.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        624.0054999943823,
+        577.6740000001155
+      ],
+      "prefill_ms": [
+        606.19208899152,
+        550.0497140019434
+      ],
+      "wall_s": [
+        1.010025700001279,
+        0.9480031999992207
+      ]
+    },
+    {
+      "prompt_tokens": 1024,
+      "repeat": 0,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          1024.0,
+          1024.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          1024.0,
+          1024.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        1042.810400002054,
+        962.7010999975028
+      ],
+      "prefill_ms": [
+        1036.6629630007083,
+        943.1083489907905
+      ],
+      "wall_s": [
+        1.4682217999943532,
+        1.372426700007054
+      ]
+    },
+    {
+      "prompt_tokens": 1024,
+      "repeat": 1,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          1024.0,
+          1024.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          1024.0,
+          1024.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        1062.5024000037229,
+        966.8338999908883
+      ],
+      "prefill_ms": [
+        1033.560680996743,
+        942.4589080008445
+      ],
+      "wall_s": [
+        1.4877088000066578,
+        1.37754619999032
+      ]
+    },
+    {
+      "prompt_tokens": 1024,
+      "repeat": 2,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          1024.0,
+          1024.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          1024.0,
+          1024.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        1059.1923000029055,
+        952.6630000036675
+      ],
+      "prefill_ms": [
+        1036.015221994603,
+        947.6493920083158
+      ],
+      "wall_s": [
+        1.4856644000101369,
+        1.3629205000033835
+      ]
+    },
+    {
+      "prompt_tokens": 2048,
+      "repeat": 0,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          2048.0,
+          2048.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          2048.0,
+          2048.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        1922.1770000003744,
+        1885.15109999571
+      ],
+      "prefill_ms": [
+        1915.9430870058713,
+        1858.8847670034738
+      ],
+      "wall_s": [
+        2.391042200004449,
+        2.338650999998208
+      ]
+    },
+    {
+      "prompt_tokens": 2048,
+      "repeat": 1,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          0.0,
+          0.0
+        ],
+        "prefix_cache_queries_total": [
+          2048.0,
+          2048.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          2048.0,
+          2048.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        2050.2345000131754,
+        1926.147399994079
+      ],
+      "prefill_ms": [
+        2019.6405089955078,
+        1902.0947829994839
+      ],
+      "wall_s": [
+        2.519816100000753,
+        2.383330999989994
+      ]
+    },
+    {
+      "prompt_tokens": 2048,
+      "repeat": 2,
+      "identical_text": true,
+      "identical_usage": true,
+      "cache": {
+        "prefix_cache_hits_total": [
+          800.0,
+          800.0
+        ],
+        "prefix_cache_queries_total": [
+          2048.0,
+          2048.0
+        ],
+        "request_prefill_kv_computed_tokens_sum": [
+          1248.0,
+          1248.0
+        ]
+      },
+      "matched_cache_work": true,
+      "ttft_ms": [
+        1239.7771999967517,
+        1216.634399999748
+      ],
+      "prefill_ms": [
+        1233.5355130053358,
+        1191.1681490018964
+      ],
+      "wall_s": [
+        1.7095764999976382,
+        1.6712980000011157
+      ]
+    }
+  ],
+  "all_outputs_match": true,
+  "all_cache_work_matches": true,
+  "note": "Individual paired timings; no aggregate speedup across unmatched cache work. Phase metrics are not pure GPU time."
+}

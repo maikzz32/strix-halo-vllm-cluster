@@ -1,0 +1,406 @@
+{
+  "created_utc": "2026-09-10T06:24:41.779239+00:00",
+  "model": "/home/maik/qwen38_rest",
+  "arguments": {
+    "url": "http://192.168.1.15:8000",
+    "lengths": [
+      256,
+      512,
+      1024,
+      2048
+    ],
+    "tokens": 32,
+    "repeats": 3,
+    "output": "results\\qsa-tail-candidate-context-20260910.json",
+    "prefix_id": "qsa-tail-matched-20260910-r1",
+    "phase_metrics": true
+  },
+  "cases": [
+    {
+      "prompt_tokens": 256,
+      "prompt_ids_sha256": "faebf93381c7c692d6c6f516309a5f9df3ba39df9d73d554872fa38bf4f16e2b",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 375.8596999978181,
+          "wall_s": 0.8665964999963762,
+          "usage": {
+            "prompt_tokens": 256,
+            "total_tokens": 288,
+            "completion_tokens": 32
+          },
+          "text_sha256": "967d66dffe51e7c540120ceb713955a3d781e9328106a4debd514d8ae862b81c",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 13.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 288.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.3614969253540039,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.120999852195382e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.851424334992771,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.3601483999955235,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.49127593499724753,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 418.3967999997549,
+          "wall_s": 0.9167261999973562,
+          "usage": {
+            "prompt_tokens": 256,
+            "total_tokens": 288,
+            "completion_tokens": 32
+          },
+          "text_sha256": "967d66dffe51e7c540120ceb713955a3d781e9328106a4debd514d8ae862b81c",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 13.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 288.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.4071378707885742,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0989009751938283e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9046382409869693,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.405687020989717,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.49895121999725234,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 440.8582000032766,
+          "wall_s": 0.9294273999985307,
+          "usage": {
+            "prompt_tokens": 256,
+            "total_tokens": 288,
+            "completion_tokens": 32
+          },
+          "text_sha256": "967d66dffe51e7c540120ceb713955a3d781e9328106a4debd514d8ae862b81c",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 13.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 288.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.4386293888092041,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.0570005290210247e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9262583719973918,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.4370119800005341,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.4892463919968577,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 512,
+      "prompt_ids_sha256": "edd2ec46d9b47ec9af394812d647cbb3423a80a12f75c74db1825f1ce452e6f2",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 557.9261999955634,
+          "wall_s": 0.9291502999985823,
+          "usage": {
+            "prompt_tokens": 512,
+            "total_tokens": 541,
+            "completion_tokens": 29
+          },
+          "text_sha256": "257ace477717ce61d39a13967a8a279c5b79b03db03e62c7ab027a391ea47847",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 10.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 541.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.5559847354888916,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.2849009837955236e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9257408179983031,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.5545548079971923,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.37118601000111084,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 580.5207999947015,
+          "wall_s": 0.9512990999937756,
+          "usage": {
+            "prompt_tokens": 512,
+            "total_tokens": 541,
+            "completion_tokens": 29
+          },
+          "text_sha256": "257ace477717ce61d39a13967a8a279c5b79b03db03e62c7ab027a391ea47847",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 10.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 541.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.5535359382629395,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.396901254542172e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9233069669862743,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.551998338996782,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.3713086279894924,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 577.6740000001155,
+          "wall_s": 0.9480031999992207,
+          "usage": {
+            "prompt_tokens": 512,
+            "total_tokens": 541,
+            "completion_tokens": 29
+          },
+          "text_sha256": "257ace477717ce61d39a13967a8a279c5b79b03db03e62c7ab027a391ea47847",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 10.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 541.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.5516865253448486,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.6579000405035913e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9206802699918626,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.5500497140019434,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.37063055598991923,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 1024,
+      "prompt_ids_sha256": "43e753f56507ab14347554f54712a8a24d1441da22fb6b27ec01a10910104ed1",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 962.7010999975028,
+          "wall_s": 1.372426700007054,
+          "usage": {
+            "prompt_tokens": 1024,
+            "total_tokens": 1056,
+            "completion_tokens": 32
+          },
+          "text_sha256": "6e33d1ca16385234ac689f235b887f25fb7a3c01bd78900c1aee77d4572cc58d",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 11.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1056.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9455528259277344,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.1419997210614383e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.3541771279997192,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9431083489907905,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.4110687790089287,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 966.8338999908883,
+          "wall_s": 1.37754619999032,
+          "usage": {
+            "prompt_tokens": 1024,
+            "total_tokens": 1056,
+            "completion_tokens": 32
+          },
+          "text_sha256": "6e33d1ca16385234ac689f235b887f25fb7a3c01bd78900c1aee77d4572cc58d",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 11.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1056.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9444806575775146,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 8.420000085607171e-06,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.354023022999172,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9424589080008445,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.41156411499832757,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 952.6630000036675,
+          "wall_s": 1.3629205000033835,
+          "usage": {
+            "prompt_tokens": 1024,
+            "total_tokens": 1056,
+            "completion_tokens": 32
+          },
+          "text_sha256": "6e33d1ca16385234ac689f235b887f25fb7a3c01bd78900c1aee77d4572cc58d",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 11.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1056.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9492785930633545,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.2018997697159648e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.3587845700094476,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.9476493920083158,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.41113517800113186,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 2048,
+      "prompt_ids_sha256": "767cd96bc6aeee55829063d93ed2360a1381e530f2fbe68a59525fb0c336063a",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 1885.15109999571,
+          "wall_s": 2.338650999998208,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "1217b86d06a5a8a9c66e0db90f77a92ac9de77ee503299ddc541fbef57f8da92",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 12.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2080.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.8606927394866943,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.2208987502381206e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.3138309640053194,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.8588847670034738,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.4549461970018456,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 1926.147399994079,
+          "wall_s": 2.383330999989994,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "1217b86d06a5a8a9c66e0db90f77a92ac9de77ee503299ddc541fbef57f8da92",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 12.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2080.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.9040474891662598,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.9929997506551445e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2.3604771720129065,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.9020947829994839,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.45838238901342265,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 1216.634399999748,
+          "wall_s": 1.6712980000011157,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "1217b86d06a5a8a9c66e0db90f77a92ac9de77ee503299ddc541fbef57f8da92",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 800.0,
+            "vllm:iteration_tokens_total_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 12.0,
+            "vllm:iteration_tokens_total_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1280.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.1926662921905518,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 8.479008101858199e-06,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.6472025549883256,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.1911681490018964,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.4560344059864292,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1248.0
+          }
+        }
+      ]
+    }
+  ],
+  "note": "First use of a unique prefix versus exact reuse; speed alone does not prove cache hits.",
+  "prefix_id": "qsa-tail-matched-20260910-r1"
+}

@@ -1,0 +1,22 @@
+{
+  "192.168.1.15": {
+    "worker_pid": "33873",
+    "run_id": "c124f9d5f46941eab7c47a23c2d555ed",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba"
+  },
+  "192.168.1.16": {
+    "worker_pid": "20943",
+    "run_id": "c124f9d5f46941eab7c47a23c2d555ed",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba"
+  },
+  "192.168.1.17": {
+    "worker_pid": "20069",
+    "run_id": "c124f9d5f46941eab7c47a23c2d555ed",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba"
+  },
+  "192.168.1.18": {
+    "worker_pid": "24323",
+    "run_id": "c124f9d5f46941eab7c47a23c2d555ed",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba"
+  }
+}

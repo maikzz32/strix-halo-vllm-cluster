@@ -76,3 +76,26 @@ candidate was activated on all four nodes. Run
 configuration. The candidate serving result is pending. The phase comparison
 tool, `bench/compare_context_phases.py`, checks tokenized prompts and reports
 output parity and matched cache work separately from individual timings.
+
+## First model result and context comparison
+
+The candidate completed ShareGPT48/C1 at **54.897 tokens/s** versus **55.258**
+for the fresh original control (-0.65%). Mean TTFT increased from 544.810 to
+680.271 ms; median TTFT decreased from 502.161 to 485.788 ms. Mean TPOT decreased
+from 15.856 to 15.307 ms (-3.46%). All 48 texts, output lengths and speculative
+statistics match exactly. Hermes checks passed. This first run does not
+establish an overall throughput gain, and the candidate is not promoted.
+
+All twelve subsequent context responses and usage counts match the control.
+Every paired request has equal cache hits, cache queries and newly computed KV
+tokens. TTFT is lower in all twelve candidate probes. For 512-token prompts,
+prefill phase times are 554.6/552.0/550.0 ms versus 604.1/610.4/606.2 ms;
+for 1024 tokens they are 943.1/942.5/947.6 versus 1036.7/1033.6/1036.0 ms.
+These matched individual samples support pursuing the candidate, but require
+a repeated/post-trial control before claiming a stable gain.
+
+A second ShareGPT run without restarting is in progress to investigate
+first-use effects. Compilation is a hypothesis for the initial TTFT outliers,
+not an established attribution. Cache counters must also be compared for the
+repeat. The service remains on experimental run
+`c124f9d5f46941eab7c47a23c2d555ed` during this evaluation.
