@@ -146,3 +146,14 @@ MoE source SHA256 `8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2
 was restored on all four nodes. MTP3 control run
 `7e8eb9e6a2094749a3b9907e61787d48` is starting. Its fresh serving result is pending.
 Do not promote the neighboring-depth trial based on isolated operator savings.
+
+
+Restoration is now verified: run `7e8eb9e6a2094749a3b9907e61787d48` is ready.
+ShareGPT48/C1 completed at **56.286 tokens/s**, mean TTFT **556.315 ms** and mean
+TPOT **15.392 ms**. All 48 texts, output lengths and speculative counters match
+the preceding MTP3 control. Hermes passes. The original MoE source and UMA
+library were verified on all four workers before the test. The 0.63% variation
+versus the prior MTP3 control is not attributed to a new optimization.
+See `2026-09-10-mtp3-neighbor-control-{serving,comparison,tools}.json` in
+`bench/records`. The neighboring-depth candidate remains disabled and restored
+out of production; the 60 tokens/s target is still unmet.

@@ -34,5 +34,24 @@ remain unexplained; no speculative runtime patch is justified by this result.
 
 Reproduce with `tools/run_decode_batch_invariance.py --host 192.168.1.18` after
 ensuring no benchmark is active. The test is
-`tests/check_decode_batch_invariance.py`; full results and installed Python
-source hashes are in `bench/records/2026-09-10-decode-batch-invariance.json`.
+`tests/check_decode_batch_invariance.py`; full results and the benchmark
+source hash are in `bench/records/2026-09-10-decode-batch-invariance.json`.
+
+
+## M4/M5 follow-up after the MTP4 trial
+
+After the restored MTP3 control completed at 56.286 tokens/s, with all 48 outputs,
+lengths and speculation counters identical to its earlier control and Hermes
+checks passing, the same seven stateless operators were checked at M4 versus M5.
+Four synthetic banks per shape again produced zero unequal elements for identical
+first-four input rows, both eagerly and in graph replay after input changes.
+Fixed-shape repeatability and unchanged serving counters also passed. This does
+not explain the 36 differing responses in the MTP4 trial and does not cover
+routed MoE, attention or recurrent-state rollback.
+
+Run `tools/run_decode_batch_invariance.py --short-rows 4 --long-rows 5` to
+reproduce on an idle cluster. The controller now stores the test hash as
+`benchmark_source_sha256`, preserving the separately reported installed-module
+`source_sha256` mapping. The older controller overwrote that mapping; do not
+attribute module hashes to the older M3/M4 public record. The new full record is
+`bench/records/2026-09-10-decode-batch-invariance-4-5.json`.
