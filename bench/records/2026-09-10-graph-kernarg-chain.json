@@ -1,0 +1,466 @@
+{
+  "results": [
+    {
+      "index": 0,
+      "variant": "default",
+      "status": "passed",
+      "rows": [
+        {
+          "launches": 1,
+          "changed_input_checks": 2,
+          "wall_us": [
+            8.082875,
+            4.912375,
+            4.67425,
+            4.3880625,
+            4.918,
+            4.931125,
+            4.9105
+          ],
+          "event_us": [
+            3.877375042065978,
+            3.9098751731216908,
+            4.049874842166901,
+            3.7873750552535057,
+            3.8123750127851963,
+            3.787437453866005,
+            3.7873750552535057
+          ],
+          "median_wall_us": 4.912375,
+          "median_event_us": 3.8123750127851963
+        },
+        {
+          "launches": 128,
+          "changed_input_checks": 2,
+          "wall_us": [
+            234.041625,
+            232.86225,
+            233.06225,
+            233.420375,
+            233.400375,
+            233.0885,
+            233.416625
+          ],
+          "event_us": [
+            232.29031264781952,
+            232.31537640094757,
+            231.9628745317459,
+            232.03487694263458,
+            232.03743994235992,
+            231.9699376821518,
+            232.02744126319885
+          ],
+          "median_wall_us": 233.400375,
+          "median_event_us": 232.03487694263458
+        },
+        {
+          "launches": 1024,
+          "changed_input_checks": 2,
+          "wall_us": [
+            1845.4941875,
+            1844.862375,
+            1845.6866875,
+            1846.0535625,
+            1845.4091875,
+            1845.8366875,
+            1845.2905
+          ],
+          "event_us": [
+            1843.5662984848022,
+            1843.4288501739502,
+            1844.283103942871,
+            1844.5631265640259,
+            1844.0077304840088,
+            1844.412922859192,
+            1844.1283702850342
+          ],
+          "median_wall_us": 1845.4941875,
+          "median_event_us": 1844.1283702850342
+        },
+        {
+          "launches": 2646,
+          "changed_input_checks": 2,
+          "wall_us": [
+            4792.929625,
+            4792.0483125,
+            4792.44775,
+            4792.0865,
+            4791.7915,
+            4792.052125,
+            4793.0864375
+          ],
+          "event_us": [
+            4791.093826293945,
+            4790.519714355469,
+            4791.031837463379,
+            4790.670871734619,
+            4790.37618637085,
+            4790.63606262207,
+            4791.58353805542
+          ],
+          "median_wall_us": 4792.0865,
+          "median_event_us": 4790.670871734619
+        }
+      ],
+      "torch": "2.13.0+rocm10.0.0",
+      "hip": "7.15.26333",
+      "library": "/usr/local/lib/python3.12/site-packages/_rocm_sdk_core/lib/libamdhip64.so.7",
+      "library_sha256": "1a8bcd00d05cce36bebcf4acf30289f36f6562ec532e9c618c42e9bd2d90ed05",
+      "environment": {
+        "GPU_MAX_HW_QUEUES": null,
+        "HIP_FORCE_DEV_KERNARG": null,
+        "AMD_DIRECT_DISPATCH": null,
+        "DEBUG_HIP_GRAPH_BATCH_SIZE": null,
+        "DEBUG_HIP_GRAPH_SEGMENT_SCHEDULING": null
+      },
+      "note": "Synthetic cached integer chain, no model, RDMA or mixed kernels."
+    },
+    {
+      "index": 1,
+      "variant": "kernarg0",
+      "status": "passed",
+      "rows": [
+        {
+          "launches": 1,
+          "changed_input_checks": 2,
+          "wall_us": [
+            8.060375,
+            4.9698125,
+            4.4555,
+            4.383625,
+            4.348625,
+            4.851125,
+            4.4455
+          ],
+          "event_us": [
+            3.89487505890429,
+            3.974874969571829,
+            3.83237493224442,
+            3.7799375131726265,
+            3.809937508776784,
+            3.7798748817294836,
+            3.849874949082732
+          ],
+          "median_wall_us": 4.4555,
+          "median_event_us": 3.83237493224442
+        },
+        {
+          "launches": 128,
+          "changed_input_checks": 2,
+          "wall_us": [
+            234.2559375,
+            232.806625,
+            233.06225,
+            233.126625,
+            233.121,
+            233.111625,
+            233.269125
+          ],
+          "event_us": [
+            232.2782427072525,
+            232.26575553417206,
+            231.96330666542053,
+            231.7502498626709,
+            231.73780739307404,
+            231.9602519273758,
+            231.89274966716766
+          ],
+          "median_wall_us": 233.121,
+          "median_event_us": 231.9602519273758
+        },
+        {
+          "launches": 1024,
+          "changed_input_checks": 2,
+          "wall_us": [
+            1845.363,
+            1844.176125,
+            1845.17925,
+            1844.7473125,
+            1844.9541875,
+            1845.226125,
+            1844.9448125
+          ],
+          "event_us": [
+            1843.3749675750732,
+            1842.6400423049927,
+            1843.76859664917,
+            1843.2434797286987,
+            1844.0860509872437,
+            1843.8085317611694,
+            1843.5392379760742
+          ],
+          "median_wall_us": 1844.9541875,
+          "median_event_us": 1843.5392379760742
+        },
+        {
+          "launches": 2646,
+          "changed_input_checks": 2,
+          "wall_us": [
+            4797.822625,
+            4798.0388125,
+            4797.7913125,
+            4798.2250625,
+            4798.6344375,
+            4796.9256875,
+            4798.9900625
+          ],
+          "event_us": [
+            4796.029090881348,
+            4796.606063842773,
+            4796.359062194824,
+            4797.0871925354,
+            4797.142028808594,
+            4796.144962310791,
+            4797.564506530762
+          ],
+          "median_wall_us": 4798.0388125,
+          "median_event_us": 4796.606063842773
+        }
+      ],
+      "torch": "2.13.0+rocm10.0.0",
+      "hip": "7.15.26333",
+      "library": "/usr/local/lib/python3.12/site-packages/_rocm_sdk_core/lib/libamdhip64.so.7",
+      "library_sha256": "1a8bcd00d05cce36bebcf4acf30289f36f6562ec532e9c618c42e9bd2d90ed05",
+      "environment": {
+        "GPU_MAX_HW_QUEUES": null,
+        "HIP_FORCE_DEV_KERNARG": "0",
+        "AMD_DIRECT_DISPATCH": null,
+        "DEBUG_HIP_GRAPH_BATCH_SIZE": null,
+        "DEBUG_HIP_GRAPH_SEGMENT_SCHEDULING": null
+      },
+      "note": "Synthetic cached integer chain, no model, RDMA or mixed kernels."
+    },
+    {
+      "index": 2,
+      "variant": "kernarg0",
+      "status": "passed",
+      "rows": [
+        {
+          "launches": 1,
+          "changed_input_checks": 2,
+          "wall_us": [
+            8.1235,
+            4.9679375,
+            4.46675,
+            4.418,
+            4.932375,
+            4.79175,
+            4.548625
+          ],
+          "event_us": [
+            3.9348751306533813,
+            3.979874774813652,
+            3.8349374663084745,
+            3.7848749198019505,
+            3.814874915406108,
+            3.709937445819378,
+            3.6648749373853207
+          ],
+          "median_wall_us": 4.79175,
+          "median_event_us": 3.814874915406108
+        },
+        {
+          "launches": 128,
+          "changed_input_checks": 2,
+          "wall_us": [
+            234.300375,
+            232.8773125,
+            232.93475,
+            233.189125,
+            233.2135,
+            233.38475,
+            233.4291875
+          ],
+          "event_us": [
+            232.17318952083588,
+            232.33819007873535,
+            231.82818293571472,
+            231.8001240491867,
+            231.8151891231537,
+            232.23775625228882,
+            232.05018043518066
+          ],
+          "median_wall_us": 233.2135,
+          "median_event_us": 232.05018043518066
+        },
+        {
+          "launches": 1024,
+          "changed_input_checks": 2,
+          "wall_us": [
+            1844.777375,
+            1845.0335625,
+            1845.718,
+            1844.653625,
+            1845.6666875,
+            1846.2891875,
+            1846.0379375
+          ],
+          "event_us": [
+            1843.3929681777954,
+            1843.4704542160034,
+            1844.3228006362915,
+            1843.1459665298462,
+            1844.698429107666,
+            1844.7284698486328,
+            1844.6439504623413
+          ],
+          "median_wall_us": 1845.6666875,
+          "median_event_us": 1844.3228006362915
+        },
+        {
+          "launches": 2646,
+          "changed_input_checks": 2,
+          "wall_us": [
+            4797.2581875,
+            4795.5008125,
+            4796.9850625,
+            4794.0351875,
+            4796.1026875,
+            4794.7333125,
+            4796.02825
+          ],
+          "event_us": [
+            4795.437335968018,
+            4794.840335845947,
+            4795.506000518799,
+            4793.384075164795,
+            4795.032024383545,
+            4793.966770172119,
+            4794.539451599121
+          ],
+          "median_wall_us": 4796.02825,
+          "median_event_us": 4794.840335845947
+        }
+      ],
+      "torch": "2.13.0+rocm10.0.0",
+      "hip": "7.15.26333",
+      "library": "/usr/local/lib/python3.12/site-packages/_rocm_sdk_core/lib/libamdhip64.so.7",
+      "library_sha256": "1a8bcd00d05cce36bebcf4acf30289f36f6562ec532e9c618c42e9bd2d90ed05",
+      "environment": {
+        "GPU_MAX_HW_QUEUES": null,
+        "HIP_FORCE_DEV_KERNARG": "0",
+        "AMD_DIRECT_DISPATCH": null,
+        "DEBUG_HIP_GRAPH_BATCH_SIZE": null,
+        "DEBUG_HIP_GRAPH_SEGMENT_SCHEDULING": null
+      },
+      "note": "Synthetic cached integer chain, no model, RDMA or mixed kernels."
+    },
+    {
+      "index": 3,
+      "variant": "default",
+      "status": "passed",
+      "rows": [
+        {
+          "launches": 1,
+          "changed_input_checks": 2,
+          "wall_us": [
+            6.6691875,
+            4.854875,
+            4.448625,
+            4.394875,
+            4.466125,
+            4.8098125,
+            4.801125
+          ],
+          "event_us": [
+            3.9023749995976686,
+            3.8724374026060104,
+            3.8123750127851963,
+            3.794874995946884,
+            3.8623749278485775,
+            3.8123750127851963,
+            3.7848749198019505
+          ],
+          "median_wall_us": 4.801125,
+          "median_event_us": 3.8123750127851963
+        },
+        {
+          "launches": 128,
+          "changed_input_checks": 2,
+          "wall_us": [
+            233.9985,
+            232.6054375,
+            232.767875,
+            232.534125,
+            233.2385,
+            232.706,
+            232.681
+          ],
+          "event_us": [
+            231.95293545722961,
+            232.02542960643768,
+            231.66044056415558,
+            231.72231018543243,
+            231.8473756313324,
+            231.54987394809723,
+            231.58487677574158
+          ],
+          "median_wall_us": 232.706,
+          "median_event_us": 231.72231018543243
+        },
+        {
+          "launches": 1024,
+          "changed_input_checks": 2,
+          "wall_us": [
+            1843.418625,
+            1842.609875,
+            1843.1305625,
+            1842.8305,
+            1842.16675,
+            1842.8555625,
+            1842.868
+          ],
+          "event_us": [
+            1841.5082693099976,
+            1841.0582542419434,
+            1841.6945934295654,
+            1841.3225412368774,
+            1841.3225412368774,
+            1841.325044631958,
+            1841.4638042449951
+          ],
+          "median_wall_us": 1842.8555625,
+          "median_event_us": 1841.325044631958
+        },
+        {
+          "launches": 2646,
+          "changed_input_checks": 2,
+          "wall_us": [
+            4790.1665625,
+            4791.69525,
+            4793.3714375,
+            4794.1876875,
+            4794.0814375,
+            4793.774625,
+            4794.4976875
+          ],
+          "event_us": [
+            4788.313865661621,
+            4790.229797363281,
+            4791.872501373291,
+            4792.69552230835,
+            4792.588710784912,
+            4793.026447296143,
+            4793.006420135498
+          ],
+          "median_wall_us": 4793.774625,
+          "median_event_us": 4792.588710784912
+        }
+      ],
+      "torch": "2.13.0+rocm10.0.0",
+      "hip": "7.15.26333",
+      "library": "/usr/local/lib/python3.12/site-packages/_rocm_sdk_core/lib/libamdhip64.so.7",
+      "library_sha256": "1a8bcd00d05cce36bebcf4acf30289f36f6562ec532e9c618c42e9bd2d90ed05",
+      "environment": {
+        "GPU_MAX_HW_QUEUES": null,
+        "HIP_FORCE_DEV_KERNARG": null,
+        "AMD_DIRECT_DISPATCH": null,
+        "DEBUG_HIP_GRAPH_BATCH_SIZE": null,
+        "DEBUG_HIP_GRAPH_SEGMENT_SCHEDULING": null
+      },
+      "note": "Synthetic cached integer chain, no model, RDMA or mixed kernels."
+    }
+  ],
+  "service_counters_unchanged": true,
+  "test_sha256": "9eedf21b15ce1690fd6f7b776f1524317f6e4e4654ae148c0e9a8f68cad2bd1a"
+}

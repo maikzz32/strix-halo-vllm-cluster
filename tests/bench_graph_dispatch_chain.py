@@ -53,5 +53,6 @@ print('RESULT=' + json.dumps(dict(status='passed', rows=rows,
     torch=torch.__version__, hip=torch.version.hip,
     library=paths[0], library_sha256=hashlib.sha256(Path(paths[0]).read_bytes()).hexdigest(),
     environment={k: os.environ.get(k) for k in
-                 ('GPU_MAX_HW_QUEUES', 'HIP_FORCE_DEV_KERNARG', 'AMD_DIRECT_DISPATCH')},
+                 ('GPU_MAX_HW_QUEUES', 'HIP_FORCE_DEV_KERNARG', 'AMD_DIRECT_DISPATCH',
+                  'DEBUG_HIP_GRAPH_BATCH_SIZE', 'DEBUG_HIP_GRAPH_SEGMENT_SCHEDULING')},
     note='Synthetic cached integer chain, no model, RDMA or mixed kernels.')))
