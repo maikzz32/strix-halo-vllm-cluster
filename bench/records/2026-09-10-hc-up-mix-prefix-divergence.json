@@ -1,0 +1,214 @@
+{
+  "before_sha256": "f261d1a7d914578724210301118da764385e685cfd694e8544c640ac65dbe658",
+  "after_sha256": "9990c0c7a87e98b4e6a28b535211a8a5d2a10bb9b6b66719f7e599e0d92e0e59",
+  "different_requests": 34,
+  "min_prefix_chars": 8,
+  "median_prefix_chars": 214.5,
+  "rows": [
+    {
+      "request": 0,
+      "common_prefix_chars": 263,
+      "before_chars": 534,
+      "after_chars": 539
+    },
+    {
+      "request": 1,
+      "common_prefix_chars": 471,
+      "before_chars": 961,
+      "after_chars": 1000
+    },
+    {
+      "request": 2,
+      "common_prefix_chars": 625,
+      "before_chars": 3731,
+      "after_chars": 3945
+    },
+    {
+      "request": 3,
+      "common_prefix_chars": 702,
+      "before_chars": 1891,
+      "after_chars": 1894
+    },
+    {
+      "request": 4,
+      "common_prefix_chars": 247,
+      "before_chars": 1408,
+      "after_chars": 1411
+    },
+    {
+      "request": 5,
+      "common_prefix_chars": 355,
+      "before_chars": 1917,
+      "after_chars": 1892
+    },
+    {
+      "request": 6,
+      "common_prefix_chars": 25,
+      "before_chars": 420,
+      "after_chars": 423
+    },
+    {
+      "request": 7,
+      "common_prefix_chars": 424,
+      "before_chars": 976,
+      "after_chars": 979
+    },
+    {
+      "request": 8,
+      "common_prefix_chars": 530,
+      "before_chars": 4127,
+      "after_chars": 4197
+    },
+    {
+      "request": 10,
+      "common_prefix_chars": 111,
+      "before_chars": 1476,
+      "after_chars": 1396
+    },
+    {
+      "request": 11,
+      "common_prefix_chars": 172,
+      "before_chars": 1495,
+      "after_chars": 1359
+    },
+    {
+      "request": 14,
+      "common_prefix_chars": 474,
+      "before_chars": 1561,
+      "after_chars": 1553
+    },
+    {
+      "request": 15,
+      "common_prefix_chars": 31,
+      "before_chars": 216,
+      "after_chars": 197
+    },
+    {
+      "request": 16,
+      "common_prefix_chars": 51,
+      "before_chars": 163,
+      "after_chars": 170
+    },
+    {
+      "request": 17,
+      "common_prefix_chars": 150,
+      "before_chars": 1378,
+      "after_chars": 1311
+    },
+    {
+      "request": 19,
+      "common_prefix_chars": 182,
+      "before_chars": 312,
+      "after_chars": 338
+    },
+    {
+      "request": 20,
+      "common_prefix_chars": 352,
+      "before_chars": 1699,
+      "after_chars": 1630
+    },
+    {
+      "request": 22,
+      "common_prefix_chars": 1072,
+      "before_chars": 1271,
+      "after_chars": 1263
+    },
+    {
+      "request": 24,
+      "common_prefix_chars": 335,
+      "before_chars": 1921,
+      "after_chars": 1917
+    },
+    {
+      "request": 25,
+      "common_prefix_chars": 100,
+      "before_chars": 196,
+      "after_chars": 196
+    },
+    {
+      "request": 27,
+      "common_prefix_chars": 54,
+      "before_chars": 1799,
+      "after_chars": 1706
+    },
+    {
+      "request": 28,
+      "common_prefix_chars": 51,
+      "before_chars": 1450,
+      "after_chars": 1370
+    },
+    {
+      "request": 29,
+      "common_prefix_chars": 26,
+      "before_chars": 136,
+      "after_chars": 133
+    },
+    {
+      "request": 30,
+      "common_prefix_chars": 472,
+      "before_chars": 910,
+      "after_chars": 906
+    },
+    {
+      "request": 32,
+      "common_prefix_chars": 68,
+      "before_chars": 2868,
+      "after_chars": 2831
+    },
+    {
+      "request": 34,
+      "common_prefix_chars": 251,
+      "before_chars": 1043,
+      "after_chars": 1060
+    },
+    {
+      "request": 37,
+      "common_prefix_chars": 390,
+      "before_chars": 811,
+      "after_chars": 808
+    },
+    {
+      "request": 39,
+      "common_prefix_chars": 352,
+      "before_chars": 2925,
+      "after_chars": 2878
+    },
+    {
+      "request": 41,
+      "common_prefix_chars": 8,
+      "before_chars": 2999,
+      "after_chars": 3767
+    },
+    {
+      "request": 43,
+      "common_prefix_chars": 146,
+      "before_chars": 442,
+      "after_chars": 460
+    },
+    {
+      "request": 44,
+      "common_prefix_chars": 638,
+      "before_chars": 1128,
+      "after_chars": 1129
+    },
+    {
+      "request": 45,
+      "common_prefix_chars": 138,
+      "before_chars": 2463,
+      "after_chars": 2607
+    },
+    {
+      "request": 46,
+      "common_prefix_chars": 150,
+      "before_chars": 1776,
+      "after_chars": 1588
+    },
+    {
+      "request": 47,
+      "common_prefix_chars": 158,
+      "before_chars": 2229,
+      "after_chars": 2270
+    }
+  ],
+  "note": "Character prefixes, not tokenizer boundaries or first internal numerical divergence; no response text exported."
+}
