@@ -72,8 +72,8 @@ counters are retained for the candidate comparison.
 
 After the control completed, the original service stopped cleanly and the
 candidate was activated on all four nodes. Run
-`c124f9d5f46941eab7c47a23c2d555ed` is starting with the unchanged TP4/MTP3
-configuration. The candidate serving result is pending. The phase comparison
+`c124f9d5f46941eab7c47a23c2d555ed` started with the unchanged TP4/MTP3
+configuration and completed the first serving trial below. The phase comparison
 tool, `bench/compare_context_phases.py`, checks tokenized prompts and reports
 output parity and matched cache work separately from individual timings.
 
@@ -94,8 +94,20 @@ for 1024 tokens they are 943.1/942.5/947.6 versus 1036.7/1033.6/1036.0 ms.
 These matched individual samples support pursuing the candidate, but require
 a repeated/post-trial control before claiming a stable gain.
 
-A second ShareGPT run without restarting is in progress to investigate
-first-use effects. Compilation is a hypothesis for the initial TTFT outliers,
-not an established attribution. Cache counters must also be compared for the
-repeat. The service remains on experimental run
-`c124f9d5f46941eab7c47a23c2d555ed` during this evaluation.
+A second ShareGPT run without restarting was interrupted at the owner's request
+after eight reported completions. It is incomplete and excluded from performance
+claims. Compilation remains a hypothesis for the initial TTFT outliers, not an
+established attribution. A completed repeat and post-trial control are missing.
+
+## Stopped test state
+
+The local benchmark controller and remote benchmark process were stopped.
+Verification immediately after stopping found no serving benchmark processes
+and zero running or waiting requests. A later read-only check for the GitHub
+update confirmed HTTP 200 and no benchmark processes; one other request was
+active and was left untouched. The model server was left running, as requested, on
+experimental run `c124f9d5f46941eab7c47a23c2d555ed` with the QSA patch.
+The original QSA source remains backed up on all nodes; it was not restored
+because the request was to stop tests, not restart or stop serving.
+Further tests require the owner to resume testing. The 60-token/s goal remains
+unachieved, and the QSA candidate is not promoted as a proven throughput gain.

@@ -9,6 +9,24 @@ computation preserved. The acceptance target is **at least 60 output tokens/s
 on ShareGPT48 at concurrency 1**, together with improved response latency.
 That target is still open.
 
+## Latest experiment — September 10
+
+Testing is **stopped at the owner's request**. The TP4 server remains running
+with the experimental QSA tail-bound patch; this patch has not been promoted
+as a proven throughput improvement. The interrupted repeat is not a benchmark
+result. No further tests are scheduled.
+
+| Matched ShareGPT48/C1 run | Output tokens/s | Mean TTFT | Mean TPOT |
+|---|---:|---:|---:|
+| Fresh original control | 55.258 | 544.810 ms | 15.856 ms |
+| QSA tail-bound candidate | 54.897 | 680.271 ms | 15.307 ms |
+
+All 48 answers, output lengths and MTP statistics match; Hermes checks pass.
+The candidate has no demonstrated overall throughput gain. All twelve paired
+context probes have identical outputs and cache work, with lower candidate
+TTFT; this latency result still needs a repeated/post-trial control.
+[Full QSA report and evidence](docs/2026-09-10-qsa-sparse-tail-bound.md).
+
 ## Measured performance
 
 | Configuration / milestone | ShareGPT output tokens/s | Mean TTFT | Mean TPOT | Evidence |
@@ -47,6 +65,7 @@ See [benchmark methodology](bench/README.md).
 | Communication | Validated UMA/RDMA backend, AVX512 BF16 reduction |
 | Tool calls | Automatic tool selection with `qwen3_xml` parser |
 | GPU power mode | `high` on all four nodes; live sysfs setting, recheck after reboot |
+| Active experiment | QSA tail-bound source; TP4 run `c124f9d5f46941eab7c47a23c2d555ed`, tests stopped |
 
 The custom release installation applies the complete upstream runtime delta
 while preserving the working Strix stack. It is not the stock ROCm wheel.
