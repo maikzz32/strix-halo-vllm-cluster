@@ -122,3 +122,10 @@ and refuses reused maps or a four-rank sequence intersection below 512 rows.
 The completed run was `c653325fc1e64e419405c8440c5ba471`. Records are
 `2026-09-10-rdma-model-prearmed-{summary,verified,tools}.json`.
 The diagnostic run has been stopped; normal transport restoration is underway.
+
+Normal TP4 transport restoration completed as run
+`efd234c8f0ae439db6b85160c877ccca`. All four original source hashes and UMA
+library mappings were verified, and all Hermes checks passed. No new serving
+throughput measurement is claimed for this restoration; the last measured
+original control remains 56.2244 tokens/s. Restoration evidence is in
+`2026-09-10-rdma-prearmed-restored-{workers,tools}.json`.
