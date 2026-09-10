@@ -23,6 +23,7 @@ def counters(base, phases=False):
                  'request_inference_time_seconds', 'request_prefill_time_seconds',
                  'request_decode_time_seconds', 'request_prefill_kv_computed_tokens')
         wanted = {'vllm:' + name + suffix for name in names for suffix in ('_sum', '_count')}
+        wanted.update(('vllm:iteration_tokens_total_sum', 'vllm:iteration_tokens_total_count'))
         for line in lines:
             if line and not line.startswith('#') and line.split('{')[0].split()[0] in wanted:
                 result[line.split()[0]] = float(line.split()[1])
@@ -80,7 +81,8 @@ def run(args):
                  'counter_delta':{k:after[k]-before.get(k,0) for k in after if not k.startswith('vllm:num_requests_')}}
             case['requests'].append(row)
             if phase_metrics:
-                counts = {k:v for k,v in row['counter_delta'].items() if '_count{' in k}
+                counts = {k:v for k,v in row['counter_delta'].items() if '_count{' in k
+                          and not k.startswith('vllm:iteration_tokens_total')}
                 assert len(counts) == 6 and all(v == 1 for v in counts.values()), counts
                 assert not any(v for k,v in after.items() if k.startswith('vllm:num_requests_'))
             args.output.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
