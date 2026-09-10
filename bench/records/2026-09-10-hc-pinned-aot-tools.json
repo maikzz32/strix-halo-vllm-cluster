@@ -1,0 +1,148 @@
+{
+  "nonstream": {
+    "id": "chatcmpl-8bd056a6f33c8d46",
+    "object": "chat.completion",
+    "created": 1789014351,
+    "model": "/home/maik/qwen38_rest",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-b26401fcca0570fd",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Berlin\"}"
+              }
+            }
+          ],
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.29.0+strix.rocm100-tp4-3aa57bef",
+    "usage": {
+      "prompt_tokens": 282,
+      "total_tokens": 308,
+      "completion_tokens": 26,
+      "prompt_tokens_details": null,
+      "completion_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "roundtrip": {
+    "id": "chatcmpl-94b9bf3754feccf4",
+    "object": "chat.completion",
+    "created": 1789014352,
+    "model": "/home/maik/qwen38_rest",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The current temperature in Berlin is **21\u00b0C**.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.29.0+strix.rocm100-tp4-3aa57bef",
+    "usage": {
+      "prompt_tokens": 336,
+      "total_tokens": 348,
+      "completion_tokens": 12,
+      "prompt_tokens_details": null,
+      "completion_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "stream_calls": {
+    "0": {
+      "name": "get_weather",
+      "arguments": "{\"city\": \"Berlin\"}"
+    }
+  },
+  "default_thinking": {
+    "id": "chatcmpl-9bd7fc8884002bda",
+    "object": "chat.completion",
+    "created": 1789014354,
+    "model": "/home/maik/qwen38_rest",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "We need to respond to user: \"Use get_weather to get the current weather in Berlin.\" Need call get_weather with city Berlin. Then final answer likely report result.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-be9bd26a19bcae88",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Berlin\"}"
+              }
+            }
+          ],
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.29.0+strix.rocm100-tp4-3aa57bef",
+    "usage": {
+      "prompt_tokens": 318,
+      "total_tokens": 381,
+      "completion_tokens": 63,
+      "prompt_tokens_details": null,
+      "completion_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  }
+}

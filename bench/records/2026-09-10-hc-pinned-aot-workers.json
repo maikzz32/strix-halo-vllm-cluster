@@ -1,0 +1,222 @@
+{
+  "192.168.1.15": {
+    "worker_pid": "29053",
+    "run_id": "d8558947e8b64c368fc66c2f7deabc3b",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+    "geometry_proof": [
+      {
+        "stage": "selected",
+        "pid": 29053,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 29053,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "selected",
+        "pid": 29053,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 29053,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      }
+    ]
+  },
+  "192.168.1.16": {
+    "worker_pid": "17667",
+    "run_id": "d8558947e8b64c368fc66c2f7deabc3b",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+    "geometry_proof": [
+      {
+        "stage": "selected",
+        "pid": 17667,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 17667,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "selected",
+        "pid": 17667,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 17667,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      }
+    ]
+  },
+  "192.168.1.17": {
+    "worker_pid": "16790",
+    "run_id": "d8558947e8b64c368fc66c2f7deabc3b",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+    "geometry_proof": [
+      {
+        "stage": "selected",
+        "pid": 16790,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 16790,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "selected",
+        "pid": 16790,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 16790,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      }
+    ]
+  },
+  "192.168.1.18": {
+    "worker_pid": "19622",
+    "run_id": "d8558947e8b64c368fc66c2f7deabc3b",
+    "library_sha256": "69a8d604b028244d219a645471bea34eb28b53510c660b231cfd323b859dbfba",
+    "geometry_proof": [
+      {
+        "stage": "selected",
+        "pid": 19622,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 19622,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused_1",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/aw/cawmcuali3mqgajy3v7mmioxljlacrnpexsfgt6hmwzwqfq5bfug.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "selected",
+        "pid": 19622,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      },
+      {
+        "stage": "precompile",
+        "pid": 19622,
+        "body_sha256": "082455cf69b7b450d76dba6566cd876d43eb18edf67542e20b2c1cb926ec68d1",
+        "kernel_name": "triton_per_fused__to_copy__unsafe_view_add_clone_mean_mul_pow_rsqrt_sigmoid_view_0",
+        "filename": "/root/.cache/vllm/torch_compile_cache/torch_aot_compile/7e91d52d8b13262f88052b4ea65e47440fab9a29ec41927d974e96f8123cf695/inductor_cache/a5/ca52h7yndoijwoskna4hynvgkiuvd3lwsi5trzlqislmf22aclgc.py",
+        "kwargs": {
+          "XBLOCK": 4
+        },
+        "num_warps": 2,
+        "num_stages": 1
+      }
+    ]
+  }
+}
