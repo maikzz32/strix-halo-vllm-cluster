@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "graph_replay": true,
+  "first_error_retained": true,
+  "reset_rearms": true,
+  "counters_exact": true,
+  "snapshot_elements": 144640,
+  "module_sha256": {
+    "hc_first_mismatch.py": "cde7d96f02f6613bc4380ff1a5ce98ae43c48b00de54de79f093f4df872fdc7c"
+  },
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "benchmark_source_sha256": "faee11e92fee3ee12dcb012d18d3687f72419d7f1b0bdef3859dcf899f97c8b3",
+  "service_counters_unchanged": true
+}
