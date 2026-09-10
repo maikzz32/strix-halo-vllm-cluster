@@ -1,0 +1,9 @@
+{
+  "raw_sha256": "e95eceafbb9008b28a1beba23e0eec17e89e86646815ecccd4e4fb269fa6d31e",
+  "passed": [
+    "auto tool selection",
+    "result roundtrip",
+    "streamed tool call",
+    "default thinking"
+  ]
+}

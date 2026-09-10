@@ -106,3 +106,43 @@ all four nodes. After an idle stop, an MTP4 trial was started as run
 this source extension differ from the MTP3 control. Startup and serving comparison
 are pending. This is an experiment, not a promoted configuration or TPS result.
 The model checkpoint and arithmetic remain unchanged.
+
+
+## MTP4 serving result: not promoted
+
+Run `b51737e200f643e5b419d46174a6f2bc` completed all 48 ShareGPT C1 requests
+without HTTP failures and passed all four Hermes checks. The trial is slower:
+
+| Metric | Prior restored MTP3 | MTP4 with neighboring paths |
+| --- | ---: | ---: |
+| Output tokens/s | 55.933 | 50.175 |
+| Mean TTFT ms | 561.396 | 716.969 |
+| Median TTFT ms | 459.474 | 523.737 |
+| Mean TPOT ms | 15.439 | 17.143 |
+| Median client ITL ms | 40.444 | 47.518 |
+| Generated tokens | 11839 | 11835 |
+| Identical responses against MTP3 | 48 | 12 |
+
+MTP4 drafted 16944 tokens in 4236 iterations and accepted 7634, with
+per-position acceptance 71.84/49.32/34.47/24.60%. Extra acceptance did not
+produce an end-to-end gain in this run. Client ITL is not a direct GPU forward
+time and output divergence prevents a clean same-trajectory cost comparison.
+The first two TTFTs were 2.553/1.579 seconds versus 1.350/0.345 in MTP3;
+startup effects may contribute, but the higher median ITL is also observed.
+This first serving trial is not a warm repeated estimate. No general claim
+that MTP4 can never improve is made.
+
+Only 12/48 responses are text-identical, so the candidate cannot qualify as an
+identical-output improvement. Neither changed text nor isolated parity proves
+its cause; no GDN-state bug or kernel arithmetic fault has been established.
+All four workers were verified to have candidate source and enabled flags.
+Per-kernel serving dispatch was not traced in this run; the earlier 48-case
+isolated test proves dispatch behavior for supplied shapes only.
+
+Records: `2026-09-10-mtp4-neighbor-{serving,comparison,tools,divergence}.json`
+in `bench/records`. Generated text stays local; published records retain hashes.
+After the completed trial, the service was stopped while idle and original
+MoE source SHA256 `8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493`
+was restored on all four nodes. MTP3 control run
+`7e8eb9e6a2094749a3b9907e61787d48` is starting. Its fresh serving result is pending.
+Do not promote the neighboring-depth trial based on isolated operator savings.
