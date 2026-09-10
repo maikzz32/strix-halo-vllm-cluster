@@ -90,3 +90,13 @@ analysis. Means are40.292/40.540/43.396ms. Counts above twice the median are1/1/
 with maxima82.05/148.22/198.09ms. Their cause is not established, and client SSE
 intervals must not be described as isolated GPU execution time. The matched MTP2 streaming comparison
 was skipped because the main benchmark failed exact-output parity.
+
+
+## Follow-up: optimized-path coverage confound
+
+The [active MoE dispatch audit](2026-09-10-moe-neighbor-depths.md) found the
+promoted W1 and W2 optimizations restricted to four verification rows. MTP2
+therefore also loses those optimizations. Its measured result is valid for that
+configuration, but cannot isolate draft-depth cost with equal optimized-path
+coverage. Extending coverage requires its own parity and serving tests; it does
+not explain the output differences by itself.
