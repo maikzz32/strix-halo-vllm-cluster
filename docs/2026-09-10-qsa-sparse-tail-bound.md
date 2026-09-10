@@ -47,3 +47,22 @@ Evidence records: `bench/records/2026-09-10-qsa-sparse-tail-r1.json` and
 `bench/records/2026-09-10-qsa-sparse-tail-r2.json`.
 The current test is `tests/bench_qsa_sparse_tail_bound.py`; it includes the
 expanded second-run coverage, while both records retain the candidate hash.
+
+## Four-node validation and staging
+
+Nodes 1–3 also passed all 32 expanded cases with exact output and changed-input
+graph parity; request counters remained unchanged. Together with Node 4's r2
+record, this establishes isolated coverage on all four APUs. Additional records
+are `2026-09-10-qsa-sparse-tail-node{15,16,17}.json`.
+
+`patches/qsa_sparse_tail_bound.py` generates the exact measured candidate and
+asserts both original and candidate SHA256. Original and candidate sources are
+staged on every node under `/opt/strix-halo-next/qsa-tail-bound-20260910-r1`.
+The stage record confirms all four serving files still contain the original.
+The deployment controller refuses activation/restoration while vLLM workers or
+engine cores exist and validates all four backups before mutating any source.
+Its local workspace expects `config/qwen029-tp4-graph-inventory.json` and the
+generator under `cluster-repo/patches`, matching the experiment workspace.
+
+A fresh original TP4 ShareGPT/Hermes/context control is running before the
+candidate model trial. Staging and isolated results are not serving validation.
