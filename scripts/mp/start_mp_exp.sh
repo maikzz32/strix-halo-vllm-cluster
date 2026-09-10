@@ -12,7 +12,7 @@ exec podman exec ${EXTRA_E:-} -e VLLM_GFX1X_MOE_INT4_GEMV=1 \
   -e VLLM_ROCM_USE_AITER=0 -e VLLM_GFX1X_MOE_TUNE=1 -e VLLM_GFX1X_FAST_PLATFORM=1 \
   -e PYTORCH_HIP_ALLOC_CONF=expandable_segments:True,garbage_collection_threshold:0.85 \
   -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e VLLM_HOST_IP="$IP" \
-  "$C" vllm serve /home/maik/qwen38_flashnext --host 0.0.0.0 --port 8000 \
+  "$C" vllm serve /home/cluster-user/qwen38_flashnext --host 0.0.0.0 --port 8000 \
   --tensor-parallel-size "${TP:-4}" --nnodes "${TP:-4}" --node-rank "$R" --master-addr "${MASTER:-192.168.100.1}" --master-port 50001 \
   --distributed-executor-backend mp $HL \
   --compilation-config "$CC" "${SPEC[@]}" \

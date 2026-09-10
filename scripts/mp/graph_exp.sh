@@ -8,7 +8,7 @@ setsid nohup /tmp/start_mp_exp.sh 0 ray-head 192.168.100.1 "$T" >/dev/null 2>&1 
 bash /tmp/wait_ready.sh "/tmp/tp4_${T}_r0.log"; RC=$?
 grep -iE "Graph capturing finished" "/tmp/tp4_${T}_r0.log" | tail -1 | cut -c1-140
 if [ $RC -ne 0 ]; then echo "RESULT $T: KEIN READY (rc=$RC)"; bash /tmp/dump_stacks.sh "$T"; grep -vE "rocSHMEM|agent.cpp|^W0|amdsmi|E-001h" "/tmp/tp4_${T}_r0.log" | grep -E "Error|Traceback|shared memory" | tail -3 | cut -c1-200; /tmp/mp_all.sh stop >/dev/null; exit 1; fi
-OUT=$(timeout 150 curl -s -m 140 localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d "{\"model\":\"/home/maik/qwen38_flashnext\",\"messages\":[{\"role\":\"user\",\"content\":\"Nenne drei Hauptstädte in Europa und je einen Fluss. Kurz.\"}],\"max_tokens\":80,\"temperature\":0}")
+OUT=$(timeout 150 curl -s -m 140 localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d "{\"model\":\"/home/cluster-user/qwen38_flashnext\",\"messages\":[{\"role\":\"user\",\"content\":\"Nenne drei Hauptstädte in Europa und je einen Fluss. Kurz.\"}],\"max_tokens\":80,\"temperature\":0}")
 if echo "$OUT" | python3 -c "import sys,json;d=json.load(sys.stdin);print('Probe ok:',d['usage']['completion_tokens'],'Tokens:',d['choices'][0]['message']['content'][-120:].replace(chr(10),' '))" 2>/dev/null; then
   echo "RESULT $T: LAEUFT -> Bench"; bash /tmp/bench_c1.sh --temperature 0 | sed -n "/Serving Benchmark Result/,/=====$/p" | grep -E "throughput|TPOT|Acceptance|duration|Failed"; exit 0
 else echo "RESULT $T: HANG bei erster Anfrage"; bash /tmp/dump_stacks.sh "$T"; grep -vE "rocSHMEM|agent.cpp|^W0|amdsmi|E-001h" "/tmp/tp4_${T}_r0.log" | grep -E "shared memory|Error" | tail -2 | cut -c1-160; /tmp/mp_all.sh stop >/dev/null; exit 2; fi

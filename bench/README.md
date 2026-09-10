@@ -107,7 +107,7 @@ Ende sind externe Literaturwerte (andere Hardware/Interconnect/Quantisierung)
 ## Prefix-Cache-Probe
 
 ```bash
-python3 bench/prefix_probe.py --model /home/maik/qwen38_ablit --prefix-tokens 2048
+python3 bench/prefix_probe.py --model /home/cluster-user/qwen38_ablit --prefix-tokens 2048
 ```
 
 APC (Automatic Prefix Caching) ist in vLLM V1 defaultmäßig an; dieses Skript

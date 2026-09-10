@@ -1,8 +1,8 @@
 #!/bin/bash
 # bench_c1.sh [zusatzargumente fuer vllm bench serve, z.B. --temperature 0]
 set -u
-M=/home/maik/qwen38_flashnext
-DS=/home/maik/datasets/ShareGPT_V3_unfiltered_cleaned_split.json
+M=/home/cluster-user/qwen38_flashnext
+DS=/home/cluster-user/datasets/ShareGPT_V3_unfiltered_cleaned_split.json
 podman exec ray-head vllm bench serve \
   --backend openai-chat --endpoint /v1/chat/completions \
   --base-url http://127.0.0.1:8000 \

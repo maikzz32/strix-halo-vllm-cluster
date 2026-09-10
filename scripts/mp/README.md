@@ -1,7 +1,7 @@
 # scripts/mp — Betrieb des Ray-freien mp-Verbunds (TP4 über 4 Nodes)
 
 Alle Skripte laufen auf node1 (Head) und erwarten sich selbst unter `/tmp/` (so wurden sie am 03.09.2026 entwickelt);
-nach einem Reboot ist `/tmp` leer — `scp scripts/mp/*.sh maik@node1:/tmp/` genügt. Modell/Argumente sind auf
+nach einem Reboot ist `/tmp` leer — `scp scripts/mp/*.sh cluster-user@node1:/tmp/` genügt. Modell/Argumente sind auf
 `qwen38-flash-next-int4` festgelegt (siehe `start_mp_exp.sh`); Env-Schalter: `CG_MODE`, `MTP_K`, `CAP_SIZES`, `EXTRA_E`.
 
 | Skript | Zweck |
