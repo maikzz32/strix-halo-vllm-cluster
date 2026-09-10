@@ -87,3 +87,38 @@ model-level instrumentation cost. Record:
 `bench/records/2026-09-10-rdma-diagnostic-serving.json`.
 
 Evidence: `bench/records/2026-09-10-rdma-trace-{enabled,disabled,stage}.json`.
+
+## Four-rank capture with arming before request submission
+
+The follow-up captured the same 2,048 collective sequences on all four ranks
+(73193 through 75240). Each map was armed before request submission and read
+back independently: requested=2048, published=0, and distinct ranks 0 through 3.
+The two 2,048-token responses match in request, content, reasoning and usage.
+Hermes auto selection, roundtrip, streaming and default thinking checks pass.
+
+| Rank | Post, us | Wait, us | Reduction/fence, us | Total, us |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 4.940 | 35.929 | 4.130 | 44.888 |
+| 1 | 4.920 | 36.419 | 3.780 | 45.188 |
+| 2 | 4.930 | 35.979 | 3.750 | 44.664 |
+| 3 | 4.929 | 35.159 | 3.940 | 44.074 |
+
+These are medians of CPU-side transport observations; component medians do
+not have to sum to the median total. They exclude GPU staging and scheduling.
+Rank 0 was the sole last-observed receive in 1,230/2,048 observations on rank 2
+and 1,242/2,048 on rank 3. This is not proof of a slow sender: receiver-side CQ
+polling and batching also affect the observations, and host clocks are not
+aligned. No uniquely slow node is established.
+
+Median last-send minus last-receive observation gaps were 9.16, 1.39, 1.185,
+and 0.0 microseconds for ranks 0 through 3. This supports the already examined
+early-reduction motivation; that implementation's matched serving result
+remains the separate small, unproven improvement documented in the overlap
+report. It is not a new performance result.
+
+`tools/capture_model_rdma_prearmed.py` accepts explicit `--run-id`, `--config`
+and `--output` arguments. It requires the exact validated diagnostic library
+and refuses reused maps or a four-rank sequence intersection below 512 rows.
+The completed run was `c653325fc1e64e419405c8440c5ba471`. Records are
+`2026-09-10-rdma-model-prearmed-{summary,verified,tools}.json`.
+The diagnostic run has been stopped; normal transport restoration is underway.
