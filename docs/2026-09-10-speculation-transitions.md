@@ -69,8 +69,10 @@ and mean length2.26 do not compensate for the observed throughput reduction.
 The controller intentionally stopped at the text-parity assertion before the
 Hermes check. Consequently no K2 Hermes success is claimed, and the planned
 three matched streaming probes were skipped. All K2 workers were stopped.
-MTP3 restoration run `aebc6c06e5a249c3a072d4f302317c9f` is loading, with a fresh
-ShareGPT48/C1 and Hermes control queued after readiness. No K2 setting is
+MTP3 restoration run `aebc6c06e5a249c3a072d4f302317c9f` is ready. Its fresh
+ShareGPT48/C1 control reached55.933tokens/s, mean TTFT561.396ms and TPOT15.439ms.
+All48 texts, lengths and speculative statistics match the previous MTP3 control;
+all Hermes checks pass. MTP3 remains active. No K2 setting is
 promoted. Adaptive depth remains unproven; further work must first resolve or
 characterize the output differences rather than treating the K2 timings as
 valid same-output cost measurements.
