@@ -35,7 +35,7 @@ print(json.dumps({'run_id':c['run_id'],'root':str(root),'exit_code':p.returncode
 def main():
  p=argparse.ArgumentParser();p.add_argument('--inputs',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--execute',action='store_true');p.add_argument('--export-dtypes',action='store_true');a=p.parse_args()
  raw=(a.inputs/'sources.tar.gz').read_bytes();m=json.loads((a.inputs/'manifest.json').read_text());sha=hashlib.sha256(raw).hexdigest();assert sha==m['archive_sha256']
- run=uuid.uuid4().hex;cfg={'run_id':run,'sha':sha,'archive':f'/home/maik/strix-halo-next/aiter-probe-{run}.tar.gz','export_dtypes':a.export_dtypes}
+ run=uuid.uuid4().hex;cfg={'run_id':run,'sha':sha,'archive':f'/home/cluster-user/strix-halo-next/aiter-probe-{run}.tar.gz','export_dtypes':a.export_dtypes}
  if not a.execute:print(json.dumps(cfg));return
  def metrics():return urllib.request.urlopen('http://192.168.1.15:8000/metrics',timeout=10).read().decode()
  import sys
@@ -43,8 +43,8 @@ def main():
  sys.path.insert(0,str(root/'tools' if (root/'tools/cluster.py').exists() else root/'scripts/native'));from cluster import request_counts
  before=metrics();assert not any(request_counts(before).values())
  a.output.mkdir(parents=True,exist_ok=False)
- subprocess.run(['scp','-q',str(a.inputs/'sources.tar.gz'),'maik@192.168.1.18:'+cfg['archive']],check=True,timeout=20)
- r=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.18','podman exec -i ray-worker python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=90)
+ subprocess.run(['scp','-q',str(a.inputs/'sources.tar.gz'),'cluster-user@192.168.1.18:'+cfg['archive']],check=True,timeout=20)
+ r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.18','podman exec -i ray-worker python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=90)
  (a.output/'run.log').write_bytes(r.stdout+r.stderr);assert r.returncode==0
  result=json.loads(r.stdout);result['configuration']=cfg;result['upstream_commit']=m['commit'];after=metrics()
  success=lambda s:sum(float(x.split()[-1]) for x in s.splitlines() if x.startswith('vllm:request_success_total{'))

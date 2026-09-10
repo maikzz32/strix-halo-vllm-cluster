@@ -56,7 +56,7 @@ def main():
             row['generated_texts_sha256'] == runs[1]['generated_texts_sha256'])
         runs.append(row)
     result = {'schema': 1, 'date': '2026-09-06', 'workload': 'ShareGPT48, seed42, temperature0, C1',
-              'model': '/home/maik/qwen38_rest', 'quantization': 'existing INT4 compressed-tensors GS32',
+              'model': '/home/cluster-user/qwen38_rest', 'quantization': 'existing INT4 compressed-tensors GS32',
               'context_capacity': 262144,
               'metric': 'output_throughput includes prompt processing and request overhead',
               'caveat': 'QSA gain about2%; substantially greater single-answer speed not yet achieved',

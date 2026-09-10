@@ -225,7 +225,7 @@ def ssh(node, container, *, timeout=False):
     remote += ['python3', '-S', '-']
     return ['ssh', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=8',
             '-o', 'ServerAliveInterval=5', '-o', 'ServerAliveCountMax=3',
-            f'maik@192.168.1.{node}', shlex.join(remote)]
+            f'cluster-user@192.168.1.{node}', shlex.join(remote)]
 
 
 def parse_records(raw):

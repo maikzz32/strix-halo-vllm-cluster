@@ -24,7 +24,7 @@ p=Path(args.library)
 assert hashlib.sha256(p.read_bytes()).hexdigest()==args.sha256
 lib=ctypes.CDLL(str(p));lib.hc_up_mix.argtypes=[ctypes.c_void_p]*6+[ctypes.c_int,ctypes.c_void_p];lib.hc_up_mix.restype=ctypes.c_int
 from safetensors import safe_open
-root=Path('/home/maik/qwen38_rest')
+root=Path('/home/cluster-user/qwen38_rest')
 index_path=next(root.glob('*.index.json'))
 index_bytes=index_path.read_bytes()
 index=json.loads(index_bytes)['weight_map']

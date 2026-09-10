@@ -19,7 +19,7 @@ print(json.dumps({'files':files,'workers':workers}))
 """
 def run(node):
  c='ray-head' if node==15 else 'ray-worker'
- r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}',f'podman exec -i {c} python3 -S -'],input=code.encode(),capture_output=True,timeout=15)
+ r=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{node}',f'podman exec -i {c} python3 -S -'],input=code.encode(),capture_output=True,timeout=15)
  assert r.returncode==0,r.stderr
  return str(node),json.loads(r.stdout)
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:r=dict(ex.map(run,(15,16,17,18)))

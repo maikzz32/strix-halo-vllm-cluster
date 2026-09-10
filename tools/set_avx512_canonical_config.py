@@ -4,7 +4,7 @@ from pathlib import Path
 OLD='e516f0bf5eea420292d967795442261801741008bc759145e1d8e558d5307304'
 REMOTE=r'''
 import pathlib,hashlib,base64,json
-c=CONFIG;p=pathlib.Path('/home/maik/strix-halo-next/config/cluster.json');backup=p.with_name('cluster.pre-avx512-20260907.json')
+c=CONFIG;p=pathlib.Path('/home/cluster-user/strix-halo-next/config/cluster.json');backup=p.with_name('cluster.pre-avx512-20260907.json')
 sha=lambda b:hashlib.sha256(b).hexdigest()
 current=p.read_bytes();new=base64.b64decode(c['new']);assert sha(new)==c['new_sha']
 if c['action']=='backup':
@@ -26,6 +26,6 @@ def main():
  if not a.execute:print(json.dumps({k:v for k,v in c.items() if k!='new'}));return
  a.output.mkdir(parents=True,exist_ok=False)
  for node in (15,16,17,18):
-  r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}','python3 -S -'],input=REMOTE.replace('CONFIG',repr(c),1).encode(),capture_output=True,timeout=20)
+  r=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{node}','python3 -S -'],input=REMOTE.replace('CONFIG',repr(c),1).encode(),capture_output=True,timeout=20)
   (a.output/f'node{node}.log').write_bytes(r.stdout+r.stderr);print(node,r.stdout.decode(),r.stderr.decode());assert r.returncode==0
 if __name__=='__main__':main()

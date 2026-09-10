@@ -296,7 +296,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.15",
+              "cluster-user@192.168.1.15",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r1/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=0 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f3np3 -e NCCL_IB_HCA=rocep197s0f3 -e UCCL_IB_HCA=rocep197s0f3 -e UCCL_SOCKET_IFNAME=enp197s0f3np3 ray-head timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id dc628a676ca44d97848af56d552db1c3 --graph --sizes 20480"
             ]
           ],
@@ -309,7 +309,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.16",
+              "cluster-user@192.168.1.16",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r1/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=1 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f3np3 -e NCCL_IB_HCA=rocep197s0f3 -e UCCL_IB_HCA=rocep197s0f3 -e UCCL_SOCKET_IFNAME=enp197s0f3np3 ray-worker timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id dc628a676ca44d97848af56d552db1c3 --graph --sizes 20480"
             ]
           ],
@@ -322,7 +322,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.17",
+              "cluster-user@192.168.1.17",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r1/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=2 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f3np3 -e NCCL_IB_HCA=rocep197s0f3 -e UCCL_IB_HCA=rocep197s0f3 -e UCCL_SOCKET_IFNAME=enp197s0f3np3 ray-worker timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id dc628a676ca44d97848af56d552db1c3 --graph --sizes 20480"
             ]
           ],
@@ -335,7 +335,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.18",
+              "cluster-user@192.168.1.18",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r1/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=3 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f1np1 -e NCCL_IB_HCA=rocep197s0f1 -e UCCL_IB_HCA=rocep197s0f1 -e UCCL_SOCKET_IFNAME=enp197s0f1np1 ray-worker timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id dc628a676ca44d97848af56d552db1c3 --graph --sizes 20480"
             ]
           ]
@@ -418,7 +418,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.15",
+              "cluster-user@192.168.1.15",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r2/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=0 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f3np3 -e NCCL_IB_HCA=rocep197s0f3 -e UCCL_IB_HCA=rocep197s0f3 -e UCCL_SOCKET_IFNAME=enp197s0f3np3 ray-head timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id 5de7579a356144d899b66121810c72f8 --graph --sizes 20480"
             ]
           ],
@@ -431,7 +431,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.16",
+              "cluster-user@192.168.1.16",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r2/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=1 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f3np3 -e NCCL_IB_HCA=rocep197s0f3 -e UCCL_IB_HCA=rocep197s0f3 -e UCCL_SOCKET_IFNAME=enp197s0f3np3 ray-worker timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id 5de7579a356144d899b66121810c72f8 --graph --sizes 20480"
             ]
           ],
@@ -444,7 +444,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.17",
+              "cluster-user@192.168.1.17",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r2/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=2 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f3np3 -e NCCL_IB_HCA=rocep197s0f3 -e UCCL_IB_HCA=rocep197s0f3 -e UCCL_SOCKET_IFNAME=enp197s0f3np3 ray-worker timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id 5de7579a356144d899b66121810c72f8 --graph --sizes 20480"
             ]
           ],
@@ -457,7 +457,7 @@
               "BatchMode=yes",
               "-o",
               "ConnectTimeout=10",
-              "maik@192.168.1.18",
+              "cluster-user@192.168.1.18",
               "podman exec -i -e NCCL_IB_GID_INDEX=1 -e NCCL_NET_GDR_LEVEL=0 -e NCCL_MIN_NCHANNELS=4 -e NCCL_MAX_NCHANNELS=4 -e NCCL_LAUNCH_MODE=GROUP -e NCCL_GRAPH_MIXING_SUPPORT=1 -e NCCL_NET_PLUGIN=/opt/strix-halo-next/uccl-20260907-r2/librccl-net-uccl.so -e NCCL_NET=RDMA_Plugin -e NCCL_DEBUG=INFO -e UCCL_NUM_ENGINES=1 -e UCCL_PORT_ENTROPY=1 -e UCCL_RCMODE=1 -e RANK=3 -e WORLD_SIZE=4 -e MASTER_ADDR=192.168.100.1 -e MASTER_PORT=29783 -e NCCL_SOCKET_IFNAME=enp197s0f1np1 -e NCCL_IB_HCA=rocep197s0f1 -e UCCL_IB_HCA=rocep197s0f1 -e UCCL_SOCKET_IFNAME=enp197s0f1np1 ray-worker timeout --signal=TERM --kill-after=5s 55s python3 - --deadline 45 --run-id 5de7579a356144d899b66121810c72f8 --graph --sizes 20480"
             ]
           ]

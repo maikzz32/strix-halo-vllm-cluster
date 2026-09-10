@@ -43,7 +43,7 @@ def main():
  dest=ROOT/'results'/('moe-w2-serial-deploy-'+args.action+'-'+uuid.uuid4().hex);dest.mkdir(parents=True)
  for node in (15,16,17,18):
   container='ray-head' if node==15 else 'ray-worker'
-  r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}',f'podman exec -i {container} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=30)
+  r=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{node}',f'podman exec -i {container} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=30)
   dest.joinpath(f'node{node}.log').write_bytes(r.stdout+r.stderr);print(node,r.returncode,r.stdout.decode(),r.stderr.decode(),flush=True)
   if r.returncode:raise RuntimeError('Deployment stopped; inspect partial state and restore if needed')
 if __name__=='__main__':main()

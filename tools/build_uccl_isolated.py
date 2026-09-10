@@ -22,7 +22,7 @@ def main():
  cfg={'run_id':uuid.uuid4().hex,'sha':sha,'archive':base64.b64encode(raw).decode()}
  if not a.execute:print(json.dumps({'run_id':cfg['run_id'],'archive_sha256':sha,'loaded':False}));return
  a.output.mkdir(parents=True,exist_ok=False);(a.output/'manifest.json').write_text(json.dumps({'run_id':cfg['run_id'],'inputs':m},indent=2))
- r=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.18','podman exec -i ray-worker python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=180)
+ r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.18','podman exec -i ray-worker python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=180)
  (a.output/'run.log').write_bytes(r.stdout+r.stderr)
  result=json.loads(r.stdout);(a.output/'result.json').write_text(json.dumps(result,indent=2));print(json.dumps(result))
  raise SystemExit(r.returncode)

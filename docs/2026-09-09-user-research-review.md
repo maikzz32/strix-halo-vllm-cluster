@@ -62,7 +62,7 @@ require runner integration and correct recurrent-state rollback.
 Four TP1 replicas cannot be assumed for the current approximately 170.55-GiB
 checkpoint on 128-GB nodes. The suggested 88.7-GiB group-128 checkpoint is a
 different model artifact from the current group-32 weights. Discuss that change
-with Maik before testing it. llama.cpp timing does not establish equal TP1 and
+with cluster-user before testing it. llama.cpp timing does not establish equal TP1 and
 TP4 forward latency for this vLLM runtime. Linear catch-up cost and multiplicative
 DSI/DFlash gains are hypotheses, not established results.
 
@@ -89,7 +89,7 @@ No acceptance gain or 3% saving is assumed from either idea.
    PEARL is motivation, not evidence that its reported gains apply to TP4/MTP.
 4. Keep four-replica DSI and MTP retraining outside the current deployment:
    the former needs a different memory plan/model artifact and the latter
-   changes weights. Discuss any new checkpoint with Maik first.
+   changes weights. Discuss any new checkpoint with cluster-user first.
 
 The latest restored ShareGPT48/C1 control is 55.933 tokens/s with mean TTFT
 561.396 ms, using GPU high mode. Reaching 60 at the same output count requires

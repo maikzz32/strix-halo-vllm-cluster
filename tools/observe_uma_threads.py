@@ -27,7 +27,7 @@ def main():
  p=argparse.ArgumentParser();p.add_argument('--output',type=pathlib.Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
  def run(n):
   c='ray-head' if n==15 else 'ray-worker'
-  r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{n}',f'podman exec -i {c} python3 -S -'],input=REMOTE.encode(),capture_output=True,timeout=20)
+  r=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{n}',f'podman exec -i {c} python3 -S -'],input=REMOTE.encode(),capture_output=True,timeout=20)
   (a.output/f'node{n}.log').write_bytes(r.stdout+r.stderr);assert r.returncode==0,r.stderr
   d=json.loads(r.stdout);(a.output/f'node{n}.json').write_text(json.dumps(d,indent=2))
   return {'node':n,'worker':d['worker'],'top_threads':[(t['tid'],t['tick_delta'],t['after']['cpu'],t['after']['migrations']) for t in d['threads'][:5]]}

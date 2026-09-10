@@ -2,7 +2,7 @@
 """Patch 61: load the local GLM-5.3-Flash int4 re-quant on the glm5next loader.
 
 Two adaptations in ``vllm/models/glm5next/nvidia/model.py`` (PR #53906
-branch), needed because the local checkpoint (/home/maik/glm53_flash, based
+branch), needed because the local checkpoint (/home/cluster-user/glm53_flash, based
 on cyankiwi/GLM-5.3-Flash-AWQ-INT4) does not match the loader's assumptions:
 
 1. **Name remap** — the checkpoint carries AWQ-era tensor names; the loader

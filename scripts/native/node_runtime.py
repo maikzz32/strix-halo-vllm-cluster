@@ -13,7 +13,7 @@ import subprocess
 import sys
 import time
 
-ROOT = pathlib.Path("/home/maik/strix-halo-next")
+ROOT = pathlib.Path("/home/cluster-user/strix-halo-next")
 RUN_ENV = "STRIX_CLUSTER_RUN_ID"
 
 

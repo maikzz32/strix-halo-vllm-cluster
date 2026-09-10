@@ -1,6 +1,6 @@
 {
   "created_utc": "2026-09-09T20:16:24.832877+00:00",
-  "model": "/home/maik/qwen38_rest",
+  "model": "/home/cluster-user/qwen38_rest",
   "arguments": {
     "url": "http://192.168.1.15:8000",
     "lengths": [
@@ -30,8 +30,8 @@
           },
           "text_sha256": "103f85d7b3b54bf57e155ceb2808859886cf068d8446a4e1e79f4cf80fad8f6a",
           "counter_delta": {
-            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0,
-            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0
           }
         },
         {
@@ -46,8 +46,8 @@
           },
           "text_sha256": "103f85d7b3b54bf57e155ceb2808859886cf068d8446a4e1e79f4cf80fad8f6a",
           "counter_delta": {
-            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 256.0,
-            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0
           }
         }
       ]
@@ -68,8 +68,8 @@
           },
           "text_sha256": "31b7658c11b4c92f480f4a04a573ece202e4d758e71a6484b8e5278d4a1ec7ba",
           "counter_delta": {
-            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0,
-            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0
           }
         },
         {
@@ -84,8 +84,8 @@
           },
           "text_sha256": "31b7658c11b4c92f480f4a04a573ece202e4d758e71a6484b8e5278d4a1ec7ba",
           "counter_delta": {
-            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 512.0,
-            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0
           }
         }
       ]
@@ -106,8 +106,8 @@
           },
           "text_sha256": "6e33d1ca16385234ac689f235b887f25fb7a3c01bd78900c1aee77d4572cc58d",
           "counter_delta": {
-            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0,
-            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0
           }
         },
         {
@@ -122,8 +122,8 @@
           },
           "text_sha256": "6e33d1ca16385234ac689f235b887f25fb7a3c01bd78900c1aee77d4572cc58d",
           "counter_delta": {
-            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 1024.0,
-            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"}": 0.0
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0
           }
         }
       ]

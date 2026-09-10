@@ -7,7 +7,7 @@ The current four-node configuration is documented in
 Nodes 1/2 use containers `qwen029-tp2` and nodes 3/4 use `qwen029-tp4`;
 all four run TP4. Their PID 1 is `sleep infinity`, with inference launched by
 this controller. After reboot, start these four preserved containers and
-use `start --config /home/maik/strix-halo-next/config/cluster.json --timeout 900`
+use `start --config /home/cluster-user/strix-halo-next/config/cluster.json --timeout 900`
 on node 1. No Ray service is required by this newer deployment.
 
 The controller behavior below still applies. The `ray-head`/`ray-worker`
@@ -18,7 +18,7 @@ deployment and are retained as historical recovery context.
 
 This controller operates the four existing patched containers (`ray-head` and
 `ray-worker`) using vLLM's native `mp` executor. Its configuration reproduces the
-measured `/home/maik/qwen38_rest` production setup: TP4, MTP3, 262144 context,
+measured `/home/cluster-user/qwen38_rest` production setup: TP4, MTP3, 262144 context,
 target decode graphs, draft prefill graphs, four RCCL channels and RoCEv2 GID1.
 
 **The existing `ray-head`/`ray-worker` containers are a prerequisite.** Their
@@ -36,9 +36,9 @@ From a repository checkout on node1:
 
 ```bash
 bash scripts/native/deploy.sh
-python3 /home/maik/strix-halo-next/tools/cluster.py status
-python3 /home/maik/strix-halo-next/tools/cluster.py dry-run
-python3 /home/maik/strix-halo-next/tools/cluster.py restart --tag production
+python3 /home/cluster-user/strix-halo-next/tools/cluster.py status
+python3 /home/cluster-user/strix-halo-next/tools/cluster.py dry-run
+python3 /home/cluster-user/strix-halo-next/tools/cluster.py restart --tag production
 ```
 
 `restart` first validates runtime/model availability and matching configuration
@@ -47,7 +47,7 @@ It requires both running/waiting request gauges to confirm idle, stops inference
 on every rank, checks that all nodes can start, then launches the ranks and waits
 for the matching model API. Startup
 failure cleans up only processes carrying that attempt's run ID. Logs and exact
-launch configuration are retained under `/home/maik/strix-halo-next/logs` on each
+launch configuration are retained under `/home/cluster-user/strix-halo-next/logs` on each
 node. `--force-stop` is an explicit recovery option for a broken or busy server.
 
 Model endpoint: `http://192.168.1.15:8000/v1`.
@@ -86,7 +86,7 @@ The obsolete `dflash-27b.service` on node 1 was stopped and disabled after its
 Its unit file was preserved. Restoring that older service requires restoring
 its separate container first; it is not part of this Qwen Flash Next cluster.
 
-Configuration is `/home/maik/strix-halo-next/config/cluster.json` **on every node**.
+Configuration is `/home/cluster-user/strix-halo-next/config/cluster.json` **on every node**.
 For an experiment, copy one identical JSON file to all four nodes and pass its
 absolute path with `--config`. Revert by restarting with the original file. The
 local config contains host addresses/interface names specific to this cluster.
@@ -95,18 +95,18 @@ before a start; a restart checks it before stopping the existing service. `stop`
 and run-scoped failure cleanup remain available when configuration copies differ.
 
 Deployment uploads and syntax-validates all four nodes before replacing any
-deployed file. SSH/SCP explicitly use `maik` and fail without a password prompt.
+deployed file. SSH/SCP explicitly use `cluster-user` and fail without a password prompt.
 Existing `config/cluster.json` remains untouched; the repository version is
 stored as `config/repository-default.json`. Each upload is retained under
-`/home/maik/strix-halo-next/deployments/release.XXXXXXXX`, with exact previous files
+`/home/cluster-user/strix-halo-next/deployments/release.XXXXXXXX`, with exact previous files
 and a recovery manifest. The deploy command prints each node's release path.
 
 To restore a deployment on a node, use its printed release path:
 
 ```bash
-RELEASE=/home/maik/strix-halo-next/deployments/release.XXXXXXXX
+RELEASE=/home/cluster-user/strix-halo-next/deployments/release.XXXXXXXX
 python3 "$RELEASE/deploy_release.py" restore --stage "$RELEASE" \
-  --destination /home/maik/strix-halo-next
+  --destination /home/cluster-user/strix-halo-next
 ```
 
 Restoration refuses to overwrite files edited since deployment and can recover
@@ -116,11 +116,11 @@ node. If the operator config was changed separately, restart with the saved
 original JSON after copying it to the same absolute path on all nodes.
 
 ```bash
-python3 /home/maik/strix-halo-next/tools/bench_stream.py \
-  --output /home/maik/strix-halo-next/results/stream.json --tokens 512 --repeats 2
-bash /home/maik/strix-halo-next/tools/bench_sharegpt.sh sharegpt-run
-python3 /home/maik/strix-halo-next/tools/quality_probe.py \
-  --output /home/maik/strix-halo-next/results/quality.json
+python3 /home/cluster-user/strix-halo-next/tools/bench_stream.py \
+  --output /home/cluster-user/strix-halo-next/results/stream.json --tokens 512 --repeats 2
+bash /home/cluster-user/strix-halo-next/tools/bench_sharegpt.sh sharegpt-run
+python3 /home/cluster-user/strix-halo-next/tools/quality_probe.py \
+  --output /home/cluster-user/strix-halo-next/results/quality.json
 ```
 
 Run benchmarks sequentially. `bench_stream.py` stores requests, complete text,
@@ -154,7 +154,7 @@ repository default. Container overlays remain required: the earlier image
 snapshot predates the UMA and W2 additions.
 
 Every host retains `config/cluster.pre-w2-serial-20260907.json` under
-`/home/maik/strix-halo-next`, SHA-256
+`/home/cluster-user/strix-halo-next`, SHA-256
 `b7f78a76b557e81e86271027f4339a74c9759cb5b700faf3c2a35ee8df038546`.
 The W2 source backup is inside each container at
 `/opt/strix-halo-next/moe-w2-serial-20260907-r1/original.py`.
@@ -166,10 +166,10 @@ the mutation tools reject unexpected source/configuration hashes and require a
 stopped service for source changes. Use a new output directory for each attempt.
 
 ```bash
-ssh maik@192.168.1.15 'python3 /home/maik/strix-halo-next/tools/cluster.py stop --config /home/maik/strix-halo-next/config/cluster.json'
+ssh cluster-user@192.168.1.15 'python3 /home/cluster-user/strix-halo-next/tools/cluster.py stop --config /home/cluster-user/strix-halo-next/config/cluster.json'
 python tools/deploy_moe_w2_serial.py restore --execute
 python tools/set_w2_canonical_config.py restore --config bench/records/w2-serial-model-r1.json --output results/w2-rollback-config --execute
-ssh maik@192.168.1.15 'python3 /home/maik/strix-halo-next/tools/cluster.py start --config /home/maik/strix-halo-next/config/cluster.json --tag w2-rollback --timeout 900'
+ssh cluster-user@192.168.1.15 'python3 /home/cluster-user/strix-halo-next/tools/cluster.py start --config /home/cluster-user/strix-halo-next/config/cluster.json --tag w2-rollback --timeout 900'
 ```
 
 For reactivation after that rollback, stop serving, run `deploy_moe_w2_serial.py

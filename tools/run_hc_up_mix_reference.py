@@ -11,7 +11,7 @@ source=(root/'tests/check_hc_up_mix_reference.py').read_bytes()
 out=args.output;out.mkdir(parents=True,exist_ok=False)
 (out/'before.json').write_text(json.dumps(before))
 modules={name:(root/'patches'/('hc_up_mix_reference.py' if name=='hc_up_mix_runtime.py' else name)).read_text() for name in ('hc_up_mix_runtime.py','hc_up_mix_source.py')}
-p=subprocess.run(['ssh','-o','BatchMode=yes','maik@'+args.host,f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 150s python3 -'],input=('import pathlib,tempfile,sys\np=pathlib.Path(tempfile.mkdtemp(prefix="hc-reference-"))/"test.py"\ns='+repr(source.decode('utf-8-sig'))+'\np.write_text(s)\nsys.path.insert(0,str(p.parent))\nmodules='+repr(modules)+'\nfor name,body in modules.items(): (p.parent/name).write_text(body)\nexec(compile(s,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})\n').encode(),capture_output=True,timeout=175)
+p=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@'+args.host,f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 150s python3 -'],input=('import pathlib,tempfile,sys\np=pathlib.Path(tempfile.mkdtemp(prefix="hc-reference-"))/"test.py"\ns='+repr(source.decode('utf-8-sig'))+'\np.write_text(s)\nsys.path.insert(0,str(p.parent))\nmodules='+repr(modules)+'\nfor name,body in modules.items(): (p.parent/name).write_text(body)\nexec(compile(s,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})\n').encode(),capture_output=True,timeout=175)
 (out/'run.log').write_bytes(p.stdout+p.stderr)
 after=metrics();(out/'after.json').write_text(json.dumps(after))
 print('host',args.host,'exit',p.returncode);print(p.stderr.decode(errors='replace')[-500:])

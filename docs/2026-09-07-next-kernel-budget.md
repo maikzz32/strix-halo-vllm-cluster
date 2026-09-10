@@ -64,7 +64,7 @@ The same installed Python/NumPy can reproduce the read-only survey:
 
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 tools/analyze_hc_lossless.py \
-  --model /home/maik/qwen38_rest --output /tmp/hc-lossless-survey.json
+  --model /home/cluster-user/qwen38_rest --output /tmp/hc-lossless-survey.json
 ```
 
 The subsequent [native GPU experiment](2026-09-07-hc-native.md) implemented and tested in-kernel lossless decoding. It preserved the tested BF16 results but slowed the common merged-down and up projections; no serving integration was promoted. An uncompressed unroll adjustment improved the isolated up operator by 8%, with an estimated full-model opportunity below 1% that remains unvalidated.

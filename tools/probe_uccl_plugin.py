@@ -30,7 +30,7 @@ def main():
  def count(s):return sum(float(x.split()[-1]) for x in s.splitlines() if x.startswith('vllm:request_success_total{'))
  before=metrics();assert not any(mod.request_counts(before).values())
  a.output.mkdir(parents=True,exist_ok=False);(a.output/'manifest.json').write_text(json.dumps({k:v for k,v in cfg.items() if k!='source'},indent=2));(a.output/'probe.cpp').write_text(cfg['source'])
- r=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.18','podman exec -i ray-worker python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=75)
+ r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.18','podman exec -i ray-worker python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=75)
  (a.output/'run.log').write_bytes(r.stdout+r.stderr);record=json.loads(r.stdout)
  after=metrics();service={'before_success':count(before),'after_success':count(after),'after_requests':mod.request_counts(after)};assert count(before)==count(after) and not any(service['after_requests'].values())
  record['service_check']=service;(a.output/'result.json').write_text(json.dumps(record,indent=2));print(json.dumps(record))

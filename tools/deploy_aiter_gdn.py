@@ -71,7 +71,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     for node in (15,16,17,18):
         container = 'ray-head' if node == 15 else 'ray-worker'
-        result = subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}',
+        result = subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{node}',
             f'podman exec -i {container} python3 -S -'],
             input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=30)
         (args.output/f'node{node}.log').write_bytes(result.stdout+result.stderr)

@@ -13,7 +13,7 @@ import time
 import urllib.request
 import uuid
 
-ROOT = pathlib.Path("/home/maik/strix-halo-next")
+ROOT = pathlib.Path("/home/cluster-user/strix-halo-next")
 
 
 def remote(node, rank, action, args, run_id=None, quiet=False):
@@ -25,7 +25,7 @@ def remote(node, rank, action, args, run_id=None, quiet=False):
         argv += ["--expected-config-sha256", args.config_sha256]
     process = subprocess.run(
         ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
-         f"maik@{node['host']}", shlex.join(argv)],
+         f"cluster-user@{node['host']}", shlex.join(argv)],
         capture_output=True, text=True, timeout=100 if action == "start" else 60)
     if not quiet or process.returncode:
         print(f"rank{rank} {action}: {process.stdout.strip()} {process.stderr.strip()}", flush=True)

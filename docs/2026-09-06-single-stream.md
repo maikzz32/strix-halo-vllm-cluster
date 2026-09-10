@@ -3,7 +3,7 @@
 Ziel ist eine einzelne laufende Antwort deutlich über dem bisherigen
 ShareGPT-Ergebnis von etwa 48 Token/s. Die bisherigen Änderungen erreichen
 dieses Ziel noch nicht. Alle hier verglichenen Modellläufe verwenden dieselben
-INT4-Gewichte unter `/home/maik/qwen38_rest`, vier TP-Ranks und MTP3.
+INT4-Gewichte unter `/home/cluster-user/qwen38_rest`, vier TP-Ranks und MTP3.
 
 ## Vergleichbare Modellmessungen
 
@@ -112,7 +112,7 @@ Die aktuellen Messungen und Änderungen bleiben auf vLLM beschränkt.
 Die native Steuerung wurde mit erfolgreichen Starts und Stopps auf allen vier
 Nodes geprüft. 22 lokale Lifecycle-/Deployment-Tests bestehen. Logs, genaue
 Startkonfigurationen und wiederherstellbare Deployment-Dateien liegen unter
-`/home/maik/strix-halo-next` auf den Nodes.
+`/home/cluster-user/strix-halo-next` auf den Nodes.
 
 Auf Node 1 ist die vorhandene Container-Laufzeit zusätzlich als lokales Image
 `localhost/strix-halo-runtime:20260906-qsa-gated` gesichert:

@@ -64,7 +64,7 @@ def one(rank):
     cfg=dict(rank=rank,run_id=run_id,service_run_id=a.service_run_id,source=source,
              iface='enp197s0f1np1' if rank==3 else 'enp197s0f3np3')
     container='qwen029-tp2' if rank<2 else 'qwen029-tp4'
-    r=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.'+str(rank+15),
+    r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.'+str(rank+15),
         'podman exec -i '+container+' python3 -'],input=remote.replace('CONFIG',repr(cfg),1).encode(),
         capture_output=True,timeout=180)
     (a.output/f'rank{rank}.log').write_bytes(r.stdout+r.stderr)

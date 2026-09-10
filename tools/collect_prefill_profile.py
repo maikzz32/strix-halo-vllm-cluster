@@ -24,7 +24,7 @@ with tarfile.open(fileobj=sys.stdout.buffer,mode='w|') as archive:
 summary=[]
 for host,container in [('192.168.1.15','qwen029-tp2'),('192.168.1.16','qwen029-tp2'),
                        ('192.168.1.17','qwen029-tp4'),('192.168.1.18','qwen029-tp4')]:
-    r=subprocess.run(['ssh','-o','BatchMode=yes','maik@'+host,
+    r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@'+host,
         'podman exec -i '+container+' python3 -'],input=('ROOT='+repr(remote)+'\n'+code).encode(),
         capture_output=True,check=True,timeout=120)
     with tarfile.open(fileobj=io.BytesIO(r.stdout)) as archive:

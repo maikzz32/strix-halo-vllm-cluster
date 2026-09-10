@@ -35,9 +35,9 @@ INVENTORY="${1:-$REPO_ROOT/ansible/inventory.yaml}"
 IMAGE="${VLLM_IMAGE:-ghcr.io/maikzz32/strix-vllm-gfx1151:latest}"
 SSH_OPTS="${SSH_OPTS:--o BatchMode=yes -o ConnectTimeout=5}"
 # Host directory with local models, bind-mounted read-only at the SAME path so
-# registry entries with host-local paths (e.g. /home/maik/qwen38_ablit)
+# registry entries with host-local paths (e.g. /home/cluster-user/qwen38_ablit)
 # resolve identically inside the container.
-MODELS_DIR="${MODELS_DIR:-/home/maik}"
+MODELS_DIR="${MODELS_DIR:-/home/cluster-user}"
 
 NAMES=(); TARGETS=(); IPS=()
 while read -r name host user; do

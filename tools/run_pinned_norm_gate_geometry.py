@@ -47,7 +47,7 @@ payload = (
 )
 container = 'qwen029-tp2' if args.host.endswith(('.15', '.16')) else 'qwen029-tp4'
 proc = subprocess.run(
-    ['ssh', '-o', 'BatchMode=yes', 'maik@' + args.host,
+    ['ssh', '-o', 'BatchMode=yes', 'cluster-user@' + args.host,
      f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 150s python3 -'],
     input=payload.encode(), capture_output=True, timeout=175)
 (args.output / 'run.log').write_bytes(proc.stdout + proc.stderr)

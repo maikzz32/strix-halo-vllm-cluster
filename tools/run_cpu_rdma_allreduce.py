@@ -123,7 +123,7 @@ def main():
 
     def ssh(node):
         return ['ssh', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=10', '-o', 'ServerAliveInterval=5',
-                '-o', 'ServerAliveCountMax=3', f'maik@192.168.1.{node}', 'python3 -S -']
+                '-o', 'ServerAliveCountMax=3', f'cluster-user@192.168.1.{node}', 'python3 -S -']
 
     def run_rank(config):
         cfg = dict(config, source=source)

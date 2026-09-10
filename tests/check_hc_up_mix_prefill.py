@@ -86,7 +86,7 @@ for prefix in ['model.layers.0.attn_hyper_connection','model.mtp.layers.0.attn_h
 # Compile a single dynamic graph at M2, then execute M4 and fallback sizes.
 m=make('model.layers.1.attn_hyper_connection',True)
 from safetensors import safe_open
-root=pathlib.Path('/home/maik/qwen38_rest')
+root=pathlib.Path('/home/cluster-user/qwen38_rest')
 index=json.loads(next(root.glob('*.index.json')).read_text())['weight_map']
 key='model.language_model.layers.0.attn_hyper_connection.input_mix_weight_up.weight'
 with safe_open(str(root/index[key]),framework='pt',device='cpu') as f:

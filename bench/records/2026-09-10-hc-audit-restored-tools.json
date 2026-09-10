@@ -3,7 +3,7 @@
     "id": "chatcmpl-8f11c32ead1f0656",
     "object": "chat.completion",
     "created": 1789010436,
-    "model": "/home/maik/qwen38_rest",
+    "model": "/home/cluster-user/qwen38_rest",
     "choices": [
       {
         "index": 0,
@@ -53,7 +53,7 @@
     "id": "chatcmpl-9000a62e2af58ec4",
     "object": "chat.completion",
     "created": 1789010436,
-    "model": "/home/maik/qwen38_rest",
+    "model": "/home/cluster-user/qwen38_rest",
     "choices": [
       {
         "index": 0,
@@ -99,7 +99,7 @@
     "id": "chatcmpl-a36a9745f90659d8",
     "object": "chat.completion",
     "created": 1789010438,
-    "model": "/home/maik/qwen38_rest",
+    "model": "/home/cluster-user/qwen38_rest",
     "choices": [
       {
         "index": 0,

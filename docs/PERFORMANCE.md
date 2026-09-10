@@ -505,7 +505,7 @@ skalieren waehrend das Zielmodell das nicht tut.
 mtp-Eintraegen den Regex `re:mtp\..*`, und dieser traegt den ganzen Schutz -- die expliziten
 Namen greifen nach `_remap_ignored_layers` (mtp.layers.0 -> .48) NICHT. Nur den Regex zu
 entfernen laesst den Router quantisiert erwarten und den Start scheitern; richtig ist ein
-Lookahead `re:mtp\.(?!layers\.\d+\.mlp\.experts\.).*`. (2) `/home/maik` ist im Container
+Lookahead `re:mtp\.(?!layers\.\d+\.mlp\.experts\.).*`. (2) `/home/cluster-user` ist im Container
 schreibgeschuetzt -- Ergebnis nach /tmp schreiben und mit `podman cp` herausholen.
 
 Produktion bleibt auf `qwen38_rest`. Der quantisierte Checkpoint `qwen38_mtpq` liegt auf allen

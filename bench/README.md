@@ -2,10 +2,10 @@
 
 ## Primary acceptance workload
 
-- Model: existing `/home/maik/qwen38_rest`, asymmetric INT4 group32.
+- Model: existing `/home/cluster-user/qwen38_rest`, asymmetric INT4 group32.
 - TP4 across four 128 GB gfx1151 hosts; MTP3 and 262144 context limit.
 - Dataset: `ShareGPT_V3_unfiltered_cleaned_split.json` at
-  `/home/maik/datasets/` on node 1. The dataset is not bundled.
+  `/home/cluster-user/datasets/` on node 1. The dataset is not bundled.
 - 48 prompts, seed 42, temperature 0, maximum concurrency 1.
 - OpenAI chat-completions endpoint, streamed output, default chat template.
 - vLLM's preliminary single-request check runs before the timed workload.

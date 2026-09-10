@@ -26,7 +26,7 @@ def main():
  before=metrics();a.output.mkdir(parents=True,exist_ok=False);hashes=[]
  for rank,node in enumerate((15,16,17,18)):
   c='ray-head' if rank==0 else 'ray-worker'
-  r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}',f'podman exec -i {c} timeout --signal=TERM --kill-after=3s 100s python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=110)
+  r=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{node}',f'podman exec -i {c} timeout --signal=TERM --kill-after=3s 100s python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=110)
   a.output.joinpath(f'node{node}.log').write_bytes(r.stdout+r.stderr)
   if r.returncode:raise RuntimeError(f'Staging failed on {node}; inspect log, no activation performed')
   record=json.loads(r.stdout);hashes.append(record['binary_sha256']);print(node,record['binary_sha256'],flush=True)

@@ -30,7 +30,7 @@ if __name__ == '__main__':
         raise SystemExit(0)
     a.output.mkdir(parents=True,exist_ok=False)
     a.output.joinpath('native.hip').write_bytes(source.encode())
-    r=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.18',
+    r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.18',
         'podman exec -i ray-worker timeout --signal=TERM --kill-after=5s 110s python3 -S -'],
         input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=125)
     a.output.joinpath('build.log').write_bytes(r.stdout+r.stderr)

@@ -90,7 +90,7 @@ def main():
     result_dir.mkdir(parents=True,exist_ok=False)
     def run(node):
         container='ray-head' if node==15 else 'ray-worker'
-        process=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}',
+        process=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{node}',
             f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 65s python3 -S -'],
             input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=75)
         result_dir.joinpath(f'node{node}.log').write_bytes(process.stdout+process.stderr)

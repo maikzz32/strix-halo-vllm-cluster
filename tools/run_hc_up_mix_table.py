@@ -10,7 +10,7 @@ before=metrics();assert not any(v for k,v in before.items() if 'num_requests_' i
 source=(root/'tests/check_hc_up_mix_table.py').read_bytes()
 out=args.output;out.mkdir(parents=True,exist_ok=False)
 (out/'before.json').write_text(json.dumps(before))
-p=subprocess.run(['ssh','-o','BatchMode=yes','maik@'+args.host,f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 150s python3 - --seed {args.seed} --library {shlex.quote(args.library)} --sha256 {shlex.quote(args.sha256)}'],input=('import pathlib,tempfile,sys\np=pathlib.Path(tempfile.mkdtemp(prefix="hc-up-mix-table-"))/"test.py"\ns='+repr(source.decode('utf-8-sig'))+'\np.write_text(s)\nexec(compile(s,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})\n').encode(),capture_output=True,timeout=175)
+p=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@'+args.host,f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 150s python3 - --seed {args.seed} --library {shlex.quote(args.library)} --sha256 {shlex.quote(args.sha256)}'],input=('import pathlib,tempfile,sys\np=pathlib.Path(tempfile.mkdtemp(prefix="hc-up-mix-table-"))/"test.py"\ns='+repr(source.decode('utf-8-sig'))+'\np.write_text(s)\nexec(compile(s,str(p),"exec"),{"__name__":"__main__","__file__":str(p)})\n').encode(),capture_output=True,timeout=175)
 (out/'run.log').write_bytes(p.stdout+p.stderr)
 after=metrics();(out/'after.json').write_text(json.dumps(after))
 print('host',args.host,'exit',p.returncode);print(p.stderr.decode(errors='replace')[-500:])

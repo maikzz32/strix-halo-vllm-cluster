@@ -18628,15 +18628,15 @@
       "service_check": {
         "before": {
           "gauges": [
-            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0",
-            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0"
+            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0",
+            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0"
           ],
           "success": 54.0
         },
         "after": {
           "gauges": [
-            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0",
-            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0"
+            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0",
+            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0"
           ],
           "success": 54.0
         }
@@ -37207,15 +37207,15 @@
       "service_check": {
         "before": {
           "gauges": [
-            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0",
-            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0"
+            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0",
+            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0"
           ],
           "success": 54.0
         },
         "after": {
           "gauges": [
-            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0",
-            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0"
+            "vllm:num_requests_running{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0",
+            "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0"
           ],
           "success": 54.0
         }

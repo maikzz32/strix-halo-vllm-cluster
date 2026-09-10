@@ -5,7 +5,7 @@
   "llama_node3_stopped": true,
   "tp": 4,
   "api": "http://192.168.1.15:8000/v1",
-  "model": "/home/maik/qwen38_rest",
+  "model": "/home/cluster-user/qwen38_rest",
   "config_sha256": "0e617e5ac6d2365ed7f6eba123d3d0aa77eaffbb88239be7507b8966ad29e369",
   "runtime": {
     "ranks": [

@@ -41,7 +41,7 @@ records=[]
 for action in (['stage'] if args.action=='stage' else ['check',args.action]):
  for node in nodes:
   code='GENERATOR='+repr(generator)+'\nACTION='+repr(action)+'\n'+REMOTE
-  r=subprocess.run(['ssh','-o','BatchMode=yes','maik@'+node['host'],'podman exec -i '+node['container']+' python3 -S -'],input=code.encode(),capture_output=True,timeout=30)
+  r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@'+node['host'],'podman exec -i '+node['container']+' python3 -S -'],input=code.encode(),capture_output=True,timeout=30)
   assert r.returncode==0,(node['host'],r.stderr.decode())
   records.append(dict(host=node['host'],action=action,**json.loads(r.stdout)))
   print(records[-1],flush=True)

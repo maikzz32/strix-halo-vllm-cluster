@@ -25,7 +25,7 @@ print(json.dumps(after))
 
 def remote(host,action,original=None):
     source='ACTION='+repr(action)+'\nORIGINAL='+repr(original)+'\n'+REMOTE
-    r=subprocess.run(['ssh','maik@'+host,'sudo -n python3 -S -'],input=source,text=True,capture_output=True,check=True,timeout=45)
+    r=subprocess.run(['ssh','cluster-user@'+host,'sudo -n python3 -S -'],input=source,text=True,capture_output=True,check=True,timeout=45)
     return json.loads(r.stdout)
 def bench(name,tokens=256,repeats=2):
     subprocess.run(['python',str(ROOT/'bench/bench_stream.py'),'--url','http://192.168.1.15:8000','--tokens',str(tokens),'--repeats',str(repeats),'--concurrency','1','--output',str(OUT/(name+'.json'))],cwd=ROOT,check=True,timeout=180)

@@ -158,7 +158,7 @@ def main():
             remote += ["--graph"]
         remote += ['--sizes', ','.join(str(value) for value in sizes)]
         command = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10",
-                   f"maik@192.168.1.{node}", shlex.join(remote)]
+                   f"cluster-user@192.168.1.{node}", shlex.join(remote)]
         commands.append((rank, node, command))
     if args.dry_run:
         print(json.dumps({"output": str(output), "run_id":run_id, "sizes_bytes":sizes,

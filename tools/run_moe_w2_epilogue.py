@@ -68,7 +68,7 @@ def main():
     manifest.update(before_request_counts=counts, before_success_total=success(before))
     args.output.joinpath('manifest.json').write_text(json.dumps(manifest,indent=2))
     args.output.joinpath('metrics-before.txt').write_text(before)
-    process=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.18',
+    process=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.18',
         'podman exec -i ray-worker python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),
         capture_output=True,timeout=180)
     args.output.joinpath('run.log').write_bytes(process.stdout+process.stderr)

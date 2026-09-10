@@ -9,7 +9,7 @@ copies the target's quantization into the draft ModelConfig
 quant_config consumer inside ``Glm5NextMultiTokenPredictorLayer`` is built
 with the compressed-tensors pack-quantized int4 (group 32) method.
 
-That is wrong for the local checkpoint (/home/maik/glm53_flash): the
+That is wrong for the local checkpoint (/home/cluster-user/glm53_flash): the
 llm-compressor ignore list covers every layer-45 weight (2334 ignore
 entries; zero ``weight_packed`` keys under ``layers.45.`` in the
 safetensors index — verified), i.e. the whole MTP layer is BF16. The

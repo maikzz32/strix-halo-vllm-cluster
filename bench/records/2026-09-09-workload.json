@@ -1,5 +1,5 @@
 {
-  "model": "/home/maik/qwen38_rest",
+  "model": "/home/cluster-user/qwen38_rest",
   "model_config_sha256": "7cff3dedb5bbdf5ce93ba0d51cf6466f2969c15c3aa90194401573b0327f521c",
   "tokenizer_config_sha256": "b11349aafa7cdc6a320767cf7ceb29ed82f7eda5d65e8e0819e76f0ce947bf27",
   "dataset": "ShareGPT_V3_unfiltered_cleaned_split.json",

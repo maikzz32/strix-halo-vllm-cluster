@@ -62,7 +62,7 @@ Aus einem Repository-Checkout die zwei Quelldateien übertragen:
 
 ```bash
 scp tests/hip_graph_host_callback.cpp tests/bench_hip_graph_host_callback.py \
-  maik@192.168.1.18:/home/maik/strix-halo-next/tests/
+  cluster-user@192.168.1.18:/home/cluster-user/strix-halo-next/tests/
 ```
 
 Auf Node18 mit dem vorhandenen Compiler bauen; dies ist CPU-Arbeit:
@@ -71,7 +71,7 @@ Auf Node18 mit dem vorhandenen Compiler bauen; dies ist CPU-Arbeit:
 podman exec ray-worker timeout --signal=TERM --kill-after=5s 40s \
   g++ -std=c++17 -O2 -fPIC -shared -D__HIP_PLATFORM_AMD__ \
   -I/opt/rocm/include \
-  /home/maik/strix-halo-next/tests/hip_graph_host_callback.cpp \
+  /home/cluster-user/strix-halo-next/tests/hip_graph_host_callback.cpp \
   -L/opt/rocm/lib -Wl,-rpath,/opt/rocm/lib -lamdhip64 \
   -o /tmp/libstrix_hip_graph_host_callback.so
 podman exec ray-worker sha256sum /tmp/libstrix_hip_graph_host_callback.so
@@ -82,7 +82,7 @@ Erst mit freier GPU den begrenzten Test starten:
 ```bash
 date -u +%FT%TZ
 podman exec ray-worker timeout --signal=TERM --kill-after=5s 45s \
-  python3 /home/maik/strix-halo-next/tests/bench_hip_graph_host_callback.py \
+  python3 /home/cluster-user/strix-halo-next/tests/bench_hip_graph_host_callback.py \
   --library /tmp/libstrix_hip_graph_host_callback.so \
   --output /tmp/hip-host-callback-repeat.json
 date -u +%FT%TZ

@@ -55,7 +55,7 @@ See [benchmark methodology](bench/README.md).
 | Hosts | Fedora 45, `192.168.1.15`–`192.168.1.18` |
 | GPU | Radeon 8060S, gfx1151 / RDNA 3.5 |
 | Network | Intel 25 GbE RDMA NICs through a switch |
-| Model | Qwen3.8 Flash Next, `/home/maik/qwen38_rest` |
+| Model | Qwen3.8 Flash Next, `/home/cluster-user/qwen38_rest` |
 | Quantization | Existing asymmetric INT4, group size 32 |
 | Runtime | Custom `0.29.0+strix.rocm100`, preserved gfx1151 patches |
 | Parallelism | TP4, native vLLM `mp` executor |
@@ -77,8 +77,7 @@ building the generic base image does not reproduce this deployment.
 
 ```text
 Base URL: http://192.168.1.15:8000/v1
-Model:    /home/maik/qwen38_rest
-API key:  local (placeholder if the client requires one)
+Model:    /home/cluster-user/qwen38_rest
 ```
 
 Hermes Agent can use this custom endpoint. Automatic and streamed tool calls
@@ -90,11 +89,11 @@ XML parser; the agent's name does not determine the server parser.
 Run on node 1:
 
 ```bash
-python3 /home/maik/strix-halo-next/tools/cluster.py status \
-  --config /home/maik/strix-halo-next/config/cluster.json
+python3 /home/cluster-user/strix-halo-next/tools/cluster.py status \
+  --config /home/cluster-user/strix-halo-next/config/cluster.json
 
-python3 /home/maik/strix-halo-next/tools/cluster.py start \
-  --config /home/maik/strix-halo-next/config/cluster.json \
+python3 /home/cluster-user/strix-halo-next/tools/cluster.py start \
+  --config /home/cluster-user/strix-halo-next/config/cluster.json \
   --tag production --timeout 900
 ```
 
@@ -109,7 +108,7 @@ replace the canonical run; inspect the controller status before operating it.
 On node 1, with the September 9 containers running:
 
 ```bash
-bash /home/maik/strix-halo-next/tools/bench_sharegpt_qwen029.sh my-unique-run
+bash /home/cluster-user/strix-halo-next/tools/bench_sharegpt_qwen029.sh my-unique-run
 ```
 
 This uses 48 ShareGPT prompts, seed 42, temperature 0, concurrency 1 and

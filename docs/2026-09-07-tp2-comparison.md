@@ -47,7 +47,7 @@ for the preserved installation. Copy the same file to all participating hosts
 before passing its absolute path to the native controller. Stop the existing
 four-rank service before changing the node list; stopping only a two-node
 configuration would leave the other ranks behind. The standard host config
-remains `/home/maik/strix-halo-next/config/cluster.json`.
+remains `/home/cluster-user/strix-halo-next/config/cluster.json`.
 
 [Raw metrics and response hashes](../bench/records/2026-09-07-tp2-comparison.json).
 Full answer texts remain in the local benchmark artifacts.

@@ -42,7 +42,7 @@ def main():
   def one(rank):
    node=rank+15;container='ray-head' if rank==0 else 'ray-worker'
    cfg={'action':action,'run_id':run_id,'rank':rank,'hca':'rocep197s0f1' if rank==3 else 'rocep197s0f3','sources':files if action=='build' else {}}
-   r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@192.168.1.{node}',f'podman exec -i {container} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=35)
+   r=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@192.168.1.{node}',f'podman exec -i {container} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=35)
    a.output.joinpath(f'{action}-rank{rank}.json').write_bytes(r.stdout);record=json.loads(r.stdout)
    assert r.returncode==0 and record['exit_code']==0 and not record['remaining'],record
    return rank

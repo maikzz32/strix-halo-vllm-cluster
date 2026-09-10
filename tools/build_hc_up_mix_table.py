@@ -98,7 +98,7 @@ if __name__ == '__main__':
     (a.output/'source.json').write_text(json.dumps(manifest,indent=2))
     if a.execute:
         cfg={'root':'/tmp/hc-up-mix-'+uuid.uuid4().hex,'source':source}
-        r=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.18',
+        r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.18',
             'podman exec -i qwen029-tp4 timeout --signal=TERM --kill-after=5s 110s python3 -S -'],
             input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=125)
         (a.output/'build.log').write_bytes(r.stdout+r.stderr)

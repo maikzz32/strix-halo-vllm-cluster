@@ -15,7 +15,7 @@
 # applies to BOTH chips - do not relax the Dockerfile overlay.
 strix_nodes:
   vars:
-    ansible_user: maik
+    ansible_user: cluster-user
     ansible_become: true
   hosts:
     node1:

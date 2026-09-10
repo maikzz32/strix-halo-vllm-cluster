@@ -369,7 +369,7 @@
     "startup": "READY",
     "config_sha256": "b7f78a76b557e81e86271027f4339a74c9759cb5b700faf3c2a35ee8df038546",
     "library_sha256": "4a19af40adb2e931670a49d8d31110e2e694a438e4dbc92c45541cf669ab0301",
-    "backup_config": "/home/maik/strix-halo-next/config/cluster.pre-uma-20260907.json",
+    "backup_config": "/home/cluster-user/strix-halo-next/config/cluster.pre-uma-20260907.json",
     "streams_vs_restored": {
       "matched_streams": 6,
       "identical_outputs": 6,

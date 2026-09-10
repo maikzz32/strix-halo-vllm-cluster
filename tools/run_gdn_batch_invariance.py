@@ -10,7 +10,7 @@ before=metrics();assert not any(v for k,v in before.items() if 'num_requests_' i
 source=(root/'tests/check_gdn_batch_invariance.py').read_bytes()
 out=root/('results/gdn-batch-invariance-'+args.host+'-20260910');out.mkdir(exist_ok=False)
 (out/'before.json').write_text(json.dumps(before))
-p=subprocess.run(['ssh','-o','BatchMode=yes','maik@'+args.host,f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 150s python3 -'],input=source,capture_output=True,timeout=175)
+p=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@'+args.host,f'podman exec -i {container} timeout --signal=TERM --kill-after=5s 150s python3 -'],input=source,capture_output=True,timeout=175)
 (out/'run.log').write_bytes(p.stdout+p.stderr)
 after=metrics();(out/'after.json').write_text(json.dumps(after))
 print('host',args.host,'exit',p.returncode);print(p.stderr.decode(errors='replace')[-500:])

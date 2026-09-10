@@ -35,7 +35,7 @@ payload=('import pathlib,tempfile,sys,hashlib,json\n'
          f'sys.argv=[str(d/"test.py"),"--library",str(lib),"--sha256",{a.sha256!r},"--output",str(d/"result.json")]\n'
          'exec(compile(s,str(d/"test.py"),"exec"),{"__name__":"__main__","__file__":str(d/"test.py")})\n'
          'print("RESULT="+json.dumps(json.loads((d/"result.json").read_text())))\n')
-r=subprocess.run(['ssh','-o','BatchMode=yes','maik@192.168.1.18',
+r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@192.168.1.18',
                   'podman exec -i qwen029-tp4 timeout --signal=TERM --kill-after=5s 150s python3 -'],
                  input=payload.encode(),capture_output=True,timeout=175)
 (a.output/'run.log').write_bytes(r.stdout+r.stderr)

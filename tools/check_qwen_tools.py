@@ -1,7 +1,7 @@
 """Check auto tool selection, streaming, and a synthetic tool-result round trip."""
 import json,urllib.request,pathlib,argparse
 URL='http://192.168.1.15:8000/v1/chat/completions'
-MODEL='/home/maik/qwen38_rest'
+MODEL='/home/cluster-user/qwen38_rest'
 TOOL={'type':'function','function':{'name':'get_weather','description':'Get the current temperature for a city.','parameters':{'type':'object','properties':{'city':{'type':'string'}},'required':['city']}}}
 def request(body):
  return urllib.request.urlopen(urllib.request.Request(URL,data=json.dumps(body).encode(),headers={'Content-Type':'application/json'}),timeout=120)

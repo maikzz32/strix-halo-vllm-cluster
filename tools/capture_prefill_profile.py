@@ -40,7 +40,7 @@ for p in pathlib.Path('/proc').iterdir():
 assert len(rows)==1,rows
 print(json.dumps(rows))
 '''
-    r=subprocess.run(['ssh','-o','BatchMode=yes','maik@'+host,
+    r=subprocess.run(['ssh','-o','BatchMode=yes','cluster-user@'+host,
         'podman exec -i '+container+' python3 -'],input=('RUN='+repr(a.run_id)+'\n'+code).encode(),
         capture_output=True,check=True,timeout=30)
     proof[host]=json.loads(r.stdout)

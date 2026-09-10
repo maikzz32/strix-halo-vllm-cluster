@@ -38,12 +38,12 @@ print(json.dumps(out))
 '''
 def node(node,action):
  source='RUN='+repr(RUN)+'\nLIB='+repr(LIB)+'\nSHA='+repr(SHA)+'\nACTION='+repr(action)+'\n'+REMOTE
- r=subprocess.run(['ssh','maik@'+node['host'],'podman exec -i '+node['container']+' python3 -S -'],input=source,text=True,capture_output=True,check=True,timeout=25)
+ r=subprocess.run(['ssh','cluster-user@'+node['host'],'podman exec -i '+node['container']+' python3 -S -'],input=source,text=True,capture_output=True,check=True,timeout=25)
  return node['host'],json.loads(r.stdout)
 def all_nodes(action):
  with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:return dict(pool.map(lambda n:node(n,action),NODES))
 def save(name,data):(OUT/(name+'.json')).write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8')
-BODY={'model':'/home/maik/qwen38_rest','messages':[{'role':'user','content':'Write a detailed technical explanation of memory bandwidth, caches, and synchronization in distributed language model inference. Include several concrete examples.'}],'temperature':0,'max_tokens':2048,'ignore_eos':True,'stream':True,'stream_options':{'include_usage':True},'chat_template_kwargs':{'enable_thinking':False}}
+BODY={'model':'/home/cluster-user/qwen38_rest','messages':[{'role':'user','content':'Write a detailed technical explanation of memory bandwidth, caches, and synchronization in distributed language model inference. Include several concrete examples.'}],'temperature':0,'max_tokens':2048,'ignore_eos':True,'stream':True,'stream_options':{'include_usage':True},'chat_template_kwargs':{'enable_thinking':False}}
 def request(first):
  req=urllib.request.Request('http://192.168.1.15:8000/v1/chat/completions',data=json.dumps(BODY).encode(),headers={'Content-Type':'application/json'})
  events=[];content='';reasoning='';usage=None

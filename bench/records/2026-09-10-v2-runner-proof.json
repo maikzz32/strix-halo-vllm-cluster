@@ -9,7 +9,7 @@
         "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
       },
       "runner_log": "(Worker pid=16818) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
-      "log_path": "/home/maik/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank0.log"
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank0.log"
     },
     "192.168.1.16": {
       "source_sha256": {
@@ -19,7 +19,7 @@
         "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
       },
       "runner_log": "(Worker pid=9719) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
-      "log_path": "/home/maik/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank1.log"
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank1.log"
     },
     "192.168.1.17": {
       "source_sha256": {
@@ -29,7 +29,7 @@
         "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
       },
       "runner_log": "(Worker pid=8844) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
-      "log_path": "/home/maik/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank2.log"
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank2.log"
     },
     "192.168.1.18": {
       "source_sha256": {
@@ -39,7 +39,7 @@
         "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
       },
       "runner_log": "(Worker pid=9488) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
-      "log_path": "/home/maik/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank3.log"
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank3.log"
     }
   }
 }

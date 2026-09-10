@@ -23,7 +23,7 @@ if cfg['w1_order_flag'] is not None:assert workers[0]['w1_order_flag']==cfg['w1_
 moe_sha=hashlib.sha256(pathlib.Path('/usr/local/lib64/python3.12/site-packages/vllm/model_executor/layers/fused_moe/fused_moe.py').read_bytes()).hexdigest()
 if cfg['moe_sha'] is not None:assert moe_sha==cfg['moe_sha']
 sha=hashlib.sha256(pathlib.Path(cfg['library']).read_bytes()).hexdigest();assert sha==cfg['sha']
-logs=list(pathlib.Path('/home/maik/strix-halo-next/logs').glob('*'+cfg['run_id']+'-rank'+str(cfg['rank'])+'.log'));assert len(logs)==1
+logs=list(pathlib.Path('/home/cluster-user/strix-halo-next/logs').glob('*'+cfg['run_id']+'-rank'+str(cfg['rank'])+'.log'));assert len(logs)==1
 raw=logs[0].read_bytes();lines=raw.decode(errors='replace').splitlines()
 proofs=[json.loads(x[x.index('{"event": "parity_proof"'):]) for x in lines if '{"event": "parity_proof"' in x];assert len(proofs)==1
 proof=proofs[0]['proof'];assert proofs[0]['rank']==cfg['rank']
@@ -41,7 +41,7 @@ def main():
  a.output.mkdir(parents=True,exist_ok=False)
  def one(rank):
   node=nodes[rank]['host'];c=nodes[rank]['container'];cfg={'rank':rank,'run_id':a.run_id,'library':a.library,'sha':a.sha256,'moe_sha':a.moe_source_sha,'w2_flag':a.w2_flag,'w1_order_flag':a.w1_order_flag}
-  r=subprocess.run(['ssh','-o','BatchMode=yes',f'maik@{node}',f'podman exec -i {c} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=20)
+  r=subprocess.run(['ssh','-o','BatchMode=yes',f'cluster-user@{node}',f'podman exec -i {c} python3 -S -'],input=REMOTE.replace('CONFIG',repr(cfg),1).encode(),capture_output=True,timeout=20)
   a.output.joinpath(f'rank{rank}.log').write_bytes(r.stdout+r.stderr)
   if r.returncode:raise RuntimeError(f'Rank{rank} evidence failed; inspect log')
   row=json.loads(r.stdout);print(rank,row['workers'][0]['pid'],'mapped and parity verified',flush=True);return row

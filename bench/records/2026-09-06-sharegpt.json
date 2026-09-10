@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-09-06",
   "workload": "ShareGPT48, seed42, temperature0, C1",
-  "model": "/home/maik/qwen38_rest",
+  "model": "/home/cluster-user/qwen38_rest",
   "quantization": "existing INT4 compressed-tensors GS32",
   "context_capacity": 262144,
   "metric": "output_throughput includes prompt processing and request overhead",

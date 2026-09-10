@@ -1,6 +1,6 @@
 # Qwen3.8 / GLM5.3 and DGX Spark comparison
 
-Research date: 2026-09-06. Web findings are publisher measurements; they are not measurements of this cluster. Remote inspection below used read-only source/config/header reads in `ray-head` on `maik@192.168.1.15`. No remote runtime file or model was changed by this research agent.
+Research date: 2026-09-06. Web findings are publisher measurements; they are not measurements of this cluster. Remote inspection below used read-only source/config/header reads in `ray-head` on `cluster-user@192.168.1.15`. No remote runtime file or model was changed by this research agent.
 
 ## Model identity
 
@@ -47,7 +47,7 @@ Root: `/usr/local/lib64/python3.12/site-packages/vllm`.
 
 Whole-package text search found no `VLLM_MTP_DRAFT_VOCAB` or `_attach_draft_vocab`. `Qwen4ExpMTP` has no `get_top_tokens` before our proposed patch. Therefore merely setting the existing flag fails. The flag is not used to replace target-model sampling; the target needs no new method.
 
-The inspected process served `/home/maik/qwen38_rest` with TP4/4 nodes, FULL_DECODE_ONLY, MTP3, 262144 context, async scheduling,8192 batched tokens,8 sequences. No local-argmax flag was supplied.
+The inspected process served `/home/cluster-user/qwen38_rest` with TP4/4 nodes, FULL_DECODE_ONLY, MTP3, 262144 context, async scheduling,8192 batched tokens,8 sequences. No local-argmax flag was supplied.
 
 ### The important quantization difference
 

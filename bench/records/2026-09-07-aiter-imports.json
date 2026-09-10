@@ -32,7 +32,7 @@
         "configuration": {
           "run_id": "2e7c01f0c3ad4b389dd1a046403acc12",
           "sha": "cc18b515133748b14f9aa10e445fd74e9e01c30cd5f56db5d356296462b81a45",
-          "archive": "/home/maik/strix-halo-next/aiter-probe-2e7c01f0c3ad4b389dd1a046403acc12.tar.gz",
+          "archive": "/home/cluster-user/strix-halo-next/aiter-probe-2e7c01f0c3ad4b389dd1a046403acc12.tar.gz",
           "export_dtypes": true
         },
         "upstream_commit": "e8eac17259db6efcb48eba2aa0d9a3bf422e7b35",
@@ -58,7 +58,7 @@
         "configuration": {
           "run_id": "974e1890d47e4e578564b75a556d7afe",
           "sha": "cc18b515133748b14f9aa10e445fd74e9e01c30cd5f56db5d356296462b81a45",
-          "archive": "/home/maik/strix-halo-next/aiter-probe-974e1890d47e4e578564b75a556d7afe.tar.gz",
+          "archive": "/home/cluster-user/strix-halo-next/aiter-probe-974e1890d47e4e578564b75a556d7afe.tar.gz",
           "export_dtypes": true
         },
         "upstream_commit": "e8eac17259db6efcb48eba2aa0d9a3bf422e7b35",

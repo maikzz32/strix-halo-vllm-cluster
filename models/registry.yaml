@@ -48,7 +48,7 @@ defaults:
 models:
 
   qwen38-27b-ablit:
-    hf_repo: /home/maik/qwen38_ablit   # local path, present on ALL 4 nodes (same path)
+    hf_repo: /home/cluster-user/qwen38_ablit   # local path, present on ALL 4 nodes (same path)
     dtype: gptq-int4
     approx_size_gib: 17
     context:
@@ -96,7 +96,7 @@ models:
     references: []
 
   qwen38-27b-ablit-dflash:
-    hf_repo: /home/maik/qwen38_ablit   # local path, present on ALL 4 nodes (same path)
+    hf_repo: /home/cluster-user/qwen38_ablit   # local path, present on ALL 4 nodes (same path)
     dtype: gptq-int4
     approx_size_gib: 17
     context:
@@ -249,7 +249,7 @@ models:
   # compressed_tensors_moe_wna16.py handles zero points explicitly.
   # This checkpoint is the STOCK Qwen quantization, i.e. NOT decensored.
   qwen38-flash-next-int4:
-    hf_repo: /home/maik/qwen38_flashnext   # local INT4 re-quant, present on ALL 4 nodes
+    hf_repo: /home/cluster-user/qwen38_flashnext   # local INT4 re-quant, present on ALL 4 nodes
     dtype: gptq-int4
     approx_size_gib: 176
     context:
@@ -321,7 +321,7 @@ models:
       - https://github.com/vllm-project/vllm/pull/48998
 
   glm53-flash:
-    hf_repo: /home/maik/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
+    hf_repo: /home/cluster-user/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
     dtype: gptq-int4                  # compressed-tensors pack-quantized 4-bit group 32
     approx_size_gib: 199
     context:
@@ -376,7 +376,7 @@ models:
       - https://recipes.vllm.ai/zai-org/GLM-5.3-Flash
 
   glm53-flash-mtp:
-    hf_repo: /home/maik/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
+    hf_repo: /home/cluster-user/glm53_flash   # local int4 re-quant, present on ALL 4 nodes
     dtype: gptq-int4                  # compressed-tensors pack-quantized 4-bit group 32
     approx_size_gib: 199
     context:

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "model": "/home/maik/qwen38_rest",
+  "model": "/home/cluster-user/qwen38_rest",
   "index_sha256": "48f682afd891be530fcc2a27f3a235bbe255f3fd131967fceab1f48592722d09",
   "tensor_count": 298,
   "raw_bytes": 1318748160,

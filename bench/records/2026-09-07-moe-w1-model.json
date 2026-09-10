@@ -602,8 +602,8 @@
     }
   ],
   "final_idle_gauges": [
-    "vllm:num_requests_running{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0",
-    "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/maik/qwen38_rest\"} 0.0"
+    "vllm:num_requests_running{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0",
+    "vllm:num_requests_waiting{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"} 0.0"
   ],
   "shape_guard": {
     "candidate_sha256": "ae51c19f42da386c7c2d3099bf7366e656c53343f4cac24e98fbc91da6e73852",
