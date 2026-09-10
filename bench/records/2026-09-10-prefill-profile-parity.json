@@ -1,0 +1,8 @@
+{
+  "run_id": "8454376332f9468589c57f7b96c3f592",
+  "prompt_tokens": 512,
+  "output_tokens": 32,
+  "outputs_equal": true,
+  "request_sha256": "25fdc6813bb3780680a2359c12f83481e239b35ea5b1a847eff3c0f3b6b07d2d",
+  "note": "Profiler started before second request; not a performance benchmark."
+}

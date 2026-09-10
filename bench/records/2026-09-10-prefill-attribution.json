@@ -1,0 +1,685 @@
+{
+  "ranks": [
+    {
+      "host": "192.168.1.15",
+      "trace_sha256": "243a30e8cdb42df64b19eb776b94babe9a8fa3d6d4732b865cba47ae32ea2710",
+      "phases": [
+        {
+          "scope": "execute_context_1(504)_generation_0(0)",
+          "kernel_count": 3022,
+          "gpu_span_ms": 544.7823740234375,
+          "kernel_union_ms": 527.3744970703125,
+          "uncovered_ms": 17.407876953125,
+          "category_summed_ms": {
+            "other": 85.89927600000019,
+            "qsa": 84.92291999999999,
+            "rccl_including_wait": 171.705078,
+            "dense_int4": 53.71842900000003,
+            "routed_moe_gemm": 131.12878299999997
+          },
+          "category_counts": {
+            "other": 2478,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252,
+            "routed_moe_gemm": 96
+          },
+          "top_kernel_summed_ms": [
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              171.705078
+            ],
+            [
+              "fused_moe_kernel_gptq_awq.kd",
+              131.12878299999997
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              66.20481
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              53.71842900000003
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT32x32x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA256_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA2_VWB1_WSGRA0_WSGRB0_WS32_WG16_4_1_WGMXCC1.kd",
+              19.922143999999996
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              17.958924000000003
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              17.820849000000003
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT128x64x32_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_4_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR0_PLR0_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSM1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG64_2_1_WGMXCC1.kd",
+              15.091240999999998
+            ],
+            [
+              "void vllm::moe::moe_sum_vec_dynamic_kernel<c10::BFloat16, int, false>(c10::BFloat16*, c10::BFloat16 const*, long, int, int, long, long, int const*, int const*, long, long) [clone .kd]",
+              4.639900000000001
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              3.612783
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              3.4811859999999992
+            ],
+            [
+              "_hc_gate_mix_kernel.kd",
+              3.2026140000000005
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              1.4277489999999997
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              1.1367310000000002
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              1.0087290000000002
+            ]
+          ]
+        },
+        {
+          "scope": "execute_context_1(8)_generation_0(0)",
+          "kernel_count": 3103,
+          "gpu_span_ms": 62.3663984375,
+          "kernel_union_ms": 55.20277734375,
+          "uncovered_ms": 7.16362109375,
+          "category_summed_ms": {
+            "other": 35.009701,
+            "qsa": 1.2179069999999996,
+            "rccl_including_wait": 12.641715,
+            "dense_int4": 6.333491000000005
+          },
+          "category_counts": {
+            "other": 2655,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252
+          },
+          "top_kernel_summed_ms": [
+            [
+              "_glm53_moe_int4_gemv_partial.kd",
+              16.361359000000004
+            ],
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              12.641715
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              6.333491000000005
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x128_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA256_LBSPPB256_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              5.429278999999999
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              4.489372999999999
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              0.9261800000000001
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              0.67666
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              0.671528
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              0.5068720000000001
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              0.4539650000000001
+            ],
+            [
+              "_glm53_moe_int4_gemv_reduce.kd",
+              0.3952119999999999
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              0.3592959999999997
+            ],
+            [
+              "void vllm::moe::topkGating<16, 512, 4, 16, 32, int, __hip_bfloat16, (vllm::moe::ScoringFunc)0>(__hip_bfloat16 const*, bool const*, float*, int, int*, int*, int, int, int, bool, float const*, double, bool const*) [clone .kd]",
+              0.35338600000000003
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              0.31526
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              0.27967499999999995
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "host": "192.168.1.16",
+      "trace_sha256": "8983ec9dc08de404662a25fc253b0df204abdee11aa3c111d709a150250a1f81",
+      "phases": [
+        {
+          "scope": "execute_context_1(504)_generation_0(0)",
+          "kernel_count": 3022,
+          "gpu_span_ms": 540.5318115234375,
+          "kernel_union_ms": 496.28825,
+          "uncovered_ms": 44.2435615234375,
+          "category_summed_ms": {
+            "other": 82.21221299999998,
+            "qsa": 79.196261,
+            "rccl_including_wait": 163.98345600000002,
+            "dense_int4": 48.06097700000004,
+            "routed_moe_gemm": 122.83531800000006
+          },
+          "category_counts": {
+            "other": 2478,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252,
+            "routed_moe_gemm": 96
+          },
+          "top_kernel_summed_ms": [
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              163.98345600000002
+            ],
+            [
+              "fused_moe_kernel_gptq_awq.kd",
+              122.83531800000006
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              62.41348500000001
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              48.06097700000004
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT32x32x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA256_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA2_VWB1_WSGRA0_WSGRB0_WS32_WG16_4_1_WGMXCC1.kd",
+              18.802746999999993
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              17.996170000000003
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              16.041478
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT128x64x32_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_4_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR0_PLR0_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSM1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG64_2_1_WGMXCC1.kd",
+              14.270891999999991
+            ],
+            [
+              "void vllm::moe::moe_sum_vec_dynamic_kernel<c10::BFloat16, int, false>(c10::BFloat16*, c10::BFloat16 const*, long, int, int, long, long, int const*, int const*, long, long) [clone .kd]",
+              4.622606000000001
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              3.275776999999999
+            ],
+            [
+              "_hc_gate_mix_kernel.kd",
+              3.157526999999999
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              3.135147000000001
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              1.348742
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              1.045809
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              1.0075319999999999
+            ]
+          ]
+        },
+        {
+          "scope": "execute_context_1(8)_generation_0(0)",
+          "kernel_count": 3103,
+          "gpu_span_ms": 62.3567978515625,
+          "kernel_union_ms": 55.2563818359375,
+          "uncovered_ms": 7.100416015625,
+          "category_summed_ms": {
+            "other": 34.90892400000002,
+            "qsa": 1.216422,
+            "rccl_including_wait": 12.846254000000002,
+            "dense_int4": 6.284830000000001
+          },
+          "category_counts": {
+            "other": 2655,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252
+          },
+          "top_kernel_summed_ms": [
+            [
+              "_glm53_moe_int4_gemv_partial.kd",
+              16.282743
+            ],
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              12.846254000000002
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              6.284830000000001
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x128_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA256_LBSPPB256_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              5.473616999999999
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              4.4617629999999995
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              0.9203729999999998
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              0.67426
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              0.6722079999999999
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              0.508387
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              0.44260900000000014
+            ],
+            [
+              "_glm53_moe_int4_gemv_reduce.kd",
+              0.392972
+            ],
+            [
+              "void vllm::moe::topkGating<16, 512, 4, 16, 32, int, __hip_bfloat16, (vllm::moe::ScoringFunc)0>(__hip_bfloat16 const*, bool const*, float*, int, int*, int*, int, int, int, bool, float const*, double, bool const*) [clone .kd]",
+              0.3473399999999999
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              0.34021399999999996
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              0.313819
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              0.28055599999999997
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "host": "192.168.1.17",
+      "trace_sha256": "05398780f5bd969a98843bf4be2d905e4d92c98dd615cc698aa6e8b63772b4b6",
+      "phases": [
+        {
+          "scope": "execute_context_1(504)_generation_0(0)",
+          "kernel_count": 3022,
+          "gpu_span_ms": 544.1669990234375,
+          "kernel_union_ms": 528.302078125,
+          "uncovered_ms": 15.8649208984375,
+          "category_summed_ms": {
+            "other": 87.73377799999993,
+            "qsa": 89.20043200000002,
+            "rccl_including_wait": 152.42766100000003,
+            "dense_int4": 57.96980200000002,
+            "routed_moe_gemm": 140.97044800000003
+          },
+          "category_counts": {
+            "other": 2478,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252,
+            "routed_moe_gemm": 96
+          },
+          "top_kernel_summed_ms": [
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              152.42766100000003
+            ],
+            [
+              "fused_moe_kernel_gptq_awq.kd",
+              140.97044800000003
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              69.179257
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              57.96980200000002
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT32x32x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA256_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA2_VWB1_WSGRA0_WSGRB0_WS32_WG16_4_1_WGMXCC1.kd",
+              20.427993999999998
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              19.247071000000002
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              17.623711000000004
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT128x64x32_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_4_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR0_PLR0_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSM1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG64_2_1_WGMXCC1.kd",
+              15.752245000000006
+            ],
+            [
+              "void vllm::moe::moe_sum_vec_dynamic_kernel<c10::BFloat16, int, false>(c10::BFloat16*, c10::BFloat16 const*, long, int, int, long, long, int const*, int const*, long, long) [clone .kd]",
+              4.6389400000000025
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              3.8829370000000005
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              3.617188
+            ],
+            [
+              "_hc_gate_mix_kernel.kd",
+              3.211176
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              1.5173429999999999
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              1.2185310000000003
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              0.9891749999999997
+            ]
+          ]
+        },
+        {
+          "scope": "execute_context_1(8)_generation_0(0)",
+          "kernel_count": 3103,
+          "gpu_span_ms": 62.3491591796875,
+          "kernel_union_ms": 54.9043876953125,
+          "uncovered_ms": 7.444771484375,
+          "category_summed_ms": {
+            "other": 35.550989999999906,
+            "qsa": 1.2711120000000002,
+            "rccl_including_wait": 11.556594999999996,
+            "dense_int4": 6.525732999999995
+          },
+          "category_counts": {
+            "other": 2655,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252
+          },
+          "top_kernel_summed_ms": [
+            [
+              "_glm53_moe_int4_gemv_partial.kd",
+              16.574338
+            ],
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              11.556594999999996
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              6.525732999999995
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x128_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA256_LBSPPB256_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              5.491042000000002
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              4.458748999999998
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              0.9425390000000001
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              0.706651
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              0.6721830000000002
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              0.5302869999999998
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              0.509226
+            ],
+            [
+              "_glm53_moe_int4_gemv_reduce.kd",
+              0.3997739999999999
+            ],
+            [
+              "void vllm::moe::topkGating<16, 512, 4, 16, 32, int, __hip_bfloat16, (vllm::moe::ScoringFunc)0>(__hip_bfloat16 const*, bool const*, float*, int, int*, int*, int, int, int, bool, float const*, double, bool const*) [clone .kd]",
+              0.3663810000000001
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              0.3462539999999999
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              0.32666300000000004
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              0.28639899999999996
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "host": "192.168.1.18",
+      "trace_sha256": "f49d7347550b401e009550c87591fb671b8bf940a503ec0d373dd5c0a9e03353",
+      "phases": [
+        {
+          "scope": "execute_context_1(504)_generation_0(0)",
+          "kernel_count": 3022,
+          "gpu_span_ms": 544.5321162109375,
+          "kernel_union_ms": 528.1945517578125,
+          "uncovered_ms": 16.337564453125,
+          "category_summed_ms": {
+            "other": 84.92925699999996,
+            "qsa": 84.20783999999995,
+            "rccl_including_wait": 174.61320100000003,
+            "dense_int4": 53.679366999999985,
+            "routed_moe_gemm": 130.76490299999998
+          },
+          "category_counts": {
+            "other": 2478,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252,
+            "routed_moe_gemm": 96
+          },
+          "top_kernel_summed_ms": [
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              174.61320100000003
+            ],
+            [
+              "fused_moe_kernel_gptq_awq.kd",
+              130.76490299999998
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              65.496522
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              53.679366999999985
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT32x32x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA256_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA2_VWB1_WSGRA0_WSGRB0_WS32_WG16_4_1_WGMXCC1.kd",
+              19.33316400000001
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              17.954451000000002
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              17.650811000000004
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT128x64x32_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT2_4_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR0_PLR0_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSM1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG64_2_1_WGMXCC1.kd",
+              15.349758999999997
+            ],
+            [
+              "void vllm::moe::moe_sum_vec_dynamic_kernel<c10::BFloat16, int, false>(c10::BFloat16*, c10::BFloat16 const*, long, int, int, long, long, int const*, int const*, long, long) [clone .kd]",
+              4.6138959999999996
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              3.6342250000000003
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              3.5168270000000006
+            ],
+            [
+              "_hc_gate_mix_kernel.kd",
+              3.1858500000000003
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              1.4201439999999996
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              1.1468909999999999
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              0.982692
+            ]
+          ]
+        },
+        {
+          "scope": "execute_context_1(8)_generation_0(0)",
+          "kernel_count": 3103,
+          "gpu_span_ms": 62.3788828125,
+          "kernel_union_ms": 55.1386826171875,
+          "uncovered_ms": 7.2402001953125,
+          "category_summed_ms": {
+            "other": 34.78950599999992,
+            "qsa": 1.2109500000000002,
+            "rccl_including_wait": 12.883504,
+            "dense_int4": 6.254773
+          },
+          "category_counts": {
+            "other": 2655,
+            "qsa": 98,
+            "rccl_including_wait": 98,
+            "dense_int4": 252
+          },
+          "top_kernel_summed_ms": [
+            [
+              "_glm53_moe_int4_gemv_partial.kd",
+              16.317973000000006
+            ],
+            [
+              "ncclDevKernel_Generic_4(ncclDevKernelArgsStorage<4096ul>) [clone .kd]",
+              12.883504
+            ],
+            [
+              "_triton_w4a16_skinny_fmt_kernel.kd",
+              6.254773
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x128_MI16x16x1_SN_LDSB0_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS0_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU1_K1_LDSTI0_LBSPPA256_LBSPPB256_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR2_PLR1_PKA0_SGROB0_SIA3_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              5.406126000000002
+            ],
+            [
+              "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT16x16x64_MI16x16x1_SN_LDSB1_AFC1_AG0_AGGSUA0_AGNTAB0_AFEM1_AFEM1_ASEM1_BL1_BS1_CD1_1_CLR0_CLS0_CADS0_DTLA0_DTLB0_DTLM0_DTVA0_DTVB0_DTVMXSA0_DTVMXSB0_DTVSM0_DPLB0_EPS1_ELFLR0_EMLLn1_FDSI0_GRPM1_GRVWA8_GRVWB8_GSUAMB_GLS0_HPLR0_ISA1151_ICIW0_IU4_K1_LDSTI0_LBSPPA128_LBSPPB128_LBSPPMXSA0_LBSPPMXSB0_LBSPPM0_LPA8_LPB8_LPMXSA0_LPMXSB0_LPM0_LRVW16_LWPMn1_MIAV1_MIWT1_1_MXLIBL_MXSFNS_MO40_MGRIPM1_NTn1_NTA0_NTB0_NTC0_NTD0_NTE0_NTMXSA0_NTMXSB0_NTM0_NTWS0_NVn1_NVA0_NVB0_NVC0_NVD0_NVE0_NVMXSA0_NVMXSB0_NVM0_NVWS0_NEPBS0_NLCA1_NLCB1_ONLL1_PAP0_PGL0_PGR1_PLR1_PKA0_SGROB0_SIA2_SS1_SPO0_SRVW0_SSO0_SVW1_SK0_SKFTR0_SKFDPO0_SKWS0_SKXCCM0_SNLL0_SIP1_SGRO0_TDMI0_TDMIM0_TDMS0_TIN0_THn1_THA0_THB0_THC0_THD0_THE0_THMXSA0_THMXSB0_THM0_THWS0_TLDS1_TLDSMn1_ULSGRO0_USL1_USLMX0_UDFMAC0_UIOFGRO0_UPLRP0_USFGROn1_USI0_VSn1_VWA1_VWB1_WSGRA0_WSGRB0_WS32_WG16_2_1_WGMXCC1.kd",
+              4.455137
+            ],
+            [
+              "recompute_w_u_fwd_kernel.kd",
+              0.9232980000000003
+            ],
+            [
+              "_qsa_sparse_paged_gqa_splitk_kernel.kd",
+              0.666651
+            ],
+            [
+              "void at::native::index_elementwise_kernel<128, 4, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}>(long, at::native::gpu_index_kernel<at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1}>(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>, at::native::index_kernel_impl<at::native::OpaqueType<4> >(at::TensorIteratorBase&, c10::ArrayRef<long>, c10::ArrayRef<long>)::{lambda(char*, char const*, long)#1} const&, bool)::{lambda(int)#1}) [clone .kd]",
+              0.6663830000000001
+            ],
+            [
+              "chunk_gated_delta_rule_fwd_kernel_h_blockdim64.kd",
+              0.501069
+            ],
+            [
+              "_hc_combine_norm_kernel.kd",
+              0.424336
+            ],
+            [
+              "_glm53_moe_int4_gemv_reduce.kd",
+              0.40084699999999995
+            ],
+            [
+              "void vllm::moe::topkGating<16, 512, 4, 16, 32, int, __hip_bfloat16, (vllm::moe::ScoringFunc)0>(__hip_bfloat16 const*, bool const*, float*, int, int*, int*, int, int, int, bool, float const*, double, bool const*) [clone .kd]",
+              0.349465
+            ],
+            [
+              "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int, bool)#1}) [clone .kd]",
+              0.3393349999999999
+            ],
+            [
+              "_qsa_mqa_paged_kernel.kd",
+              0.31322
+            ],
+            [
+              "chunk_fwd_kernel_o.kd",
+              0.28363199999999994
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "note": "Profiled CPU-scope-correlated GPU intervals; sums include waits and are not end-to-end serving timings."
+}
