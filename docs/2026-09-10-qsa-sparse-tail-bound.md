@@ -64,5 +64,15 @@ engine cores exist and validates all four backups before mutating any source.
 Its local workspace expects `config/qwen029-tp4-graph-inventory.json` and the
 generator under `cluster-repo/patches`, matching the experiment workspace.
 
-A fresh original TP4 ShareGPT/Hermes/context control is running before the
-candidate model trial. Staging and isolated results are not serving validation.
+A fresh original TP4 control completed with 55.258 output tokens/s, 544.810 ms
+mean TTFT and 15.856 ms mean TPOT. All 48 texts, lengths and speculative
+statistics match the prior original control. Hermes checks passed. Twelve
+context probes at 256/512/1024/2048 tokens also completed; their cache and phase
+counters are retained for the candidate comparison.
+
+After the control completed, the original service stopped cleanly and the
+candidate was activated on all four nodes. Run
+`c124f9d5f46941eab7c47a23c2d555ed` is starting with the unchanged TP4/MTP3
+configuration. The candidate serving result is pending. The phase comparison
+tool, `bench/compare_context_phases.py`, checks tokenized prompts and reports
+output parity and matched cache work separately from individual timings.
