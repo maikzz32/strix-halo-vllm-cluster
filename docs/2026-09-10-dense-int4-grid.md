@@ -87,5 +87,5 @@ the restored control. Candidate throughput is 0.14% below that fresh control;
 its mean TTFT is 2.80% higher. Both controls have identical texts and speculation
 statistics, and Hermes checks pass. The variation between original runs means
 we do not attribute the entire earlier 1.20% difference to this code change.
-There is no demonstrated serving gain. The original configuration remains active;
+There is no demonstrated serving gain. The original configuration was restored at trial close;
 the candidate is not promoted.

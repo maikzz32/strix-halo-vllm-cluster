@@ -8,12 +8,12 @@ def metrics(url):
             if line.startswith(('vllm:spec_decode','vllm:num_requests_running','vllm:num_requests_waiting','vllm:request_success_total'))}
 
 def main():
-    a=argparse.ArgumentParser();a.add_argument('--url',default='http://192.168.1.15:8000');a.add_argument('--output',type=Path,required=True);a.add_argument('--tokens',type=int,default=512);args=a.parse_args()
+    a=argparse.ArgumentParser();a.add_argument('--url',default='http://192.168.1.15:8000');a.add_argument('--output',type=Path,required=True);a.add_argument('--tokens',type=int,default=512);a.add_argument('--prompt-file',type=Path);args=a.parse_args()
     if args.output.exists():raise FileExistsError(args.output)
     before=metrics(args.url)
     assert not any(v for k,v in before.items() if 'num_requests_' in k),'service busy'
     with urllib.request.urlopen(args.url+'/v1/models',timeout=10) as r:model=json.load(r)['data'][0]['id']
-    body={'model':model,'messages':[{'role':'user','content':'Explain in detail how to measure communication and computation bottlenecks in a four-node inference cluster. Include a reproducible experimental design and discuss confounders.'}],'temperature':0,'seed':42,'max_tokens':args.tokens,'stream':True,'return_token_ids':True,'stream_options':{'include_usage':True,'continuous_usage_stats':True}}
+    body={'model':model,'messages':[{'role':'user','content':args.prompt_file.read_text(encoding='utf-8') if args.prompt_file else 'Explain in detail how to measure communication and computation bottlenecks in a four-node inference cluster. Include a reproducible experimental design and discuss confounders.'}],'temperature':0,'seed':42,'max_tokens':args.tokens,'stream':True,'return_token_ids':True,'stream_options':{'include_usage':True,'continuous_usage_stats':True}}
     req=urllib.request.Request(args.url+'/v1/chat/completions',json.dumps(body).encode(),{'Content-Type':'application/json'})
     start=time.perf_counter();events=[];usage={};done=False
     with urllib.request.urlopen(req,timeout=120) as response:
