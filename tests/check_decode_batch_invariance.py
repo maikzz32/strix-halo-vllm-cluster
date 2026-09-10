@@ -15,12 +15,14 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--short-rows',type=int,default=3)
     parser.add_argument('--long-rows',type=int,default=4)
+    parser.add_argument('--head-only',action='store_true')
     args=parser.parse_args()
     assert 1 <= args.short_rows < args.long_rows <= 8
     short_rows,long_rows=args.short_rows,args.long_rows
     torch.set_num_threads(1);torch.manual_seed(9512)
     rows=[]
-    for kind,n,k in [('bf16',336,10240),('bf16',320,10240),('bf16',10240,320),('bf16',1,2560),('int4',512,2560),('int4',320,2560),('int4',2560,160)]:
+    shapes = [('int4',62080,2560)] if args.head_only else [('bf16',336,10240),('bf16',320,10240),('bf16',10240,320),('bf16',1,2560),('int4',512,2560),('int4',320,2560),('int4',2560,160)]
+    for kind,n,k in shapes:
         for bank in range(4):
             x=torch.randn((long_rows,k),device='cuda',dtype=torch.bfloat16)
             if kind=='bf16':
@@ -45,5 +47,5 @@ def main():
             torch.cuda.current_stream().wait_stream(stream)
             rows.append({'kind':kind,'N':n,'K':k,'bank':bank,'eager_prefix':first,'changed_graph_prefix':changed,'fixed_shape_repeatability':True})
     paths=[Path(utils.__file__),Path(dense.__file__)]
-    print('RESULT='+json.dumps({'short_rows':short_rows,'long_rows':long_rows,'torch_version':torch.__version__,'hip_version':torch.version.hip,'device':torch.cuda.get_device_name(),'cases':rows,'source_sha256':{str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},'note':'Synthetic stateless operators only. Cross-shape mismatches are observations, not automatically bugs or proof of full-model divergence cause. Serving source unchanged.'}),flush=True)
+    print('RESULT='+json.dumps({'head_only':args.head_only,'short_rows':short_rows,'long_rows':long_rows,'torch_version':torch.__version__,'hip_version':torch.version.hip,'device':torch.cuda.get_device_name(),'cases':rows,'source_sha256':{str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},'note':'Synthetic stateless operators only. Cross-shape mismatches are observations, not automatically bugs or proof of full-model divergence cause. Serving source unchanged.'}),flush=True)
 if __name__=='__main__':main()

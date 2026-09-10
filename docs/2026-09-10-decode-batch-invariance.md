@@ -55,3 +55,40 @@ reproduce on an idle cluster. The controller now stores the test hash as
 `source_sha256` mapping. The older controller overwrote that mapping; do not
 attribute module hashes to the older M3/M4 public record. The new full record is
 `bench/records/2026-09-10-decode-batch-invariance-4-5.json`.
+
+
+## GDN recurrence and quantized LM-head follow-up
+
+The installed post-convolution fused sigmoid-gating GDN update was tested with
+C1, H4/HV12/K128/V128 and FP32 recurrent state. For M3/M4 and M4/M5, four banks
+and every shared valid accepted-token count produce exact common output and
+state prefixes. Changed-input/changed-acceptance graph replay matches eager
+results; fixed-shape repeats and untouched state slots also match. All 28 cases
+pass. Noncontiguous state storage and index-row stride are exercised. The test
+uses valid state indices and does not cover convolution, padded requests,
+metadata construction or full-model rollback. In particular, passing this test
+is not proof that the complete recurrent-state lifecycle is correct.
+
+The checkpoint config has hidden size 2560, vocabulary 248320 and quantization
+targeting `lm_head`, with no head entry in the ignore list. The corresponding
+TP4 INT4 operator shape N62080/K2560 was checked with synthetic packed weights,
+four banks per pair, M3/M4 and M4/M5. All common-prefix elements match in eager
+and changed-input graph execution. Actual checkpoint hidden states and weight
+values are not used in this isolated test.
+
+All three isolated runs returned exit 0 and left serving counters unchanged.
+The active MTP3 service and its files were unchanged. These negative findings
+narrow the tested cases; they do not identify the cause of the earlier model
+response differences or establish a new speed improvement.
+
+Reproduce on an idle cluster:
+
+```sh
+python tools/run_gdn_batch_invariance.py
+python tools/run_decode_batch_invariance.py --short-rows 3 --long-rows 4 --head-only
+python tools/run_decode_batch_invariance.py --short-rows 4 --long-rows 5 --head-only
+```
+
+Full source hashes and checks are in
+`bench/records/2026-09-10-gdn-batch-invariance.json` and
+`bench/records/2026-09-10-head-batch-invariance-{3-4,4-5}.json`.

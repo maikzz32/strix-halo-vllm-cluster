@@ -1,0 +1,320 @@
+{
+  "cases": [
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 0,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 0,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 0,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 1,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 1,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 1,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 2,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 2,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 2,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 3,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 3,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 3,
+      "long_rows": 4,
+      "bank": 3,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 0,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 0,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 0,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 0,
+      "accepted": 4,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 1,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 1,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 1,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 1,
+      "accepted": 4,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 2,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 2,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 2,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 2,
+      "accepted": 4,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 3,
+      "accepted": 1,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 3,
+      "accepted": 2,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 3,
+      "accepted": 3,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    },
+    {
+      "short_rows": 4,
+      "long_rows": 5,
+      "bank": 3,
+      "accepted": 4,
+      "eager_prefix_exact": true,
+      "state_prefix_exact": true,
+      "fixed_shape_repeatable": true,
+      "changed_input_graph_exact": true,
+      "untouched_state_exact": true
+    }
+  ],
+  "source_sha256": {
+    "/usr/local/lib64/python3.12/site-packages/vllm/third_party/flash_linear_attention/ops/fused_sigmoid_gating.py": "000ab8996af9788fdb8843a6a3b91833e7a14c8acc0e1ea073a536330f64cb6f"
+  },
+  "note": "Isolated installed post-convolution GDN recurrence; valid state slots, C1, FP32 state. No convolution, norm, model metadata generation or full-model rollback test.",
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "benchmark_source_sha256": "2f0aa6de99562c4463f57091e7c8d5f39ef65619e68ac217f60445740a4657ca",
+  "service_counters_unchanged": true
+}
