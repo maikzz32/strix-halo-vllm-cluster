@@ -76,3 +76,33 @@ The next unresolved step is actual dispatch integration with opt-in neighboring
 shapes, preserving the existing M4 path and all dtype/layout checks. Only after
 that validation should an MTP4 model comparison be staged. These results do not
 identify the cause of MTP2's different generated outputs.
+
+
+## Actual dispatch validation and staged model trial
+
+`patches/moe_neighbor_depths.py` generates an opt-in extension from installed
+source SHA256 `8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493`.
+Candidate SHA256 is `ab22219d75f1add289f9418fdc2158f482418e45864dc5e2771157de456874e6`.
+`STRIX_MOE_NEIGHBOR_DEPTHS=1` admits W1 M3/M5 and W2 M30/M50. Existing M4/M40
+selection remains active regardless of the new flag. Other guards and kernel
+implementations are unchanged. W2 grid and valid-row count follow the admitted M.
+
+The isolated test compiles the actual generated function into the installed
+module globals and observes which kernel is launched. All 48 cases pass:
+W1/W2, verification rows 2/3/4/5, BM16/BM32, and three routing patterns.
+Flag-off, flag-on and original optimization flags disabled are checked for
+correct selection and exact output. Graphs replay exactly after changed inputs.
+This covers M2 and BM32 fallback as well as the existing M4 path. It does not
+establish which shapes the serving runner will request.
+
+Full dispatch evidence is in `bench/records/2026-09-10-moe-neighbor-dispatch.json`.
+Generate candidate source with the generator's `generate(original_bytes)` and run
+`tools/run_moe_neighbor_dispatch.py --execute --candidate-source candidate.py
+--output results/unique-directory` on an idle cluster.
+
+The candidate was staged with original-source backups and identical hashes on
+all four nodes. After an idle stop, an MTP4 trial was started as run
+`b51737e200f643e5b419d46174a6f2bc`. Only draft depth (3 to 4), the new flag, and
+this source extension differ from the MTP3 control. Startup and serving comparison
+are pending. This is an experiment, not a promoted configuration or TPS result.
+The model checkpoint and arithmetic remain unchanged.

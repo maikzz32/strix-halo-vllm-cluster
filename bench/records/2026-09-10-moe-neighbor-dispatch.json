@@ -1,0 +1,471 @@
+{
+  "report": {
+    "status": "passed",
+    "seed": 9564,
+    "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+    "candidate_sha256": "ab22219d75f1add289f9418fdc2158f482418e45864dc5e2771157de456874e6",
+    "cases": [
+      {
+        "operator": "w1",
+        "verification_tokens": 2,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 2,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 2,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 2,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 2,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 2,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 3,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 3,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 3,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 3,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 3,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 3,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 4,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 4,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 4,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 4,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 4,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 4,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 5,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 5,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 5,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 5,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 5,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w1",
+        "verification_tokens": 5,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 2,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 2,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 2,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 2,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 2,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 2,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 3,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 3,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 3,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 3,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 3,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 3,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 4,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 4,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 4,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 4,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 4,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 4,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 5,
+        "block_size_m": 16,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 5,
+        "block_size_m": 16,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 5,
+        "block_size_m": 16,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 5,
+        "block_size_m": 32,
+        "pattern": "reuse",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 5,
+        "block_size_m": 32,
+        "pattern": "overlap",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      },
+      {
+        "operator": "w2",
+        "verification_tokens": 5,
+        "block_size_m": 32,
+        "pattern": "disjoint",
+        "eager_exact": true,
+        "changed_input_graph_exact": true,
+        "dispatch_verified": true
+      }
+    ],
+    "dispatch_counts": {
+      "partial": 360,
+      "w1": 36,
+      "w2": 36
+    }
+  },
+  "run_id": "e160de9585a64cba816fc180939fa9f4",
+  "manifest": {
+    "run_id": "e160de9585a64cba816fc180939fa9f4",
+    "seed": 9564,
+    "source_sha256": {
+      "bench_moe_neighbor_dispatch.py": "244d2e2999077088789d5bd8964e23881ba1c52e0c28ac98ccf63a857d855054",
+      "candidate.py": "ab22219d75f1add289f9418fdc2158f482418e45864dc5e2771157de456874e6"
+    },
+    "before_request_counts": {
+      "running": 0.0,
+      "waiting": 0.0
+    },
+    "before_success_total": 52.0
+  },
+  "service_check": {
+    "before_success_total": 52.0,
+    "after_success_total": 52.0,
+    "unchanged": true,
+    "after_request_counts": {
+      "running": 0.0,
+      "waiting": 0.0
+    }
+  },
+  "remaining_owned_processes": []
+}
