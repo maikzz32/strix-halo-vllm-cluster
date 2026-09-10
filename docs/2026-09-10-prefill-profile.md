@@ -49,3 +49,9 @@ Evidence: `bench/records/2026-09-10-prefill-attribution.json` and
 `collect_prefill_profile.py`, and `summarize_prefill_trace.py`. The capture and
 collection tools currently encode this diagnostic's hosts and output directory.
 Raw response text remains local.
+
+Restoration completed as `cb44c293b28746e69faad3890f96798e`. All four original
+worker source hashes and UMA library mappings passed verification. Hermes auto
+selection, tool-result roundtrip, streaming and default-thinking checks pass.
+Evidence: `2026-09-10-prefill-restored-{workers,tools}.json`. No new serving
+throughput is claimed for this restoration.
