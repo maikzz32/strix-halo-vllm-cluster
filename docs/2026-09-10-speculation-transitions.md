@@ -50,12 +50,30 @@ measurement. To decide whether adaptive engineering is worthwhile, a separate
 configuration changes only `num_speculative_tokens` from3 to2. Weights, original
 INT4 dispatch, UMA transport, GPU high mode and graph settings remain the same.
 
-Run `6a3f657a109a4e60a6fa3c5e0e463620` is loading on all four nodes. ShareGPT48/C1
-and Hermes checks are queued after readiness. K2 acceptance statistics are
-expected to differ; output text/length parity is checked separately. No K2 gain
-or adaptive-policy gain is claimed. MTP3 must be restored for a fresh control
-before choosing a production depth.
+Run `6a3f657a109a4e60a6fa3c5e0e463620` completed ShareGPT48/C1, but failed
+the exact-output comparison. Only13 of48 texts are identical, with11,695 output
+tokens versus11,839 for K3. The35 differing texts have a median common prefix
+of158 characters (minimum8); these are character counts, not token positions.
+No cause of divergence is established. No checkpoint or source file changed.
 
+| Configuration | Output tokens/s | Mean TTFT ms | Mean TPOT ms | Output tokens |
+| --- | ---: | ---: | ---: | ---: |
+| Prior MTP3 control | 55.676 | 564.287 | 15.482 | 11,839 |
+| MTP2 experiment | 49.249 | 570.789 | 18.113 | 11,695 |
+
+These are observed results with different generated outputs, not a valid
+same-output speedup estimate. K2 mean/median ITL were40.22/40.41ms; they do not
+establish a useful step saving on identical trajectories. Acceptance62.77%
+and mean length2.26 do not compensate for the observed throughput reduction.
+
+The controller intentionally stopped at the text-parity assertion before the
+Hermes check. Consequently no K2 Hermes success is claimed, and the planned
+three matched streaming probes were skipped. All K2 workers were stopped.
+MTP3 restoration run `aebc6c06e5a249c3a072d4f302317c9f` is loading, with a fresh
+ShareGPT48/C1 and Hermes control queued after readiness. No K2 setting is
+promoted. Adaptive depth remains unproven; further work must first resolve or
+characterize the output differences rather than treating the K2 timings as
+valid same-output cost measurements.
 
 ## Step-interval comparison preparation
 
@@ -68,5 +86,5 @@ silently removed; the maximum and count above twice the median are retained.
 The existing K3 streams have medians40.319/40.277/40.360ms for code/German/
 analysis. Means are40.292/40.540/43.396ms. Counts above twice the median are1/1/10,
 with maxima82.05/148.22/198.09ms. Their cause is not established, and client SSE
-intervals must not be described as isolated GPU execution time. MTP2 comparison
-is pending completion of its main benchmark.
+intervals must not be described as isolated GPU execution time. The matched MTP2 streaming comparison
+was skipped because the main benchmark failed exact-output parity.
