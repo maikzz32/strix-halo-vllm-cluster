@@ -119,3 +119,39 @@ This is a bounded prerequisite for evaluating draft length. It neither implement
 PEARL nor proves acceptance-adaptive speculation will improve the service.
 The earlier MTP2 run produced different text on 35 of 48 prompts, so it cannot
 serve as an identical-output estimate of the cost of one fewer draft step.
+
+## September 10 update after the latest measurements
+
+The latest measured original control is **56.2244 output tokens/s**, with
+**550.539 ms mean TTFT**. Reaching 60 with the same output count requires
+about **6.29% less elapsed time**. The restored service passed all four worker
+checks and Hermes checks; restoration itself was not another throughput run.
+
+The [four-rank transport capture](2026-09-10-rdma-trace.md) now covers the
+same 2,048 collective sequences on every rank. Median CPU-side transport
+totals are 44.07–45.19 microseconds. They exclude GPU staging and scheduling;
+the old 20-microsecond probe still cannot be substituted for a full collective.
+This closes the missing common-rank capture, not the attribution of every
+GPU wait. CQ observations do not identify a uniquely slow sender.
+
+The [HC up/mix fusion with pinned norm geometry](2026-09-10-hc-up-mix.md)
+removed 97 graph nodes and restored exact responses on all 48 benchmark
+prompts. It measured 56.7244 versus its preceding original control of
+56.4758 tokens/s, only 0.44% higher in a single comparison. It was not promoted.
+This is direct evidence against predicting serving gains from node counts
+alone. The separate [HC down prefetch test](2026-09-10-hc-down-prefetch.md)
+retained tested BF16 outputs but suggests only about 0.127 ms per target graph
+from its isolated measurements; that is not a measured model saving.
+
+The neighbor-depth model trials also completed: MTP4 reached approximately
+50.17 tokens/s and MTP2 approximately 49.25, with only 12 and 13 matching
+responses respectively. Production remains MTP3. Earlier text describing the
+model trials as outstanding is historical.
+
+The next bounded research priority is the remaining dispatch/fusion boundary,
+with an unprofiled control and explicit intermediate-rounding checks. A whole
+GDN or MoE megakernel is a larger design change: cross-workgroup synchronization,
+recurrent state, routing and register/LDS pressure must be accounted for before
+assuming it improves latency. Draft/verification overlap remains a second
+research direction, subject to runner-state and resource-contention analysis.
+Neither direction currently supplies evidence for a 60-token/s claim.
