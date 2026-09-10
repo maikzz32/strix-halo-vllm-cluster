@@ -49,6 +49,8 @@ def prepare(module):
     prefix=module.input_mix_weight_up.prefix
     if prefix in LAYERS:raise RuntimeError('Duplicate audited HC prefix')
     LAYERS[prefix]=module
+    from hc_audit_control import start
+    start(LAYERS)
 
 def mix(module,x,xn,original_gate_mix):
     if module._strix_up_mix_selected:

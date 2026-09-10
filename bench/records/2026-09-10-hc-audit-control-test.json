@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "snapshot_exact": true,
+  "hash_exact": true,
+  "reset_exact": true,
+  "control_transport": "local-files",
+  "network_listener": false,
+  "module_sha256": {
+    "hc_first_mismatch.py": "cde7d96f02f6613bc4380ff1a5ce98ae43c48b00de54de79f093f4df872fdc7c",
+    "hc_audit_control.py": "d0fa28c5fcc1f5fabf970b812ebaf2043a590d369cd381272b99a833864b1aa1"
+  },
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "benchmark_source_sha256": "8328a423e0716188b551356f49a6c5567c0c12e7124d322517cc7fdfd9973b83",
+  "service_counters_unchanged": true
+}
