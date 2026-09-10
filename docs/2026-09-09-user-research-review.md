@@ -91,9 +91,9 @@ No acceptance gain or 3% saving is assumed from either idea.
    the former needs a different memory plan/model artifact and the latter
    changes weights. Discuss any new checkpoint with Maik first.
 
-The latest restored ShareGPT48/C1 control is 56.272 tokens/s with mean TTFT
-565.697 ms, using GPU high mode. Reaching 60 at the same output count requires
-about 6.21% less benchmark elapsed time (6.62% more throughput). Fixed-prompt
+The latest restored ShareGPT48/C1 control is 55.933 tokens/s with mean TTFT
+561.396 ms, using GPU high mode. Reaching 60 at the same output count requires
+about 6.78% less benchmark elapsed time (7.27% more throughput). Fixed-prompt
 decode rates must not replace the ShareGPT metric when reporting completion.
 
 The [early RDMA reduction trial](2026-09-10-rdma-overlap.md) improved isolated
@@ -103,3 +103,19 @@ collective latency by about 4.7%, but serving reached only 56.446 tokens/s,
 also is not an acceptance-adaptive MTP switch: its batch-size policy is constant
 at C1. The current service already uses V2, so the previously stated V1
 full-graph downgrade does not apply; that earlier conclusion was corrected.
+
+
+## Follow-up: close optimized-path coverage before another depth comparison
+
+The installed W1/W2 guards only select the promoted kernels at MTP3's four
+verification rows. MTP2 and MTP4 therefore also change optimized-path coverage.
+[Neighbor-depth operator tests](2026-09-10-moe-neighbor-depths.md) now pass exact
+checks with two seeds for both operators at three/five rows. W2 improves roughly
+23-32%; W1 improves 4-10% for overlap/disjoint routing, with mixed reuse results.
+These are operator measurements, not model speedups. Actual dispatch validation
+and a matched model trial remain outstanding; production MTP3 is unchanged.
+
+This is a bounded prerequisite for evaluating draft length. It neither implements
+PEARL nor proves acceptance-adaptive speculation will improve the service.
+The earlier MTP2 run produced different text on 35 of 48 prompts, so it cannot
+serve as an identical-output estimate of the cost of one fewer draft step.

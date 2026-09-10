@@ -1,0 +1,549 @@
+{
+  "runs": [
+    {
+      "directory": "moe-w1-depth3-20260910",
+      "run_id": "0ea87380775c4077826e0b6a73a40347",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9562,
+        "verification_tokens": 3,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  37.781691551208496,
+                  38.97307316462199,
+                  38.96357615788778,
+                  39.065070947011314,
+                  39.098238945007324
+                ],
+                "median_us": 38.97307316462199
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  39.13114865620931,
+                  39.11506732304891,
+                  39.39439058303833,
+                  39.21689987182617,
+                  39.35272296269735
+                ],
+                "median_us": 39.21689987182617
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 457,
+            "packed_working_set_bytes": 216435200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  71.4235782623291,
+                  71.60665988922119,
+                  71.61815166473389,
+                  71.70814673105876,
+                  71.74206574757893
+                ],
+                "median_us": 71.61815166473389
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  65.25391737620036,
+                  65.46207666397095,
+                  65.61782360076904,
+                  65.54640928904216,
+                  65.49749374389648
+                ],
+                "median_us": 65.49749374389648
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 221171200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  97.41743405659993,
+                  97.5045124689738,
+                  97.5174347559611,
+                  97.19360669453938,
+                  97.62542247772217
+                ],
+                "median_us": 97.5045124689738
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  91.3548469543457,
+                  91.3226842880249,
+                  90.77844619750977,
+                  91.29509925842285,
+                  91.41743183135986
+                ],
+                "median_us": 91.3226842880249
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "0ea87380775c4077826e0b6a73a40347",
+        "seed": 9562,
+        "source_sha256": {
+          "bench_moe_w1_order.py": "686746fd91ba69097791e3689b6f318ae7a4e75bfa422ec1dd31370eee3496be",
+          "moe_w1_order_kernel.py": "ebca55ca4ab063c41efdfbf84402333f31a7fadea0776ad305ff87fb2cc3d564"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "directory": "moe-w1-depth3-seed9563-20260910",
+      "run_id": "f5dd6394f54f4980ba005a624d329efd",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9563,
+        "verification_tokens": 3,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  39.17973438898722,
+                  39.49572642644247,
+                  39.40972487131754,
+                  39.59296941757202,
+                  39.51905965805054
+                ],
+                "median_us": 39.49572642644247
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  36.1101508140564,
+                  36.41197681427002,
+                  36.41172647476196,
+                  36.569058895111084,
+                  36.345974604288735
+                ],
+                "median_us": 36.41172647476196
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 457,
+            "packed_working_set_bytes": 216435200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  66.97769959767659,
+                  67.64551798502605,
+                  67.35801696777344,
+                  68.00450483957927,
+                  67.6989237467448
+                ],
+                "median_us": 67.64551798502605
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  60.66129207611084,
+                  61.73326174418131,
+                  60.61563094456991,
+                  61.05928421020508,
+                  61.600351333618164
+                ],
+                "median_us": 61.05928421020508
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 221171200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  90.4909610748291,
+                  90.6782865524292,
+                  91.01969401041667,
+                  90.47078291575114,
+                  90.79911708831787
+                ],
+                "median_us": 90.6782865524292
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  83.8882287343343,
+                  83.73231887817383,
+                  83.51665337880452,
+                  83.66406758626302,
+                  83.77964496612549
+                ],
+                "median_us": 83.73231887817383
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "f5dd6394f54f4980ba005a624d329efd",
+        "seed": 9563,
+        "source_sha256": {
+          "bench_moe_w1_order.py": "686746fd91ba69097791e3689b6f318ae7a4e75bfa422ec1dd31370eee3496be",
+          "moe_w1_order_kernel.py": "ebca55ca4ab063c41efdfbf84402333f31a7fadea0776ad305ff87fb2cc3d564"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "directory": "moe-w1-depth5-20260910",
+      "run_id": "370af5dd90664c30a817cba82956ca53",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9562,
+        "verification_tokens": 5,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  38.16551367441813,
+                  39.19031620025635,
+                  39.362565676371254,
+                  39.24623330434164,
+                  39.37514623006185
+                ],
+                "median_us": 39.24623330434164
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  39.46331342061361,
+                  39.49155807495117,
+                  39.59822257359823,
+                  39.57680861155192,
+                  39.57547346750895
+                ],
+                "median_us": 39.57547346750895
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 221171200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  97.29118347167969,
+                  97.72683779398601,
+                  97.9794184366862,
+                  97.8925069173177,
+                  98.02566369374593
+                ],
+                "median_us": 97.8925069173177
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  91.04636510213216,
+                  90.7072941462199,
+                  91.03302955627441,
+                  91.34368896484375,
+                  91.50226910909016
+                ],
+                "median_us": 91.04636510213216
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 487,
+            "packed_working_set_bytes": 230643200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  151.14018122355142,
+                  151.75933837890625,
+                  151.29451751708984,
+                  151.02968215942383,
+                  151.42483711242676
+                ],
+                "median_us": 151.29451751708984
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  144.9598471323649,
+                  144.6677049001058,
+                  144.67711448669434,
+                  144.81919606526694,
+                  144.79853312174478
+                ],
+                "median_us": 144.79853312174478
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "370af5dd90664c30a817cba82956ca53",
+        "seed": 9562,
+        "source_sha256": {
+          "bench_moe_w1_order.py": "686746fd91ba69097791e3689b6f318ae7a4e75bfa422ec1dd31370eee3496be",
+          "moe_w1_order_kernel.py": "ebca55ca4ab063c41efdfbf84402333f31a7fadea0776ad305ff87fb2cc3d564"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "directory": "moe-w1-depth5-seed9563-20260910",
+      "run_id": "a4b2435ccf01407583edb436576b5d18",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9563,
+        "verification_tokens": 5,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  36.25690142313639,
+                  36.63538694381714,
+                  36.67930364608765,
+                  36.71213388442993,
+                  36.8365486462911
+                ],
+                "median_us": 36.67930364608765
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  36.28389835357666,
+                  36.32547458012899,
+                  36.62772178649902,
+                  36.408559481302895,
+                  36.58796548843384
+                ],
+                "median_us": 36.408559481302895
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 221171200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  90.50645033518474,
+                  90.76086680094402,
+                  91.34251276652019,
+                  90.88853200276692,
+                  91.04293982187907
+                ],
+                "median_us": 90.88853200276692
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  83.77298514048259,
+                  83.55789979298909,
+                  83.84372393290202,
+                  83.70248476664226,
+                  83.74231656392415
+                ],
+                "median_us": 83.74231656392415
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 487,
+            "packed_working_set_bytes": 230643200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  140.02423286437988,
+                  138.72909545898438,
+                  138.32712173461914,
+                  138.5350227355957,
+                  138.6081059773763
+                ],
+                "median_us": 138.6081059773763
+              },
+              {
+                "method": "expert_kfast",
+                "samples_us": [
+                  133.52850278218588,
+                  132.5037717819214,
+                  132.53018856048584,
+                  132.25611845652261,
+                  132.627272605896
+                ],
+                "median_us": 132.53018856048584
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "expert_kfast": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "a4b2435ccf01407583edb436576b5d18",
+        "seed": 9563,
+        "source_sha256": {
+          "bench_moe_w1_order.py": "686746fd91ba69097791e3689b6f318ae7a4e75bfa422ec1dd31370eee3496be",
+          "moe_w1_order_kernel.py": "ebca55ca4ab063c41efdfbf84402333f31a7fadea0776ad305ff87fb2cc3d564"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    }
+  ],
+  "note": "Isolated W1 operator tests; no production dispatch change or demonstrated serving gain."
+}

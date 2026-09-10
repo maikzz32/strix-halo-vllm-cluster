@@ -45,3 +45,34 @@ Next steps: test the W1 expert-order variant at neighboring shapes, then validat
 the actual shape-restricted dispatch before staging a model trial. Preserve the
 existing M4 path. MTP3 remains the active validated service; no MTP4 trial has
 started and no new checkpoint is needed for this investigation.
+
+
+## W1: neighboring shapes also pass isolated parity
+
+Two seeds (9562 and 9563), three routing patterns and 24 rotating banks per
+pattern pass exact eager and changed-input graph checks at three and five
+verification rows. The test calls the installed wrapper with its W1 selection
+flag disabled, then substitutes the unchanged expert-order partial kernel.
+This tests operator output, not a proposed production dispatch guard.
+Serving counters stayed unchanged and all owned test processes exited.
+
+| Rows | Routing | Seed 9562 fallback / expert-order us | Seed 9563 fallback / expert-order us |
+| --- | --- | ---: | ---: |
+| 3 | Reuse10 | 38.973 / 39.217 | 39.496 / 36.412 |
+| 3 | Overlap | 71.618 / 65.497 | 67.646 / 61.059 |
+| 3 | Disjoint | 97.505 / 91.323 | 90.678 / 83.732 |
+| 5 | Reuse10 | 39.246 / 39.575 | 36.679 / 36.409 |
+| 5 | Overlap | 97.893 / 91.046 | 90.889 / 83.742 |
+| 5 | Disjoint | 151.295 / 144.799 | 138.608 / 132.530 |
+
+Overlap/disjoint cases improve by approximately 4-10%. Reuse10 is mixed,
+including a small regression in the first seed. Do not describe W1 as a
+universal speedup. Full samples, source hashes and service checks are in
+`bench/records/2026-09-10-moe-w1-neighbor-depths.json`.
+Reproduce with `tools/run_moe_w1_depths.py --execute --tokens 3 --seed 9562
+--output results/unique-directory`; also test tokens 5 and seed 9563.
+
+The next unresolved step is actual dispatch integration with opt-in neighboring
+shapes, preserving the existing M4 path and all dtype/layout checks. Only after
+that validation should an MTP4 model comparison be staged. These results do not
+identify the cause of MTP2's different generated outputs.
