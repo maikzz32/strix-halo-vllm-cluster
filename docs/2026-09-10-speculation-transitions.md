@@ -55,3 +55,18 @@ and Hermes checks are queued after readiness. K2 acceptance statistics are
 expected to differ; output text/length parity is checked separately. No K2 gain
 or adaptive-policy gain is claimed. MTP3 must be restored for a fresh control
 before choosing a production depth.
+
+
+## Step-interval comparison preparation
+
+`bench/compare_speculation_streams.py` checks identical requests, output token IDs
+and usage before comparing K3/K2 intervals. It invokes the group-accounting
+validator at each measured depth, drops the initial and final boundary groups,
+and reports both mean and median client-observed intervals. No outliers are
+silently removed; the maximum and count above twice the median are retained.
+
+The existing K3 streams have medians40.319/40.277/40.360ms for code/German/
+analysis. Means are40.292/40.540/43.396ms. Counts above twice the median are1/1/10,
+with maxima82.05/148.22/198.09ms. Their cause is not established, and client SSE
+intervals must not be described as isolated GPU execution time. MTP2 comparison
+is pending completion of its main benchmark.
