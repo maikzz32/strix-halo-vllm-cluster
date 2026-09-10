@@ -1,0 +1,184 @@
+{
+  "scope": "Rank-0 saved graph-module source comparison; not runtime kernel or storage equivalence.",
+  "inputs": {
+    "original-backbone": {
+      "path": "/root/.cache/vllm/torch_compile_cache/ffe81a8b80/rank_0_0/backbone/computation_graph.py",
+      "sha256": "2c5dcf4b8775354e2a8ddc7f56af50095be50a33e82f564d4145af5623a954fb"
+    },
+    "original-eagle_head": {
+      "path": "/root/.cache/vllm/torch_compile_cache/ffe81a8b80/rank_0_0/eagle_head/computation_graph.py",
+      "sha256": "81f242549a7edf2127c6de17c47c97690b568c7817e3b3aa9d1c64fae429a51f"
+    },
+    "audit-backbone": {
+      "path": "/root/.cache/vllm/torch_compile_cache/d3bf1a21c0/rank_0_0/backbone/computation_graph.py",
+      "sha256": "15329c59a2761db152f78432973c93dd9512b827ed5ef0a8dbaf32bc72c306ed"
+    },
+    "audit-eagle_head": {
+      "path": "/root/.cache/vllm/torch_compile_cache/d3bf1a21c0/rank_0_0/eagle_head/computation_graph.py",
+      "sha256": "019b5568a1f1f2aab9e1f1d130fe8e5c8618e12a107810559a73762ef1012796"
+    }
+  },
+  "segments": {
+    "backbone": {
+      "segments": 99,
+      "audit_segments": 99,
+      "equal_return_and_side_effect_expressions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98
+      ],
+      "different_segments": []
+    },
+    "eagle_head": {
+      "segments": 3,
+      "audit_segments": 3,
+      "equal_return_and_side_effect_expressions": [
+        0,
+        1,
+        2
+      ],
+      "different_segments": []
+    }
+  },
+  "outer_wiring": {
+    "original-backbone": {
+      "normalized_sha256": "eb0d7d588e31d94ef1ba09b76c462eff26077ee69a64c26272b7e5a7f0f59c00",
+      "excluded_audit_buffer_references": {
+        "arguments": 0,
+        "aliases": 0,
+        "call_arguments": 0,
+        "release_targets": 0
+      }
+    },
+    "audit-backbone": {
+      "normalized_sha256": "eb0d7d588e31d94ef1ba09b76c462eff26077ee69a64c26272b7e5a7f0f59c00",
+      "excluded_audit_buffer_references": {
+        "arguments": 195,
+        "aliases": 195,
+        "call_arguments": 244,
+        "release_targets": 195
+      }
+    },
+    "backbone_outer_equal": true,
+    "original-eagle_head": {
+      "normalized_sha256": "15791b6f7a35ef7c8072663593df7b00558a3656d4a0b8f5131ff62a036be931",
+      "excluded_audit_buffer_references": {
+        "arguments": 0,
+        "aliases": 0,
+        "call_arguments": 0,
+        "release_targets": 0
+      }
+    },
+    "audit-eagle_head": {
+      "normalized_sha256": "15791b6f7a35ef7c8072663593df7b00558a3656d4a0b8f5131ff62a036be931",
+      "excluded_audit_buffer_references": {
+        "arguments": 0,
+        "aliases": 0,
+        "call_arguments": 0,
+        "release_targets": 0
+      }
+    },
+    "eagle_head_outer_equal": true
+  },
+  "limitations": [
+    "Audit calls are expanded into their reference expressions for segment comparison.",
+    "Outer comparison removes audit-buffer arguments, aliases, call arguments and release targets, and type annotations.",
+    "Does not validate lower-level kernel selection, strides, memory aliasing, numerical execution or hidden operator state."
+  ]
+}
