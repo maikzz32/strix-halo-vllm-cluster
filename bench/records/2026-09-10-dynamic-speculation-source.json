@@ -10,7 +10,7 @@
   "findings": [
     "Dynamic speculative-token count schedule is keyed by batch size.",
     "Confidence-driven adaptive verification is restricted to DSpark.",
-    "Existing model runner overrides full graphs to PIECEWISE for dynamic speculative decoding unless V2 runner is enabled."
+    "V1 downgrades full graphs for dynamic speculative decoding; current service is V2, confirmed separately on all four nodes."
   ],
-  "action": "No configuration change; a C1 acceptance-driven policy and full-graph support require implementation and validation."
+  "action": "No configuration change. Corrected earlier runner assumption; acceptance-driven policy requires scheduler, draft-work and graph/rollback validation."
 }

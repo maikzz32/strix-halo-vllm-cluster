@@ -84,4 +84,3 @@ All candidate workers were stopped, and the original source SHA256 was restored
 on all four nodes. Run `594dd64087594e7eb373d1bf6bdc6593` is loading the original
 configuration for the fresh restored control. The candidate is not promoted.
 The restored control result is still pending.
-

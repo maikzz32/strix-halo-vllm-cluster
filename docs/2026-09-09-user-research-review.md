@@ -101,4 +101,5 @@ collective latency by about 4.7%, but serving reached only 56.446 tokens/s,
 0.31% above the fresh restored control. It was not promoted. The existing
 [dynamic speculation implementation](2026-09-10-dynamic-speculation-review.md)
 also is not an acceptance-adaptive MTP switch: its batch-size policy is constant
-at C1, and enabling it on the current runner downgrades full graph execution.
+at C1. The current service already uses V2, so the previously stated V1
+full-graph downgrade does not apply; that earlier conclusion was corrected.
