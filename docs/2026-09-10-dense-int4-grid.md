@@ -72,6 +72,7 @@ option enabled, original UMA transport and GPU high mode.
 | --- | ---: | ---: | ---: |
 | Prior original control | 56.272 | 565.697 | 15.382 |
 | Restricted dense INT4 candidate | 55.599 | 580.107 | 15.509 |
+| Fresh restored original | 55.676 | 564.287 | 15.482 |
 
 The candidate is 1.20% slower in this comparison. All 48 texts, output lengths
 and speculation statistics are identical (11,839 output tokens, 14,767 input
@@ -81,6 +82,10 @@ regression is established; do not attribute it to a particular kernel or cache
 mechanism without further evidence.
 
 All candidate workers were stopped, and the original source SHA256 was restored
-on all four nodes. Run `594dd64087594e7eb373d1bf6bdc6593` is loading the original
-configuration for the fresh restored control. The candidate is not promoted.
-The restored control result is still pending.
+on all four nodes. Run `594dd64087594e7eb373d1bf6bdc6593` is ready and completed
+the restored control. Candidate throughput is 0.14% below that fresh control;
+its mean TTFT is 2.80% higher. Both controls have identical texts and speculation
+statistics, and Hermes checks pass. The variation between original runs means
+we do not attribute the entire earlier 1.20% difference to this code change.
+There is no demonstrated serving gain. The original configuration remains active;
+the candidate is not promoted.

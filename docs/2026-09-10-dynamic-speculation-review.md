@@ -35,3 +35,31 @@ The inspected autoregressive speculator still loops to its configured
 that fewer draft forwards run. Any proposed adaptive policy must verify both
 scheduling and actual draft execution, and capture every length it can select.
 No dynamic policy has been enabled in the service.
+
+
+## Handoff audit for an actual draft-depth policy
+
+The autoregressive proposer returns a draft-token matrix. V2 copies it into
+`req_states.draft_tokens[input_batch.idx_mapping]`, a fixed-width state buffer,
+then calls `DraftTokensHandler.set_draft_tokens`. That handler records matrix
+width and only transfers actual IDs for structured-output validation. Ordinary
+asynchronous scheduling uses placeholders instead of copying IDs back to CPU.
+`AsyncScheduler._update_after_schedule` sets the next placeholder length from
+`scheduler_output.num_spec_tokens_to_schedule`.
+
+Therefore a shorter autoregressive loop alone is insufficient. The selected
+next-step depth must agree across the scheduler placeholders, producer execution,
+valid buffer prefix and graph descriptors. Leaving old values in unused columns
+and scheduling the old width would consume stale draft tokens. The policy also
+needs consistent TP-rank decisions without extra GPU-to-CPU synchronization.
+
+A streaming probe (`bench/speculation_stream_probe.py`) requests token
+IDs per SSE choice and compares their count with usage and speculative metric
+deltas. The first bounded 512-token run passed token-ID/usage equality, one completed
+request and idle checks. It produced180 nonempty groups and179 draft iterations.
+Excluding the initial singleton, inferred per-position acceptance counts were
+140/108/84 versus the metric140/108/85. The final length-limited group contained
+three tokens, consistent with a truncated final step. This supports further
+acceptance-pattern diagnostics without changing workers, but one aggregate
+match does not prove that every SSE group corresponds to one engine iteration.
+See `bench/records/2026-09-10-speculation-stream-probe.json`.
