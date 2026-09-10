@@ -13,13 +13,23 @@ def request(url, body=None):
         data=None if body is None else json.dumps(body).encode(),
         headers={'Content-Type':'application/json'}),timeout=600)
 
-def counters(base):
+def counters(base, phases=False):
     with request(base+'/metrics') as r: lines=r.read().decode().splitlines()
-    return {line.split()[0]:float(line.split()[1]) for line in lines
+    result = {line.split()[0]:float(line.split()[1]) for line in lines
         if line.startswith(('vllm:prefix_cache_queries_total','vllm:prefix_cache_hits_total',
                             'vllm:num_requests_running','vllm:num_requests_waiting'))}
+    if phases:
+        names = ('time_to_first_token_seconds', 'request_queue_time_seconds',
+                 'request_inference_time_seconds', 'request_prefill_time_seconds',
+                 'request_decode_time_seconds', 'request_prefill_kv_computed_tokens')
+        wanted = {'vllm:' + name + suffix for name in names for suffix in ('_sum', '_count')}
+        for line in lines:
+            if line and not line.startswith('#') and line.split('{')[0].split()[0] in wanted:
+                result[line.split()[0]] = float(line.split()[1])
+    return result
 
 def run(args):
+    phase_metrics = getattr(args, 'phase_metrics', False)
     with request(args.url+'/v1/models') as r:model=json.load(r)['data'][0]['id']
     initial=counters(args.url)
     if any(v for k,v in initial.items() if k.startswith('vllm:num_requests_')):
@@ -45,7 +55,7 @@ def run(args):
         case={'prompt_tokens':length,'prompt_ids_sha256':hashlib.sha256(json.dumps(ids).encode()).hexdigest(),'requests':[]}
         record['cases'].append(case)
         for repeat in range(args.repeats):
-            before=counters(args.url)
+            before=counters(args.url, phase_metrics)
             body={'model':model,'prompt':ids,'max_tokens':args.tokens,'temperature':0,
                   'seed':42,'stream':True,'stream_options':{'include_usage':True}}
             started=time.perf_counter();first=None;parts=[];usage={};done=False
@@ -63,12 +73,16 @@ def run(args):
                         parts.append(part)
             elapsed=time.perf_counter()-started
             assert done and first is not None and usage['prompt_tokens']==length
-            after=counters(args.url)
+            after=counters(args.url, phase_metrics)
             row={'repeat':repeat,'prefix_state':'first_use' if repeat==0 else 'reused',
                  'ttft_ms':(first-started)*1000,'wall_s':elapsed,'usage':usage,
                  'text_sha256':hashlib.sha256(''.join(parts).encode()).hexdigest(),
                  'counter_delta':{k:after[k]-before.get(k,0) for k in after if not k.startswith('vllm:num_requests_')}}
             case['requests'].append(row)
+            if phase_metrics:
+                counts = {k:v for k,v in row['counter_delta'].items() if '_count{' in k}
+                assert len(counts) == 6 and all(v == 1 for v in counts.values()), counts
+                assert not any(v for k,v in after.items() if k.startswith('vllm:num_requests_'))
             args.output.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
             print(json.dumps(row),flush=True)
 
@@ -80,6 +94,7 @@ if __name__=='__main__':
     p.add_argument('--repeats',type=int,default=3)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--prefix-id',help='Reuse this identifier across restarted before/candidate/after runs for identical inputs.')
+    p.add_argument('--phase-metrics',action='store_true',help='Collect per-request phase histogram deltas; requires an otherwise idle server.')
     a=p.parse_args()
     if min(a.lengths)<256 or a.repeats<2:p.error('Lengths >=256 and at least two repeats required')
     run(a)
