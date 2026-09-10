@@ -1,0 +1,282 @@
+{
+  "status": "passed",
+  "dynamic_dispatch": [
+    {
+      "rows": 2,
+      "native_calls": 0,
+      "exact": true
+    },
+    {
+      "rows": 4,
+      "native_calls": 1,
+      "exact": true
+    },
+    {
+      "rows": 6,
+      "native_calls": 0,
+      "exact": true
+    },
+    {
+      "rows": 16,
+      "native_calls": 0,
+      "exact": true
+    },
+    {
+      "rows": 128,
+      "native_calls": 0,
+      "exact": true
+    },
+    {
+      "rows": 512,
+      "native_calls": 0,
+      "exact": true
+    },
+    {
+      "rows": 4,
+      "native_calls": 1,
+      "exact": true
+    }
+  ],
+  "checkpoint_key": "model.language_model.layers.0.attn_hyper_connection.input_mix_weight_up.weight",
+  "weight_sha256": "6e87eb16e95e4e24cb83f3852d4200bdff7da87d8e8989022fe8012b88c2f978",
+  "dynamic_graph_count": 1,
+  "real_constructor": true,
+  "inductor_pair": true,
+  "inductor_full_methods": true,
+  "checks": [
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    }
+  ],
+  "compiled_fullgraph": true,
+  "changed_graph_exact": true,
+  "module_sha256": {
+    "hc_up_mix_runtime.py": "aca928f2dc4ff8e67995e1384ca0aa7c6abec043158dc049e53c97ff527f22ac",
+    "hc_up_mix_source.py": "44a5e75923ea6f982b7b927c8a07febf7e274f140a05e0d63d96d5439da51317"
+  },
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "benchmark_source_sha256": "b83a9354259cd17c59963749a9eee60c891ce6926e5ebf7983f9cb058fd82887",
+  "service_counters_unchanged": true
+}

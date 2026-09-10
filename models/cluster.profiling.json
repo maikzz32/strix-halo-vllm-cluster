@@ -1,0 +1,81 @@
+{
+  "model": "/home/cluster-user/qwen38_rest",
+  "master_addr": "192.168.100.1",
+  "master_port": 50001,
+  "api_port": 8000,
+  "max_model_len": 262144,
+  "max_num_seqs": 8,
+  "max_num_batched_tokens": 8192,
+  "gpu_memory_utilization": 0.85,
+  "speculative_config": {
+    "method": "mtp",
+    "num_speculative_tokens": 3
+  },
+  "compilation_config": {
+    "cudagraph_mode": "FULL_DECODE_ONLY"
+  },
+  "environment": {
+    "VLLM_PLUGINS": "lora_filesystem_resolver,lora_hf_hub_resolver",
+    "VLLM_GFX1X_HC_QUANT": "0",
+    "VLLM_GFX1X_GATE_QUANT": "1",
+    "VLLM_GFX1X_SPEC_CUDAGRAPH": "prefill",
+    "VLLM_GFX1X_MOE_INT4_GEMV": "1",
+    "VLLM_ROCM_USE_AITER": "0",
+    "VLLM_GFX1X_MOE_TUNE": "1",
+    "VLLM_GFX1X_FAST_PLATFORM": "1",
+    "NCCL_GRAPH_MIXING_SUPPORT": "1",
+    "NCCL_LAUNCH_MODE": "GROUP",
+    "NCCL_MAX_NCHANNELS": "4",
+    "NCCL_MIN_NCHANNELS": "4",
+    "NCCL_IB_GID_INDEX": "1",
+    "NCCL_NET_GDR_LEVEL": "0",
+    "PYTORCH_HIP_ALLOC_CONF": "expandable_segments:True,garbage_collection_threshold:0.85",
+    "VLLM_QSA_SKIP_INVISIBLE_TILES": "1",
+    "ROCPROFILER_SET_ROCPROFILER_REGISTER_LIBRARY": "0",
+    "ROCPROFILER_QUEUE_INTERPOSITION": "0"
+  },
+  "nodes": [
+    {
+      "host": "192.168.1.15",
+      "rdma_ip": "192.168.100.1",
+      "container": "ray-head",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.16",
+      "rdma_ip": "192.168.100.2",
+      "container": "ray-worker",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.17",
+      "rdma_ip": "192.168.100.3",
+      "container": "ray-worker",
+      "iface": "enp197s0f3np3"
+    },
+    {
+      "host": "192.168.1.18",
+      "rdma_ip": "192.168.100.4",
+      "container": "ray-worker",
+      "iface": "enp197s0f1np1"
+    }
+  ],
+  "profiler_config": {
+    "profiler": "torch",
+    "torch_profiler_dir": "/tmp/qwen38-torch-queuefix-20260906",
+    "torch_profiler_with_stack": false,
+    "torch_profiler_record_shapes": false,
+    "torch_profiler_with_memory": false,
+    "torch_profiler_with_flops": false,
+    "torch_profiler_use_gzip": true,
+    "torch_profiler_dump_cuda_time_total": false,
+    "capture_torch_profiler": false,
+    "detailed_trace_annotation": false,
+    "ignore_frontend": true,
+    "delay_iterations": 0,
+    "wait_iterations": 0,
+    "warmup_iterations": 2,
+    "active_iterations": 16,
+    "max_iterations": 16
+  }
+}

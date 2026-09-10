@@ -1,0 +1,549 @@
+{
+  "runs": [
+    {
+      "directory": "moe-w2-depth3-20260910",
+      "run_id": "64a09fc920304650ba7b171151e4bd7c",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9560,
+        "verification_tokens": 3,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 56832000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  28.55819861094157,
+                  28.82502277692159,
+                  29.039935270945232,
+                  28.961020708084106,
+                  29.153096675872803
+                ],
+                "median_us": 28.961020708084106
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  22.39862283070882,
+                  22.274458408355713,
+                  22.566449642181396,
+                  22.3352054754893,
+                  22.584867477416992
+                ],
+                "median_us": 22.39862283070882
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 457,
+            "packed_working_set_bytes": 108217600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  52.18120018641154,
+                  52.53469149271647,
+                  52.50452756881714,
+                  52.82426675160726,
+                  52.51852671305338
+                ],
+                "median_us": 52.51852671305338
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  35.81749598185221,
+                  35.958659648895264,
+                  35.62091588973999,
+                  35.9198252360026,
+                  35.81207593282064
+                ],
+                "median_us": 35.81749598185221
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 110585600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  64.97084697087605,
+                  65.84656635920207,
+                  65.87706804275513,
+                  66.20430946350098,
+                  65.88139931360881
+                ],
+                "median_us": 65.87706804275513
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  46.6166098912557,
+                  46.38286828994751,
+                  46.63402636845907,
+                  46.43694957097372,
+                  46.424031257629395
+                ],
+                "median_us": 46.43694957097372
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "64a09fc920304650ba7b171151e4bd7c",
+        "seed": 9560,
+        "source_sha256": {
+          "bench_moe_w2_serial.py": "0fe3a8ed0a88ecd1e2976dad931decc9e1406466902597edd01aa6cce40a5b16",
+          "moe_w2_serial_kernel.py": "b170f05e08df619d435c5c5592573103c53b060b8bbb53aace6a50623610a1f1"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "directory": "moe-w2-depth5-20260910",
+      "run_id": "e10d3e9f48f34e739c415678434ad09a",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9560,
+        "verification_tokens": 5,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 56832000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  31.505366166432697,
+                  31.639444828033447,
+                  31.85235659281413,
+                  31.773193677266438,
+                  31.81035916010539
+                ],
+                "median_us": 31.773193677266438
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  23.231931527455647,
+                  23.11793565750122,
+                  23.422261079152424,
+                  23.295847574869793,
+                  23.398512601852417
+                ],
+                "median_us": 23.295847574869793
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 110585600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  68.32258701324463,
+                  69.15289560953777,
+                  69.0194845199585,
+                  69.2728042602539,
+                  68.91357103983562
+                ],
+                "median_us": 69.0194845199585
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  46.869186560312905,
+                  46.851181983947754,
+                  46.55269384384155,
+                  46.67135874430338,
+                  46.46703004837036
+                ],
+                "median_us": 46.67135874430338
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 487,
+            "packed_working_set_bytes": 115321600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  95.60423692067464,
+                  95.64181963602702,
+                  95.49224376678467,
+                  95.29066880544026,
+                  95.43623924255371
+                ],
+                "median_us": 95.49224376678467
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  71.75632317860921,
+                  71.41300042470296,
+                  71.24975522359212,
+                  71.18641535441081,
+                  71.13284269968669
+                ],
+                "median_us": 71.24975522359212
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "e10d3e9f48f34e739c415678434ad09a",
+        "seed": 9560,
+        "source_sha256": {
+          "bench_moe_w2_serial.py": "0fe3a8ed0a88ecd1e2976dad931decc9e1406466902597edd01aa6cce40a5b16",
+          "moe_w2_serial_kernel.py": "b170f05e08df619d435c5c5592573103c53b060b8bbb53aace6a50623610a1f1"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "directory": "moe-w2-depth3-seed9561-20260910",
+      "run_id": "140930ce75374836b948e1e9fb7b9e63",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9561,
+        "verification_tokens": 3,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 56832000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  29.525421063105266,
+                  30.64763943354289,
+                  30.68530559539795,
+                  29.16951576868693,
+                  29.328511158625286
+                ],
+                "median_us": 29.525421063105266
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  24.060076475143433,
+                  23.537256320317585,
+                  22.82986044883728,
+                  22.50770131746928,
+                  22.631865739822388
+                ],
+                "median_us": 22.82986044883728
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 457,
+            "packed_working_set_bytes": 108217600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  52.12045510609945,
+                  52.60544220606486,
+                  52.7449369430542,
+                  52.4940292040507,
+                  52.299368381500244
+                ],
+                "median_us": 52.4940292040507
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  35.9478235244751,
+                  36.15398406982422,
+                  35.83099444707235,
+                  35.76007684071859,
+                  35.80507437388102
+                ],
+                "median_us": 35.83099444707235
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 110585600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  66.62896076838176,
+                  67.32560793558757,
+                  67.44344234466553,
+                  67.47160752614339,
+                  67.4461046854655
+                ],
+                "median_us": 67.44344234466553
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  46.76827589670817,
+                  46.650191148122154,
+                  46.41744693120321,
+                  46.417784690856934,
+                  46.39578262964884
+                ],
+                "median_us": 46.417784690856934
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "140930ce75374836b948e1e9fb7b9e63",
+        "seed": 9561,
+        "source_sha256": {
+          "bench_moe_w2_serial.py": "0fe3a8ed0a88ecd1e2976dad931decc9e1406466902597edd01aa6cce40a5b16",
+          "moe_w2_serial_kernel.py": "b170f05e08df619d435c5c5592573103c53b060b8bbb53aace6a50623610a1f1"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    },
+    {
+      "directory": "moe-w2-depth5-seed9561-20260910",
+      "run_id": "e2542909be9e41f38ce7e10966da6108",
+      "report": {
+        "status": "passed",
+        "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+        "seed": 9561,
+        "verification_tokens": 5,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 56832000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  32.37384160359701,
+                  33.023738861083984,
+                  33.35773150126139,
+                  33.147152264912926,
+                  33.20065140724182
+                ],
+                "median_us": 33.147152264912926
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  24.36106602350871,
+                  24.138738711675007,
+                  24.332066377003986,
+                  24.203654130299885,
+                  24.306901295979817
+                ],
+                "median_us": 24.306901295979817
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap",
+            "distinct_experts": 467,
+            "packed_working_set_bytes": 110585600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  70.54409980773926,
+                  71.69791062672932,
+                  71.23649915059407,
+                  71.4234987894694,
+                  71.64882818857829
+                ],
+                "median_us": 71.4234987894694
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  50.03368457158407,
+                  50.047763188680015,
+                  50.28584003448486,
+                  49.96409813563029,
+                  50.19684235254923
+                ],
+                "median_us": 50.047763188680015
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint",
+            "distinct_experts": 487,
+            "packed_working_set_bytes": 115321600,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  102.88803577423096,
+                  103.4710963567098,
+                  103.73109181722005,
+                  103.79225413004558,
+                  103.64434719085693
+                ],
+                "median_us": 103.64434719085693
+              },
+              {
+                "method": "serial32w2",
+                "samples_us": [
+                  77.99189885457356,
+                  77.67049471537273,
+                  78.11988989512126,
+                  77.85498301188152,
+                  77.94965108235677
+                ],
+                "median_us": 77.94965108235677
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "serial32w2": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ]
+      },
+      "manifest": {
+        "run_id": "e2542909be9e41f38ce7e10966da6108",
+        "seed": 9561,
+        "source_sha256": {
+          "bench_moe_w2_serial.py": "0fe3a8ed0a88ecd1e2976dad931decc9e1406466902597edd01aa6cce40a5b16",
+          "moe_w2_serial_kernel.py": "b170f05e08df619d435c5c5592573103c53b060b8bbb53aace6a50623610a1f1"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 52.0
+      },
+      "service_check": {
+        "before_success_total": 52.0,
+        "after_success_total": 52.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      }
+    }
+  ],
+  "note": "Isolated unchanged serial kernel at30/50 routed rows; installed dispatch still restricted to40. No serving gain or production change."
+}

@@ -1,57 +1,148 @@
-# vLLM-Cluster für 4× AMD Strix Halo (gfx1151) über 25 GbE RoCE
+# Four-node Strix Halo vLLM cluster
 
-Eigene Build-Pipeline + Cluster-Orchestrierung für vLLM auf 4 Strix-Halo-Nodes
-(Ryzen AI Max+ 395, iGPU gfx1151 / RDNA 3.5, je 128 GB Unified Memory),
-verbunden über 25 GbE RDMA (RoCEv2). Ziel: immer aktuelle, lauffähige Images
-(Stable-Kanal: letztes vLLM-Release, Dev-Kanal: vLLM main für Day-0-Modelle)
-und maximaler Durchsatz, entschieden durch eigene Benchmarks.
+Low-latency Qwen3.8 Flash Next inference across **4 × AMD Ryzen AI Max+ 395**,
+each with **128 GB unified memory**, connected through **25 GbE RoCEv2**.
+All four gfx1151 GPUs cooperate using tensor parallelism.
 
-## Struktur
+The focus is a faster **single answer**, with the existing INT4 weights and
+computation preserved. The acceptance target is **at least 60 output tokens/s
+on ShareGPT48 at concurrency 1**, together with improved response latency.
+That target is still open.
 
-- `docker/` — Container-Image (Fedora 44, ROCm/torch gfx1151, vLLM aus Source)
-- `patches/` — idempotente gfx1151-Patch-Schicht + fail-closed Kompatibilitätsprüfung
-- `.github/workflows/` — Build-Pipeline (stable / dev / model-watch / rccl)
-- `ansible/` — Provisionierung der 4 Fedora-Nodes (Base, RDMA, Runtime, Ray)
-- `scripts/` — Cluster-Start (`cluster_up.sh`) und Serven (`serve.sh <modell> <profil>`)
-- `bench/` — Benchmark-Harness (Single-Stream tok/s + Aggregat-Durchsatz, TP/PP/EP-Matrix)
-- `models/registry.yaml` — zentrale Modell-Registry (Status, Parser, Profile, Blocker)
-- `docs/` — Runbook und Hintergrunddokumente
+## Latest experiment — September 10
 
-## Parallel-Profile
+Testing is **stopped at the owner's request**. The TP4 server remains running
+with the experimental QSA tail-bound patch; this patch has not been promoted
+as a proven throughput improvement. The interrupted repeat is not a benchmark
+result. No further tests are scheduled.
 
-`tp2`/`tp4` (Tensor-Parallel über Ray/RCCL), `pp4` (Pipeline-Parallel), `tp2pp2`,
-`ep` (Expert-Parallel für MoE), `solo` (1 Node, Baseline). Welches Profil pro
-Modell gewinnt, entscheidet `bench/run_matrix.py` — auf 25 GbE ist das
-empirisch offen (Referenzdaten existieren nur für 100/200 GbE).
+| Matched ShareGPT48/C1 run | Output tokens/s | Mean TTFT | Mean TPOT |
+|---|---:|---:|---:|
+| Fresh original control | 55.258 | 544.810 ms | 15.856 ms |
+| QSA tail-bound candidate | 54.897 | 680.271 ms | 15.307 ms |
 
-## Quickstart (Überblick)
+All 48 answers, output lengths and MTP statistics match; Hermes checks pass.
+The candidate has no demonstrated overall throughput gain. All twelve paired
+context probes have identical outputs and cache work, with lower candidate
+TTFT; this latency result still needs a repeated/post-trial control.
+[Full QSA report and evidence](docs/2026-09-10-qsa-sparse-tail-bound.md).
 
-1. Image bauen lassen (GitHub Actions, ghcr.io) oder lokal: `docker/`
-2. Nodes provisionieren: `ansible-playbook -i ansible/inventory.yaml ansible/playbooks/site.yml`
-3. Cluster hochfahren: `scripts/cluster_up.sh`
-4. Modell serven: `scripts/serve.sh qwen36-35b-a3b tp4`
-5. Benchmarks: `python3 bench/run_matrix.py --model qwen36-35b-a3b`
+## Measured performance
 
-Details: `docs/RUNBOOK.md`.
+| Configuration / milestone | ShareGPT output tokens/s | Mean TTFT | Mean TPOT | Evidence |
+|---|---:|---:|---:|---|
+| Original TP4 baseline | 48.60 | See report | See report | [Baseline](docs/2026-09-06-single-stream.md) |
+| TP4 + UMA production checkpoint | 52.04 | See report | See report | [UMA](docs/2026-09-07-hip-uma.md) |
+| TP4 + W2 serial production checkpoint | 53.85 | See report | 16.43 ms | [W2](docs/2026-09-07-moe-w2-serial-model.md) |
+| TP4 + AVX512 + W1 expert order | 56.04 | See report | See report | [Bracketed W1 comparison](docs/2026-09-07-moe-w1-order.md) |
+| vLLM 0.29 custom TP4, September 9 baseline | **55.74** | **541.77 ms** | **15.63 ms** | [Record](bench/records/2026-09-09-qwen029-tp4-baseline.json) |
+| vLLM 0.29 TP4, GPU high mode, September 10 | **56.36** | **545.61 ms** | **15.41 ms** | [Auto/high/auto comparison](docs/2026-09-10-gpu-performance-profile.md) |
 
-## Bekannte Einschränkungen
+These are historical milestones, **not a controlled comparison between every
+row**. Individual reports contain matched controls, output parity and known
+confounders. The September 9 baseline completed 48/48 requests, generated
+11,839 tokens and took 212.38 seconds. No version-only speedup is claimed.
 
-- GLM-5.3-Flash **läuft** (2026-09-01, tp4, Dev-Image `dev-glm53-flash`):
-  upstream gfx950-gated, bei uns via Patch 58 + 61 + Torch-Kpool-Lane
-  (Details: `models/registry.yaml`, `docs/PERFORMANCE.md` §e). Bring-up-
-  Qualitätscaveat beachten (G1-Repetition auf Kurz-Prompts).
-- Graph-**Capture** deadlocked auf gfx1151 (HIP, vllm#32180) — Default ist daher
-  `cudagraph_mode NONE` (Inductor-Fusion bleibt aktiv; gemessen +7–9 % vs.
-  `--enforce-eager`, 600-s-Soak hang-frei, Stand 2026-08-31).
-- `amd_iommu=off` vs. RDMA: ungelöster Trade-off, per `iommu_mode` parametrierbar,
-  A/B-Test über `bench/iommu_ab.sh`.
+Output throughput includes prefill and request overhead. It is not pure
+decode speed or aggregate throughput at high concurrency. MTP emits token
+bursts, so stream event intervals must not be confused with per-token time.
+See [benchmark methodology](bench/README.md).
 
-## Performance-Programm (Ziel: schneller als DGX Spark)
+## Current runtime
 
-Dev-Builds basieren auf dem jeweils frischesten vLLM-Dev/PR-Stand (Registry-Feld
-`vllm_ref` pinnt PR-Heads per SHA; `model-watch` triggert Rebuilds, wenn Heads
-sich bewegen). Die gfx1151-Performance-Patches liegen in `patches/` (Serie 50–58,
-Doku: `patches/manifest.d/`): MXFP4-MoE-Tuning, Radix-Top-k, TileLang-Sparse-Indexer,
-W8A8-Skinny-GEMM, AITER-Triton-Enablement, APU-Memory-Reporting, PLE-Offload
-(Zero-Copy auf Unified Memory), GLM-MTP-Dispatch. Strategie, Messwerte,
-Spark-Referenzziele und Messplan: **`docs/PERFORMANCE.md`**.
+| Component | Configuration |
+|---|---|
+| Hosts | Fedora 45, `192.168.1.15`–`192.168.1.18` |
+| GPU | Radeon 8060S, gfx1151 / RDNA 3.5 |
+| Network | Intel 25 GbE RDMA NICs through a switch |
+| Model | Qwen3.8 Flash Next, `/home/cluster-user/qwen38_rest` |
+| Quantization | Existing asymmetric INT4, group size 32 |
+| Runtime | Custom `0.29.0+strix.rocm100`, preserved gfx1151 patches |
+| Parallelism | TP4, native vLLM `mp` executor |
+| Speculation | Native MTP, 3 draft tokens |
+| Graphs | `FULL_DECODE_ONLY`, draft prefill graph |
+| Context limit | 262,144 tokens |
+| Communication | Validated UMA/RDMA backend, AVX512 BF16 reduction |
+| Tool calls | Automatic tool selection with `qwen3_xml` parser |
+| GPU power mode | `high` on all four nodes; live sysfs setting, recheck after reboot |
+| Active experiment | QSA tail-bound source; TP4 run `c124f9d5f46941eab7c47a23c2d555ed`, tests stopped |
+
+The custom release installation applies the complete upstream runtime delta
+while preserving the working Strix stack. It is not the stock ROCm wheel.
+The live container overlays and saved node images contain additional patches;
+building the generic base image does not reproduce this deployment.
+[Deployment details](docs/2026-09-09-qwen029-tp4.md).
+
+## Connect an OpenAI-compatible client
+
+```text
+Base URL: http://192.168.1.15:8000/v1
+Model:    /home/cluster-user/qwen38_rest
+```
+
+Hermes Agent can use this custom endpoint. Automatic and streamed tool calls
+have been checked, including a tool-result roundtrip. The model uses the Qwen
+XML parser; the agent's name does not determine the server parser.
+
+## Operate the existing cluster
+
+Run on node 1:
+
+```bash
+python3 /home/cluster-user/strix-halo-next/tools/cluster.py status \
+  --config /home/cluster-user/strix-halo-next/config/cluster.json
+
+python3 /home/cluster-user/strix-halo-next/tools/cluster.py start \
+  --config /home/cluster-user/strix-halo-next/config/cluster.json \
+  --tag production --timeout 900
+```
+
+The controller checks all ranks and records run IDs, commands and logs.
+Normal stop/restart requires idle request queues. Startup and crash recovery
+are manual. Experiments use separate configuration files and may temporarily
+replace the canonical run; inspect the controller status before operating it.
+[Native controller guide](scripts/native/README.md).
+
+## Reproduce the serving benchmark
+
+On node 1, with the September 9 containers running:
+
+```bash
+bash /home/cluster-user/strix-halo-next/tools/bench_sharegpt_qwen029.sh my-unique-run
+```
+
+This uses 48 ShareGPT prompts, seed 42, temperature 0, concurrency 1 and
+streamed chat completions. The script and dataset requirements are in
+[bench/README.md](bench/README.md). Results are collected outside the model
+container. Public records retain timings and response hashes; weights and
+generated text are not committed.
+
+## Research and experiments
+
+- [September 9 GitHub and paper review](docs/2026-09-09-research-roadmap.md)
+- [Hardware strengths and kernel hypotheses](docs/2026-09-07-strix-hardware-strengths.md)
+- [Measured GPU critical-path budget](docs/2026-09-06-gpu-budget.md)
+- [DGX Spark comparison and workload differences](docs/2026-09-06-spark-comparison.md)
+- [UCCL investigation and the NIC SRQ limitation](docs/2026-09-07-uccl-review.md)
+- [TP2 versus TP4 comparison](docs/2026-09-07-tp2-comparison.md)
+- [AITER module review](docs/2026-09-07-aiter-modules.md)
+
+Negative experiments remain documented. Isolated kernel improvements are not
+advertised as model-level gains. Candidate changes require numerical checks,
+full-model measurements and controls before promotion.
+
+## Repository layout
+
+| Directory | Purpose |
+|---|---|
+| `scripts/native/` | Run-scoped lifecycle and deployment for the existing cluster |
+| `bench/` | Benchmark clients, exporters and public measurement records |
+| `patches/` | Version-specific runtime and kernel patches |
+| `tests/` | Numerical, graph and lifecycle checks |
+| `tools/` | Runtime evidence collection and bounded experiments |
+| `docs/` | Deployment, research and experiment reports |
+| `docker/`, `ansible/`, `models/` | General build/provisioning framework and model registry |
+
+The older general build/provisioning path covers additional models and is
+separate from the measured Qwen Flash Next runtime. See the historical
+[runbook](docs/RUNBOOK.md) and [performance log](docs/PERFORMANCE.md) for that work.

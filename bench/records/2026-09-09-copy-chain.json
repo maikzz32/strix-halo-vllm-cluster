@@ -1,0 +1,16 @@
+{
+  "copies": 88,
+  "bytes": 1794048,
+  "fresh_input_checks": 2,
+  "replays_per_sample": 32,
+  "samples_us": [
+    179.54203486442566,
+    178.79453301429749,
+    178.5295605659485,
+    178.71831357479095,
+    178.7070631980896
+  ],
+  "median_chain_us": 178.71831357479095,
+  "host": "192.168.1.15",
+  "note": "Isolated serial copy chain with the same size multiset. Excludes model kernels, interleaving, cache behavior and communication. Not subtractable from model time."
+}

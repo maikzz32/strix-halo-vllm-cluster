@@ -1,0 +1,46 @@
+[
+  {
+    "host": "192.168.1.15",
+    "result": {
+      "passed": true,
+      "records": 1,
+      "node_counts": [
+        2
+      ],
+      "note": "Tensor copy may be implemented as a kernel. This smoke does not require a memcpy node."
+    }
+  },
+  {
+    "host": "192.168.1.16",
+    "result": {
+      "passed": true,
+      "records": 1,
+      "node_counts": [
+        2
+      ],
+      "note": "Tensor copy may be implemented as a kernel. This smoke does not require a memcpy node."
+    }
+  },
+  {
+    "host": "192.168.1.17",
+    "result": {
+      "passed": true,
+      "records": 1,
+      "node_counts": [
+        2
+      ],
+      "note": "Tensor copy may be implemented as a kernel. This smoke does not require a memcpy node."
+    }
+  },
+  {
+    "host": "192.168.1.18",
+    "result": {
+      "passed": true,
+      "records": 1,
+      "node_counts": [
+        2
+      ],
+      "note": "Tensor copy may be implemented as a kernel. This smoke does not require a memcpy node."
+    }
+  }
+]

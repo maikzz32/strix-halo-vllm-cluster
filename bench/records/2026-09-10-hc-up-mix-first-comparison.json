@@ -1,0 +1,41 @@
+{
+  "before_raw_sha256": "f261d1a7d914578724210301118da764385e685cfd694e8544c640ac65dbe658",
+  "after_raw_sha256": "805eeb0d16fb0465053603ce8a7b8713f749dc2f5d9c18ac7483acdd5a8455ed",
+  "matched_requests": 48,
+  "identical_texts": 48,
+  "identical_output_lengths": true,
+  "identical_speculation": true,
+  "metrics": {
+    "output_throughput": {
+      "before": 56.286100917631664,
+      "after": 56.18956616899452,
+      "change_percent": -0.17150725856532878
+    },
+    "mean_ttft_ms": {
+      "before": 556.3154526244034,
+      "after": 549.9334182917058,
+      "change_percent": -1.1471970269009257
+    },
+    "median_ttft_ms": {
+      "before": 461.14323949586833,
+      "after": 470.57626450259704,
+      "change_percent": 2.0455737390926654
+    },
+    "p99_ttft_ms": {
+      "before": 1192.0166741545838,
+      "after": 1066.4887813957466,
+      "change_percent": -10.53071617877036
+    },
+    "mean_tpot_ms": {
+      "before": 15.391825239269403,
+      "after": 15.562524676299628,
+      "change_percent": 1.1090266058551457
+    },
+    "p99_tpot_ms": {
+      "before": 19.861508062135698,
+      "after": 20.626380609489328,
+      "change_percent": 3.8510295641235537
+    }
+  },
+  "note": "Request bodies, seed, temperature, config and dataset must also match; raw result files do not encode every parameter."
+}

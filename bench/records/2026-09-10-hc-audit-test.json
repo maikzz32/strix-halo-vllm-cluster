@@ -1,0 +1,244 @@
+{
+  "status": "passed",
+  "real_constructor": true,
+  "inductor_pair": true,
+  "inductor_full_methods": true,
+  "checks": [
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": true,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 1,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 3,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 4,
+      "method": "combine_and_mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "mix",
+      "exact": true
+    },
+    {
+      "prefix": "model.mtp.layers.0.attn_hyper_connection",
+      "combine": false,
+      "rows": 5,
+      "method": "combine_and_mix",
+      "exact": true
+    }
+  ],
+  "compiled_fullgraph": true,
+  "changed_graph_exact": true,
+  "module_sha256": {
+    "hc_up_mix_runtime.py": "81c224d8c2737988ab8a5e3754b0cb173d95d7cef3e6202a99f15b373d5caf67",
+    "hc_up_mix_source.py": "44a5e75923ea6f982b7b927c8a07febf7e274f140a05e0d63d96d5439da51317",
+    "hc_up_mix_dynamic.py": "aca928f2dc4ff8e67995e1384ca0aa7c6abec043158dc049e53c97ff527f22ac",
+    "hc_first_mismatch.py": "cde7d96f02f6613bc4380ff1a5ce98ae43c48b00de54de79f093f4df872fdc7c"
+  },
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "benchmark_source_sha256": "f2741bf6e953f62c96f89c0bd1b91246055b260210669412d59886ba4022b1e8",
+  "service_counters_unchanged": true
+}

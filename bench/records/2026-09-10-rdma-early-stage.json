@@ -1,0 +1,206 @@
+[
+  {
+    "addon": "/opt/strix-halo-next/rdma-early-reduce-20260910-r1",
+    "commands": [
+      [
+        "gcc",
+        "-std=c11",
+        "-O3",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "cpu_rdma_transport.c",
+        "-o",
+        "transport.o"
+      ],
+      [
+        "/opt/rocm/bin/hipcc",
+        "-std=c++17",
+        "-O3",
+        "--offload-arch=gfx1151",
+        "-DSTRIX_UMA_THREADS=1024",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "hip_uma_backend.hip",
+        "-o",
+        "uma.o"
+      ],
+      [
+        "g++",
+        "-shared",
+        "uma.o",
+        "transport.o",
+        "-L/opt/rocm/lib",
+        "-Wl,-rpath,/opt/rocm/lib",
+        "-lamdhip64",
+        "-libverbs",
+        "-lpthread",
+        "-o",
+        "libhip_rdma_backend.so"
+      ]
+    ],
+    "binary_sha256": "f8e3fddbdad358892e3e90ffed8f1cda00fce8cc0f1a699450191079e744079b",
+    "sources_sha256": {
+      "cpu_rdma_transport.c": "21cbec6110563573b56a437d4115641a8635cd65ac9a1ea83c2c07bb1d94f618",
+      "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+      "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+      "cpu_rdma_reduce_avx512.h": "d8c4c3ec82c099e019d7ef9dccacf9be3ac2e0ffb21140c7e5547112aa4d1551",
+      "hip_uma_backend.hip": "c1ded581348d4365760fcd2a5818b3d58cb09015f6f76a4d31d9eb4668e44ffe"
+    },
+    "host": "192.168.1.15"
+  },
+  {
+    "addon": "/opt/strix-halo-next/rdma-early-reduce-20260910-r1",
+    "commands": [
+      [
+        "gcc",
+        "-std=c11",
+        "-O3",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "cpu_rdma_transport.c",
+        "-o",
+        "transport.o"
+      ],
+      [
+        "/opt/rocm/bin/hipcc",
+        "-std=c++17",
+        "-O3",
+        "--offload-arch=gfx1151",
+        "-DSTRIX_UMA_THREADS=1024",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "hip_uma_backend.hip",
+        "-o",
+        "uma.o"
+      ],
+      [
+        "g++",
+        "-shared",
+        "uma.o",
+        "transport.o",
+        "-L/opt/rocm/lib",
+        "-Wl,-rpath,/opt/rocm/lib",
+        "-lamdhip64",
+        "-libverbs",
+        "-lpthread",
+        "-o",
+        "libhip_rdma_backend.so"
+      ]
+    ],
+    "binary_sha256": "f8e3fddbdad358892e3e90ffed8f1cda00fce8cc0f1a699450191079e744079b",
+    "sources_sha256": {
+      "cpu_rdma_transport.c": "21cbec6110563573b56a437d4115641a8635cd65ac9a1ea83c2c07bb1d94f618",
+      "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+      "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+      "cpu_rdma_reduce_avx512.h": "d8c4c3ec82c099e019d7ef9dccacf9be3ac2e0ffb21140c7e5547112aa4d1551",
+      "hip_uma_backend.hip": "c1ded581348d4365760fcd2a5818b3d58cb09015f6f76a4d31d9eb4668e44ffe"
+    },
+    "host": "192.168.1.16"
+  },
+  {
+    "addon": "/opt/strix-halo-next/rdma-early-reduce-20260910-r1",
+    "commands": [
+      [
+        "gcc",
+        "-std=c11",
+        "-O3",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "cpu_rdma_transport.c",
+        "-o",
+        "transport.o"
+      ],
+      [
+        "/opt/rocm/bin/hipcc",
+        "-std=c++17",
+        "-O3",
+        "--offload-arch=gfx1151",
+        "-DSTRIX_UMA_THREADS=1024",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "hip_uma_backend.hip",
+        "-o",
+        "uma.o"
+      ],
+      [
+        "g++",
+        "-shared",
+        "uma.o",
+        "transport.o",
+        "-L/opt/rocm/lib",
+        "-Wl,-rpath,/opt/rocm/lib",
+        "-lamdhip64",
+        "-libverbs",
+        "-lpthread",
+        "-o",
+        "libhip_rdma_backend.so"
+      ]
+    ],
+    "binary_sha256": "f8e3fddbdad358892e3e90ffed8f1cda00fce8cc0f1a699450191079e744079b",
+    "sources_sha256": {
+      "cpu_rdma_transport.c": "21cbec6110563573b56a437d4115641a8635cd65ac9a1ea83c2c07bb1d94f618",
+      "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+      "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+      "cpu_rdma_reduce_avx512.h": "d8c4c3ec82c099e019d7ef9dccacf9be3ac2e0ffb21140c7e5547112aa4d1551",
+      "hip_uma_backend.hip": "c1ded581348d4365760fcd2a5818b3d58cb09015f6f76a4d31d9eb4668e44ffe"
+    },
+    "host": "192.168.1.17"
+  },
+  {
+    "addon": "/opt/strix-halo-next/rdma-early-reduce-20260910-r1",
+    "commands": [
+      [
+        "gcc",
+        "-std=c11",
+        "-O3",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "cpu_rdma_transport.c",
+        "-o",
+        "transport.o"
+      ],
+      [
+        "/opt/rocm/bin/hipcc",
+        "-std=c++17",
+        "-O3",
+        "--offload-arch=gfx1151",
+        "-DSTRIX_UMA_THREADS=1024",
+        "-fPIC",
+        "-I.",
+        "-c",
+        "hip_uma_backend.hip",
+        "-o",
+        "uma.o"
+      ],
+      [
+        "g++",
+        "-shared",
+        "uma.o",
+        "transport.o",
+        "-L/opt/rocm/lib",
+        "-Wl,-rpath,/opt/rocm/lib",
+        "-lamdhip64",
+        "-libverbs",
+        "-lpthread",
+        "-o",
+        "libhip_rdma_backend.so"
+      ]
+    ],
+    "binary_sha256": "f8e3fddbdad358892e3e90ffed8f1cda00fce8cc0f1a699450191079e744079b",
+    "sources_sha256": {
+      "cpu_rdma_transport.c": "21cbec6110563573b56a437d4115641a8635cd65ac9a1ea83c2c07bb1d94f618",
+      "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+      "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+      "cpu_rdma_reduce_avx512.h": "d8c4c3ec82c099e019d7ef9dccacf9be3ac2e0ffb21140c7e5547112aa4d1551",
+      "hip_uma_backend.hip": "c1ded581348d4365760fcd2a5818b3d58cb09015f6f76a4d31d9eb4668e44ffe"
+    },
+    "host": "192.168.1.18"
+  }
+]

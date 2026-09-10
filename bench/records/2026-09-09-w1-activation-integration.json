@@ -1,0 +1,27 @@
+{
+  "candidate_sha256": "e00190bb5b5009b1ce3526440a524044ebd8af9f98e278a83f3059ff2b247792",
+  "cases": [
+    {
+      "routing": "reuse10",
+      "banks": 24,
+      "fused_exact": true,
+      "disabled_fallback_exact": true,
+      "wrapper_and_changed_graph_exact": true
+    },
+    {
+      "routing": "overlap25",
+      "banks": 24,
+      "fused_exact": true,
+      "disabled_fallback_exact": true,
+      "wrapper_and_changed_graph_exact": true
+    },
+    {
+      "routing": "disjoint40",
+      "banks": 24,
+      "fused_exact": true,
+      "disabled_fallback_exact": true,
+      "wrapper_and_changed_graph_exact": true
+    }
+  ],
+  "note": "Full W1 GEMM helper and invocation wrapper tested. Expert caller and model serving remain untested."
+}

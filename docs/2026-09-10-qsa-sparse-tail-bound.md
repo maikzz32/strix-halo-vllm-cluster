@@ -1,0 +1,113 @@
+# Bound sparse QSA attention to the occupied selection prefix
+
+The first empty-tile candidate regressed fully occupied prefill by 12–14%.
+This replacement scans selection indices once per program, finds the last
+nonnegative entry, and caps the existing split's loop end at its tile boundary.
+It keeps the original split start, split count, tile geometry and populated-tile
+arithmetic. Negative holes within the occupied prefix still take the original
+path. No host readback or graph-specific fixed context length is introduced.
+
+The scan is conservative: nonnegative indices that point to invalid pages can
+extend the bound unnecessarily, but cannot exclude a valid entry. The existing
+kernel still validates pages and requests. Only trailing tiles whose indices
+are all negative are removed. Finite synthetic parity tests do not constitute
+a proof for arbitrary NaN/infinity inputs.
+
+## Initial screening
+
+| Rows | Selection | Original (us) | Bounded loop (us) |
+| --- | --- | ---: | ---: |
+| 4 | Causal | 38.13 | 20.64 |
+| 8 | Causal | 68.43 | 35.41 |
+| 504 | Causal | 4902.52 | 878.45 |
+| 504 | Full | 5248.82 | 5271.37 |
+| 1024 | Causal | 9966.88 | 2875.91 |
+| 1024 | Full | 10526.72 | 10472.04 |
+
+All 20 initial cases match bit for bit. Changed-input graph replay matches
+candidate eager execution. These are kernel-level timings, not model TPS.
+
+## Expanded validation
+
+The second run adds two requests with independently permuted page tables,
+noncontiguous K/V views from a packed allocation, and three patterns generated
+by the installed `expand_qsa_block_indices_cuda`: short positions, mixed short
+and long requests, and positions spanning the 2048-token selection boundary.
+Selected compressed blocks are synthetic random permutations; the full scoring
+and top-k pipeline is not executed by this test.
+
+All 32 cases pass exact output comparison and changed-input HIP graph checks.
+Both runs alternate timing order over six samples of eight replays and verify
+that serving request counters remain unchanged. The installed QSA source hash
+was independently rechecked before testing. No serving source was changed.
+
+The bounded-loop candidate is suitable for the next integration validation and
+matched TP4 serving trial; it has not yet been deployed or shown a serving gain.
+Evidence records: `bench/records/2026-09-10-qsa-sparse-tail-r1.json` and
+`bench/records/2026-09-10-qsa-sparse-tail-r2.json`.
+The current test is `tests/bench_qsa_sparse_tail_bound.py`; it includes the
+expanded second-run coverage, while both records retain the candidate hash.
+
+## Four-node validation and staging
+
+Nodes 1–3 also passed all 32 expanded cases with exact output and changed-input
+graph parity; request counters remained unchanged. Together with Node 4's r2
+record, this establishes isolated coverage on all four APUs. Additional records
+are `2026-09-10-qsa-sparse-tail-node{15,16,17}.json`.
+
+`patches/qsa_sparse_tail_bound.py` generates the exact measured candidate and
+asserts both original and candidate SHA256. Original and candidate sources are
+staged on every node under `/opt/strix-halo-next/qsa-tail-bound-20260910-r1`.
+The stage record confirms all four serving files still contain the original.
+The deployment controller refuses activation/restoration while vLLM workers or
+engine cores exist and validates all four backups before mutating any source.
+Its local workspace expects `config/qwen029-tp4-graph-inventory.json` and the
+generator under `cluster-repo/patches`, matching the experiment workspace.
+
+A fresh original TP4 control completed with 55.258 output tokens/s, 544.810 ms
+mean TTFT and 15.856 ms mean TPOT. All 48 texts, lengths and speculative
+statistics match the prior original control. Hermes checks passed. Twelve
+context probes at 256/512/1024/2048 tokens also completed; their cache and phase
+counters are retained for the candidate comparison.
+
+After the control completed, the original service stopped cleanly and the
+candidate was activated on all four nodes. Run
+`c124f9d5f46941eab7c47a23c2d555ed` started with the unchanged TP4/MTP3
+configuration and completed the first serving trial below. The phase comparison
+tool, `bench/compare_context_phases.py`, checks tokenized prompts and reports
+output parity and matched cache work separately from individual timings.
+
+## First model result and context comparison
+
+The candidate completed ShareGPT48/C1 at **54.897 tokens/s** versus **55.258**
+for the fresh original control (-0.65%). Mean TTFT increased from 544.810 to
+680.271 ms; median TTFT decreased from 502.161 to 485.788 ms. Mean TPOT decreased
+from 15.856 to 15.307 ms (-3.46%). All 48 texts, output lengths and speculative
+statistics match exactly. Hermes checks passed. This first run does not
+establish an overall throughput gain, and the candidate is not promoted.
+
+All twelve subsequent context responses and usage counts match the control.
+Every paired request has equal cache hits, cache queries and newly computed KV
+tokens. TTFT is lower in all twelve candidate probes. For 512-token prompts,
+prefill phase times are 554.6/552.0/550.0 ms versus 604.1/610.4/606.2 ms;
+for 1024 tokens they are 943.1/942.5/947.6 versus 1036.7/1033.6/1036.0 ms.
+These matched individual samples support pursuing the candidate, but require
+a repeated/post-trial control before claiming a stable gain.
+
+A second ShareGPT run without restarting was interrupted at the owner's request
+after eight reported completions. It is incomplete and excluded from performance
+claims. Compilation remains a hypothesis for the initial TTFT outliers, not an
+established attribution. A completed repeat and post-trial control are missing.
+
+## Stopped test state
+
+The local benchmark controller and remote benchmark process were stopped.
+Verification immediately after stopping found no serving benchmark processes
+and zero running or waiting requests. A later read-only check for the GitHub
+update confirmed HTTP 200 and no benchmark processes; one other request was
+active and was left untouched. The model server was left running, as requested, on
+experimental run `c124f9d5f46941eab7c47a23c2d555ed` with the QSA patch.
+The original QSA source remains backed up on all nodes; it was not restored
+because the request was to stop tests, not restart or stop serving.
+Further tests require the owner to resume testing. The 60-token/s goal remains
+unachieved, and the QSA candidate is not promoted as a proven throughput gain.

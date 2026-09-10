@@ -1,0 +1,87 @@
+{
+  "head_only": true,
+  "short_rows": 3,
+  "long_rows": 4,
+  "torch_version": "2.13.0+rocm10.0.0",
+  "hip_version": "7.15.26333",
+  "device": "AMD Radeon 8060S Graphics",
+  "cases": [
+    {
+      "kind": "int4",
+      "N": 62080,
+      "K": 2560,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 62080,
+      "K": 2560,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 62080,
+      "K": 2560,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 62080,
+      "K": 2560,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 186240,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    }
+  ],
+  "source_sha256": {
+    "/usr/local/lib64/python3.12/site-packages/vllm/model_executor/layers/utils.py": "ebaf8b74ed89033ad450fbfdd08e051bf0b750ee54b2c64cbd3bf3944a5910e0",
+    "/usr/local/lib64/python3.12/site-packages/vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py": "a136168a08484c2b3e9d18ba2fcfbd9c067a5a70dc1ebb9e319b89ddb1e5a48e"
+  },
+  "note": "Synthetic stateless operators only. Cross-shape mismatches are observations, not automatically bugs or proof of full-model divergence cause. Serving source unchanged.",
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "benchmark_source_sha256": "744f6b086921f077e96921b8784a84fa226ea9af1d60530b5ebc89af82828de2",
+  "service_counters_unchanged": true
+}

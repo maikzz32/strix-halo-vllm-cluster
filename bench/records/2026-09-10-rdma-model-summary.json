@@ -1,0 +1,66 @@
+{
+  "identical_outputs": true,
+  "completion_tokens": 2048,
+  "common_sequences_all_four": 0,
+  "common_sequences_nodes_1_2_4": 1946,
+  "ranks": [
+    {
+      "host": "192.168.1.15",
+      "rank": 0,
+      "first_sequence": 74065,
+      "last_sequence": 76112,
+      "median_us": {
+        "post_us": 4.99,
+        "completion_wait_us": 36.069,
+        "reduction_and_fence_us": 5.07,
+        "total_us": 46.2385
+      },
+      "trace_sha256": "fe03adf936b28f5ceb42a67cbf8e0e5457454bd3b6bf01b5477c0514ad700d24"
+    },
+    {
+      "host": "192.168.1.16",
+      "rank": 1,
+      "first_sequence": 74000,
+      "last_sequence": 76047,
+      "median_us": {
+        "post_us": 4.92,
+        "completion_wait_us": 37.158500000000004,
+        "reduction_and_fence_us": 3.84,
+        "total_us": 45.973
+      },
+      "trace_sha256": "4523462e58abeb1f14d0f5e2506812a6efb6c7a9ce6cddcc1761dfed326f151f"
+    },
+    {
+      "host": "192.168.1.17",
+      "rank": 2,
+      "first_sequence": 76559,
+      "last_sequence": 78606,
+      "median_us": {
+        "post_us": 5.04,
+        "completion_wait_us": 34.414,
+        "reduction_and_fence_us": 6.2745,
+        "total_us": 46.348
+      },
+      "trace_sha256": "8a1cc7afecc7d8ad00d42b49e29c4f624bf8da48bf151fb66034d06fbf0f91fe"
+    },
+    {
+      "host": "192.168.1.18",
+      "rank": 3,
+      "first_sequence": 74102,
+      "last_sequence": 76149,
+      "median_us": {
+        "post_us": 4.99,
+        "completion_wait_us": 35.194,
+        "reduction_and_fence_us": 5.05,
+        "total_us": 45.8885
+      },
+      "trace_sha256": "4e19dc6a81ee30b2444b714da77ce36b2461d698feb556da56d96664ed557cae"
+    }
+  ],
+  "limitation": "Node 3 was armed later. Do not compare simultaneous four-rank arrivals from these windows.",
+  "shared_receiver_0_latest_recv_minus_latest_send_median_us": -10.309499999999998,
+  "raw_response_sha256": {
+    "reference": "afc6073639a22ca0d5e4885527970d222fc5a7cccbe84a436522f02d74a6d3f0",
+    "candidate": "5c5c53040eab92aca25acbd3e4b883b154d029a66502db60579b1a9fa6703d3b"
+  }
+}

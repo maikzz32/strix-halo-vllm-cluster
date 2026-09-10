@@ -1,0 +1,382 @@
+{
+  "created_utc": "2026-09-10T05:25:22.652416+00:00",
+  "model": "/home/cluster-user/qwen38_rest",
+  "arguments": {
+    "url": "http://192.168.1.15:8000",
+    "lengths": [
+      256,
+      512,
+      1024,
+      2048
+    ],
+    "tokens": 32,
+    "repeats": 3,
+    "output": "results\\prefill-phase-20260910-r1.json",
+    "prefix_id": null,
+    "phase_metrics": true
+  },
+  "cases": [
+    {
+      "prompt_tokens": 256,
+      "prompt_ids_sha256": "0583bd662f7bb4e3305dedabee47cde3f91ce4fc194b3959070069d8183247c0",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 475.838999991538,
+          "wall_s": 0.9278899999917485,
+          "usage": {
+            "prompt_tokens": 256,
+            "total_tokens": 287,
+            "completion_tokens": 31
+          },
+          "text_sha256": "084c86637d4823bb74a255e2f118ada2b4df90137e757ad7d4948f282e8d4c62",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.4627833366394043,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 3.945900243707001e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.9135823329997947,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.46129231998929754,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.4522900130104972,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 421.70000000623986,
+          "wall_s": 0.8750033000105759,
+          "usage": {
+            "prompt_tokens": 256,
+            "total_tokens": 287,
+            "completion_tokens": 31
+          },
+          "text_sha256": "084c86637d4823bb74a255e2f118ada2b4df90137e757ad7d4948f282e8d4c62",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.3964381217956543,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.907000842038542e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.8488065019919304,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.3953143219987396,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.4534921799931908,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 407.790199998999,
+          "wall_s": 0.8607023999938974,
+          "usage": {
+            "prompt_tokens": 256,
+            "total_tokens": 287,
+            "completion_tokens": 31
+          },
+          "text_sha256": "084c86637d4823bb74a255e2f118ada2b4df90137e757ad7d4948f282e8d4c62",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.40552520751953125,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 5.440000677481294e-06,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.851255322995712,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.39836533699417487,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.4528899860015372,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 256.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 512,
+      "prompt_ids_sha256": "0fc4c832db1852da6626bc319c5e436cb4b33be5bed35192fd7bc8de394a30dc",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 632.3970000084955,
+          "wall_s": 1.1255001999961678,
+          "usage": {
+            "prompt_tokens": 512,
+            "total_tokens": 544,
+            "completion_tokens": 32
+          },
+          "text_sha256": "bdf9b4db198497ed8abf264388ab792019c6c04160611ca9cb11089089f06a36",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.6050271987915039,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2.2590000298805535e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0978151410090504,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.6037539600074524,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.494061181001598,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 620.5511000007391,
+          "wall_s": 1.1150410999980522,
+          "usage": {
+            "prompt_tokens": 512,
+            "total_tokens": 544,
+            "completion_tokens": 32
+          },
+          "text_sha256": "bdf9b4db198497ed8abf264388ab792019c6c04160611ca9cb11089089f06a36",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.599388837814331,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2.177999704144895e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0927681629982544,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.5979427239944926,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.49482543900376186,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 612.3139000119409,
+          "wall_s": 1.1074081000115257,
+          "usage": {
+            "prompt_tokens": 512,
+            "total_tokens": 544,
+            "completion_tokens": 32
+          },
+          "text_sha256": "bdf9b4db198497ed8abf264388ab792019c6c04160611ca9cb11089089f06a36",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.5996084213256836,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2.0399005734361708e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0930835339968326,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.5980713400058448,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.4950121939909877,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 512.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 1024,
+      "prompt_ids_sha256": "0e2e505ecfa8682c78faf3f57349217ca6c9e162da44bc7c94d2b38c360224df",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 1399.4949999905657,
+          "wall_s": 1.853776799995103,
+          "usage": {
+            "prompt_tokens": 1024,
+            "total_tokens": 1056,
+            "completion_tokens": 32
+          },
+          "text_sha256": "82911d5cb59a88e8e22b58392dcd6ce7891b76dd53402992ce27d72078e3294a",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.3873069286346436,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.1619995348155499e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.8412203309999313,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.3856067919987254,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.45561353900120594,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 1044.32220000308,
+          "wall_s": 1.5013945999962743,
+          "usage": {
+            "prompt_tokens": 1024,
+            "total_tokens": 1056,
+            "completion_tokens": 32
+          },
+          "text_sha256": "82911d5cb59a88e8e22b58392dcd6ce7891b76dd53402992ce27d72078e3294a",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.040881633758545,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 6.590009434148669e-06,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.4843392210023012,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0254405229934491,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.4588986980088521,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 1044.569899997441,
+          "wall_s": 1.5020565000013448,
+          "usage": {
+            "prompt_tokens": 1024,
+            "total_tokens": 1056,
+            "completion_tokens": 32
+          },
+          "text_sha256": "82911d5cb59a88e8e22b58392dcd6ce7891b76dd53402992ce27d72078e3294a",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.027400255203247,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.4820005162619054e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.4844277770025656,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0256293270067545,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.4587984499958111,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1024.0
+          }
+        }
+      ]
+    },
+    {
+      "prompt_tokens": 2048,
+      "prompt_ids_sha256": "1d17bbeef7d3540696ffe34a27f9d475492bed92396b8e692ed4af5721097306",
+      "requests": [
+        {
+          "repeat": 0,
+          "prefix_state": "first_use",
+          "ttft_ms": 2010.1204000093276,
+          "wall_s": 2.3446047000034014,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "5179b64ff17e1cbdfbadbfe014603e6faf0d547ad3bf1bea718c3685e6afe401",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.981935739517212,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 3.0419992981478572e-05,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2.315407640009653,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.9794627110095462,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.33594492900010664,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2048.0
+          }
+        },
+        {
+          "repeat": 1,
+          "prefix_state": "reused",
+          "ttft_ms": 1999.796799995238,
+          "wall_s": 2.334811399996397,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "5179b64ff17e1cbdfbadbfe014603e6faf0d547ad3bf1bea718c3685e6afe401",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.995431900024414,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 9.349998435936868e-06,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2.3304871460131835,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.9937378000031458,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.3367493460100377,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2048.0
+          }
+        },
+        {
+          "repeat": 2,
+          "prefix_state": "reused",
+          "ttft_ms": 1234.0736000041943,
+          "wall_s": 1.5692066000046907,
+          "usage": {
+            "prompt_tokens": 2048,
+            "total_tokens": 2080,
+            "completion_tokens": 32
+          },
+          "text_sha256": "5179b64ff17e1cbdfbadbfe014603e6faf0d547ad3bf1bea718c3685e6afe401",
+          "counter_delta": {
+            "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 2048.0,
+            "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 800.0,
+            "vllm:time_to_first_token_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:time_to_first_token_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.220773696899414,
+            "vllm:request_queue_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_queue_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 6.8500085035339e-06,
+            "vllm:request_inference_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_inference_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.5555613309988985,
+            "vllm:request_prefill_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.218578420986887,
+            "vllm:request_decode_time_seconds_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_decode_time_seconds_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 0.3369829100120114,
+            "vllm:request_prefill_kv_computed_tokens_count{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1.0,
+            "vllm:request_prefill_kv_computed_tokens_sum{engine=\"0\",model_name=\"/home/cluster-user/qwen38_rest\"}": 1248.0
+          }
+        }
+      ]
+    }
+  ],
+  "note": "First use of a unique prefix versus exact reuse; speed alone does not prove cache hits.",
+  "prefix_id": "2fba47c3b7c247e4bbe003baeb4611e4"
+}

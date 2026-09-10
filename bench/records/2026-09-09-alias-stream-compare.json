@@ -1,0 +1,74 @@
+{
+  "matched_streams": 6,
+  "identical_outputs": 6,
+  "median_paired_decode_change_percent": -0.18308787038542884,
+  "note": "Changed outputs can change speculative acceptance. Repeated paired runs are needed to distinguish small gains from noise.",
+  "results": [
+    {
+      "prompt": "analysis",
+      "repeat": 0,
+      "identical_output": true,
+      "identical_token_count": true,
+      "before_decode_tps": 66.58822287331287,
+      "after_decode_tps": 67.13093422352904,
+      "decode_change_percent": 0.8150260313279478,
+      "before_ttft_ms": 353.17439999926137,
+      "after_ttft_ms": 373.217400003341
+    },
+    {
+      "prompt": "analysis",
+      "repeat": 1,
+      "identical_output": true,
+      "identical_token_count": true,
+      "before_decode_tps": 67.13808992550601,
+      "after_decode_tps": 67.04974596474298,
+      "decode_change_percent": -0.1315854544879813,
+      "before_ttft_ms": 361.7115999950329,
+      "after_ttft_ms": 384.333299996797
+    },
+    {
+      "prompt": "code",
+      "repeat": 0,
+      "identical_output": true,
+      "identical_token_count": true,
+      "before_decode_tps": 76.96665583056819,
+      "after_decode_tps": 76.54312436631197,
+      "decode_change_percent": -0.5502791561953324,
+      "before_ttft_ms": 249.9247000014293,
+      "after_ttft_ms": 280.10169999470236
+    },
+    {
+      "prompt": "code",
+      "repeat": 1,
+      "identical_output": true,
+      "identical_token_count": true,
+      "before_decode_tps": 76.76128774741684,
+      "after_decode_tps": 76.58121322273576,
+      "decode_change_percent": -0.23459028628287637,
+      "before_ttft_ms": 350.3026000034879,
+      "after_ttft_ms": 369.97640000481624
+    },
+    {
+      "prompt": "german",
+      "repeat": 0,
+      "identical_output": true,
+      "identical_token_count": true,
+      "before_decode_tps": 62.418548222475515,
+      "after_decode_tps": 62.37153112369372,
+      "decode_change_percent": -0.07532552441658069,
+      "before_ttft_ms": 310.324899997795,
+      "after_ttft_ms": 343.6037999999826
+    },
+    {
+      "prompt": "german",
+      "repeat": 1,
+      "identical_output": true,
+      "identical_token_count": true,
+      "before_decode_tps": 62.316299536664054,
+      "after_decode_tps": 60.63903215832522,
+      "decode_change_percent": -2.6915387961250925,
+      "before_ttft_ms": 416.27429999789456,
+      "after_ttft_ms": 435.74960000114515
+    }
+  ]
+}

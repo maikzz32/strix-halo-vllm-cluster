@@ -1,0 +1,150 @@
+{
+  "status": "passed",
+  "source_sha256": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493",
+  "seed": 9340,
+  "cases": [
+    {
+      "pattern": "reuse10",
+      "distinct_experts": 240,
+      "packed_working_set_bytes": 113664000,
+      "methods": [
+        {
+          "method": "installed",
+          "samples_us": [
+            35.70941686630249,
+            35.8829140663147,
+            35.96349159876505,
+            36.044490337371826,
+            36.03440920511881
+          ],
+          "median_us": 35.96349159876505
+        },
+        {
+          "method": "stages3",
+          "samples_us": [
+            36.181326707204185,
+            36.305816968282066,
+            36.43523454666138,
+            36.340816815694176,
+            36.51955922444662
+          ],
+          "median_us": 36.340816815694176
+        },
+        {
+          "method": "stages4",
+          "samples_us": [
+            45.107738176981606,
+            45.08007367451986,
+            45.079986254374184,
+            45.07040977478027,
+            45.11082569758097
+          ],
+          "median_us": 45.08007367451986
+        }
+      ],
+      "bit_mismatches": {
+        "installed": 0,
+        "stages3": 0,
+        "stages4": 0
+      },
+      "changed_input_graph_exact": true
+    },
+    {
+      "pattern": "overlap25",
+      "distinct_experts": 462,
+      "packed_working_set_bytes": 218803200,
+      "methods": [
+        {
+          "method": "installed",
+          "samples_us": [
+            70.0270414352417,
+            70.65585454305013,
+            70.78526814778645,
+            70.68593502044678,
+            70.73310216267903
+          ],
+          "median_us": 70.68593502044678
+        },
+        {
+          "method": "stages3",
+          "samples_us": [
+            72.6118008295695,
+            72.11864789326985,
+            72.54006067911784,
+            72.18448321024577,
+            72.67338434855144
+          ],
+          "median_us": 72.54006067911784
+        },
+        {
+          "method": "stages4",
+          "samples_us": [
+            83.45332940419515,
+            82.83902009328206,
+            83.19025039672852,
+            82.8430970509847,
+            83.20900599161784
+          ],
+          "median_us": 83.19025039672852
+        }
+      ],
+      "bit_mismatches": {
+        "installed": 0,
+        "stages3": 0,
+        "stages4": 0
+      },
+      "changed_input_graph_exact": true
+    },
+    {
+      "pattern": "disjoint40",
+      "distinct_experts": 477,
+      "packed_working_set_bytes": 225907200,
+      "methods": [
+        {
+          "method": "installed",
+          "samples_us": [
+            107.40825335184734,
+            107.41241772969563,
+            107.52049287160237,
+            107.51766363779704,
+            107.35258261362712
+          ],
+          "median_us": 107.41241772969563
+        },
+        {
+          "method": "stages3",
+          "samples_us": [
+            109.55618222554524,
+            108.61196517944336,
+            108.97519588470459,
+            108.56654644012451,
+            108.92711480458577
+          ],
+          "median_us": 108.92711480458577
+        },
+        {
+          "method": "stages4",
+          "samples_us": [
+            125.42541027069092,
+            124.55659707387288,
+            125.31867027282715,
+            124.33002789815266,
+            124.99699592590332
+          ],
+          "median_us": 124.99699592590332
+        }
+      ],
+      "bit_mismatches": {
+        "installed": 0,
+        "stages3": 0,
+        "stages4": 0
+      },
+      "changed_input_graph_exact": true
+    }
+  ],
+  "dispatch_counts": {
+    "3": 216,
+    "4": 216
+  },
+  "service_counters_unchanged": true
+}

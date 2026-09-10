@@ -1,0 +1,73 @@
+{
+  "before_sha256": "81314a5ac4f698ca600f1bc7ffc2a2d664a59abe3dcd60296bc9154c40c8cdd4",
+  "after_sha256": "54bdc6dc2d4222008bea7a3d04625dfa9c85b6474dd4d9a6883fb3d86a029e47",
+  "cases": [
+    {
+      "prompt_tokens": 256,
+      "repeat": 0,
+      "identical_output": true,
+      "identical_usage": true,
+      "cache_hits_before": 0.0,
+      "cache_hits_after": 0.0,
+      "ttft_ms_before": 398.3500999966054,
+      "ttft_ms_after": 416.36450000078185,
+      "ttft_change_percent": 4.522253164824086
+    },
+    {
+      "prompt_tokens": 256,
+      "repeat": 1,
+      "identical_output": true,
+      "identical_usage": true,
+      "cache_hits_before": 0.0,
+      "cache_hits_after": 0.0,
+      "ttft_ms_before": 405.622600002971,
+      "ttft_ms_after": 403.9187000016682,
+      "ttft_change_percent": -0.4200702823980551
+    },
+    {
+      "prompt_tokens": 512,
+      "repeat": 0,
+      "identical_output": true,
+      "identical_usage": true,
+      "cache_hits_before": 0.0,
+      "cache_hits_after": 0.0,
+      "ttft_ms_before": 623.9285000046948,
+      "ttft_ms_after": 625.3750999967451,
+      "ttft_change_percent": 0.2318534883467338
+    },
+    {
+      "prompt_tokens": 512,
+      "repeat": 1,
+      "identical_output": true,
+      "identical_usage": true,
+      "cache_hits_before": 0.0,
+      "cache_hits_after": 0.0,
+      "ttft_ms_before": 613.0775999990874,
+      "ttft_ms_after": 622.2402999992482,
+      "ttft_change_percent": 1.4945416371719533
+    },
+    {
+      "prompt_tokens": 1024,
+      "repeat": 0,
+      "identical_output": true,
+      "identical_usage": true,
+      "cache_hits_before": 0.0,
+      "cache_hits_after": 0.0,
+      "ttft_ms_before": 1042.9365000018151,
+      "ttft_ms_after": 1089.5959999979823,
+      "ttft_change_percent": 4.473858187539315
+    },
+    {
+      "prompt_tokens": 1024,
+      "repeat": 1,
+      "identical_output": true,
+      "identical_usage": true,
+      "cache_hits_before": 0.0,
+      "cache_hits_after": 0.0,
+      "ttft_ms_before": 1047.706899997138,
+      "ttft_ms_after": 1062.6660999987507,
+      "ttft_change_percent": 1.4278039021842437
+    }
+  ],
+  "note": "Individual timing samples; matched input tokens and outputs do not prove a causal speedup. Check cache coverage and a post-trial control."
+}

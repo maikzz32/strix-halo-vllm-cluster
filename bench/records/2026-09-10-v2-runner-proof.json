@@ -1,0 +1,45 @@
+{
+  "run_id": "594dd64087594e7eb373d1bf6bdc6593",
+  "nodes": {
+    "192.168.1.15": {
+      "source_sha256": {
+        "config/vllm.py": "788430b9211a5b0ccda0be565ad2a0f27e9069370f35d2b1f6a333a6ca135186",
+        "v1/worker/gpu/model_runner.py": "8e9b7c3647869050d05b26e910a8813fa3bfb19dba52494e999b29152507ff14",
+        "v1/worker/gpu/model_states/mamba_hybrid.py": "13fad849778315c9f18aff31cf67290a06320ee071ef5c24143076b4c952282d",
+        "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
+      },
+      "runner_log": "(Worker pid=16818) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank0.log"
+    },
+    "192.168.1.16": {
+      "source_sha256": {
+        "config/vllm.py": "788430b9211a5b0ccda0be565ad2a0f27e9069370f35d2b1f6a333a6ca135186",
+        "v1/worker/gpu/model_runner.py": "8e9b7c3647869050d05b26e910a8813fa3bfb19dba52494e999b29152507ff14",
+        "v1/worker/gpu/model_states/mamba_hybrid.py": "13fad849778315c9f18aff31cf67290a06320ee071ef5c24143076b4c952282d",
+        "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
+      },
+      "runner_log": "(Worker pid=9719) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank1.log"
+    },
+    "192.168.1.17": {
+      "source_sha256": {
+        "config/vllm.py": "788430b9211a5b0ccda0be565ad2a0f27e9069370f35d2b1f6a333a6ca135186",
+        "v1/worker/gpu/model_runner.py": "8e9b7c3647869050d05b26e910a8813fa3bfb19dba52494e999b29152507ff14",
+        "v1/worker/gpu/model_states/mamba_hybrid.py": "13fad849778315c9f18aff31cf67290a06320ee071ef5c24143076b4c952282d",
+        "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
+      },
+      "runner_log": "(Worker pid=8844) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank2.log"
+    },
+    "192.168.1.18": {
+      "source_sha256": {
+        "config/vllm.py": "788430b9211a5b0ccda0be565ad2a0f27e9069370f35d2b1f6a333a6ca135186",
+        "v1/worker/gpu/model_runner.py": "8e9b7c3647869050d05b26e910a8813fa3bfb19dba52494e999b29152507ff14",
+        "v1/worker/gpu/model_states/mamba_hybrid.py": "13fad849778315c9f18aff31cf67290a06320ee071ef5c24143076b4c952282d",
+        "v1/worker/gpu/spec_decode/autoregressive/speculator.py": "c7fb6ae82a6a9cc79ad88b007e73f773102c41c14e619e12596925f2c252aca3"
+      },
+      "runner_log": "(Worker pid=9488) INFO 09-09 23:56:39 [gpu_worker.py:429] Using V2 Model Runner",
+      "log_path": "/home/cluster-user/strix-halo-next/logs/qwen029-dense-control-594dd64087594e7eb373d1bf6bdc6593-rank3.log"
+    }
+  }
+}

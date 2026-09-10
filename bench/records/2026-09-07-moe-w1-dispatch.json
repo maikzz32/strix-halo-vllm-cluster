@@ -1,0 +1,240 @@
+{
+  "runs": [
+    {
+      "trial": 1,
+      "exit_code": 1,
+      "manifest": {
+        "run_id": "89af718623b54c7aa3cb5c508f112005",
+        "seed": 9348,
+        "source_sha256": {
+          "bench_moe_w1_dispatch.py": "ed288cb2f6b324c45a4d42a94b4c0233e102080ed3a0ea5748d63db293e98635",
+          "moe_w1_order_kernel.py": "ebca55ca4ab063c41efdfbf84402333f31a7fadea0776ad305ff87fb2cc3d564",
+          "candidate.py": "4ec08f9dcaaf5d9cb33d41e06a96a2c2ccc1235c08041cbd5e2724015e887fa6"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "report": null,
+      "service": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "remaining_owned_processes": []
+    },
+    {
+      "trial": 2,
+      "exit_code": 1,
+      "manifest": {
+        "run_id": "1a01d6cc594b4ec6938ed50963e470de",
+        "seed": 9348,
+        "source_sha256": {
+          "bench_moe_w1_dispatch.py": "ed288cb2f6b324c45a4d42a94b4c0233e102080ed3a0ea5748d63db293e98635",
+          "moe_w1_order_kernel.py": "ebca55ca4ab063c41efdfbf84402333f31a7fadea0776ad305ff87fb2cc3d564",
+          "candidate.py": "4ec08f9dcaaf5d9cb33d41e06a96a2c2ccc1235c08041cbd5e2724015e887fa6"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "report": null,
+      "service": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "remaining_owned_processes": []
+    },
+    {
+      "trial": 3,
+      "exit_code": 0,
+      "manifest": {
+        "run_id": "741c5b27ce7c4c85a57ec5e81ffc85e0",
+        "seed": 9348,
+        "source_sha256": {
+          "bench_moe_w1_dispatch.py": "ed288cb2f6b324c45a4d42a94b4c0233e102080ed3a0ea5748d63db293e98635",
+          "moe_w1_order_kernel.py": "ebca55ca4ab063c41efdfbf84402333f31a7fadea0776ad305ff87fb2cc3d564",
+          "candidate.py": "8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493"
+        },
+        "before_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "before_success_total": 54.0
+      },
+      "report": {
+        "status": "passed",
+        "source_sha256": "25ac1a380733b9f3ee3735cc58779e2d1215d5f87ed9e601cfc839d49c1403b7",
+        "seed": 9348,
+        "cases": [
+          {
+            "pattern": "reuse10",
+            "distinct_experts": 240,
+            "packed_working_set_bytes": 113664000,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  38.82123629252116,
+                  39.90861972173055,
+                  39.860292275746666,
+                  39.952615896860756,
+                  39.96062676111857
+                ],
+                "median_us": 39.90861972173055
+              },
+              {
+                "method": "patch_off",
+                "samples_us": [
+                  38.97997935612997,
+                  39.137725035349526,
+                  39.11122878392538,
+                  39.119390646616615,
+                  39.142727851867676
+                ],
+                "median_us": 39.119390646616615
+              },
+              {
+                "method": "patch_on",
+                "samples_us": [
+                  39.226059118906655,
+                  39.25664027531942,
+                  39.400716622670494,
+                  39.36388889948527,
+                  39.39530452092489
+                ],
+                "median_us": 39.36388889948527
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "patch_off": 0,
+              "patch_on": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "overlap25",
+            "distinct_experts": 462,
+            "packed_working_set_bytes": 218803200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  83.70780150095622,
+                  84.39769744873047,
+                  84.20979181925456,
+                  79.85599040985107,
+                  79.92215951283772
+                ],
+                "median_us": 83.70780150095622
+              },
+              {
+                "method": "patch_off",
+                "samples_us": [
+                  84.29511388142903,
+                  84.48811372121175,
+                  84.48903560638428,
+                  80.23365338643391,
+                  79.9647331237793
+                ],
+                "median_us": 84.29511388142903
+              },
+              {
+                "method": "patch_on",
+                "samples_us": [
+                  76.66874726613362,
+                  76.51526133219402,
+                  76.71091556549072,
+                  74.67981179555257,
+                  71.64114316304524
+                ],
+                "median_us": 76.51526133219402
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "patch_off": 0,
+              "patch_on": 0
+            },
+            "changed_input_graph_exact": true
+          },
+          {
+            "pattern": "disjoint40",
+            "distinct_experts": 477,
+            "packed_working_set_bytes": 225907200,
+            "methods": [
+              {
+                "method": "installed",
+                "samples_us": [
+                  113.80103429158528,
+                  117.02377796173096,
+                  114.80724811553955,
+                  112.73789405822754,
+                  112.99088795979817
+                ],
+                "median_us": 113.80103429158528
+              },
+              {
+                "method": "patch_off",
+                "samples_us": [
+                  113.81386915842693,
+                  116.42245451609294,
+                  114.69809214274089,
+                  113.10462951660156,
+                  113.07438214619954
+                ],
+                "median_us": 113.81386915842693
+              },
+              {
+                "method": "patch_on",
+                "samples_us": [
+                  112.55456606547038,
+                  112.70890235900879,
+                  109.67798233032227,
+                  110.00322500864665,
+                  109.33115482330322
+                ],
+                "median_us": 110.00322500864665
+              }
+            ],
+            "bit_mismatches": {
+              "installed": 0,
+              "patch_off": 0,
+              "patch_on": 0
+            },
+            "changed_input_graph_exact": true
+          }
+        ],
+        "dispatch_counts": {
+          "original": 216,
+          "ordered": 216
+        }
+      },
+      "service": {
+        "before_success_total": 54.0,
+        "after_success_total": 54.0,
+        "unchanged": true,
+        "after_request_counts": {
+          "running": 0.0,
+          "waiting": 0.0
+        }
+      },
+      "remaining_owned_processes": []
+    }
+  ],
+  "decision": "Exact patched-driver test passes after UTF-8 transfer correction; staged all4, model trial pending."
+}

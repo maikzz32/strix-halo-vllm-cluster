@@ -1,0 +1,58 @@
+[
+  {
+    "host": "192.168.1.15",
+    "action": "check",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd"
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "check",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd"
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "check",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd"
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "check",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd"
+  },
+  {
+    "host": "192.168.1.15",
+    "action": "activate",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4"
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "activate",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4"
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "activate",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4"
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "activate",
+    "original_sha": "0aed889a98011d75d62e4ed6fe911821088e99b7aa1dd2921de2ef41730e76fd",
+    "candidate_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4",
+    "active_sha": "e02ae3503c07229904d3dcc3f3d3732a75664dee6f38f31334da6df1c53c02f4"
+  }
+]

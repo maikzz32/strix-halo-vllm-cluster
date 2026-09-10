@@ -1,0 +1,14 @@
+{
+  "model": "/home/cluster-user/qwen38_rest",
+  "model_config_sha256": "7cff3dedb5bbdf5ce93ba0d51cf6466f2969c15c3aa90194401573b0327f521c",
+  "tokenizer_config_sha256": "b11349aafa7cdc6a320767cf7ceb29ed82f7eda5d65e8e0819e76f0ce947bf27",
+  "dataset": "ShareGPT_V3_unfiltered_cleaned_split.json",
+  "dataset_sha256": "35f0e213ce091ed9b9af2a1f0755e9d39f9ccec34ab281cd4ca60d70f6479ba4",
+  "num_prompts": 48,
+  "max_concurrency": 1,
+  "seed": 42,
+  "temperature": 0,
+  "endpoint": "/v1/chat/completions",
+  "chat_template_kwargs": null,
+  "note": "Hashes read from node 1 on September 9. Config hashes are not full checkpoint weight hashes. Dataset and weights are not redistributed."
+}

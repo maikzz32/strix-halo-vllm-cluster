@@ -1,0 +1,46 @@
+[
+  {
+    "node": {
+      "host": "192.168.1.15",
+      "rdma_ip": "192.168.100.1",
+      "container": "qwen029-tp2",
+      "iface": "enp197s0f3np3"
+    },
+    "exit_code": 0,
+    "stdout": "{\"restored\": \"/usr/local/lib64/python3.12/site-packages/vllm/model_executor/layers/fused_moe/modular_kernel.py\", \"sha256\": \"1e60aca6ed0dd4fcb46d577897ff1651f27a6130b3449d22265c0c791beec5d5\"}\n",
+    "stderr": ""
+  },
+  {
+    "node": {
+      "host": "192.168.1.16",
+      "rdma_ip": "192.168.100.2",
+      "container": "qwen029-tp2",
+      "iface": "enp197s0f3np3"
+    },
+    "exit_code": 0,
+    "stdout": "{\"restored\": \"/usr/local/lib64/python3.12/site-packages/vllm/model_executor/layers/fused_moe/modular_kernel.py\", \"sha256\": \"1e60aca6ed0dd4fcb46d577897ff1651f27a6130b3449d22265c0c791beec5d5\"}\n",
+    "stderr": ""
+  },
+  {
+    "node": {
+      "host": "192.168.1.17",
+      "rdma_ip": "192.168.100.3",
+      "container": "qwen029-tp4",
+      "iface": "enp197s0f3np3"
+    },
+    "exit_code": 0,
+    "stdout": "{\"restored\": \"/usr/local/lib64/python3.12/site-packages/vllm/model_executor/layers/fused_moe/modular_kernel.py\", \"sha256\": \"1e60aca6ed0dd4fcb46d577897ff1651f27a6130b3449d22265c0c791beec5d5\"}\n",
+    "stderr": ""
+  },
+  {
+    "node": {
+      "host": "192.168.1.18",
+      "rdma_ip": "192.168.100.4",
+      "container": "qwen029-tp4",
+      "iface": "enp197s0f1np1"
+    },
+    "exit_code": 0,
+    "stdout": "{\"restored\": \"/usr/local/lib64/python3.12/site-packages/vllm/model_executor/layers/fused_moe/modular_kernel.py\", \"sha256\": \"1e60aca6ed0dd4fcb46d577897ff1651f27a6130b3449d22265c0c791beec5d5\"}\n",
+    "stderr": ""
+  }
+]

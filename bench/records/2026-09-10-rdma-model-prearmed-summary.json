@@ -1,0 +1,96 @@
+{
+  "parity": {
+    "identical_outputs": true,
+    "common_sequences": 2048,
+    "first_sequence": 73193,
+    "last_sequence": 75240
+  },
+  "ranks": [
+    {
+      "rank": 0,
+      "trace_sha256": "5793b7e2f881888aced6450920426f2fc208b18230116846a76205a39960f6a2",
+      "rows": 2048,
+      "median_us": {
+        "post_us": 4.94,
+        "completion_wait_us": 35.929,
+        "reduction_and_fence_us": 4.13,
+        "total_us": 44.888
+      },
+      "last_recv_sets": {
+        "1,2,3": 4,
+        "3": 601,
+        "2": 958,
+        "1": 438,
+        "2,3": 23,
+        "1,2": 14,
+        "1,3": 10
+      },
+      "median_last_send_minus_last_recv_us": 9.159999999999997,
+      "send_after_receive_fraction": 0.9765625
+    },
+    {
+      "rank": 1,
+      "trace_sha256": "e099f6e94dba9d1cd75ba17fea60f64ea53ca0c5ec56d90a86a700563ceec175",
+      "rows": 2048,
+      "median_us": {
+        "post_us": 4.92,
+        "completion_wait_us": 36.419,
+        "reduction_and_fence_us": 3.78,
+        "total_us": 45.188
+      },
+      "last_recv_sets": {
+        "0": 776,
+        "3": 576,
+        "2": 682,
+        "0,3": 8,
+        "0,2,3": 3,
+        "2,3": 2,
+        "0,2": 1
+      },
+      "median_last_send_minus_last_recv_us": 1.3900000000000006,
+      "send_after_receive_fraction": 0.64794921875
+    },
+    {
+      "rank": 2,
+      "trace_sha256": "af71ed9f4eb384294e1ab6e0bc110a0951b56f9808ec459dc44ca3371d0e4231",
+      "rows": 2048,
+      "median_us": {
+        "post_us": 4.93,
+        "completion_wait_us": 35.979,
+        "reduction_and_fence_us": 3.75,
+        "total_us": 44.664
+      },
+      "last_recv_sets": {
+        "0": 1230,
+        "3": 627,
+        "1": 178,
+        "0,1": 3,
+        "0,3": 4,
+        "1,3": 5,
+        "0,1,3": 1
+      },
+      "median_last_send_minus_last_recv_us": 1.1849999999999987,
+      "send_after_receive_fraction": 0.5830078125
+    },
+    {
+      "rank": 3,
+      "trace_sha256": "8fdd21eab756134a1f287b53691cfaed069a12b13e29862c440dc1070bbcefeb",
+      "rows": 2048,
+      "median_us": {
+        "post_us": 4.929,
+        "completion_wait_us": 35.159,
+        "reduction_and_fence_us": 3.94,
+        "total_us": 44.073499999999996
+      },
+      "last_recv_sets": {
+        "0": 1242,
+        "2": 553,
+        "1": 252,
+        "0,1,2": 1
+      },
+      "median_last_send_minus_last_recv_us": 0.0,
+      "send_after_receive_fraction": 0.35009765625
+    }
+  ],
+  "note": "Same collective sequences across all four ranks. Software CQ observation times, no cross-host clock alignment. Last receive is not proof of a slow sender; CQ batching and receiver scheduling contribute."
+}

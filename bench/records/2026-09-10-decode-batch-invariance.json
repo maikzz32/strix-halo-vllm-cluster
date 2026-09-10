@@ -1,0 +1,488 @@
+{
+  "torch_version": "2.13.0+rocm10.0.0",
+  "hip_version": "7.15.26333",
+  "device": "AMD Radeon 8060S Graphics",
+  "cases": [
+    {
+      "kind": "bf16",
+      "N": 336,
+      "K": 10240,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 336,
+      "K": 10240,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 336,
+      "K": 10240,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 336,
+      "K": 10240,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1008,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 320,
+      "K": 10240,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 320,
+      "K": 10240,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 320,
+      "K": 10240,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 320,
+      "K": 10240,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 10240,
+      "K": 320,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 10240,
+      "K": 320,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 10240,
+      "K": 320,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 10240,
+      "K": 320,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 30720,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 1,
+      "K": 2560,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 1,
+      "K": 2560,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 1,
+      "K": 2560,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "bf16",
+      "N": 1,
+      "K": 2560,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 3,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 512,
+      "K": 2560,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 512,
+      "K": 2560,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 512,
+      "K": 2560,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 512,
+      "K": 2560,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 1536,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 320,
+      "K": 2560,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 320,
+      "K": 2560,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 320,
+      "K": 2560,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 320,
+      "K": 2560,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 960,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 2560,
+      "K": 160,
+      "bank": 0,
+      "eager_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 2560,
+      "K": 160,
+      "bank": 1,
+      "eager_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 2560,
+      "K": 160,
+      "bank": 2,
+      "eager_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    },
+    {
+      "kind": "int4",
+      "N": 2560,
+      "K": 160,
+      "bank": 3,
+      "eager_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "changed_graph_prefix": {
+        "elements": 7680,
+        "unequal_elements": 0,
+        "max_abs_difference": 0.0
+      },
+      "fixed_shape_repeatability": true
+    }
+  ],
+  "source_sha256": "426aed07e0d09b3cc9678024ddce5486c18d681d4b4df33c8269c9f4db636884",
+  "note": "Synthetic stateless operators only. Cross-shape mismatches are observations, not automatically bugs or proof of full-model divergence cause. Serving source unchanged.",
+  "host": "192.168.1.18",
+  "container": "qwen029-tp4",
+  "service_counters_unchanged": true
+}

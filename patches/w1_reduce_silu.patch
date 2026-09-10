@@ -1,0 +1,122 @@
+--- a/vllm/model_executor/layers/fused_moe/fused_moe.py
++++ b/vllm/model_executor/layers/fused_moe/fused_moe.py
+@@ -847,6 +847,7 @@
+     use_int8_w8a16,
+     block_shape,
+     config,
++    activation_output=None,
+ ):
+     """Split-K skinny int4 dequant GEMV for decode shapes. Returns True when
+     the call was handled (C written), False to run the stock kernel."""
+@@ -963,6 +964,20 @@
+         if (mul_routed_weight and topk_weights is not None)
+         else part
+     )
++    if (activation_output is not None
++            and os.environ.get("STRIX_W1_REDUCE_SILU", "0") == "1"
++            and M == 4 and top_k == 10 and N == 320 and K == 2560
++            and SPLITK == 4 and GS == 32 and BM == 16
++            and not mul_routed_weight and B.size(0) == 512
++            and C.dtype == torch.bfloat16
++            and activation_output.dtype == torch.bfloat16
++            and activation_output.device == C.device
++            and tuple(activation_output.shape) == (40, 160)
++            and activation_output.is_contiguous()):
++        _strix_w1_reduce_silu[(40, 2)](
++            part, activation_output, 40, 320, 4, 128,
++            enable_fp_fusion=False)
++        return 2  # both the GEMM and activation output were handled
+     BLOCK = 512
+     _glm53_moe_int4_gemv_reduce[(num_valid * _glm53_triton.cdiv(N, BLOCK),)](
+         part,
+@@ -994,6 +1009,7 @@
+     use_int8_w8a16: bool,
+     use_int4_w4a16: bool,
+     block_shape: list[int] | None,
++    activation_output: torch.Tensor | None = None,
+ ):
+     assert B_scale is not None and B_scale.ndim == 3
+     assert B_zp is None or B_zp.ndim == 3
+@@ -1028,12 +1044,14 @@
+         )
+     )
+ 
+-    if _glm53_moe_int4_gemv(
++    handled = _glm53_moe_int4_gemv(
+         A, B, C, B_scale, B_zp, topk_weights, sorted_token_ids,
+         expert_ids, num_tokens_post_padded, mul_routed_weight, top_k,
+-        compute_type, use_int4_w4a16, use_int8_w8a16, block_shape, config
+-    ):
+-        return
++        compute_type, use_int4_w4a16, use_int8_w8a16, block_shape, config,
++        activation_output=activation_output
++    )
++    if handled:
++        return handled == 2
+     fused_moe_kernel_gptq_awq[grid](
+         A,
+         B,
+@@ -2392,3 +2410,16 @@
+         b = _glm53_tl.trans(((nib - zp) * sc).to(_glm53_tl.bfloat16))
+         acc = _glm53_tl.dot(a, b, acc=acc)
+     _glm53_tl.store(part_ptr + pid_k.to(_glm53_tl.int64) * (num_valid * N) + offs_token[:, None] * N + offs_n[None, :], acc, mask=token_mask[:, None])
++
++
++@triton.jit
++def _strix_w1_reduce_silu(P,O,R:tl.constexpr,N:tl.constexpr,S:tl.constexpr,B:tl.constexpr):
++    row=tl.program_id(0);i=tl.program_id(1)*B+tl.arange(0,B);mask=i<N//2
++    a=tl.full((B,),0,tl.float32);b=tl.full((B,),0,tl.float32)
++    for s in tl.static_range(S):
++        a+=tl.load(P+s*R*N+row*N+i,mask,0)
++        b+=tl.load(P+s*R*N+row*N+i+N//2,mask,0)
++    a=a.to(tl.bfloat16).to(tl.float32);b=b.to(tl.bfloat16).to(tl.float32)
++    activated=(a/(1.0+tl.exp(-a))).to(tl.bfloat16).to(tl.float32)
++    v=activated*b
++    tl.store(O+row*(N//2)+i,v,mask)
+--- a/vllm/model_executor/layers/fused_moe/experts/triton_moe.py
++++ b/vllm/model_executor/layers/fused_moe/experts/triton_moe.py
+@@ -2,6 +2,7 @@
+ # SPDX-FileCopyrightText: Copyright contributors to the vLLM project
+ """Triton-based MoE expert implementations."""
+ 
++import os
+ import torch
+ 
+ import vllm.model_executor.layers.fused_moe.modular_kernel as mk
+@@ -710,7 +711,16 @@
+             topk_ids, config["BLOCK_SIZE_M"], num_align_experts, expert_map
+         )
+ 
+-        invoke_fused_moe_wna16_triton_kernel(
++        fuse_activation = (
++            os.environ.get("STRIX_W1_REDUCE_SILU", "0") == "1"
++            and activation == MoEActivation.SILU
++            and self.activation_config.clamp_limit is None
++            and self.activation_config.alpha == 1.0
++            and self.activation_config.beta == 0.0
++            and self.activation_config.activation_situ_beta is None
++            and self.activation_config.activation_situ_linear_beta is None
++        )
++        activation_done = invoke_fused_moe_wna16_triton_kernel(
+             hidden_states,
+             w1,
+             intermediate_cache1,
+@@ -727,11 +737,13 @@
+             use_int8_w8a16=self.quant_config.use_int8_w8a16,
+             use_int4_w4a16=self.quant_config.use_int4_w4a16,
+             block_shape=self.block_shape,
+-        )
+-
+-        self.activation(
+-            activation, intermediate_cache2, intermediate_cache1.view(-1, N)
+-        )
++            activation_output=intermediate_cache2 if fuse_activation else None,
++        )
++
++        if not activation_done:
++            self.activation(
++                activation, intermediate_cache2, intermediate_cache1.view(-1, N)
++            )
+ 
+         a2q_scale: torch.Tensor | None = None
+ 

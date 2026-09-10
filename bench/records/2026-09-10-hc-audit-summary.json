@@ -1,0 +1,38 @@
+{
+  "run_id": "52e785167ca743b2bab06739f0c3ff80",
+  "service_counters_unchanged": true,
+  "ranks": [
+    {
+      "host": "192.168.1.15",
+      "layer_count": 97,
+      "calls_per_layer": 4615,
+      "total_pair_comparisons": 447655,
+      "gate_bit_differences": 0,
+      "output_bit_differences": 0
+    },
+    {
+      "host": "192.168.1.16",
+      "layer_count": 97,
+      "calls_per_layer": 4615,
+      "total_pair_comparisons": 447655,
+      "gate_bit_differences": 0,
+      "output_bit_differences": 0
+    },
+    {
+      "host": "192.168.1.17",
+      "layer_count": 97,
+      "calls_per_layer": 4615,
+      "total_pair_comparisons": 447655,
+      "gate_bit_differences": 0,
+      "output_bit_differences": 0
+    },
+    {
+      "host": "192.168.1.18",
+      "layer_count": 97,
+      "calls_per_layer": 4615,
+      "total_pair_comparisons": 447655,
+      "gate_bit_differences": 0,
+      "output_bit_differences": 0
+    }
+  ]
+}

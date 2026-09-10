@@ -1,0 +1,58 @@
+[
+  {
+    "host": "192.168.1.15",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"66b775e00ecbb5d2f320dda82d3cd93f7baa607bb77f0a39c248bcb64d4c01a8\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"66b775e00ecbb5d2f320dda82d3cd93f7baa607bb77f0a39c248bcb64d4c01a8\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"66b775e00ecbb5d2f320dda82d3cd93f7baa607bb77f0a39c248bcb64d4c01a8\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"66b775e00ecbb5d2f320dda82d3cd93f7baa607bb77f0a39c248bcb64d4c01a8\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.15",
+    "action": "restore",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"restore\", \"source_sha\": \"8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "restore",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"restore\", \"source_sha\": \"8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "restore",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"restore\", \"source_sha\": \"8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "restore",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"restore\", \"source_sha\": \"8b0d48a769b03c62e786a880941531ebdfb1bc582d53b6e03c5e49e73b3b2493\"}\n",
+    "stderr": ""
+  }
+]

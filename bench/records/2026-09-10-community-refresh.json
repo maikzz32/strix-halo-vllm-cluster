@@ -1,0 +1,30 @@
+[
+  {
+    "repository": "hec-ovi/vllm-awq4-qwen",
+    "path": "csrc/awq_mmq_gfx1151/awq_mmq_gfx1151_kernel.hip",
+    "sha256": "689febefd9f8fab1452885f6ff9771294838bb39c8c6e57a0856506c3b800778",
+    "commit": "1452a9ff2bac1e422c9c1667dd5a8b4045e6d8b9",
+    "tree_sha": "bd9840c708cbfd8a066bf2b1144240d5f6c3cd9b"
+  },
+  {
+    "repository": "hec-ovi/vllm-awq4-qwen",
+    "path": "csrc/awq_mmq_gfx1151/awq_mmq_gfx1151/vllm_kernel.py",
+    "sha256": "2b775293483ed54da8641d1f7499d18aa9779d548918a3016668a9ca6bc7c43f",
+    "commit": "1452a9ff2bac1e422c9c1667dd5a8b4045e6d8b9",
+    "tree_sha": "bd9840c708cbfd8a066bf2b1144240d5f6c3cd9b"
+  },
+  {
+    "repository": "KYmidnight/strix-halo-qwen38-flash",
+    "path": "README.md",
+    "sha256": "ac8a42f07c2929664ee1057d21fe6ce6c39e2081306735111c60243c9f2cf5c0",
+    "commit": "24e6c3d4762c76dbccb5ecf1df30477ef734392b",
+    "tree_sha": "ba58bedc57f18ad5641b90e5a816ce009818de3e"
+  },
+  {
+    "repository": "KYmidnight/strix-halo-qwen38-flash",
+    "path": "bench/ab_bench.py",
+    "sha256": "ee98b25a9399d16445a234295376a02e3a7c017ef6912e4890ff56c9393e745f",
+    "commit": "24e6c3d4762c76dbccb5ecf1df30477ef734392b",
+    "tree_sha": "ba58bedc57f18ad5641b90e5a816ce009818de3e"
+  }
+]

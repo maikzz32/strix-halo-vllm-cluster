@@ -1,0 +1,26 @@
+{
+  "assembly_sha256": "e178879b86f0a7118c275d97425f8e61bf2d5d0d615c3f7fe4fa22855159f58f",
+  "binary_sha256": "06c4be4e14ab4197f0865ebe918adaa746096afaad96b823f62de4f54b5754e8",
+  "kernels": [
+    {
+      "name": "_ZN9reference16wvSplitK_hf_big_I14__hip_bfloat16Li32ELi1ELi16ELi8ELi4ELi4EEEviiiiiiPKT_S4_S4_PS2_ii",
+      "group_segment_fixed_size": 65536,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 44,
+      "vgpr_count": 132,
+      "sgpr_spill_count": 0,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 32
+    },
+    {
+      "name": "_ZN8prefetch16wvSplitK_hf_big_I14__hip_bfloat16Li32ELi1ELi16ELi8ELi4ELi4EEEviiiiiiPKT_S4_S4_PS2_ii",
+      "group_segment_fixed_size": 65536,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 44,
+      "vgpr_count": 138,
+      "sgpr_spill_count": 0,
+      "vgpr_spill_count": 0,
+      "wavefront_size": 32
+    }
+  ]
+}

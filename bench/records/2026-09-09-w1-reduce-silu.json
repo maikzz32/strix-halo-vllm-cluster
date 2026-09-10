@@ -1,0 +1,81 @@
+{
+  "banks": 48,
+  "elements": 307200,
+  "mismatches": 0,
+  "max_abs": 0.0,
+  "changed_graph_mismatches": 0,
+  "samples_us": [
+    [
+      5.867312662303448,
+      5.759843625128269,
+      5.681093782186508,
+      5.732343532145023,
+      5.773593671619892,
+      5.779843777418137
+    ],
+    [
+      3.837374970316887,
+      3.7961562629789114,
+      3.869906300678849,
+      3.8549061864614487,
+      3.7911562249064445,
+      3.8348750676959753
+    ]
+  ],
+  "median_us": [
+    5.766718648374081,
+    3.836125019006431
+  ],
+  "seed": 9601,
+  "shape": {
+    "rows": 40,
+    "N": 320,
+    "split_k": 4
+  },
+  "initial_attempt": {
+    "missing_silu_bf16_rounding": true,
+    "mismatches": 73847,
+    "max_abs": 4.0
+  },
+  "scope": "Isolated synthetic reduction and activation; no model integration or serving gain proven.",
+  "initial_reference_block": 128,
+  "production_block_check": {
+    "reference_block": 512,
+    "candidate_block": 128,
+    "mismatches": 0,
+    "changed_graph_mismatches": 0,
+    "median_us": [
+      5.771703086793423,
+      3.821156220510602
+    ],
+    "samples_us": [
+      [
+        5.896093789488077,
+        5.781093612313271,
+        5.766093730926514,
+        5.777312442660332,
+        5.7610939256846905,
+        5.7610939256846905
+      ],
+      [
+        3.8199061527848244,
+        3.829906228929758,
+        3.818624885752797,
+        3.8023749366402626,
+        3.8224062882363796,
+        3.8248749915510416
+      ]
+    ]
+  },
+  "finite_gate_sweep": {
+    "checked": 261120,
+    "finite_gate_values": 65280,
+    "multipliers": [
+      1.0,
+      -1.0,
+      0.125,
+      3.25
+    ],
+    "mismatches": 0
+  }
+}

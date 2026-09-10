@@ -1,0 +1,313 @@
+{
+  "run_id": "e4f22732fd0f4773aed76842817b8b8d",
+  "service_counters_unchanged": true,
+  "ranks": [
+    {
+      "rank": 0,
+      "status": "passed",
+      "cases": [
+        {
+          "values": 10240,
+          "bytes": 20480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            103.30834239721298,
+            97.02474623918533,
+            96.08352929353714,
+            103.6095917224884,
+            96.64352983236313
+          ],
+          "wall_samples_us": [
+            104.9045625,
+            97.8925625,
+            97.01665625,
+            104.27175,
+            97.5781875
+          ],
+          "median_us": 97.02474623918533
+        },
+        {
+          "values": 20480,
+          "bytes": 40960,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            131.51627779006958,
+            124.8377189040184,
+            129.20509278774261,
+            122.97903001308441,
+            127.22893059253693
+          ],
+          "wall_samples_us": [
+            132.7696875,
+            125.56334375,
+            130.03696875,
+            123.90246875,
+            127.90859375
+          ],
+          "median_us": 127.22893059253693
+        },
+        {
+          "values": 1290240,
+          "bytes": 2580480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            1343.4619903564453,
+            1337.8772735595703,
+            1337.61727809906,
+            1345.278263092041,
+            1340.1347398757935
+          ],
+          "wall_samples_us": [
+            1345.89028125,
+            1338.58703125,
+            1338.5620625,
+            1345.93840625,
+            1341.10571875
+          ],
+          "median_us": 1340.1347398757935
+        }
+      ],
+      "environment": {
+        "NCCL_NET_GDR_LEVEL": "0",
+        "NCCL_MAX_NCHANNELS": "4",
+        "NCCL_MIN_NCHANNELS": "4",
+        "NCCL_LAUNCH_MODE": "GROUP",
+        "NCCL_GRAPH_MIXING_SUPPORT": "1",
+        "NCCL_IB_GID_INDEX": "1",
+        "GLOO_SOCKET_IFNAME": "enp197s0f3np3"
+      },
+      "note": "Integer sum checks only, not cancellation-rich reduction-order calibration; isolated graph throughput excludes model arrival skew."
+    },
+    {
+      "rank": 1,
+      "status": "passed",
+      "cases": [
+        {
+          "values": 10240,
+          "bytes": 20480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            103.74918580055237,
+            110.92521995306015,
+            99.10434484481812,
+            106.1253771185875,
+            101.65674984455109
+          ],
+          "wall_samples_us": [
+            105.64134375,
+            111.68771875,
+            99.77934375,
+            107.16940625,
+            102.61109375
+          ],
+          "median_us": 103.74918580055237
+        },
+        {
+          "values": 20480,
+          "bytes": 40960,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            132.35953450202942,
+            129.12340462207794,
+            125.23725628852844,
+            127.55092978477478,
+            129.34215366840363
+          ],
+          "wall_samples_us": [
+            133.26359375,
+            130.085875,
+            125.911625,
+            128.50121875,
+            129.9780625
+          ],
+          "median_us": 129.12340462207794
+        },
+        {
+          "values": 1290240,
+          "bytes": 2580480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            1337.21125125885,
+            1343.658447265625,
+            1336.5399837493896,
+            1338.1437063217163,
+            1337.57746219635
+          ],
+          "wall_samples_us": [
+            1338.17753125,
+            1344.598875,
+            1337.39690625,
+            1339.73746875,
+            1338.61
+          ],
+          "median_us": 1337.57746219635
+        }
+      ],
+      "environment": {
+        "GLOO_SOCKET_IFNAME": "enp197s0f3np3",
+        "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+        "NCCL_LAUNCH_MODE": "GROUP",
+        "NCCL_MAX_NCHANNELS": "4",
+        "NCCL_MIN_NCHANNELS": "4",
+        "NCCL_NET_GDR_LEVEL": "0",
+        "NCCL_GRAPH_MIXING_SUPPORT": "1",
+        "NCCL_IB_GID_INDEX": "1"
+      },
+      "note": "Integer sum checks only, not cancellation-rich reduction-order calibration; isolated graph throughput excludes model arrival skew."
+    },
+    {
+      "rank": 2,
+      "status": "passed",
+      "cases": [
+        {
+          "values": 10240,
+          "bytes": 20480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            101.15978121757507,
+            99.58481043577194,
+            96.9998762011528,
+            99.0435928106308,
+            97.32987731695175
+          ],
+          "wall_samples_us": [
+            102.7488125,
+            100.73978125,
+            97.98425,
+            100.1610625,
+            98.044875
+          ],
+          "median_us": 99.0435928106308
+        },
+        {
+          "values": 20480,
+          "bytes": 40960,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            125.10541081428528,
+            126.57037377357483,
+            123.58168512582779,
+            125.96659362316132,
+            124.92915242910385
+          ],
+          "wall_samples_us": [
+            126.4025625,
+            127.23878125,
+            124.40696875,
+            126.60346875,
+            125.820375
+          ],
+          "median_us": 125.10541081428528
+        },
+        {
+          "values": 1290240,
+          "bytes": 2580480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            1348.2937812805176,
+            1338.8527631759644,
+            1341.2139415740967,
+            1347.0325469970703,
+            1343.6201810836792
+          ],
+          "wall_samples_us": [
+            1349.1881875,
+            1339.8371875,
+            1341.8686875,
+            1348.12040625,
+            1344.2239375
+          ],
+          "median_us": 1343.6201810836792
+        }
+      ],
+      "environment": {
+        "GLOO_SOCKET_IFNAME": "enp197s0f3np3",
+        "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+        "NCCL_IB_GID_INDEX": "1",
+        "NCCL_GRAPH_MIXING_SUPPORT": "1",
+        "NCCL_LAUNCH_MODE": "GROUP",
+        "NCCL_MIN_NCHANNELS": "4",
+        "NCCL_NET_GDR_LEVEL": "0",
+        "NCCL_MAX_NCHANNELS": "4"
+      },
+      "note": "Integer sum checks only, not cancellation-rich reduction-order calibration; isolated graph throughput excludes model arrival skew."
+    },
+    {
+      "rank": 3,
+      "status": "passed",
+      "cases": [
+        {
+          "values": 10240,
+          "bytes": 20480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            104.60959374904633,
+            110.08194088935852,
+            97.35481441020966,
+            104.51962798833847,
+            102.32840478420258
+          ],
+          "wall_samples_us": [
+            106.046125,
+            111.039125,
+            98.30321875,
+            105.6005,
+            103.39684375
+          ],
+          "median_us": 104.51962798833847
+        },
+        {
+          "values": 20480,
+          "bytes": 40960,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            134.70877707004547,
+            130.45261800289154,
+            126.4214962720871,
+            126.8177479505539,
+            128.32018733024597
+          ],
+          "wall_samples_us": [
+            136.02625,
+            131.11415625,
+            127.06428125,
+            128.98703125,
+            129.39359375
+          ],
+          "median_us": 128.32018733024597
+        },
+        {
+          "values": 1290240,
+          "bytes": 2580480,
+          "changed_input_checks": 2,
+          "event_samples_us": [
+            1339.2139673233032,
+            1341.3914442062378,
+            1335.5666399002075,
+            1338.937759399414,
+            1339.3527269363403
+          ],
+          "wall_samples_us": [
+            1340.73534375,
+            1342.47153125,
+            1336.5460625,
+            1340.0056875,
+            1340.27503125
+          ],
+          "median_us": 1339.2139673233032
+        }
+      ],
+      "environment": {
+        "NCCL_SOCKET_IFNAME": "enp197s0f1np1",
+        "NCCL_MAX_NCHANNELS": "4",
+        "NCCL_MIN_NCHANNELS": "4",
+        "NCCL_NET_GDR_LEVEL": "0",
+        "NCCL_GRAPH_MIXING_SUPPORT": "1",
+        "NCCL_IB_GID_INDEX": "1",
+        "NCCL_LAUNCH_MODE": "GROUP",
+        "GLOO_SOCKET_IFNAME": "enp197s0f1np1"
+      },
+      "note": "Integer sum checks only, not cancellation-rich reduction-order calibration; isolated graph throughput excludes model arrival skew."
+    }
+  ]
+}

@@ -1,0 +1,1353 @@
+{
+  "scope": "isolated four-rank descriptor backend; not a model benchmark",
+  "runs": [
+    {
+      "directory": "hip-rdma-backend-smoke-20260907",
+      "manifest": {
+        "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+        "source_sha256": {
+          "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+          "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+          "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+          "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+          "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+          "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+          "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+          "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+          "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+          "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+        },
+        "configs": [
+          {
+            "rank": 0,
+            "node": 15,
+            "container": "ray-head",
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "arguments": [
+              "--rank",
+              "0",
+              "--run-id",
+              "1c41f9f1a3ce4140996904fdb54f65e7",
+              "--device",
+              "rocep197s0f3",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "4",
+              "--warmup",
+              "4",
+              "--samples",
+              "1",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+              "GLOO_SOCKET_IFNAME": "enp197s0f3np3"
+            }
+          },
+          {
+            "rank": 1,
+            "node": 16,
+            "container": "ray-worker",
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "arguments": [
+              "--rank",
+              "1",
+              "--run-id",
+              "1c41f9f1a3ce4140996904fdb54f65e7",
+              "--device",
+              "rocep197s0f3",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "4",
+              "--warmup",
+              "4",
+              "--samples",
+              "1",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+              "GLOO_SOCKET_IFNAME": "enp197s0f3np3"
+            }
+          },
+          {
+            "rank": 2,
+            "node": 17,
+            "container": "ray-worker",
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "arguments": [
+              "--rank",
+              "2",
+              "--run-id",
+              "1c41f9f1a3ce4140996904fdb54f65e7",
+              "--device",
+              "rocep197s0f3",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "4",
+              "--warmup",
+              "4",
+              "--samples",
+              "1",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+              "GLOO_SOCKET_IFNAME": "enp197s0f3np3"
+            }
+          },
+          {
+            "rank": 3,
+            "node": 18,
+            "container": "ray-worker",
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "arguments": [
+              "--rank",
+              "3",
+              "--run-id",
+              "1c41f9f1a3ce4140996904fdb54f65e7",
+              "--device",
+              "rocep197s0f1",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "4",
+              "--warmup",
+              "4",
+              "--samples",
+              "1",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f1np1",
+              "GLOO_SOCKET_IFNAME": "enp197s0f1np1"
+            }
+          }
+        ],
+        "payload_bytes": 20480,
+        "gpu_dependency": true,
+        "timestamp_utc": "2026-09-07T10:30:08.082764+00:00",
+        "backend_test": true,
+        "serving_before": {
+          "timestamp_utc": "2026-09-07T10:30:08.125920+00:00",
+          "requests": {
+            "running": 0.0,
+            "waiting": 0.0
+          },
+          "successful_requests": 1.0
+        }
+      },
+      "ranks": [
+        {
+          "rank": 0,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 0,
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 160,
+            "operations_per_graph": 32,
+            "iterations": 4,
+            "samples": 1,
+            "warmup": 4,
+            "wall_samples_us": [
+              58.76596875
+            ],
+            "hip_event_samples_us": [
+              56.08721077442169
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        },
+        {
+          "rank": 1,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 1,
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 160,
+            "operations_per_graph": 32,
+            "iterations": 4,
+            "samples": 1,
+            "warmup": 4,
+            "wall_samples_us": [
+              59.1642734375
+            ],
+            "hip_event_samples_us": [
+              58.78380313515663
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        },
+        {
+          "rank": 2,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 2,
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 160,
+            "operations_per_graph": 32,
+            "iterations": 4,
+            "samples": 1,
+            "warmup": 4,
+            "wall_samples_us": [
+              58.6921875
+            ],
+            "hip_event_samples_us": [
+              56.27388879656792
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        },
+        {
+          "rank": 3,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 3,
+            "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 160,
+            "operations_per_graph": 32,
+            "iterations": 4,
+            "samples": 1,
+            "warmup": 4,
+            "wall_samples_us": [
+              59.20403125
+            ],
+            "hip_event_samples_us": [
+              56.78941309452057
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        }
+      ],
+      "release": [
+        {
+          "node": 15,
+          "exit_code": 0,
+          "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+          "remaining": [],
+          "scan_errors": []
+        },
+        {
+          "node": 16,
+          "exit_code": 0,
+          "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+          "remaining": [],
+          "scan_errors": []
+        },
+        {
+          "node": 17,
+          "exit_code": 0,
+          "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+          "remaining": [],
+          "scan_errors": []
+        },
+        {
+          "node": 18,
+          "exit_code": 0,
+          "run_id": "1c41f9f1a3ce4140996904fdb54f65e7",
+          "remaining": [],
+          "scan_errors": []
+        }
+      ],
+      "serving_after": {
+        "timestamp_utc": "2026-09-07T10:30:29.112920+00:00",
+        "requests": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "successful_requests": 1.0
+      },
+      "artifact_sha256": {
+        "manifest.json": "8679b38861548015b40a998bb06edebafc8adf9f401dbcdcd910cd8ffbcab9ba",
+        "status.json": "bf0867b300f5e6e0ad0edd96685bfac0a4ffc9254fdd76662ea8f5355604662a",
+        "release.json": "efbfce01293691d2171fff1735a8f2cefd32a099f6e8dbdc4c8d6eba5e718478",
+        "serving-after.json": "8fccbe00b649b5e94482b23d9ebae18a0eeefd03f991eff9ad87780c4edd5b91"
+      }
+    },
+    {
+      "directory": "hip-rdma-backend-32x3-20260907",
+      "manifest": {
+        "run_id": "9d181eed3e7945b294a8e76079c23d53",
+        "source_sha256": {
+          "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+          "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+          "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+          "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+          "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+          "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+          "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+          "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+          "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+          "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+        },
+        "configs": [
+          {
+            "rank": 0,
+            "node": 15,
+            "container": "ray-head",
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "arguments": [
+              "--rank",
+              "0",
+              "--run-id",
+              "9d181eed3e7945b294a8e76079c23d53",
+              "--device",
+              "rocep197s0f3",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "32",
+              "--warmup",
+              "4",
+              "--samples",
+              "3",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+              "GLOO_SOCKET_IFNAME": "enp197s0f3np3"
+            }
+          },
+          {
+            "rank": 1,
+            "node": 16,
+            "container": "ray-worker",
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "arguments": [
+              "--rank",
+              "1",
+              "--run-id",
+              "9d181eed3e7945b294a8e76079c23d53",
+              "--device",
+              "rocep197s0f3",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "32",
+              "--warmup",
+              "4",
+              "--samples",
+              "3",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+              "GLOO_SOCKET_IFNAME": "enp197s0f3np3"
+            }
+          },
+          {
+            "rank": 2,
+            "node": 17,
+            "container": "ray-worker",
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "arguments": [
+              "--rank",
+              "2",
+              "--run-id",
+              "9d181eed3e7945b294a8e76079c23d53",
+              "--device",
+              "rocep197s0f3",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "32",
+              "--warmup",
+              "4",
+              "--samples",
+              "3",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f3np3",
+              "GLOO_SOCKET_IFNAME": "enp197s0f3np3"
+            }
+          },
+          {
+            "rank": 3,
+            "node": 18,
+            "container": "ray-worker",
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "arguments": [
+              "--rank",
+              "3",
+              "--run-id",
+              "9d181eed3e7945b294a8e76079c23d53",
+              "--device",
+              "rocep197s0f1",
+              "--master",
+              "192.168.100.1",
+              "--port",
+              "29881",
+              "--gid-index",
+              "1",
+              "--deadline",
+              "40",
+              "--iterations",
+              "32",
+              "--warmup",
+              "4",
+              "--samples",
+              "3",
+              "--mode",
+              "ring4"
+            ],
+            "deadline": 45,
+            "source_sha256": {
+              "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+              "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+              "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e",
+              "cpu_rdma_reference.py": "cfcb50cce09e218005b258232cf897ea16871353fbd94aff1f51b56ff277d6f1",
+              "cpu_rdma_ring4_reference.py": "42f41de338bedc42843db3106f7a97e5180a25e13983cb8bc3b8a520a040015e",
+              "analyze_rccl_bf16_reference.py": "a575e58ac49c2f06d9bf707a68c95e83f192764e8b9c2afcea49b9730f004af1",
+              "hip_rdma_backend.cpp": "4fe6d4f0dd8d86041b7ba814e4cfdb4404275c07cd89708415891854d884eae7",
+              "hip_rdma_backend.py": "38c7622a22e2548558c5b5a0e173cb16c24b008ba0d08c7afeb2e7fefb9ac0ee",
+              "validate_rccl_ring4.py": "380233e372d9d99ff71576613e59073fa50edc6e7b1c03986d6be5caa90d419a",
+              "bench_hip_rdma_backend.py": "b970bbe46b73ee520339c71e6feae30e6e6266bc9b1b9eb4939339ae3066dacd"
+            },
+            "cpp_source": "hip_rdma_backend.cpp",
+            "rank_script": "bench_hip_rdma_backend.py",
+            "use_site": true,
+            "environment": {
+              "NCCL_IB_GID_INDEX": "1",
+              "NCCL_NET_GDR_LEVEL": "0",
+              "NCCL_MIN_NCHANNELS": "4",
+              "NCCL_MAX_NCHANNELS": "4",
+              "NCCL_LAUNCH_MODE": "GROUP",
+              "NCCL_GRAPH_MIXING_SUPPORT": "1",
+              "NCCL_DEBUG": "INFO",
+              "NCCL_SOCKET_IFNAME": "enp197s0f1np1",
+              "GLOO_SOCKET_IFNAME": "enp197s0f1np1"
+            }
+          }
+        ],
+        "payload_bytes": 20480,
+        "gpu_dependency": true,
+        "timestamp_utc": "2026-09-07T10:30:48.845785+00:00",
+        "backend_test": true,
+        "serving_before": {
+          "timestamp_utc": "2026-09-07T10:30:48.857261+00:00",
+          "requests": {
+            "running": 0.0,
+            "waiting": 0.0
+          },
+          "successful_requests": 1.0
+        }
+      },
+      "ranks": [
+        {
+          "rank": 0,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 0,
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 224,
+            "operations_per_graph": 32,
+            "iterations": 32,
+            "samples": 3,
+            "warmup": 4,
+            "wall_samples_us": [
+              56.5445205078125,
+              56.3854228515625,
+              56.249205078125
+            ],
+            "hip_event_samples_us": [
+              56.49743601679802,
+              56.35158717632294,
+              56.21974915266037
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        },
+        {
+          "rank": 1,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 1,
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 224,
+            "operations_per_graph": 32,
+            "iterations": 32,
+            "samples": 3,
+            "warmup": 4,
+            "wall_samples_us": [
+              56.4436982421875,
+              56.5138037109375,
+              56.214916015625
+            ],
+            "hip_event_samples_us": [
+              56.39775097370148,
+              56.47864565253258,
+              56.18764087557793
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        },
+        {
+          "rank": 2,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 2,
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 224,
+            "operations_per_graph": 32,
+            "iterations": 32,
+            "samples": 3,
+            "warmup": 4,
+            "wall_samples_us": [
+              56.513109375,
+              56.172669921875,
+              56.106265625
+            ],
+            "hip_event_samples_us": [
+              56.464873254299164,
+              56.134458631277084,
+              56.06680363416672
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        },
+        {
+          "rank": 3,
+          "verified": true,
+          "artifact": {
+            "status": "passed",
+            "rank": 3,
+            "run_id": "9d181eed3e7945b294a8e76079c23d53",
+            "mode": "ring4",
+            "parity_proof": {
+              "banks": 32,
+              "elements_per_rank": 10240,
+              "exact_eager": true,
+              "exact_graph": true,
+              "validated_against_active_pynccl": true,
+              "profile_sha256": "2acfe604f80dbece21e2ee77e9accbc5952bf356833a1d5e2b722513a2c23f80",
+              "input_bank_sha256": [
+                "35b9c3f3b9815d7272c46b9e2e10f3d37e7a5d8063be849f657cece7422ce0fe",
+                "46dc1e58d350fc1edf2337eb252b5b718fdd0ae51cef1e94755abd68ff1e8be8",
+                "8162f5e2b9a004f7ca97147ed761d4a80c270ab871d0d992d091814fa36ade47",
+                "1fdf887e6224d1f00168cd843c08e748cd65c238b5ea0fc0fa2874a7ea17085f",
+                "20cf4979ee874e33be5df95de1116c67d8700ad932e9c4635450eb35f844d0c3",
+                "634e68deec705afa19ffdf5d0faca2e97130c0da21d8706ce28eb063b91b9055",
+                "08ab0c3771c82e9fa301cf86e0d0599ba206e281aaa4ff54a9de8ccb82b1db95",
+                "45ca3115ccbf31ccf01e2a3f0f6f68bec71efe432f7621160542c69440df91db",
+                "433636729ee57c059a2365a656c1ae4c0b8c57514d09b223566702c9ae768fd9",
+                "4eb35166c03892e1903a513e5c8ae03eef6080a9a5908099101672e48b136965",
+                "407b316c26ea1949abc7493db4c93cca1c3c6a2bdd6766d96ae9d13cbfb833f6",
+                "d0224140bfb4ab8812b4242b9554f446d09cbb8303db605bbd9f0ce20d3d466a",
+                "d70070048d7a5a719c002dd20792409bac419968115ae27ef7c6ae1d7a4e9aaf",
+                "7ea4e60fa37da9ce84e0ebdd4519ec47d7341d16d09990c5ec7e00150df58e13",
+                "59de015ed677a65f6e13b017c6d3e87f4aab9f3cdfbc6d5c270dd43831e4a539",
+                "48079e9faffd8145220cdad9738df60e69c6f9550817f0e85cf16073dbd0b362",
+                "9d4ebe79103f3624087bd362a4c800533920648d05e4cf3c780c4a347413bca0",
+                "cf5eb25d653a530e283cb51b7e542c55803967d119ed28d21b608baa3d6d2642",
+                "8955f073e688f7236a8c5f593870d82f7b579ae2ef2dfc7d635901cc512ed074",
+                "1a32d4ce58e86db6570f0d32a8d503b9e234cfe8cbc9918aeef013b08dda5137",
+                "439d8447e12d2d62c0ff251bbd55acc1226dc32e5efaa4277afc141e9f29955c",
+                "cc22f1fc306e89f646ddc58f2e8d6c2c9b7861b4981b7d0ccec4e26c5ed2b51d",
+                "c675b87331f411d227d3bff4e2da125d7d86c431a52720c720752c0776cc915c",
+                "91b2d37708f177f562247485168e39b83de41b5682860dc27807849df121a27d",
+                "9c9482b9043293906a41867cd5b42ecebb8760504510b599a4895a23c638fa37",
+                "3e623032ba77ca661aa5e199385fa0195174c4d6fdb4c3de1427acc0a867f830",
+                "ffaf6db670919ca0c87262dfaf776c59ba9bcf71e2c351ef008781fdea3b3ad2",
+                "166adce84ca7e8bcf626ea21a3e6a535f061a2dbcc93f2ec80825d5031aeac08",
+                "fa97cdb5880771fc35f2568bb58ac662b49beaeb6aec96cdaac0775a46833236",
+                "517b820f4948cff85eb76ce467e9bc20c05b068fddeb8321984f16b021965e2a",
+                "1990c77b11e26a678f8cdc561cc45626d0e2bf6a40e9fee5124eb1cd3d828a05",
+                "d472384f99a8e4442f84485aa6f8730b81b2e964844dbe4cc6305201fb81dc01"
+              ],
+              "repeat_bank0": true,
+              "graph_destroyed": true,
+              "rank_results": [
+                {
+                  "rank": 0,
+                  "errors": []
+                },
+                {
+                  "rank": 1,
+                  "errors": []
+                },
+                {
+                  "rank": 2,
+                  "errors": []
+                },
+                {
+                  "rank": 3,
+                  "errors": []
+                }
+              ]
+            },
+            "unsupported_shape_falls_back": true,
+            "exact": true,
+            "finite": true,
+            "graph_output_checks": 224,
+            "operations_per_graph": 32,
+            "iterations": 32,
+            "samples": 3,
+            "warmup": 4,
+            "wall_samples_us": [
+              56.475650390625,
+              56.6475986328125,
+              56.242921875
+            ],
+            "hip_event_samples_us": [
+              56.42390996217728,
+              56.61527439951897,
+              56.214310228824615
+            ],
+            "graphs_destroyed": true,
+            "backend_closed": true,
+            "pynccl_destroyed": true,
+            "cpu_group_destroyed": true
+          }
+        }
+      ],
+      "release": [
+        {
+          "node": 15,
+          "exit_code": 0,
+          "run_id": "9d181eed3e7945b294a8e76079c23d53",
+          "remaining": [],
+          "scan_errors": []
+        },
+        {
+          "node": 16,
+          "exit_code": 0,
+          "run_id": "9d181eed3e7945b294a8e76079c23d53",
+          "remaining": [],
+          "scan_errors": []
+        },
+        {
+          "node": 17,
+          "exit_code": 0,
+          "run_id": "9d181eed3e7945b294a8e76079c23d53",
+          "remaining": [],
+          "scan_errors": []
+        },
+        {
+          "node": 18,
+          "exit_code": 0,
+          "run_id": "9d181eed3e7945b294a8e76079c23d53",
+          "remaining": [],
+          "scan_errors": []
+        }
+      ],
+      "serving_after": {
+        "timestamp_utc": "2026-09-07T10:31:10.111052+00:00",
+        "requests": {
+          "running": 0.0,
+          "waiting": 0.0
+        },
+        "successful_requests": 1.0
+      },
+      "artifact_sha256": {
+        "manifest.json": "b58f3d2f9c95eeac7745e601437ddef3747c2e68fbd55165996ee75a7465c185",
+        "status.json": "342bbe8005d9685944db89f99697e9b75a816fe14e959bace70e606b9fd5c01a",
+        "release.json": "b82c47ea4d6c0655984ae5526ef43557fb4e8e29ab57effe61d8489a9a87e392",
+        "serving-after.json": "85d0449ccaddcd782c5b259e5d2e79c245ee8076a640add76268c18bef662118"
+      }
+    }
+  ]
+}

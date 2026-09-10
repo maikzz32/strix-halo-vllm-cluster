@@ -1,0 +1,18 @@
+{
+  "192.168.1.15": {
+    "path": "/sys/devices/pci0000:00/0000:00:08.1/0000:c6:00.0/power_dpm_force_performance_level",
+    "level": "high"
+  },
+  "192.168.1.16": {
+    "path": "/sys/devices/pci0000:00/0000:00:08.1/0000:c6:00.0/power_dpm_force_performance_level",
+    "level": "high"
+  },
+  "192.168.1.17": {
+    "path": "/sys/devices/pci0000:00/0000:00:08.1/0000:c6:00.0/power_dpm_force_performance_level",
+    "level": "high"
+  },
+  "192.168.1.18": {
+    "path": "/sys/devices/pci0000:00/0000:00:08.1/0000:c6:00.0/power_dpm_force_performance_level",
+    "level": "high"
+  }
+}

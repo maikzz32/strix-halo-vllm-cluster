@@ -1,9 +1,11 @@
 # Hardware-Profil: AMD gfx1151 (Strix Halo) — Stärken, Schwächen, Design-Regeln
 
 Zweck: dieses Repo baut ein vLLM, das **nur** auf gfx1151 laufen muss. Dieses
-Dokument ist die Hardware-Grundlage, von der alle Patches, Configs und
-Playbooks abgeleitet sind. Jede Zahl ist mit Quelle belegt; Schätzungen sind
-markiert. Stand: 2026-08-30. Vergleichsreferenz: NVIDIA GB10 (DGX Spark).
+Dokument enthält eine historische Hardware-Einordnung vom 2026-08-30.
+Einzelne Community-Messungen und damalige Regeln sind keine Nachweise für
+unseren aktuellen Cluster. Die Korrekturen zu Graphen, WMMA und Launchgrenzen
+unten haben Stand 2026-09-07; aktuelle Versuchsberichte haben Vorrang.
+Vergleichsreferenz: NVIDIA GB10 (DGX Spark).
 
 ## 1. Compute-Komplex
 
@@ -56,9 +58,15 @@ markiert. Stand: 2026-08-30. Vergleichsreferenz: NVIDIA GB10 (DGX Spark).
   16×16×16). **Kein FP8/FP6/FP4-Matrix-Pfad** — FP8 läuft emuliert auf
   BF16-Tempo, FP8-Checkpoints sind hier nur Speicherformat.
   ([GPUOpen](https://gpuopen.com/learn/wmma_on_rdna3/))
-- Triton senkt `tl.dot` für f16/bf16/i8 auf WMMA ab (Dims als Vielfache von
-  16 wählen!). **iu4 wird nirgends abgesenkt** — INT4-WMMA-Silizium existiert,
-  aber kein Software-Pfad nutzt es: **die größte unerforschte Chance**.
+- Der installierte W4A16-MoE-Pfad entpackt INT4 inklusive asymmetrischer
+  Zero-Points, multipliziert die GS32-Skalen in FP32, rundet nach BF16 und
+  führt `tl.dot` mit FP32-Akkumulation aus. Integer-WMMA nimmt dagegen auf
+  **beiden** Eingangsseiten Integer-Operanden. Es ersetzt diesen BF16-A16-Pfad
+  nicht direkt. Aktivierungsquantisierung würde die vereinbarte Rechenqualität
+  ändern. AMD dokumentiert IU4-Compiler-Intrinsics; die frühere Behauptung,
+  kein Software-Pfad nutze sie, war zu weitgehend.
+  ([AMD WMMA-Intrinsics](https://gpuopen.com/learn/wmma_on_rdna3/),
+  [Kernel-Versuchsbericht](2026-09-07-moe-occupancy.md))
 - Triton-Fallen: triton#9175 (WMMA + skalare Loads → Compiler-Crash),
   triton#9815 (Pipeliner num_stages=4), INT8-`tl.dot`-Deckel
   BLOCK_M/N ≤ 32 / BLOCK_K ≤ 64 auf gfx1151.
@@ -99,17 +107,23 @@ Halo 50 vs Spark 53 t/s; gpt-oss-20b: 73 vs 80. Prefill ist die Lücke
    Vielfache von 16; RDNA4-Tuningmuster (BK=128, kpack=2, waves_per_eu 4–8,
    `.cg`) als Startpunkt für eigene Sweeps. → `bench/tune_moe.py`,
    `patches/configs/`.
-4. **LDS 64 KB/CU und 256 Threads sind harte Gesetze** für eigene Kernel
-   (TileLang-Indexer: threads=256 zwingend, block_N<256). → Patch 52.
+4. **LDS- und Threadgrenzen pro Kernel prüfen.** Eine TileLang-Spezialisierung
+   mit 256 Threads ist keine allgemeine Hardwaregrenze. Unser validierter
+   UMA-Kernel verwendet 1024 Threads. AMD beschreibt WGPs als Paare von CUs;
+   Ressourcenangaben verschiedener Granularität dürfen nicht vermischt werden.
+   Tilegrößen müssen an tatsächlichem LDS-/VGPR-Verbrauch geprüft werden.
+   ([AMD WGP-Modell](https://rocm.docs.amd.com/projects/rocprofiler-compute/en/develop/conceptual/rdna/wgp.html),
+   [UMA-Nachweis](2026-09-07-hip-uma.md))
 5. **MALL-Budget 32 MB als Designgröße:** KV-Dtype/Block-Size so wählen, dass
    heiße Working Sets unter ~32 MB bleiben können (3,2× DRAM-Tempo).
    Evidenz für A/B fehlt öffentlich — selbst messen (UNKNOWN → eigenes
    Experiment in `bench/`).
-6. **Eager ist (vorerst) Pflicht, aber Launch-Overhead angreifen:**
-   `--async-scheduling` (+3,3 % Decode auf GB10 gemessen, auf gfx1151 mit
-   5–6 µs Launch × hunderte Kernel/Step vermutlich mehr), dazu A/B
-   `cudagraph_mode: NONE` (Inductor-Fusion ohne Capture).
-   → `bench/cudagraph_ab.sh`.
+6. **Graphen sind im aktuellen Stack validiert.** Der Cluster verwendet
+   `FULL_DECODE_ONLY`, asynchrones Scheduling und MTP3 mit Draft-Prefill-Graphen.
+   Die frühere Eager-Pflicht gilt für diesen gepatchten Lauf nicht. Weitere
+   Fusionen müssen die Graph-Replay-Semantik erhalten; alte Deadlock-Berichte
+   rechtfertigen kein pauschales Abschalten.
+   ([Graph-/Modellvergleich](2026-09-07-w2-avx512-model.md))
 7. **Kernels kompilieren einmal, überall nutzen:** Triton/Compile-Caches sind
    arch-keyed und über identische Nodes portierbar; Drift in irgendeiner
    Config/env forked den Hash still. Registry = einzige Wahrheitsquelle.
@@ -121,10 +135,13 @@ Halo 50 vs Spark 53 t/s; gpt-oss-20b: 73 vs 80. Prefill ist die Lücke
 9. **NIC-Praxis:** PCIe Gen4 x4 reicht für 25 GbE, aber Framework-AGESA-Bug:
    Mellanox CX-5 trainiert nur Gen3; Intel E810 ok. Gen3 x4 = 3,9 GB/s =
    25 GbE ohne Reserve. → `docs/RUNBOOK.md`.
-10. **INT4-WMMA ist unbebautes Land:** `v_wmma_i32_16x16x16_iu4` existiert im
-    Silizium, kein Compiler senkt darauf ab. Wer hier zuerst einen
-    W4A16-MoE-Pfad baut, halbiert die Decode-Bytes nochmal gegenüber MXFP4.
-    Langfrist-Härtetest, kein Sprint.
+10. **INT4-WMMA ist kein direkter W4A16-Ersatz.** INT4 und MXFP4 belegen
+    beide vier Bits pro Gewicht, jeweils zuzüglich Format-Metadaten. Ein
+    Wechsel zwischen ihnen halbiert daher nicht grundsätzlich die Bytes.
+    Für unveränderte BF16-Aktivierungen sind verlustfreie Packlayouts und
+    effizientere Dequantisierung vor der bisherigen BF16-Matrixoperation
+    passende Experimente. Integer-WMMA allein erfüllt diese Semantik nicht.
+    ([AMD WMMA-Operandentypen](https://gpuopen.com/learn/wmma_on_rdna3/))
 11. **Takt-Cap setzen** (2400–2500 MHz): kostet ~0 % Decode, spart ~80 W,
     verhindert Locks. → ansible base.yml.
 

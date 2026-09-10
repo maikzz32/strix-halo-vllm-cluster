@@ -1,0 +1,218 @@
+{
+  "different_requests": 35,
+  "median_common_prefix_characters": 158,
+  "min_common_prefix_characters": 8,
+  "rows": [
+    {
+      "request_index": 0,
+      "common_prefix_characters": 8,
+      "before_output_tokens": 121,
+      "after_output_tokens": 121
+    },
+    {
+      "request_index": 1,
+      "common_prefix_characters": 471,
+      "before_output_tokens": 221,
+      "after_output_tokens": 221
+    },
+    {
+      "request_index": 2,
+      "common_prefix_characters": 625,
+      "before_output_tokens": 774,
+      "after_output_tokens": 774
+    },
+    {
+      "request_index": 3,
+      "common_prefix_characters": 494,
+      "before_output_tokens": 409,
+      "after_output_tokens": 409
+    },
+    {
+      "request_index": 4,
+      "common_prefix_characters": 247,
+      "before_output_tokens": 388,
+      "after_output_tokens": 388
+    },
+    {
+      "request_index": 5,
+      "common_prefix_characters": 265,
+      "before_output_tokens": 463,
+      "after_output_tokens": 463
+    },
+    {
+      "request_index": 6,
+      "common_prefix_characters": 25,
+      "before_output_tokens": 102,
+      "after_output_tokens": 102
+    },
+    {
+      "request_index": 7,
+      "common_prefix_characters": 424,
+      "before_output_tokens": 203,
+      "after_output_tokens": 203
+    },
+    {
+      "request_index": 8,
+      "common_prefix_characters": 530,
+      "before_output_tokens": 810,
+      "after_output_tokens": 810
+    },
+    {
+      "request_index": 10,
+      "common_prefix_characters": 168,
+      "before_output_tokens": 339,
+      "after_output_tokens": 339
+    },
+    {
+      "request_index": 11,
+      "common_prefix_characters": 142,
+      "before_output_tokens": 345,
+      "after_output_tokens": 376
+    },
+    {
+      "request_index": 14,
+      "common_prefix_characters": 474,
+      "before_output_tokens": 341,
+      "after_output_tokens": 341
+    },
+    {
+      "request_index": 15,
+      "common_prefix_characters": 29,
+      "before_output_tokens": 43,
+      "after_output_tokens": 43
+    },
+    {
+      "request_index": 16,
+      "common_prefix_characters": 120,
+      "before_output_tokens": 33,
+      "after_output_tokens": 33
+    },
+    {
+      "request_index": 17,
+      "common_prefix_characters": 73,
+      "before_output_tokens": 321,
+      "after_output_tokens": 321
+    },
+    {
+      "request_index": 18,
+      "common_prefix_characters": 44,
+      "before_output_tokens": 24,
+      "after_output_tokens": 24
+    },
+    {
+      "request_index": 19,
+      "common_prefix_characters": 182,
+      "before_output_tokens": 63,
+      "after_output_tokens": 63
+    },
+    {
+      "request_index": 20,
+      "common_prefix_characters": 352,
+      "before_output_tokens": 361,
+      "after_output_tokens": 361
+    },
+    {
+      "request_index": 22,
+      "common_prefix_characters": 679,
+      "before_output_tokens": 228,
+      "after_output_tokens": 228
+    },
+    {
+      "request_index": 24,
+      "common_prefix_characters": 8,
+      "before_output_tokens": 401,
+      "after_output_tokens": 401
+    },
+    {
+      "request_index": 27,
+      "common_prefix_characters": 378,
+      "before_output_tokens": 409,
+      "after_output_tokens": 409
+    },
+    {
+      "request_index": 28,
+      "common_prefix_characters": 51,
+      "before_output_tokens": 369,
+      "after_output_tokens": 369
+    },
+    {
+      "request_index": 29,
+      "common_prefix_characters": 26,
+      "before_output_tokens": 28,
+      "after_output_tokens": 28
+    },
+    {
+      "request_index": 30,
+      "common_prefix_characters": 8,
+      "before_output_tokens": 173,
+      "after_output_tokens": 173
+    },
+    {
+      "request_index": 32,
+      "common_prefix_characters": 63,
+      "before_output_tokens": 629,
+      "after_output_tokens": 454
+    },
+    {
+      "request_index": 34,
+      "common_prefix_characters": 232,
+      "before_output_tokens": 271,
+      "after_output_tokens": 271
+    },
+    {
+      "request_index": 37,
+      "common_prefix_characters": 390,
+      "before_output_tokens": 162,
+      "after_output_tokens": 162
+    },
+    {
+      "request_index": 39,
+      "common_prefix_characters": 609,
+      "before_output_tokens": 582,
+      "after_output_tokens": 582
+    },
+    {
+      "request_index": 40,
+      "common_prefix_characters": 8,
+      "before_output_tokens": 9,
+      "after_output_tokens": 9
+    },
+    {
+      "request_index": 41,
+      "common_prefix_characters": 119,
+      "before_output_tokens": 856,
+      "after_output_tokens": 856
+    },
+    {
+      "request_index": 43,
+      "common_prefix_characters": 146,
+      "before_output_tokens": 97,
+      "after_output_tokens": 97
+    },
+    {
+      "request_index": 44,
+      "common_prefix_characters": 638,
+      "before_output_tokens": 252,
+      "after_output_tokens": 252
+    },
+    {
+      "request_index": 45,
+      "common_prefix_characters": 138,
+      "before_output_tokens": 580,
+      "after_output_tokens": 580
+    },
+    {
+      "request_index": 46,
+      "common_prefix_characters": 121,
+      "before_output_tokens": 377,
+      "after_output_tokens": 377
+    },
+    {
+      "request_index": 47,
+      "common_prefix_characters": 158,
+      "before_output_tokens": 499,
+      "after_output_tokens": 499
+    }
+  ],
+  "note": "Character prefixes, not token positions; no cause of divergence established."
+}

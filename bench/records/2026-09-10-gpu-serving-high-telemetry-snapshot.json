@@ -1,0 +1,26 @@
+{
+  "192.168.1.15": {
+    "level": "high",
+    "clock_hz": 2897000000,
+    "soc_power_uw": 87894000,
+    "temp_mc": 77000
+  },
+  "192.168.1.16": {
+    "level": "high",
+    "clock_hz": 2900000000,
+    "soc_power_uw": 101589000,
+    "temp_mc": 68000
+  },
+  "192.168.1.17": {
+    "level": "high",
+    "clock_hz": 2899000000,
+    "soc_power_uw": 85309000,
+    "temp_mc": 72000
+  },
+  "192.168.1.18": {
+    "level": "high",
+    "clock_hz": 2899000000,
+    "soc_power_uw": 86203000,
+    "temp_mc": 76000
+  }
+}

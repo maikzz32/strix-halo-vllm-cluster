@@ -1,0 +1,50 @@
+[
+  {
+    "host": "192.168.1.15",
+    "action": "check",
+    "active_sha256": "a136168a08484c2b3e9d18ba2fcfbd9c067a5a70dc1ebb9e319b89ddb1e5a48e",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "check",
+    "active_sha256": "a136168a08484c2b3e9d18ba2fcfbd9c067a5a70dc1ebb9e319b89ddb1e5a48e",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "check",
+    "active_sha256": "a136168a08484c2b3e9d18ba2fcfbd9c067a5a70dc1ebb9e319b89ddb1e5a48e",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "check",
+    "active_sha256": "a136168a08484c2b3e9d18ba2fcfbd9c067a5a70dc1ebb9e319b89ddb1e5a48e",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  },
+  {
+    "host": "192.168.1.15",
+    "action": "activate",
+    "active_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "activate",
+    "active_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "activate",
+    "active_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "activate",
+    "active_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2",
+    "candidate_sha256": "bdacb1fe96faa57b1b7153b95712da927a1c9f6c6a960b013694be6877b767d2"
+  }
+]

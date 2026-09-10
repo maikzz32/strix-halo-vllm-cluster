@@ -1,0 +1,14 @@
+{
+  "all_128_policies_restored": true,
+  "nodes": [
+    "192.168.1.15",
+    "192.168.1.16",
+    "192.168.1.17",
+    "192.168.1.18"
+  ],
+  "driver": "amd-pstate-epp",
+  "governor": "powersave",
+  "original_epp": "balance_performance",
+  "candidate_epp": "performance",
+  "clock_and_power_limits_changed": false
+}

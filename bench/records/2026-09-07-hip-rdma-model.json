@@ -1,0 +1,271 @@
+{
+  "hip-rdma-model-r1-stream-comparison-20260907.json": {
+    "cases": [
+      {
+        "prompt": "code",
+        "repeat": 0,
+        "request_exact": true,
+        "text_exact": true,
+        "baseline_decode_tps": 65.62042791915934,
+        "candidate_decode_tps": 68.14650378096026,
+        "gain_percent": 3.8495266518421722
+      },
+      {
+        "prompt": "german",
+        "repeat": 0,
+        "request_exact": true,
+        "text_exact": true,
+        "baseline_decode_tps": 54.092800486437795,
+        "candidate_decode_tps": 55.577144115922,
+        "gain_percent": 2.7440687413778253
+      },
+      {
+        "prompt": "analysis",
+        "repeat": 0,
+        "request_exact": true,
+        "text_exact": true,
+        "baseline_decode_tps": 63.1979407117837,
+        "candidate_decode_tps": 64.99322219898697,
+        "gain_percent": 2.8407278259124036
+      },
+      {
+        "prompt": "code",
+        "repeat": 1,
+        "request_exact": true,
+        "text_exact": true,
+        "baseline_decode_tps": 65.66539152442493,
+        "candidate_decode_tps": 67.58236673687651,
+        "gain_percent": 2.9193082808903092
+      },
+      {
+        "prompt": "german",
+        "repeat": 1,
+        "request_exact": true,
+        "text_exact": true,
+        "baseline_decode_tps": 54.085908299737035,
+        "candidate_decode_tps": 55.80415219365963,
+        "gain_percent": 3.1768790576656603
+      },
+      {
+        "prompt": "analysis",
+        "repeat": 1,
+        "request_exact": true,
+        "text_exact": true,
+        "baseline_decode_tps": 63.23092036055613,
+        "candidate_decode_tps": 65.17761288535036,
+        "gain_percent": 3.078703447132791
+      }
+    ],
+    "median_paired_gain_percent": 2.9990058640115502
+  },
+  "hip-rdma-model-r1-sharegpt-comparison-20260907.json": {
+    "schema": 1,
+    "workload": "ShareGPT48 seed42 temperature0 C1; same existing INT4 GS32 weights",
+    "historical_control": {
+      "source": "results\\qsa-production-sharegpt-tp4-20260907\\result.json",
+      "sha256": "cba0bb5546b57d8013b42d96ebb88eeab2cd9be254198d0b91b630aa6430a259",
+      "output_throughput": 50.302312623232645,
+      "mean_tpot_ms": 17.73439298154707,
+      "mean_ttft_ms": 542.8661728389367,
+      "completed": 48,
+      "failed": 0,
+      "total_input_tokens": 14767,
+      "total_output_tokens": 11839,
+      "spec_decode_acceptance_rate": 54.14266725742135,
+      "spec_decode_acceptance_length": 2.624280017722641,
+      "spec_decode_num_drafts": 4514,
+      "spec_decode_draft_tokens": 13542,
+      "spec_decode_accepted_tokens": 7332
+    },
+    "experiment": {
+      "source": "results\\hip-rdma-model-r1-sharegpt-20260907\\result.json",
+      "sha256": "fd6daf9ebef52dd0fc569f191fac8cae07a5d6b075fe0bfe37be167c6bf0374d",
+      "output_throughput": 49.78899747032551,
+      "mean_tpot_ms": 17.987212864506578,
+      "mean_ttft_ms": 544.3848848333536,
+      "completed": 48,
+      "failed": 0,
+      "total_input_tokens": 14767,
+      "total_output_tokens": 11839,
+      "spec_decode_acceptance_rate": 54.14266725742135,
+      "spec_decode_acceptance_length": 2.624280017722641,
+      "spec_decode_num_drafts": 4514,
+      "spec_decode_draft_tokens": 13542,
+      "spec_decode_accepted_tokens": 7332
+    },
+    "texts_identical": true,
+    "input_lens_identical": true,
+    "output_lens_identical": true,
+    "speculation_identical": true,
+    "text_sha256": [
+      "56b1c4f5a74565e676fd75f9da23424976b2a741fb807c351a23cdf1505fa086",
+      "0d7112812322b289fd47ca333bbe568b66fb1eb38689795f5a9497d63f54a6a0",
+      "b32b8b965df4c5a8a2f78927ea92a8086e24d0ea6577437ba1d4bf3225c7d963",
+      "536c7b57a08b1f4d50667d9d6c2e0a1ac0668b6a7deb0f9c0ce069a056665203",
+      "7e3a488a4039df42137532faf88ad11d971fdb487c0a15abef998f10f1698895",
+      "c240e1313c7c5d7ddfdcb816eebb49ccc93215721f1bf4e8d21120f5563942c3",
+      "aefa4f7043ed47cedbebbb6e8b274e426be967463ae288bd7277e89d2751249b",
+      "61ccfae1f1d69091fde076c845b92e1a3f5d742d3f7a6645c70458e5094cf68a",
+      "379a4bd7357076fb0f76c3f9b1c92dd1cd401cb1e2ab066ed9ef08deec69cfa5",
+      "ba449fbb35b8a9bf987e2f6810e94413bc200cf37f747c3443363f3ad6aeeb7f",
+      "54731bfbd34477445bf1096743e1cde06c89c0d99b34228fc1091254d210466c",
+      "7ffa0d10ce715150e639717e87ac309de5a5c1fee9af2848be1efaa3ca95246a",
+      "0fac97ef8c7450dcc2a69c7edda474743b9cc711697940e934b33c513855d136",
+      "720851d7ee7d0bab8352ad6c1e636192c2c9bec889a8187748e32f3f533509da",
+      "5de91f588ab302ada4b51efbe188e96c2b851abafe917b73059bf378c8df8f6c",
+      "d75ac036c92b655fef75fe33092b30cca069847315ae26df8371c9e4d118c151",
+      "90794792fef906960fd725a2dbf3c3fefcee43d87ac407f944cc598294e47938",
+      "5ec7af0d6e198637bf04b5d5b2766b854bddf8d30a288a12e1614382983b1c84",
+      "fcc10464738890bb020b5292e1f51d823791e6c37dcb1fb1fe137d855546a13b",
+      "b38aa026e5ce9fa7ed8cdb3dd8306ecdedd78e0baf25e01f1bf5b2928625edfa",
+      "a4b339700d622c616e7bb6bc9f7632d7fc464450a501b6d5f62dbc9434721c28",
+      "3c8444bef4a5238e20d147212c1ddb2398ff63001d82a22d8c7613abbb4a6cb6",
+      "a45e4dc59d573733b4394972c564b46bb4b1f25464f8ba6237df14c6d1befb70",
+      "2343058050553654676cb82c7b5b98890bf9de1db774448b4b25e32bb9267e38",
+      "ef4248012135b5f5b9e8326c51afa4156dd58c165035d8154d8f354164257963",
+      "e14dccdef469315dd49d0d3a708896bde3b2718195332c631b36e95343549fb8",
+      "50d4b5c08e9263b028cac6462ad7f05787f6350826fbf2d93b262c0c3051402e",
+      "9b4156d939f0ceb5ecd1227f648eba963d62418461429238ad89ea21d1508f1f",
+      "99acdb373631a26857e7a50de8fca14b1732260314a07cb55f82730061e4a967",
+      "cf77a7a845bae7158f178daa87f0267bb744cd08a1715772c855d60de980d7e8",
+      "c9a85f4c72a03385ecae50f2e76d61e047656d54fb3eb59d96cbbc16a2d65d10",
+      "0718b65d763f8d8c9367183a640418082d1c101b97a66039992d7fa7e4591d5d",
+      "3908b91ca52c12d8336561dd514aca70717e1e9552cddcfdd7be8e37609c79e9",
+      "6a189ee9dd5b1857fc599f30e40b1ca929f65b655a7af36f7cf61ac7dcfe97c9",
+      "b9e657aee7a3e35b1003e23ab9439e607e634a4bdb030188dc909a10baab3cd1",
+      "befe02cc4686cb7154a3291074dbef16cbdd944615123a12f0cfe313645a05c8",
+      "f3b762e6281b4f6ccd25dc808938fbec922cedf4a019a74cc2b701d76f9dad52",
+      "6dd8912158d6307994eacff9858e75f6f220d1560714d0791d10efaaa2600404",
+      "33122a891b5c374805cdf756b64cca9ebc09089a8d9a7de00246968d54fd27da",
+      "c2ab08b5fda39bf5365ca2ee155b3e3194e8b3475dae79eaba7ea9e6998e6cd3",
+      "f42d49f1b66a601d80ab3860861cead56698a9d0339d455cd2a51f868190fda9",
+      "b2b7e8a4159b6e29e880cee315dce02647e0c8aebe70d9a78dc7c378c4b32c5f",
+      "b21536851d51311e88d646eb31719d898febc5caed01bdfa16c4a46fefd6d9f1",
+      "6fe7a926da916c7842776fabd7c22d34668db3ca1e74c2e407acf5d8e6c3a512",
+      "e9aaabe09cafd596d8ac27f0c5e9c848822a4449e3b8a6ef97624b725308b8cc",
+      "5005a356562b0ad0959012742599231f1987de052db07bd2673ccee6b699309e",
+      "c44251a1da82b92049750f2247bbfeac63506cb120ade5d2bc7e0298b354b461",
+      "679901b20b2632b69bee559cf19a0ae7c83d9ebf1daf0acdd49639f86ecefb1a"
+    ]
+  },
+  "lifecycle": {
+    "experimental_run_id": "f1a428ebf13c4f78a3d84297651e71ff",
+    "experimental_config_sha256": "afe0e50874eb6bd447e5ade986b8a89167152f29dc83fc2376c555958af131cf",
+    "canonical_config_sha256": "cb2e90b2d5d7ac490a80182be287cf27aec69077818ca84f078db635f61bc9a8",
+    "restored_communicator_sha256": "03ece681b0bef349cb78dabc74585efea2cc160ae28bd711c81dfd807ca8dff5",
+    "restore_status": [
+      {
+        "node": 15,
+        "exit_code": 0
+      },
+      {
+        "node": 16,
+        "exit_code": 0
+      },
+      {
+        "node": 17,
+        "exit_code": 0
+      },
+      {
+        "node": 18,
+        "exit_code": 0
+      }
+    ]
+  },
+  "ring4-restored-control-vs-candidate-stream-20260907.json": {
+    "matched_streams": 6,
+    "identical_outputs": 6,
+    "median_paired_decode_change_percent": -1.3399910426029005,
+    "note": "Changed outputs can change speculative acceptance. Repeated paired runs are needed to distinguish small gains from noise.",
+    "results": [
+      {
+        "prompt": "analysis",
+        "repeat": 0,
+        "identical_output": true,
+        "identical_token_count": true,
+        "before_decode_tps": 66.03249881823656,
+        "after_decode_tps": 64.99322219898697,
+        "decode_change_percent": -1.5738865526054746,
+        "before_ttft_ms": 317.7758999991056,
+        "after_ttft_ms": 323.8444000016898
+      },
+      {
+        "prompt": "analysis",
+        "repeat": 1,
+        "identical_output": true,
+        "identical_token_count": true,
+        "before_decode_tps": 65.99595149063666,
+        "after_decode_tps": 65.17761288535036,
+        "decode_change_percent": -1.2399830395693368,
+        "before_ttft_ms": 333.32549999977346,
+        "after_ttft_ms": 330.3441999996721
+      },
+      {
+        "prompt": "code",
+        "repeat": 0,
+        "identical_output": true,
+        "identical_token_count": true,
+        "before_decode_tps": 68.59838280722134,
+        "after_decode_tps": 68.14650378096026,
+        "decode_change_percent": -0.6587313108108894,
+        "before_ttft_ms": 647.7390000000014,
+        "after_ttft_ms": 638.4090999999898
+      },
+      {
+        "prompt": "code",
+        "repeat": 1,
+        "identical_output": true,
+        "identical_token_count": true,
+        "before_decode_tps": 68.56977078172851,
+        "after_decode_tps": 67.58236673687651,
+        "decode_change_percent": -1.4399990456364642,
+        "before_ttft_ms": 317.69820000045,
+        "after_ttft_ms": 306.6785000009986
+      },
+      {
+        "prompt": "german",
+        "repeat": 0,
+        "identical_output": true,
+        "identical_token_count": true,
+        "before_decode_tps": 56.45547597458317,
+        "after_decode_tps": 55.577144115922,
+        "decode_change_percent": -1.5557956841185883,
+        "before_ttft_ms": 399.21030000186875,
+        "after_ttft_ms": 396.5657000007923
+      },
+      {
+        "prompt": "german",
+        "repeat": 1,
+        "identical_output": true,
+        "identical_token_count": true,
+        "before_decode_tps": 56.48064253086403,
+        "after_decode_tps": 55.80415219365963,
+        "decode_change_percent": -1.1977383876869419,
+        "before_ttft_ms": 425.96709999997984,
+        "after_ttft_ms": 420.43180000109714
+      }
+    ]
+  },
+  "restored_control_sharegpt": {
+    "source": "results\\ring4-control-r1-sharegpt-20260907\\result.json",
+    "sha256": "7d11fdfca6f2484e68a1fa547264ca40cf6bcf4d084bc064e5502286f8e9be88",
+    "output_throughput": 50.49042985358955,
+    "mean_tpot_ms": 17.609604113232344,
+    "mean_ttft_ms": 548.9954649791665,
+    "completed": 48,
+    "failed": 0,
+    "total_input_tokens": 14767,
+    "total_output_tokens": 11839,
+    "spec_decode_acceptance_rate": 54.14266725742135,
+    "spec_decode_acceptance_length": 2.624280017722641,
+    "spec_decode_num_drafts": 4514,
+    "spec_decode_draft_tokens": 13542,
+    "spec_decode_accepted_tokens": 7332,
+    "all_48_texts_identical_to_candidate": true,
+    "input_output_lens_identical": true,
+    "speculation_identical": true,
+    "candidate_output_throughput_change_percent": -1.3892382879251208,
+    "candidate_tpot_change_percent": 2.1443341306604857
+  },
+  "decision": "Do not promote: no model gain established; original RCCL source and canonical QSA config restored, run33bc8d7a599c4fa7859f61d62fd4901d."
+}

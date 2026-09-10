@@ -1,0 +1,165 @@
+{
+  "date_local": "2026-09-07",
+  "run_id": "5a19fbc2db3d4ce2b8dc85bb34b5195e",
+  "reference": "qsa-invisible-tp4-mtp3.json",
+  "reference_sha256": "24653e94bdc479f9908ec0e094aadf35992e4ac8e6de621fe4262731d71b2d13",
+  "note": "Exact request and text comparisons. First run includes a transient slow episode; control repeated with read-only hardware telemetry. These are short prompts, not ShareGPT.",
+  "runs": [
+    {
+      "name": "qsa-production-matched",
+      "source_sha256": "6f8f45e0304b10b55da8760abd71cb12900bdc172876b6a1d8d4e3cd44794d2e",
+      "comparison": {
+        "matched_streams": 6,
+        "identical_outputs": 6,
+        "median_paired_decode_change_percent": -0.1311676869497569,
+        "note": "Changed outputs can change speculative acceptance. Repeated paired runs are needed to distinguish small gains from noise.",
+        "results": [
+          {
+            "prompt": "analysis",
+            "repeat": 0,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 65.5944372488678,
+            "after_decode_tps": 65.57253212156293,
+            "decode_change_percent": -0.03339479416794022,
+            "before_ttft_ms": 312.36029596766457,
+            "after_ttft_ms": 328.1377770472318
+          },
+          {
+            "prompt": "analysis",
+            "repeat": 1,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 65.57318057535613,
+            "after_decode_tps": 41.40915921821327,
+            "decode_change_percent": -36.85046408473931,
+            "before_ttft_ms": 325.53476199973375,
+            "after_ttft_ms": 5993.994926044252
+          },
+          {
+            "prompt": "code",
+            "repeat": 0,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 68.2011677057075,
+            "after_decode_tps": 68.26115588830716,
+            "decode_change_percent": 0.08795770603005071,
+            "before_ttft_ms": 2269.7362100007012,
+            "after_ttft_ms": 283.6140320287086
+          },
+          {
+            "prompt": "code",
+            "repeat": 1,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 68.12589414899564,
+            "after_decode_tps": 68.03532983769254,
+            "decode_change_percent": -0.13293669379961237,
+            "before_ttft_ms": 307.038027967792,
+            "after_ttft_ms": 328.55450501665473
+          },
+          {
+            "prompt": "german",
+            "repeat": 0,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 56.15449233786087,
+            "after_decode_tps": 56.08182916595888,
+            "decode_change_percent": -0.1293986800999014,
+            "before_ttft_ms": 410.48813599627465,
+            "after_ttft_ms": 384.3822750495747
+          },
+          {
+            "prompt": "german",
+            "repeat": 1,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 56.16196656952123,
+            "after_decode_tps": 40.80219884717843,
+            "decode_change_percent": -27.349056061506328,
+            "before_ttft_ms": 437.07400001585484,
+            "after_ttft_ms": 439.3958170549013
+          }
+        ]
+      }
+    },
+    {
+      "name": "qsa-production-control",
+      "source_sha256": "911d91d8a7c591f6851bbdb439cc9d99274d15e706665d10ea5eec3799bcd352",
+      "comparison": {
+        "matched_streams": 6,
+        "identical_outputs": 6,
+        "median_paired_decode_change_percent": -0.32397978054219956,
+        "note": "Changed outputs can change speculative acceptance. Repeated paired runs are needed to distinguish small gains from noise.",
+        "results": [
+          {
+            "prompt": "analysis",
+            "repeat": 0,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 65.5944372488678,
+            "after_decode_tps": 65.34300146597067,
+            "decode_change_percent": -0.38331875909412005,
+            "before_ttft_ms": 312.36029596766457,
+            "after_ttft_ms": 325.6294669699855
+          },
+          {
+            "prompt": "analysis",
+            "repeat": 1,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 65.57318057535613,
+            "after_decode_tps": 65.38252272609267,
+            "decode_change_percent": -0.2907558358319351,
+            "before_ttft_ms": 325.53476199973375,
+            "after_ttft_ms": 355.2407000097446
+          },
+          {
+            "prompt": "code",
+            "repeat": 0,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 68.2011677057075,
+            "after_decode_tps": 67.68107111683071,
+            "decode_change_percent": -0.7625919120931246,
+            "before_ttft_ms": 2269.7362100007012,
+            "after_ttft_ms": 299.55583601258695
+          },
+          {
+            "prompt": "code",
+            "repeat": 1,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 68.12589414899564,
+            "after_decode_tps": 67.88745836464517,
+            "decode_change_percent": -0.3499928879157177,
+            "before_ttft_ms": 307.038027967792,
+            "after_ttft_ms": 327.5811530184001
+          },
+          {
+            "prompt": "german",
+            "repeat": 0,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 56.15449233786087,
+            "after_decode_tps": 55.9978573347593,
+            "decode_change_percent": -0.2789358367967343,
+            "before_ttft_ms": 410.48813599627465,
+            "after_ttft_ms": 399.1863009869121
+          },
+          {
+            "prompt": "german",
+            "repeat": 1,
+            "identical_output": true,
+            "identical_token_count": true,
+            "before_decode_tps": 56.16196656952123,
+            "after_decode_tps": 55.99462262614792,
+            "decode_change_percent": -0.2979666731686814,
+            "before_ttft_ms": 437.07400001585484,
+            "after_ttft_ms": 438.91216098563746
+          }
+        ]
+      }
+    }
+  ]
+}

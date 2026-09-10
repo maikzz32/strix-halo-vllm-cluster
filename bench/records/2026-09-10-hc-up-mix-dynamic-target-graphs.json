@@ -1,0 +1,2194 @@
+[
+  {
+    "host": "192.168.1.15",
+    "run_id": "4ef74c1bb4bc425f8282fdad33735be8",
+    "worker_pid": "21787",
+    "target": {
+      "name": "graph-21787-12.json",
+      "sha256": "30c86954794c91c02668b2f5651dbc1db2ddef0acd3126975b2465268a1cdb12",
+      "nodes": 2549,
+      "types": {
+        "kernel": 2461,
+        "memcpy": 88
+      },
+      "root_count": 1,
+      "edge_count": 2548,
+      "longest_dependency_chain_nodes": 2549,
+      "copies": [
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 245760,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 81920,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        }
+      ],
+      "child_graphs": []
+    }
+  },
+  {
+    "host": "192.168.1.16",
+    "run_id": "4ef74c1bb4bc425f8282fdad33735be8",
+    "worker_pid": "12710",
+    "target": {
+      "name": "graph-12710-12.json",
+      "sha256": "30c86954794c91c02668b2f5651dbc1db2ddef0acd3126975b2465268a1cdb12",
+      "nodes": 2549,
+      "types": {
+        "kernel": 2461,
+        "memcpy": 88
+      },
+      "root_count": 1,
+      "edge_count": 2548,
+      "longest_dependency_chain_nodes": 2549,
+      "copies": [
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 245760,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 81920,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        }
+      ],
+      "child_graphs": []
+    }
+  },
+  {
+    "host": "192.168.1.17",
+    "run_id": "4ef74c1bb4bc425f8282fdad33735be8",
+    "worker_pid": "11837",
+    "target": {
+      "name": "graph-11837-12.json",
+      "sha256": "30c86954794c91c02668b2f5651dbc1db2ddef0acd3126975b2465268a1cdb12",
+      "nodes": 2549,
+      "types": {
+        "kernel": 2461,
+        "memcpy": 88
+      },
+      "root_count": 1,
+      "edge_count": 2548,
+      "longest_dependency_chain_nodes": 2549,
+      "copies": [
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 245760,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 81920,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        }
+      ],
+      "child_graphs": []
+    }
+  },
+  {
+    "host": "192.168.1.18",
+    "run_id": "4ef74c1bb4bc425f8282fdad33735be8",
+    "worker_pid": "13634",
+    "target": {
+      "name": "graph-13634-12.json",
+      "sha256": "30c86954794c91c02668b2f5651dbc1db2ddef0acd3126975b2465268a1cdb12",
+      "nodes": 2549,
+      "types": {
+        "kernel": 2461,
+        "memcpy": 88
+      },
+      "root_count": 1,
+      "edge_count": 2548,
+      "longest_dependency_chain_nodes": 2549,
+      "copies": [
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 245760,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 81920,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 12288,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "kind": 3,
+          "width": 20480,
+          "height": 1,
+          "depth": 1
+        }
+      ],
+      "child_graphs": []
+    }
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "host": "192.168.1.15",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"94da5c6e73972a3194307c70472ef039eab47ee6e5e255c0a2d5cfe99cbf2f39\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"94da5c6e73972a3194307c70472ef039eab47ee6e5e255c0a2d5cfe99cbf2f39\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"5feb03eb0b6b191e1e5c5a80855b34c1d3cf684722608668608938a3b84446ff\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "check",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"check\", \"source_sha\": \"94da5c6e73972a3194307c70472ef039eab47ee6e5e255c0a2d5cfe99cbf2f39\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.15",
+    "action": "activate",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"activate\", \"source_sha\": \"28d534900ba3488adfb90d432143fad7b050169d3bfff81cd5aaf52fcb698dd6\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.16",
+    "action": "activate",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"activate\", \"source_sha\": \"28d534900ba3488adfb90d432143fad7b050169d3bfff81cd5aaf52fcb698dd6\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.17",
+    "action": "activate",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"activate\", \"source_sha\": \"d101feb4603ddaa7f3ea8a58f201036332202d4d57d13296691a9d7d4c553476\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  },
+  {
+    "host": "192.168.1.18",
+    "action": "activate",
+    "exit_code": 0,
+    "stdout": "{\"action\": \"activate\", \"source_sha\": \"28d534900ba3488adfb90d432143fad7b050169d3bfff81cd5aaf52fcb698dd6\", \"library_sha\": \"8ab4de1bd05abaf4f0188a1e82aa6a1f69e53acb8ed2cc63444e5f06b6b854bc\", \"module_sha\": \"94ba3a9cd93cdf19495191cf0bbdab57c3521308578128335d1457c090396640\"}\n",
+    "stderr": ""
+  }
+]

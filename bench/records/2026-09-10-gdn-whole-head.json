@@ -1,0 +1,132 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "seed": 9611,
+      "accepted": 1,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9611,
+      "accepted": 2,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9611,
+      "accepted": 3,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9611,
+      "accepted": 4,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9612,
+      "accepted": 1,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9612,
+      "accepted": 2,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9612,
+      "accepted": 3,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9612,
+      "accepted": 4,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9613,
+      "accepted": 1,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9613,
+      "accepted": 2,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9613,
+      "accepted": 3,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9613,
+      "accepted": 4,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9614,
+      "accepted": 1,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9614,
+      "accepted": 2,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9614,
+      "accepted": 3,
+      "output_differences": 0,
+      "state_differences": 0
+    },
+    {
+      "seed": 9614,
+      "accepted": 4,
+      "output_differences": 0,
+      "state_differences": 0
+    }
+  ],
+  "source_sha256": "000ab8996af9788fdb8843a6a3b91833e7a14c8acc0e1ea073a536330f64cb6f",
+  "candidate_sha256": "0a8899a7bd4307c8e77432f3aebfef8a59b59a62a7f7b1e166f621e738232686",
+  "changed_input_graph_exact": true,
+  "samples_us": [
+    [
+      14.839000068604946,
+      14.720000326633453,
+      14.739500358700752,
+      14.759000390768051,
+      14.740000013262033,
+      14.739500358700752,
+      14.719500206410885,
+      14.739500358700752
+    ],
+    [
+      19.17900051921606,
+      19.238999113440514,
+      19.219499081373215,
+      19.238999113440514,
+      19.199999049305916,
+      19.15950048714876,
+      19.219499081373215,
+      19.199000671505928
+    ]
+  ],
+  "medians_us": [
+    14.739500358700752,
+    19.209749065339565
+  ],
+  "note": "BV32 versus BV128, same four warps. No output normalization fused.",
+  "service_counters_unchanged": true
+}

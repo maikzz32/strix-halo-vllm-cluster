@@ -1,0 +1,66 @@
+{
+  "192.168.1.15": {
+    "worker_pid": "30806",
+    "file": "/opt/strix-halo-next/rdma-trace-20260910-r1/traces/rdma-r0-p30806.bin",
+    "header": [
+      3553977085100639314,
+      1,
+      0,
+      2048,
+      2048,
+      0,
+      0,
+      0
+    ],
+    "run_id": "c653325fc1e64e419405c8440c5ba471",
+    "library_sha256": "64c3190fc0392ae8b7d4fc04dd860ffedb962e3e20c1009fc22ac50ebc7a7b06"
+  },
+  "192.168.1.16": {
+    "worker_pid": "18763",
+    "file": "/opt/strix-halo-next/rdma-trace-20260910-r1/traces/rdma-r1-p18763.bin",
+    "header": [
+      3553977085100639314,
+      1,
+      1,
+      2048,
+      2048,
+      0,
+      0,
+      0
+    ],
+    "run_id": "c653325fc1e64e419405c8440c5ba471",
+    "library_sha256": "64c3190fc0392ae8b7d4fc04dd860ffedb962e3e20c1009fc22ac50ebc7a7b06"
+  },
+  "192.168.1.17": {
+    "worker_pid": "17886",
+    "file": "/opt/strix-halo-next/rdma-trace-20260910-r1/traces/rdma-r2-p17886.bin",
+    "header": [
+      3553977085100639314,
+      1,
+      2,
+      2048,
+      2048,
+      0,
+      0,
+      0
+    ],
+    "run_id": "c653325fc1e64e419405c8440c5ba471",
+    "library_sha256": "64c3190fc0392ae8b7d4fc04dd860ffedb962e3e20c1009fc22ac50ebc7a7b06"
+  },
+  "192.168.1.18": {
+    "worker_pid": "20779",
+    "file": "/opt/strix-halo-next/rdma-trace-20260910-r1/traces/rdma-r3-p20779.bin",
+    "header": [
+      3553977085100639314,
+      1,
+      3,
+      2048,
+      2048,
+      0,
+      0,
+      0
+    ],
+    "run_id": "c653325fc1e64e419405c8440c5ba471",
+    "library_sha256": "64c3190fc0392ae8b7d4fc04dd860ffedb962e3e20c1009fc22ac50ebc7a7b06"
+  }
+}

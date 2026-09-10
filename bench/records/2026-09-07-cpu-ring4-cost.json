@@ -1,0 +1,351 @@
+{
+  "run_id": "b88a8594b4e740e38ccfc98d9693f01a",
+  "source_sha256": {
+    "bench_cpu_ring4_cost.c": "ed2dd4cc24ab33e3707abf6d8b6e3ab36071960a587cdc35ca235020f43327bf",
+    "cpu_rdma_transport.c": "b44cc2ff7f1f6dfb72126499a985057446a586f5b4df6afd27e4619248f70fde",
+    "cpu_rdma_transport.h": "b63541d7cf312a900ad32cf0ff477c3747c759da1cdbcd5cf9588865e3b3f19d",
+    "cpu_rdma_reduce_avx2.h": "33247a00cb165650f5497529333295eb24d893baa61e41448e1a83556d0d409e"
+  },
+  "status": [
+    {
+      "node": 15,
+      "exit_code": 0
+    },
+    {
+      "node": 16,
+      "exit_code": 0
+    },
+    {
+      "node": 17,
+      "exit_code": 0
+    },
+    {
+      "node": 18,
+      "exit_code": 0
+    }
+  ],
+  "nodes": [
+    {
+      "node": 15,
+      "samples": [
+        {
+          "banks": 1,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 9.14533496,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 8.98411377,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 9.066174805,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 9.100817872,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 9.108381835,
+          "checksum": 299105374
+        },
+        {
+          "banks": 32,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 9.278044922,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 9.210700683,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 9.203596679,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 9.202263183,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 9.455105468,
+          "checksum": 9556315831
+        }
+      ],
+      "medians_us": {
+        "1": 9.100817872,
+        "32": 9.210700683
+      }
+    },
+    {
+      "node": 16,
+      "samples": [
+        {
+          "banks": 1,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 9.074680176,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 8.843467286,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 8.890328125,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 8.905865722,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 8.902266601,
+          "checksum": 299105374
+        },
+        {
+          "banks": 32,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 9.000197266,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 8.919698242,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 9.107708007,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 8.914776855,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 8.918213867,
+          "checksum": 9556315831
+        }
+      ],
+      "medians_us": {
+        "1": 8.902266601,
+        "32": 8.919698242
+      }
+    },
+    {
+      "node": 17,
+      "samples": [
+        {
+          "banks": 1,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 10.151969726,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 9.080008789,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 8.736609863,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 8.754666504,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 8.763641113,
+          "checksum": 299105374
+        },
+        {
+          "banks": 32,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 8.872376953,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 8.784617675,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 8.792547363,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 8.781512207,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 8.781526855,
+          "checksum": 9556315831
+        }
+      ],
+      "medians_us": {
+        "1": 8.763641113,
+        "32": 8.784617675
+      }
+    },
+    {
+      "node": 18,
+      "samples": [
+        {
+          "banks": 1,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 9.259608887,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 8.710834473,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 8.724584473,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 8.723930176,
+          "checksum": 299105374
+        },
+        {
+          "banks": 1,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 8.727792481,
+          "checksum": 299105374
+        },
+        {
+          "banks": 32,
+          "sample": 0,
+          "calls": 2048,
+          "mean_us": 8.809805175,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 1,
+          "calls": 2048,
+          "mean_us": 8.751996582,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 2,
+          "calls": 2048,
+          "mean_us": 8.767929687,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 3,
+          "calls": 2048,
+          "mean_us": 8.753383301,
+          "checksum": 9556315831
+        },
+        {
+          "banks": 32,
+          "sample": 4,
+          "calls": 2048,
+          "mean_us": 8.757797851,
+          "checksum": 9556315831
+        }
+      ],
+      "medians_us": {
+        "1": 8.724584473,
+        "32": 8.757797851
+      }
+    }
+  ],
+  "notes": [
+    "CPU-only benchmark; existing UMA serving workers alive but idle. No HIP or verbs context opened.",
+    "Five blocks of2048 calls per buffer mode; all samples retained. Source selftest passed before measurement.",
+    "Malloc hot/rotating buffers do not measure GPU/CPU cache-coherence cost in serving.",
+    "97 target calls times measured arithmetic cost is an opportunity estimate, not an end-to-end speed prediction."
+  ]
+}

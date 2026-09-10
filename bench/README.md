@@ -1,187 +1,84 @@
-# bench/ — Benchmark-Harness
+# Benchmark methodology
 
-Dieses Harness entscheidet, welches Parallel-Profil (`tp4`, `pp4`, `tp2pp2`,
-`ep`, `solo`) pro Modell Cluster-Default wird. Es misst Single-Stream-tok/s
-(Concurrency 1) und Aggregat-Durchsatz (Concurrency 4–32) über eine
-Modell × Profil × Prompt-Länge × Concurrency-Matrix.
+## Primary acceptance workload
 
-## Voraussetzungen
+- Model: existing `/home/cluster-user/qwen38_rest`, asymmetric INT4 group32.
+- TP4 across four 128 GB gfx1151 hosts; MTP3 and 262144 context limit.
+- Dataset: `ShareGPT_V3_unfiltered_cleaned_split.json` at
+  `/home/cluster-user/datasets/` on node 1. The dataset is not bundled.
+- 48 prompts, seed 42, temperature 0, maximum concurrency 1.
+- OpenAI chat-completions endpoint, streamed output, default chat template.
+- vLLM's preliminary single-request check runs before the timed workload.
+- Keep client, dataset, prompt ordering, template and generation parameters
+  unchanged within a comparison.
 
-- Läuft **auf node1** — entweder im Cluster-Container oder auf dem Host gegen
-  den Container (Host-Network, Endpoint via `BENCH_BASE_URL`).
-- Nur `python3` + `pyyaml` + `requests` (alles im Image vorhanden).
-- Bevorzugt das CLI `vllm bench serve`; falls nicht verfügbar, greift ein
-  eingebauter OpenAI-kompatibler Lastgenerator (Streaming `/v1/completions`)
-  als Fallback — dessen Prompt-Länge ist nur approximiert (kein Tokenizer).
-- Setzt `scripts/serve.sh <modell> <profil>` voraus (startet den Server,
-  reicht die aktuelle Umgebung inkl. `NCCL_*` an vLLM durch).
-- Teardown erfolgt per `pkill -f 'vllm serve'` lokal und per SSH auf den
-  Workern (`BENCH_WORKER_NODES`, Default `node2 node3 node4`).
-  **TODO:** auf `scripts/cluster_down.sh` umstellen, sobald vorhanden —
-  `pkill` erwischt ggf. keine Ray-Worker mit anderer Kommandozeile.
+Run `bench_sharegpt_qwen029.sh UNIQUE_TAG` on node 1. Its container name is
+`qwen029-tp2` for historical reasons; the server must actually be TP4.
+Inspect runtime status and config, not the container name. Earlier
+`bench_sharegpt.sh` targets the preserved old `ray-head` container.
 
-## Benchmark-Matrix laufen lassen
+The September 9 baseline is a single run, not a distribution of repeated
+trials. It is the control for current vLLM 0.29 experiments, not evidence
+that an upstream version change improved or regressed performance.
 
-```bash
-# ganze Matrix: alle nicht-blockierten Modelle, alle erlaubten Profile,
-# Concurrency 1/4/8/16/32, Prompt-Längen 512/4096/32768
-python3 bench/run_matrix.py
+## Metrics
 
-# gezielt: ein Modell, zwei Profile, kurze Zellen
-python3 bench/run_matrix.py \
-    --models qwen36-35b-a3b --profiles tp4,ep \
-    --concurrencies 1,16 --prompt-lengths 512
-
-# nach Abbruch fortsetzen (bereits gemessene Zellen werden übersprungen)
-python3 bench/run_matrix.py --resume bench/results/20260101T120000Z.json
-```
-
-Wichtige Optionen: `--output-len` (Default 128 Tokens), `--base-url`
-(Default `http://127.0.0.1:8000`, Env `BENCH_BASE_URL`),
-`--health-timeout` (Default 20 min — der erste Boot JIT-et Triton ~170 s),
-`--output` (eigene Ergebnisdatei).
-
-Der erste Serve-Vorgang eines Modells lädt die Gewichte und kompiliert
-Triton-Kernels — Geduld, solange der Triton-Cache nicht persistiert ist.
-
-## Ergebnisse
-
-Ein JSON-Record pro Zelle (JSONL) in `bench/results/<utc-timestamp>.json`:
-
-| Feld | Bedeutung |
+| Metric | Definition / interpretation |
 |---|---|
-| `model`, `profile` | Registry-Key, Parallel-Profil |
-| `prompt_len`, `output_len`, `concurrency`, `num_prompts` | Zell-Parameter |
-| `ttft_ms`, `itl_ms` | Time-to-First-Token / Inter-Token-Latency (Mittelwert) |
-| `output_toks` | Aggregat-Ausgabe-tok/s; bei `concurrency=1` = Single-Stream-Rate |
-| `tool` | `vllm-bench` oder `fallback` |
-| `sanity` | G1: Korrektheitsprobe — `ok`, je Prompt `finish_reason`, `unique_ratio`, `sha256` |
-| `acceptance_len` | G3: MTP-Acceptance (Δaccepted/Δdraft aus `/metrics`); nur wenn der Server die Counter exponiert |
-| `image` | G4: Image-Tag aus `VLLM_IMAGE` (nur wenn gesetzt) |
-| `env` | G4: relevante `VLLM_GFX1X_*`-/`NCCL_*`-Variablen aus der Messumgebung |
-| `sampling` | G4: `temperature`/`ignore_eos` der Messung (`temperature: null` = vllm-bench-CLI-Default) |
-| `prompt_len_exact` | G4: `false` beim Fallback-Generator (Prompt-Länge nur approximiert) |
-| `error` | gesetzt, wenn die Zelle/das Serve fehlschlug |
+| Output tokens/s | Generated tokens divided by wall time, including prefill and request overhead |
+| TTFT | Client time to first streamed token; mean, median and p99 |
+| TPOT | Per-request time per output token excluding the first token |
+| ITL | Delay between stream events; MTP bursts mean this is not one-token latency |
+| Acceptance length | Mean accepted draft tokens plus the normal target token per iteration |
+| Successful/failed | Must be reported alongside speed |
 
-## Qualitäts-Gates (Geschwindigkeit nur mit Korrektheit)
+The CLI's derived peak concurrency can disagree with the configured request
+limit. Preserve it in raw evidence and use configured concurrency plus
+server counters to validate the workload; do not claim a higher load level.
 
-- **G1 Output-Sanity:** einmal pro (Modell, Profil) nach der ersten Zelle
-  gehen 4 fixe kurze Prompts (de/en) mit `temperature=0` und **ohne**
-  `ignore_eos` gegen den laufenden Server. Geprüft werden
-  `finish_reason == "stop"`, nicht-leerer Output und Unique-Token-Ratio
-  > 0.5 (Repetitions-Detektor); pro Output wird der SHA256 abgelegt. Das
-  Ergebnis steckt als `sanity` in jeder Zelle des Profils.
-- **G3 MTP/Spec-Acceptance:** exponiert der Server
-  `vllm:spec_decode_num_accepted_tokens_total` und
-  `vllm:spec_decode_num_draft_tokens_total` unter `/metrics`, werden die
-  Counter vor/nach jeder Zelle gelesen; `acceptance_len` = Δaccepted/Δdraft.
-- **G4 Messvertrag:** jeder Record trägt `image`, `env`, `sampling` und
-  `prompt_len_exact`. `report.py` warnt, wenn Zellen desselben Modells
-  Tools (`vllm-bench` vs. `fallback`) oder Verträge mischen, und zeigt
-  Sanity/Acceptance im Ergebnis-Abschnitt.
+## Comparing a candidate
 
-Serve-Logs pro Modell/Profil liegen daneben als
-`bench/results/serve_<timestamp>_<modell>_<profil>.log`.
+Use control/candidate/control where practical, retain all measurements,
+and compare text hashes, token lengths and MTP statistics. Also run six fixed
+512-token streams (`bench_stream.py`, three prompts, two repeats) for a decode
+comparison. Do not compare these shorter non-thinking prompts directly with
+the default-template ShareGPT headline.
 
-## Report erzeugen
+Use changed-input GPU graph tests for kernel correctness. After a restart,
+verify config and loaded libraries on all ranks. Check auto tool calls and
+concurrency-2 requests. Cold-prefix and warm-prefix latency should be reported
+separately in context-depth tests; maximum context is not measured prompt depth.
+
+Export a public record without generated text:
 
 ```bash
+python3 bench/export_serving_record.py PATH/result.json \
+  --config PATH/config.json --run-id RUN_ID \
+  --output bench/records/DATE-CONFIG.json
+```
+
+Records retain raw-result and config SHA256 plus per-response hashes. Keep
+raw answers locally for exact comparison. Microbenchmark gains, different
+quantizations and multi-client aggregate throughput are separate measurements.
+
+## Other benchmark tools
+
+The older registry-driven harness remains available for other deployments:
+
+```bash
+python3 bench/run_matrix.py --models qwen36-35b-a3b --profiles tp4,ep \
+  --concurrencies 1,16 --prompt-lengths 512
 python3 bench/report.py 'bench/results/*.json'
-python3 bench/report.py bench/results/20260101T120000Z.json --output report.md
 ```
 
-Pro Modell und Prompt-Länge eine Tabelle Profil × Concurrency (tok/s),
-der Gewinner für Single-Stream (C=1) und für Aggregat ist **fett**. Der
-Abschnitt **Spark-Vergleich** unter jedem Modell setzt die Cluster-Bestwerte
-ins Verhältnis zu den externen DGX-Spark-Referenzwerten (Quelle:
-[maci0/qwen3.8-flash-next-spark](https://github.com/maci0/qwen3.8-flash-next-spark))
-und markiert jede Metrik als `BEATEN` oder `NOT-YET`. Der Abschnitt
-**Toolbox-C-Vergleich** vergleicht pro Concurrency-Stufe (C=1/8/32) die
-beste Cluster-Zelle als tok/s pro Request (Aggregat/C) gegen die offiziellen
-kyuz0-Toolbox-C-Werte (Qwen3.8-27B, 1 Node, MTP: 43,55 / 16,84 / 7,46).
-Die Referenzwerte am
-Ende sind externe Literaturwerte (andere Hardware/Interconnect/Quantisierung)
-— Strategie, Begründung und Akzeptanzkriterium stehen in
-[docs/PERFORMANCE.md](../docs/PERFORMANCE.md).
+It depends on `scripts/serve.sh`, Python, PyYAML and requests. It can use a
+fallback load generator with approximate prompt lengths; records produced by
+different generators must not be pooled. Its older broad process teardown is
+not the run-scoped native controller and should not manage the current Qwen
+Flash Next experiment.
 
-## Prefix-Cache-Probe
-
-```bash
-python3 bench/prefix_probe.py --model /home/cluster-user/qwen38_ablit --prefix-tokens 2048
-```
-
-APC (Automatic Prefix Caching) ist in vLLM V1 defaultmäßig an; dieses Skript
-misst den Nachweis und den Nutzen: TTFT einer langen, geteilten Prefix kalt
-vs. warm. Gemessen 2026-08-31 (qwen38-27b-ablit, tp4, MTP): kalt 5517 ms →
-warm Ø 1958 ms bei ~2K-Token-Prefix (2,8×).
-
-
-## kpool-Sparse-Indexer: Triton-Lane (GLM-5.3-Flash, gfx1151)
-
-```bash
-# im Container auf node1 (ray-head), kein Server nötig:
-python3 bench/kpool_triton_validate.py --lane /tmp/kpool_triton_lane.py
-python3 bench/kpool_triton_validate.py --installed   # gepatchtes Modul
-```
-
-Validiert die Triton-Hotpaths aus `patches/runtime_glm53_kpool_triton.py`
-(Standalone-Spiegel: `bench/kpool_triton_lane.py`) gegen die Torch-Lane
-(v1.4) als Goldene Referenz und misst beide: Decode-Paged-Logits ~20–37×
-schneller, Prefill-Logits ~4,5–5,4×, Gather bit-exakt, Top-k/Expand-Indizes
-exakt identisch, Logits max. rel. Diff ~3e-7. Vertrag: Cache
-`[nb, 32, 132]` uint8 (fp8 + fp32-Scale, 16×16-Preshuffle), block_table in
-288-Pool-Einheiten (num_states = 1152/4). Laufzeit-Gate:
-`VLLM_GFX1X_KPOOL_TRITON=1` (Default aus).
-
-
-## MoE int4 (WNA16) Skinny-GEMV (GLM-5.3-Flash, gfx1151)
-
-```bash
-# im Container (ray-head), kein Server nötig:
-python3 /tmp/moe_int4_sweep.py        # Stock-Kernel Config-Sweep + Layout-Aufbau
-python3 /tmp/moe_int4_ab.py           # Endausbau: vllm vs Split-K-Pfad über M
-python3 /tmp/moe_int4_patch_check.py  # Dispatch-Check am gepatchten Modul
-```
-
-Standalone-Harness für `patches/runtime_glm53_moe_int4_tune.py` (Kernel-Spiegel:
-`bench/moe_int4_gemv_proto.py`). Baut synthetische Gewichte im exakten
-Runtime-Layout (uint8 N-first, 2 Nibbles/Byte entlang K, bf16-Scales,
-asymmetrische ZP gruppe 32) und misst die WNA16-Triton-MoE-Aufrufe
-(`fused_moe_kernel_gptq_awq`, w13 + w2) gegen den Split-K-Pfad: M=1 ~1,84×,
-M=6 (MTP-Verify) ~1,52×, M=32 ~1,21× schneller; Numerik max. rel. Diff
-6,5–7,8e-3 (Split-K-Reassoziation an bf16-Rundungsgrenzen; SPLIT_K=1
-bit-exakt). Laufzeit-Gate: `VLLM_GFX1X_MOE_INT4_GEMV=1` (Default an).
-
-
-## A/B: Ethernet/TCP vs. RDMA (RoCE)
-
-```bash
-bench/compare_eth_vs_rdma.sh qwen36-35b-a3b tp4
-```
-
-Läuft dieselbe Matrix (Concurrency 1,16) zweimal: einmal mit RCCL über RoCE
-(`NCCL_IB_GID_INDEX=1`), einmal erzwungen über TCP-Sockets
-(`NCCL_IB_DISABLE=1`), und druckt das Delta in Prozent.
-
-**Voraussetzung:** `podman exec` erbt die Client-Umgebung nicht —
-`scripts/serve.sh` muss `NCCL_IB_DISABLE` in seiner `-e`-Liste an den
-Container durchreichen. Das Skript prüft das vorab und bricht sonst mit
-einer konkreten Anleitung ab.
-
-## A/B: IOMMU-Modus (braucht Reboots)
-
-```bash
-bench/iommu_ab.sh qwen36-35b-a3b tp4
-```
-
-Checklisten-Skript: zeigt den aktuellen Kernel-Cmdline-Modus
-(`amd_iommu=off` vs. `iommu=pt`), prüft die RDMA-Sichtbarkeit
-(`ibv_devinfo`) und fährt eine Benchmark-Zelle mit einem Multi-Node-Profil —
-das beantwortet die offene Frage, ob `amd_iommu=off` RDMA auf dieser NIC
-bricht (Fehlerbild: `ibv_reg_mr` / „Cannot allocate memory“ beim RCCL-Init).
-Danach druckt es die exakten `grubby`-Kommandos zum Umschalten inkl.
-Reboot auf allen Nodes. Einmal pro Modus ausführen, dann vergleichen:
-
-```bash
-python3 bench/report.py 'bench/results/*iommu*.json'
-```
+`prefix_probe.py` measures prefix reuse. `kpool_triton_validate.py` and the
+INT4 prototype tools cover older GLM experiments. `compare_eth_vs_rdma.sh`
+and `iommu_ab.sh` target the general deployment; the latter involves host
+configuration/reboots. Their historical measurements remain in
+[`docs/PERFORMANCE.md`](../docs/PERFORMANCE.md) and Git history.
